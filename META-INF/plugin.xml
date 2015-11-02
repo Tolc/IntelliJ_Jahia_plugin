@@ -62,7 +62,7 @@
       <!--<colorSettingsPage implementation="fr.smile.jahia.intellij.plugin.cnd.CndColorSettingsPage"/>-->
       <annotator language="JAVA" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndAnnotator"/>
       <!--<codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndLineMarkerProvider"/>-->
-      <!--<completion.contributor language="Cnd" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndCompletionContributor"/>-->
+      <completion.contributor language="Cnd" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndCompletionContributor"/>
       <!--<psi.referenceContributor implementation="fr.smile.jahia.intellij.plugin.cnd.CndReferenceContributor"/>-->
       <!--<lang.findUsagesProvider language="Cnd" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndFindUsagesProvider"/>-->
       <!--<lang.refactoringSupport language="Cnd" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndRefactoringSupportProvider"/>-->
