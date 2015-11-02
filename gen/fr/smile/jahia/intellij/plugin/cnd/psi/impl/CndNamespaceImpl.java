@@ -2,8 +2,6 @@
 package fr.smile.jahia.intellij.plugin.cnd.psi.impl;
 
 import java.util.List;
-
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
@@ -23,14 +21,12 @@ public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndName
     else super.accept(visitor);
   }
 
-    @Nullable
-    @Override
-    public PsiElement getNameIdentifier() {
-        return null;
-    }
+  public String getNamespaceName() {
+    return CndPsiImplUtil.getNamespaceName(this);
+  }
 
-    @Override
-    public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException {
-        return null;
-    }
+  public String getNamespaceURI() {
+    return CndPsiImplUtil.getNamespaceURI(this);
+  }
+
 }

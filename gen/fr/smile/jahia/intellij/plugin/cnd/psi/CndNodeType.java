@@ -16,4 +16,16 @@ public interface CndNodeType extends CndNodeTypeElement {
   @Nullable
   CndProperties getProperties();
 
+  String getNodeTypeName();
+
+  PsiElement setNodeTypeName(String newName);
+
+  String getNodeTypeNamespace();
+
+  PsiElement getNameIdentifier();
+
+  String getName();
+
+  PsiElement setName(String newName);
+
 }

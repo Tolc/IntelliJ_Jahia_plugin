@@ -7,4 +7,8 @@ import com.intellij.psi.PsiElement;
 
 public interface CndNamespace extends CndNamespaceElement {
 
+  String getNamespaceName();
+
+  String getNamespaceURI();
+
 }

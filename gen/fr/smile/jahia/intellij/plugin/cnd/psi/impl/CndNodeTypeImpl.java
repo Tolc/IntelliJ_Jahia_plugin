@@ -2,8 +2,6 @@
 package fr.smile.jahia.intellij.plugin.cnd.psi.impl;
 
 import java.util.List;
-
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
@@ -41,14 +39,28 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
     return findChildByClass(CndProperties.class);
   }
 
-    @Nullable
-    @Override
-    public PsiElement getNameIdentifier() {
-        return null;
-    }
+  public String getNodeTypeName() {
+    return CndPsiImplUtil.getNodeTypeName(this);
+  }
 
-    @Override
-    public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException {
-        return null;
-    }
+  public PsiElement setNodeTypeName(String newName) {
+    return CndPsiImplUtil.setNodeTypeName(this, newName);
+  }
+
+  public String getNodeTypeNamespace() {
+    return CndPsiImplUtil.getNodeTypeNamespace(this);
+  }
+
+  public PsiElement getNameIdentifier() {
+    return CndPsiImplUtil.getNameIdentifier(this);
+  }
+
+  public String getName() {
+    return CndPsiImplUtil.getName(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return CndPsiImplUtil.setName(this, newName);
+  }
+
 }
