@@ -53,11 +53,13 @@ public class CndSyntaxHighlighter extends SyntaxHighlighterBase {
         } else if (tokenType.equals(CndTypes.NODE_TYPE_MIXIN)
                 || tokenType.equals(CndTypes.NODE_TYPE_ORDERABLE)
                 || tokenType.equals(CndTypes.NODE_TYPE_ABSTRACT)
-                || tokenType.equals(CndTypes.PROPERTY_ATTRIBUTES)
+                || tokenType.equals(CndTypes.PROPERTY_ATTRIBUTE)
+                || tokenType.equals(CndTypes.PROPERTY_PLUS_ATTRIBUTE)
                 || tokenType.equals(CndTypes.EXTEND_ITEM_START)
                 || tokenType.equals(CndTypes.EXTEND_OPENING)) {
             return KEYWORD_KEYS;
         } else if (tokenType.equals(CndTypes.PROPERTY_NAME)
+                || tokenType.equals(CndTypes.PROPERTY_PLUS_NAME)
                 || tokenType.equals(CndTypes.PROPERTY_CONSTRAINT)
                 || tokenType.equals(CndTypes.EXTEND_ITEM_TYPE)) {
             return STRING_KEYS;

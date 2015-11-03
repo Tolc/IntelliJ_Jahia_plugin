@@ -327,7 +327,7 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_VALUE] [PROPERTY_ATTRIBUTES] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  // PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_VALUE] [(PROPERTY_ATTRIBUTE)*] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
   public static boolean propertyMinus(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyMinus")) return false;
     if (!nextTokenIs(b, PROPERTY_MINUS_OPENING)) return false;
@@ -348,10 +348,22 @@ public class CndParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // [PROPERTY_ATTRIBUTES]
+  // [(PROPERTY_ATTRIBUTE)*]
   private static boolean propertyMinus_6(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyMinus_6")) return false;
-    consumeToken(b, PROPERTY_ATTRIBUTES);
+    propertyMinus_6_0(b, l + 1);
+    return true;
+  }
+
+  // (PROPERTY_ATTRIBUTE)*
+  private static boolean propertyMinus_6_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyMinus_6_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, PROPERTY_ATTRIBUTE)) break;
+      if (!empty_element_parsed_guard_(b, "propertyMinus_6_0", c)) break;
+      c = current_position_(b);
+    }
     return true;
   }
 
@@ -363,13 +375,13 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PROPERTY_PLUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_VALUE] [PROPERTY_ATTRIBUTES]
+  // PROPERTY_PLUS_OPENING PROPERTY_PLUS_NAME PROPERTY_TYPE_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_VALUE] [(PROPERTY_PLUS_ATTRIBUTE)*]
   public static boolean propertyPlus(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyPlus")) return false;
     if (!nextTokenIs(b, PROPERTY_PLUS_OPENING)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, PROPERTY_PLUS_OPENING, PROPERTY_NAME, PROPERTY_TYPE_OPENING, NODE_TYPE_NAMESPACE, NODE_TYPE_DECLARATION_COLON, NODE_TYPE_NAME, PROPERTY_TYPE_CLOSING);
+    r = consumeTokens(b, 0, PROPERTY_PLUS_OPENING, PROPERTY_PLUS_NAME, PROPERTY_TYPE_OPENING, NODE_TYPE_NAMESPACE, NODE_TYPE_DECLARATION_COLON, NODE_TYPE_NAME, PROPERTY_TYPE_CLOSING);
     r = r && propertyPlus_7(b, l + 1);
     r = r && propertyPlus_8(b, l + 1);
     exit_section_(b, m, PROPERTY_PLUS, r);
@@ -383,10 +395,22 @@ public class CndParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // [PROPERTY_ATTRIBUTES]
+  // [(PROPERTY_PLUS_ATTRIBUTE)*]
   private static boolean propertyPlus_8(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyPlus_8")) return false;
-    consumeToken(b, PROPERTY_ATTRIBUTES);
+    propertyPlus_8_0(b, l + 1);
+    return true;
+  }
+
+  // (PROPERTY_PLUS_ATTRIBUTE)*
+  private static boolean propertyPlus_8_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyPlus_8_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, PROPERTY_PLUS_ATTRIBUTE)) break;
+      if (!empty_element_parsed_guard_(b, "propertyPlus_8_0", c)) break;
+      c = current_position_(b);
+    }
     return true;
   }
 
