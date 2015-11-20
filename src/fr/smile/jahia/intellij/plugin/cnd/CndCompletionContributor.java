@@ -4,6 +4,7 @@ import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.patterns.PlatformPatterns;
+import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import fr.smile.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.smile.jahia.intellij.plugin.cnd.psi.CndNodeType;
@@ -24,7 +25,7 @@ public class CndCompletionContributor extends CompletionContributor {
 
                         List<CndNamespace> namespaces = CndUtil.findNamespaces(parameters.getPosition().getProject());
                         for (CndNamespace namespace : namespaces) {
-                            resultSet.addElement(LookupElementBuilder.create(namespace.getNamespaceName() + ":"));
+                            resultSet.addElement(LookupElementBuilder.create(namespace.getNamespaceName()));
                         }
                     }
                 }
@@ -60,6 +61,60 @@ public class CndCompletionContributor extends CompletionContributor {
                             for (CndNodeType nodeType : nodeTypes) {
                                 resultSet.addElement(LookupElementBuilder.create(namespace.getNamespaceName() + ":" + nodeType.getNodeTypeName()));
                             }
+                        }
+                    }
+                }
+        );
+
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.NODE_TYPE_INHERITANCE_COLON).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+
+                        Project project = parameters.getPosition().getProject();
+                        PsiElement namespace = parameters.getPosition().getPrevSibling();
+
+                        List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace.getText());
+                        for (CndNodeType nodeType : nodeTypes) {
+                            resultSet.addElement(LookupElementBuilder.create(":" + nodeType.getNodeTypeName()));
+                        }
+                    }
+                }
+        );
+
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.NODE_TYPE_INHERITANCE_TYPE_NAME).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+
+                        Project project = parameters.getPosition().getProject();
+                        PsiElement namespace = parameters.getPosition().getPrevSibling().getPrevSibling();
+
+                        List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace.getText());
+                        for (CndNodeType nodeType : nodeTypes) {
+                            resultSet.addElement(LookupElementBuilder.create(nodeType.getNodeTypeName()));
+                        }
+                    }
+                }
+        );
+
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.NODE_TYPE_NAME).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+
+                        Project project = parameters.getPosition().getProject();
+                        PsiElement namespace = parameters.getPosition().getPrevSibling().getPrevSibling();
+
+                        List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace.getText());
+                        for (CndNodeType nodeType : nodeTypes) {
+                            resultSet.addElement(LookupElementBuilder.create(nodeType.getNodeTypeName()));
                         }
                     }
                 }
