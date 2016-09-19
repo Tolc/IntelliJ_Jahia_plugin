@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-  <id>fr.smile.jahia.intellij.plugin</id>
+  <id>fr.tolc.jahia.intellij.plugin</id>
   <name>Jahia</name>
   <version>1.0</version>
   <vendor email="thomas.coquel117@gmail.com" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
@@ -56,23 +56,23 @@ k
     <todoIndexer filetype="Simple file" implementationClass="com.simpleplugin.SimpleTodoIndexer"/>
 
     <!-- CND -->
-    <fileTypeFactory implementation="fr.smile.jahia.intellij.plugin.cnd.CndFileTypeFactory"/>
-    <lang.parserDefinition language="Cnd" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndParserDefinition"/>
-    <lang.syntaxHighlighterFactory key="Cnd" language="Cnd" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndSyntaxHighlighterFactory"/>
-    <!--<colorSettingsPage implementation="fr.smile.jahia.intellij.plugin.cnd.CndColorSettingsPage"/>-->
-    <annotator language="JAVA" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndAnnotator"/>
-    <!--<codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndLineMarkerProvider"/>-->
-    <completion.contributor language="Cnd" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndCompletionContributor"/>
-    <!--<psi.referenceContributor implementation="fr.smile.jahia.intellij.plugin.cnd.CndReferenceContributor"/>-->
-    <!--<lang.findUsagesProvider language="Cnd" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndFindUsagesProvider"/>-->
-    <!--<lang.refactoringSupport language="Cnd" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndRefactoringSupportProvider"/>-->
-    <!--<lang.foldingBuilder language="JAVA" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndFoldingBuilder"/>-->
-    <!--<gotoSymbolContributor implementation="fr.smile.jahia.intellij.plugin.cnd.CndChooseByNameContributor"/>-->
-    <!--<lang.psiStructureViewFactory language="Cnd" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndStructureViewFactory"/>-->
-    <!--<lang.formatter language="Cnd" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndFormattingModelBuilder"/>-->
-    <!--<codeStyleSettingsProvider implementation="fr.smile.jahia.intellij.plugin.cnd.CndCodeStyleSettingsProvider"/>-->
-    <!--<langCodeStyleSettingsProvider implementation="fr.smile.jahia.intellij.plugin.cnd.CndLanguageCodeStyleSettingsProvider"/>-->
-    <!--<lang.commenter language="Cnd" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndCommenter"/>-->
-    <!--<todoIndexer filetype="Cnd file" implementationClass="fr.smile.jahia.intellij.plugin.cnd.CndTodoIndexer"/>-->
+    <fileTypeFactory implementation="fr.tolc.jahia.intellij.plugin.cnd.CndFileTypeFactory"/>
+    <lang.parserDefinition language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndParserDefinition"/>
+    <lang.syntaxHighlighterFactory key="Cnd" language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighterFactory"/>
+    <!--<colorSettingsPage implementation="fr.tolc.jahia.intellij.plugin.cnd.CndColorSettingsPage"/>-->
+    <annotator language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndAnnotator"/>
+    <!--<codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndLineMarkerProvider"/>-->
+    <completion.contributor language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCompletionContributor"/>
+    <!--<psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.CndReferenceContributor"/>-->
+    <!--<lang.findUsagesProvider language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFindUsagesProvider"/>-->
+    <!--<lang.refactoringSupport language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndRefactoringSupportProvider"/>-->
+    <!--<lang.foldingBuilder language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFoldingBuilder"/>-->
+    <!--<gotoSymbolContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.CndChooseByNameContributor"/>-->
+    <!--<lang.psiStructureViewFactory language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndStructureViewFactory"/>-->
+    <!--<lang.formatter language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFormattingModelBuilder"/>-->
+    <!--<codeStyleSettingsProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.CndCodeStyleSettingsProvider"/>-->
+    <!--<langCodeStyleSettingsProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.CndLanguageCodeStyleSettingsProvider"/>-->
+    <!--<lang.commenter language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCommenter"/>-->
+    <!--<todoIndexer filetype="Cnd file" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndTodoIndexer"/>-->
   </extensions>
 </idea-plugin>

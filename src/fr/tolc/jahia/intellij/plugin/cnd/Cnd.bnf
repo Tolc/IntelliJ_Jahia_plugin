@@ -1,0 +1,33 @@
+{
+  parserClass="fr.tolc.jahia.intellij.plugin.cnd.parser.CndParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Cnd"
+  psiImplClassSuffix="Impl"
+  psiPackage="fr.tolc.jahia.intellij.plugin.cnd.psi"
+  psiImplPackage="fr.tolc.jahia.intellij.plugin.cnd.psi.impl"
+
+  elementTypeHolderClass="fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes"
+  elementTypeClass="fr.tolc.jahia.intellij.plugin.cnd.psi.CndElementType"
+  tokenTypeClass="fr.tolc.jahia.intellij.plugin.cnd.psi.CndTokenType"
+
+  psiImplUtilClass="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndPsiImplUtil"
+}
+
+cndFile ::= namespace* (COMMENT|nodeType|CRLF)*
+
+namespace ::= NAMESPACE_OPENING NAMESPACE_NAME NAMESPACE_EQUAL NAMESPACE_URI NAMESPACE_CLOSING { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNamespaceElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespaceElement" methods=[getNamespaceName getNamespaceURI]}
+
+nodeType ::= NODE_TYPE_DECLARATION_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME NODE_TYPE_DECLARATION_CLOSING [inheritances] [NODE_TYPE_ORDERABLE|NODE_TYPE_MIXIN|NODE_TYPE_MIXIN WHITE_SPACE+ NODE_TYPE_ORDERABLE|NODE_TYPE_ORDERABLE WHITE_SPACE+ NODE_TYPE_MIXIN|NODE_TYPE_ABSTRACT] [extend] [properties] {mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNodeTypeElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeElement" methods=[getNodeTypeName setNodeTypeName getNodeTypeNamespace getNameIdentifier getName setName]}
+
+inheritances ::= NODE_TYPE_INHERITANCE_OPENING inheritance (NODE_TYPE_INHERITANCE_TYPE_COMMA inheritance)*
+inheritance ::= NODE_TYPE_INHERITANCE_NAMESPACE NODE_TYPE_INHERITANCE_COLON NODE_TYPE_INHERITANCE_TYPE_NAME
+
+extend ::= EXTEND_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME [EXTEND_ITEM_START EXTEND_ITEM_TYPE]
+
+properties ::= (propertyMinus|propertyPlus)*
+propertyMinus ::= PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_VALUE] [(PROPERTY_ATTRIBUTE)*] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+propertyPlus ::= PROPERTY_PLUS_OPENING PROPERTY_PLUS_NAME PROPERTY_TYPE_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_VALUE] [(PROPERTY_PLUS_ATTRIBUTE)*]
