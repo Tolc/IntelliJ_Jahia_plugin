@@ -50,7 +50,7 @@ PROPERTY_TYPE="string"(","{WHITE_SPACE}*("richtext"|"textarea"|"choicelist"("[re
 PROPERTY_DEFAULT={WHITE_SPACE}+"="{WHITE_SPACE}+
 PROPERTY_DEFAULT_VALUE="'"[^\r\n]*"'"|[:digit:]+|"true"|"false"
 PROPERTY_PLUS_DEFAULT_VALUE={NAMESPACE_CHARS}{NODE_TYPE_DECLARATION_SEPARATOR}{NODE_TYPE_CHARS}
-PROPERTY_ATTRIBUTE="mandatory"|"hidden"|"multiple"|"nofulltext"|"indexed=no"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict=sum"
+PROPERTY_ATTRIBUTE="mandatory"|"protected"|"primary"|"hidden"|"multiple"|"nofulltext"|"indexed=no"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict=sum"
 PROPERTY_PLUS_ATTRIBUTE={WHITE_SPACE}+"autocreated"
 PROPERTY_CONSTRAINT_START={WHITE_SPACE}+"<"{WHITE_SPACE}+
 PROPERTY_CONSTRAINT=("'"[^\r\n]+"',"{WHITE_SPACE}*)*"'"[^\r\n]+"'"|([:jletterdigit:]+","{WHITE_SPACE}*)*[:jletterdigit:]+|{NAMESPACE_CHARS}{NODE_TYPE_DECLARATION_SEPARATOR}{NODE_TYPE_CHARS}

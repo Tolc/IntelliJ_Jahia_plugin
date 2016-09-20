@@ -1,6 +1,12 @@
 package fr.tolc.jahia.intellij.plugin.cnd;
 
-import com.intellij.codeInsight.completion.*;
+import java.util.List;
+
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionProvider;
+import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.patterns.PlatformPatterns;
@@ -9,12 +15,7 @@ import com.intellij.util.ProcessingContext;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class CndCompletionContributor extends CompletionContributor {
     public CndCompletionContributor() {
@@ -149,7 +150,7 @@ public class CndCompletionContributor extends CompletionContributor {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
-                        String[] attributes = {"mandatory", "hidden", "multiple", "nofulltext",
+                        String[] attributes = {"mandatory", "protected", "primary", "hidden", "multiple", "nofulltext",
                                 "indexed=no", "autocreated", "boost=", "onconflict=sum"
                         };
                         for (String attribute : attributes) {
