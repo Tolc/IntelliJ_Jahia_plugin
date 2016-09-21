@@ -150,7 +150,7 @@ public class CndCompletionContributor extends CompletionContributor {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
-                        String[] attributes = {"mandatory", "protected", "primary", "hidden", "multiple", "nofulltext",
+                        String[] attributes = {"mandatory", "protected", "primary", "i18n", "hidden", "multiple", "nofulltext",
                                 "indexed=no", "autocreated", "boost=", "onconflict=sum"
                         };
                         for (String attribute : attributes) {
