@@ -57,7 +57,7 @@ PROPERTY_CONSTRAINT=("'"[^\r\n]+"',"{WHITE_SPACE}*)*"'"[^\r\n]+"'"|([:jletterdig
 
 EXTEND_START="extends"{WHITE_SPACE}*"="
 EXTEND_ITEM_TYPE_START="itemtype"{WHITE_SPACE}*"="
-EXTEND_ITEM_TYPE_VALUE="default"|"options"
+EXTEND_ITEM_TYPE_VALUE="default"|"options"|"layout"
 
 %state NAMESPACE_BEGIN
 %state NAMESPACE_NAME_DONE
