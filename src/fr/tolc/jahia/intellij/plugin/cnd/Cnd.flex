@@ -47,7 +47,7 @@ PROPERTY_NAME_CHARS=[:jletter:]([:jletterdigit:]|:)*
 PROPERTY_PLUS_NAME_CHARS={PROPERTY_NAME_CHARS}|"*"
 PROPERTY_TYPE_START={WHITE_SPACE}+"("
 PROPERTY_TYPE_END=")"
-PROPERTY_TYPE="string"(","{WHITE_SPACE}*("text"|"richtext"|"textarea"|"choicelist"("["("resourceBundle"|("country"(",flag"){0,1}))"]"){0,1})){0,1}|"long"|"double"|"boolean"|"date"|"weakreference"(","{WHITE_SPACE}*"picker[type='"("image"|"file"|"page"|"category"|"folder")"'"(",mime='"[^\r\n]+"'"){0,1}"]"|","{WHITE_SPACE}*"category"("[autoSelectParent="("true"|"false")"]"){0,1}){0,1}
+PROPERTY_TYPE="string"(","{WHITE_SPACE}*("text"|"richtext"|"textarea"|"choicelist"("["("resourceBundle"|("country"(",flag"){0,1}))"]"){0,1})){0,1}|"long"|"double"|"boolean"|"date"|"binary"|"weakreference"(","{WHITE_SPACE}*"picker[type='"("image"|"file"|"page"|"category"|"folder"|"contentfolder")"'"(",mime='"[^\r\n]+"'"){0,1}"]"|","{WHITE_SPACE}*"category"("[autoSelectParent="("true"|"false")"]"){0,1}){0,1}
 PROPERTY_DEFAULT={WHITE_SPACE}+"="{WHITE_SPACE}+
 PROPERTY_DEFAULT_VALUE="'"[^\r\n]*"'"|[:digit:]+|"true"|"false"|"now()"|[:jletter:][:jletterdigit:]*
 PROPERTY_PLUS_DEFAULT_VALUE={NAMESPACE_CHARS}{NODE_TYPE_DECLARATION_SEPARATOR}{NODE_TYPE_CHARS}
