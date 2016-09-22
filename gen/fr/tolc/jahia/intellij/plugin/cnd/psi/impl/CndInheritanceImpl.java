@@ -2,8 +2,6 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
 
 import java.util.List;
-
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndVisitor;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
@@ -19,8 +17,12 @@ public class CndInheritanceImpl extends ASTWrapperPsiElement implements CndInher
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitInheritance(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitInheritance(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -57,6 +57,7 @@ PROPERTY_CONSTRAINT_START={WHITE_SPACE}+"<"{WHITE_SPACE}+
 PROPERTY_CONSTRAINT=("'"[^\r\n]+"',"{WHITE_SPACE}*)*"'"[^\r\n]+"'"|([:jletterdigit:]+","{WHITE_SPACE}*)*[:jletterdigit:]+|{NAMESPACE_CHARS}{NODE_TYPE_DECLARATION_SEPARATOR}{NODE_TYPE_CHARS}
 
 EXTEND_START="extends"{WHITE_SPACE}*"="
+EXTEND_ANOTHER={WHITE_SPACE}*","
 EXTEND_ITEM_TYPE_START="itemtype"{WHITE_SPACE}*"="
 EXTEND_ITEM_TYPE_VALUE="default"|"options"|"layout"
 
@@ -93,6 +94,7 @@ EXTEND_ITEM_TYPE_VALUE="default"|"options"|"layout"
 %state EXTEND_BEGIN
 %state EXTEND_NAMESPACE_DONE
 %state EXTEND_COLON_DONE
+%state EXTEND_DONE
 %state EXTEND_ITEM_BEGIN
 
 
@@ -159,7 +161,8 @@ EXTEND_ITEM_TYPE_VALUE="default"|"options"|"layout"
 <YYINITIAL> {EXTEND_START}                                      { yybegin(EXTEND_BEGIN); return CndTypes.EXTEND_OPENING; }
 <EXTEND_BEGIN> {NAMESPACE_CHARS}                                { yybegin(EXTEND_NAMESPACE_DONE); return CndTypes.NODE_TYPE_NAMESPACE; }
 <EXTEND_NAMESPACE_DONE> {NODE_TYPE_DECLARATION_SEPARATOR}       { yybegin(EXTEND_COLON_DONE); return CndTypes.NODE_TYPE_DECLARATION_COLON; }
-<EXTEND_COLON_DONE> {NODE_TYPE_CHARS}                           { yybegin(YYINITIAL); return CndTypes.NODE_TYPE_NAME; }
+<EXTEND_COLON_DONE> {NODE_TYPE_CHARS}                           { yybegin(EXTEND_DONE); return CndTypes.NODE_TYPE_NAME; }
+<EXTEND_DONE> {EXTEND_ANOTHER}                           		{ yybegin(EXTEND_BEGIN); return CndTypes.EXTEND_COMMA; }
 <YYINITIAL> {EXTEND_ITEM_TYPE_START}                            { yybegin(EXTEND_ITEM_BEGIN); return CndTypes.EXTEND_ITEM_START; }
 <EXTEND_ITEM_BEGIN> {EXTEND_ITEM_TYPE_VALUE}                    { yybegin(YYINITIAL); return CndTypes.EXTEND_ITEM_TYPE; }
 

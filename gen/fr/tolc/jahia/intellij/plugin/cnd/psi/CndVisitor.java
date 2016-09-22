@@ -11,6 +11,10 @@ public class CndVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitExtendNodeType(@NotNull CndExtendNodeType o) {
+    visitPsiElement(o);
+  }
+
   public void visitInheritance(@NotNull CndInheritance o) {
     visitPsiElement(o);
   }

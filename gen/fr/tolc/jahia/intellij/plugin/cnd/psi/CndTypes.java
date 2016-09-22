@@ -5,12 +5,11 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.impl.*;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndInheritancesImpl;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndPropertiesImpl;
 
 public interface CndTypes {
 
   IElementType EXTEND = new CndElementType("EXTEND");
+  IElementType EXTEND_NODE_TYPE = new CndElementType("EXTEND_NODE_TYPE");
   IElementType INHERITANCE = new CndElementType("INHERITANCE");
   IElementType INHERITANCES = new CndElementType("INHERITANCES");
   IElementType NAMESPACE = new CndElementType("NAMESPACE");
@@ -21,6 +20,7 @@ public interface CndTypes {
 
   IElementType COMMENT = new CndTokenType("COMMENT");
   IElementType CRLF = new CndTokenType("CRLF");
+  IElementType EXTEND_COMMA = new CndTokenType("EXTEND_COMMA");
   IElementType EXTEND_ITEM_START = new CndTokenType("EXTEND_ITEM_START");
   IElementType EXTEND_ITEM_TYPE = new CndTokenType("EXTEND_ITEM_TYPE");
   IElementType EXTEND_OPENING = new CndTokenType("EXTEND_OPENING");
@@ -62,6 +62,9 @@ public interface CndTypes {
       IElementType type = node.getElementType();
        if (type == EXTEND) {
         return new CndExtendImpl(node);
+      }
+      else if (type == EXTEND_NODE_TYPE) {
+        return new CndExtendNodeTypeImpl(node);
       }
       else if (type == INHERITANCE) {
         return new CndInheritanceImpl(node);

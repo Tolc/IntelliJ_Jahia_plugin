@@ -2,15 +2,14 @@
 package fr.tolc.jahia.intellij.plugin.cnd.parser;
 
 import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.lang.PsiParser;
-import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.psi.tree.IElementType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class CndParser implements PsiParser, LightPsiParser {
@@ -24,28 +23,31 @@ public class CndParser implements PsiParser, LightPsiParser {
     boolean r;
     b = adapt_builder_(t, b, this, null);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    if (t == CndTypes.EXTEND) {
+    if (t == EXTEND) {
       r = extend(b, 0);
     }
-    else if (t == CndTypes.INHERITANCE) {
+    else if (t == EXTEND_NODE_TYPE) {
+      r = extendNodeType(b, 0);
+    }
+    else if (t == INHERITANCE) {
       r = inheritance(b, 0);
     }
-    else if (t == CndTypes.INHERITANCES) {
+    else if (t == INHERITANCES) {
       r = inheritances(b, 0);
     }
-    else if (t == CndTypes.NAMESPACE) {
+    else if (t == NAMESPACE) {
       r = namespace(b, 0);
     }
-    else if (t == CndTypes.NODE_TYPE) {
+    else if (t == NODE_TYPE) {
       r = nodeType(b, 0);
     }
-    else if (t == CndTypes.PROPERTIES) {
+    else if (t == PROPERTIES) {
       r = properties(b, 0);
     }
-    else if (t == CndTypes.PROPERTY_MINUS) {
+    else if (t == PROPERTY_MINUS) {
       r = propertyMinus(b, 0);
     }
-    else if (t == CndTypes.PROPERTY_PLUS) {
+    else if (t == PROPERTY_PLUS) {
       r = propertyPlus(b, 0);
     }
     else {
@@ -99,42 +101,79 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "cndFile_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = GeneratedParserUtilBase.consumeToken(b, CndTypes.COMMENT);
+    r = consumeToken(b, COMMENT);
     if (!r) r = nodeType(b, l + 1);
-    if (!r) r = GeneratedParserUtilBase.consumeToken(b, CndTypes.CRLF);
+    if (!r) r = consumeToken(b, CRLF);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // EXTEND_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME [EXTEND_ITEM_START EXTEND_ITEM_TYPE]
+  // EXTEND_OPENING extendNodeType (EXTEND_COMMA extendNodeType)* [EXTEND_ITEM_START EXTEND_ITEM_TYPE]
   public static boolean extend(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "extend")) return false;
-    if (!GeneratedParserUtilBase.nextTokenIs(b, CndTypes.EXTEND_OPENING)) return false;
+    if (!nextTokenIs(b, EXTEND_OPENING)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, CndTypes.EXTEND_OPENING, CndTypes.NODE_TYPE_NAMESPACE, CndTypes.NODE_TYPE_DECLARATION_COLON, CndTypes.NODE_TYPE_NAME);
-    r = r && extend_4(b, l + 1);
-    exit_section_(b, m, CndTypes.EXTEND, r);
+    r = consumeToken(b, EXTEND_OPENING);
+    r = r && extendNodeType(b, l + 1);
+    r = r && extend_2(b, l + 1);
+    r = r && extend_3(b, l + 1);
+    exit_section_(b, m, EXTEND, r);
+    return r;
+  }
+
+  // (EXTEND_COMMA extendNodeType)*
+  private static boolean extend_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "extend_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!extend_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "extend_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // EXTEND_COMMA extendNodeType
+  private static boolean extend_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "extend_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EXTEND_COMMA);
+    r = r && extendNodeType(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
   // [EXTEND_ITEM_START EXTEND_ITEM_TYPE]
-  private static boolean extend_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "extend_4")) return false;
-    GeneratedParserUtilBase.parseTokens(b, 0, CndTypes.EXTEND_ITEM_START, CndTypes.EXTEND_ITEM_TYPE);
+  private static boolean extend_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "extend_3")) return false;
+    parseTokens(b, 0, EXTEND_ITEM_START, EXTEND_ITEM_TYPE);
     return true;
+  }
+
+  /* ********************************************************** */
+  // NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME
+  public static boolean extendNodeType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "extendNodeType")) return false;
+    if (!nextTokenIs(b, NODE_TYPE_NAMESPACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, NODE_TYPE_NAMESPACE, NODE_TYPE_DECLARATION_COLON, NODE_TYPE_NAME);
+    exit_section_(b, m, EXTEND_NODE_TYPE, r);
+    return r;
   }
 
   /* ********************************************************** */
   // NODE_TYPE_INHERITANCE_NAMESPACE NODE_TYPE_INHERITANCE_COLON NODE_TYPE_INHERITANCE_TYPE_NAME
   public static boolean inheritance(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "inheritance")) return false;
-    if (!GeneratedParserUtilBase.nextTokenIs(b, CndTypes.NODE_TYPE_INHERITANCE_NAMESPACE)) return false;
+    if (!nextTokenIs(b, NODE_TYPE_INHERITANCE_NAMESPACE)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, CndTypes.NODE_TYPE_INHERITANCE_NAMESPACE, CndTypes.NODE_TYPE_INHERITANCE_COLON, CndTypes.NODE_TYPE_INHERITANCE_TYPE_NAME);
-    exit_section_(b, m, CndTypes.INHERITANCE, r);
+    r = consumeTokens(b, 0, NODE_TYPE_INHERITANCE_NAMESPACE, NODE_TYPE_INHERITANCE_COLON, NODE_TYPE_INHERITANCE_TYPE_NAME);
+    exit_section_(b, m, INHERITANCE, r);
     return r;
   }
 
@@ -142,13 +181,13 @@ public class CndParser implements PsiParser, LightPsiParser {
   // NODE_TYPE_INHERITANCE_OPENING inheritance (NODE_TYPE_INHERITANCE_TYPE_COMMA inheritance)*
   public static boolean inheritances(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "inheritances")) return false;
-    if (!GeneratedParserUtilBase.nextTokenIs(b, CndTypes.NODE_TYPE_INHERITANCE_OPENING)) return false;
+    if (!nextTokenIs(b, NODE_TYPE_INHERITANCE_OPENING)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = GeneratedParserUtilBase.consumeToken(b, CndTypes.NODE_TYPE_INHERITANCE_OPENING);
+    r = consumeToken(b, NODE_TYPE_INHERITANCE_OPENING);
     r = r && inheritance(b, l + 1);
     r = r && inheritances_2(b, l + 1);
-    exit_section_(b, m, CndTypes.INHERITANCES, r);
+    exit_section_(b, m, INHERITANCES, r);
     return r;
   }
 
@@ -169,7 +208,7 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "inheritances_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = GeneratedParserUtilBase.consumeToken(b, CndTypes.NODE_TYPE_INHERITANCE_TYPE_COMMA);
+    r = consumeToken(b, NODE_TYPE_INHERITANCE_TYPE_COMMA);
     r = r && inheritance(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -179,11 +218,11 @@ public class CndParser implements PsiParser, LightPsiParser {
   // NAMESPACE_OPENING NAMESPACE_NAME NAMESPACE_EQUAL NAMESPACE_URI NAMESPACE_CLOSING
   public static boolean namespace(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace")) return false;
-    if (!GeneratedParserUtilBase.nextTokenIs(b, CndTypes.NAMESPACE_OPENING)) return false;
+    if (!nextTokenIs(b, NAMESPACE_OPENING)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, CndTypes.NAMESPACE_OPENING, CndTypes.NAMESPACE_NAME, CndTypes.NAMESPACE_EQUAL, CndTypes.NAMESPACE_URI, CndTypes.NAMESPACE_CLOSING);
-    exit_section_(b, m, CndTypes.NAMESPACE, r);
+    r = consumeTokens(b, 0, NAMESPACE_OPENING, NAMESPACE_NAME, NAMESPACE_EQUAL, NAMESPACE_URI, NAMESPACE_CLOSING);
+    exit_section_(b, m, NAMESPACE, r);
     return r;
   }
 
@@ -191,15 +230,15 @@ public class CndParser implements PsiParser, LightPsiParser {
   // NODE_TYPE_DECLARATION_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME NODE_TYPE_DECLARATION_CLOSING [inheritances] [NODE_TYPE_ORDERABLE|NODE_TYPE_MIXIN|NODE_TYPE_MIXIN WHITE_SPACE+ NODE_TYPE_ORDERABLE|NODE_TYPE_ORDERABLE WHITE_SPACE+ NODE_TYPE_MIXIN|NODE_TYPE_ABSTRACT] [extend] [properties]
   public static boolean nodeType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "nodeType")) return false;
-    if (!GeneratedParserUtilBase.nextTokenIs(b, CndTypes.NODE_TYPE_DECLARATION_OPENING)) return false;
+    if (!nextTokenIs(b, NODE_TYPE_DECLARATION_OPENING)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, CndTypes.NODE_TYPE_DECLARATION_OPENING, CndTypes.NODE_TYPE_NAMESPACE, CndTypes.NODE_TYPE_DECLARATION_COLON, CndTypes.NODE_TYPE_NAME, CndTypes.NODE_TYPE_DECLARATION_CLOSING);
+    r = consumeTokens(b, 0, NODE_TYPE_DECLARATION_OPENING, NODE_TYPE_NAMESPACE, NODE_TYPE_DECLARATION_COLON, NODE_TYPE_NAME, NODE_TYPE_DECLARATION_CLOSING);
     r = r && nodeType_5(b, l + 1);
     r = r && nodeType_6(b, l + 1);
     r = r && nodeType_7(b, l + 1);
     r = r && nodeType_8(b, l + 1);
-    exit_section_(b, m, CndTypes.NODE_TYPE, r);
+    exit_section_(b, m, NODE_TYPE, r);
     return r;
   }
 
@@ -222,11 +261,11 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "nodeType_6_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = GeneratedParserUtilBase.consumeToken(b, CndTypes.NODE_TYPE_ORDERABLE);
-    if (!r) r = GeneratedParserUtilBase.consumeToken(b, CndTypes.NODE_TYPE_MIXIN);
+    r = consumeToken(b, NODE_TYPE_ORDERABLE);
+    if (!r) r = consumeToken(b, NODE_TYPE_MIXIN);
     if (!r) r = nodeType_6_0_2(b, l + 1);
     if (!r) r = nodeType_6_0_3(b, l + 1);
-    if (!r) r = GeneratedParserUtilBase.consumeToken(b, CndTypes.NODE_TYPE_ABSTRACT);
+    if (!r) r = consumeToken(b, NODE_TYPE_ABSTRACT);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -236,9 +275,9 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "nodeType_6_0_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = GeneratedParserUtilBase.consumeToken(b, CndTypes.NODE_TYPE_MIXIN);
+    r = consumeToken(b, NODE_TYPE_MIXIN);
     r = r && nodeType_6_0_2_1(b, l + 1);
-    r = r && GeneratedParserUtilBase.consumeToken(b, CndTypes.NODE_TYPE_ORDERABLE);
+    r = r && consumeToken(b, NODE_TYPE_ORDERABLE);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -248,10 +287,10 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "nodeType_6_0_2_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = GeneratedParserUtilBase.consumeToken(b, CndTypes.WHITE_SPACE);
+    r = consumeToken(b, WHITE_SPACE);
     int c = current_position_(b);
     while (r) {
-      if (!GeneratedParserUtilBase.consumeToken(b, CndTypes.WHITE_SPACE)) break;
+      if (!consumeToken(b, WHITE_SPACE)) break;
       if (!empty_element_parsed_guard_(b, "nodeType_6_0_2_1", c)) break;
       c = current_position_(b);
     }
@@ -264,9 +303,9 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "nodeType_6_0_3")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = GeneratedParserUtilBase.consumeToken(b, CndTypes.NODE_TYPE_ORDERABLE);
+    r = consumeToken(b, NODE_TYPE_ORDERABLE);
     r = r && nodeType_6_0_3_1(b, l + 1);
-    r = r && GeneratedParserUtilBase.consumeToken(b, CndTypes.NODE_TYPE_MIXIN);
+    r = r && consumeToken(b, NODE_TYPE_MIXIN);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -276,10 +315,10 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "nodeType_6_0_3_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = GeneratedParserUtilBase.consumeToken(b, CndTypes.WHITE_SPACE);
+    r = consumeToken(b, WHITE_SPACE);
     int c = current_position_(b);
     while (r) {
-      if (!GeneratedParserUtilBase.consumeToken(b, CndTypes.WHITE_SPACE)) break;
+      if (!consumeToken(b, WHITE_SPACE)) break;
       if (!empty_element_parsed_guard_(b, "nodeType_6_0_3_1", c)) break;
       c = current_position_(b);
     }
@@ -305,14 +344,14 @@ public class CndParser implements PsiParser, LightPsiParser {
   // (propertyMinus|propertyPlus)*
   public static boolean properties(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "properties")) return false;
-    Marker m = enter_section_(b, l, _NONE_, "<properties>");
+    Marker m = enter_section_(b, l, _NONE_, PROPERTIES, "<properties>");
     int c = current_position_(b);
     while (true) {
       if (!properties_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "properties", c)) break;
       c = current_position_(b);
     }
-    exit_section_(b, l, m, CndTypes.PROPERTIES, true, false, null);
+    exit_section_(b, l, m, true, false, null);
     return true;
   }
 
@@ -331,21 +370,21 @@ public class CndParser implements PsiParser, LightPsiParser {
   // PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_VALUE] [(PROPERTY_ATTRIBUTE)*] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
   public static boolean propertyMinus(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyMinus")) return false;
-    if (!GeneratedParserUtilBase.nextTokenIs(b, CndTypes.PROPERTY_MINUS_OPENING)) return false;
+    if (!nextTokenIs(b, PROPERTY_MINUS_OPENING)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, CndTypes.PROPERTY_MINUS_OPENING, CndTypes.PROPERTY_NAME, CndTypes.PROPERTY_TYPE_OPENING, CndTypes.PROPERTY_TYPE, CndTypes.PROPERTY_TYPE_CLOSING);
+    r = consumeTokens(b, 0, PROPERTY_MINUS_OPENING, PROPERTY_NAME, PROPERTY_TYPE_OPENING, PROPERTY_TYPE, PROPERTY_TYPE_CLOSING);
     r = r && propertyMinus_5(b, l + 1);
     r = r && propertyMinus_6(b, l + 1);
     r = r && propertyMinus_7(b, l + 1);
-    exit_section_(b, m, CndTypes.PROPERTY_MINUS, r);
+    exit_section_(b, m, PROPERTY_MINUS, r);
     return r;
   }
 
   // [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_VALUE]
   private static boolean propertyMinus_5(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyMinus_5")) return false;
-    GeneratedParserUtilBase.parseTokens(b, 0, CndTypes.PROPERTY_DEFAULT_OPENING, CndTypes.PROPERTY_DEFAULT_VALUE);
+    parseTokens(b, 0, PROPERTY_DEFAULT_OPENING, PROPERTY_DEFAULT_VALUE);
     return true;
   }
 
@@ -361,7 +400,7 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "propertyMinus_6_0")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!GeneratedParserUtilBase.consumeToken(b, CndTypes.PROPERTY_ATTRIBUTE)) break;
+      if (!consumeToken(b, PROPERTY_ATTRIBUTE)) break;
       if (!empty_element_parsed_guard_(b, "propertyMinus_6_0", c)) break;
       c = current_position_(b);
     }
@@ -371,7 +410,7 @@ public class CndParser implements PsiParser, LightPsiParser {
   // [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
   private static boolean propertyMinus_7(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyMinus_7")) return false;
-    GeneratedParserUtilBase.parseTokens(b, 0, CndTypes.PROPERTY_CONSTRAINT_OPENING, CndTypes.PROPERTY_CONSTRAINT);
+    parseTokens(b, 0, PROPERTY_CONSTRAINT_OPENING, PROPERTY_CONSTRAINT);
     return true;
   }
 
@@ -379,20 +418,20 @@ public class CndParser implements PsiParser, LightPsiParser {
   // PROPERTY_PLUS_OPENING PROPERTY_PLUS_NAME PROPERTY_TYPE_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_VALUE] [(PROPERTY_PLUS_ATTRIBUTE)*]
   public static boolean propertyPlus(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyPlus")) return false;
-    if (!GeneratedParserUtilBase.nextTokenIs(b, CndTypes.PROPERTY_PLUS_OPENING)) return false;
+    if (!nextTokenIs(b, PROPERTY_PLUS_OPENING)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, CndTypes.PROPERTY_PLUS_OPENING, CndTypes.PROPERTY_PLUS_NAME, CndTypes.PROPERTY_TYPE_OPENING, CndTypes.NODE_TYPE_NAMESPACE, CndTypes.NODE_TYPE_DECLARATION_COLON, CndTypes.NODE_TYPE_NAME, CndTypes.PROPERTY_TYPE_CLOSING);
+    r = consumeTokens(b, 0, PROPERTY_PLUS_OPENING, PROPERTY_PLUS_NAME, PROPERTY_TYPE_OPENING, NODE_TYPE_NAMESPACE, NODE_TYPE_DECLARATION_COLON, NODE_TYPE_NAME, PROPERTY_TYPE_CLOSING);
     r = r && propertyPlus_7(b, l + 1);
     r = r && propertyPlus_8(b, l + 1);
-    exit_section_(b, m, CndTypes.PROPERTY_PLUS, r);
+    exit_section_(b, m, PROPERTY_PLUS, r);
     return r;
   }
 
   // [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_VALUE]
   private static boolean propertyPlus_7(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyPlus_7")) return false;
-    GeneratedParserUtilBase.parseTokens(b, 0, CndTypes.PROPERTY_DEFAULT_OPENING, CndTypes.PROPERTY_DEFAULT_VALUE);
+    parseTokens(b, 0, PROPERTY_DEFAULT_OPENING, PROPERTY_DEFAULT_VALUE);
     return true;
   }
 
@@ -408,7 +447,7 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "propertyPlus_8_0")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!GeneratedParserUtilBase.consumeToken(b, CndTypes.PROPERTY_PLUS_ATTRIBUTE)) break;
+      if (!consumeToken(b, PROPERTY_PLUS_ATTRIBUTE)) break;
       if (!empty_element_parsed_guard_(b, "propertyPlus_8_0", c)) break;
       c = current_position_(b);
     }

@@ -2,11 +2,6 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
 
 import java.util.List;
-
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndInheritances;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperties;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndVisitor;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
@@ -21,8 +16,12 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitNodeType(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitNodeType(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 

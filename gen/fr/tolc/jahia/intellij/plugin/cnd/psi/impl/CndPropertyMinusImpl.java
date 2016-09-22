@@ -2,9 +2,6 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
 
 import java.util.List;
-
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyMinus;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndVisitor;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
@@ -20,8 +17,12 @@ public class CndPropertyMinusImpl extends ASTWrapperPsiElement implements CndPro
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitPropertyMinus(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitPropertyMinus(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 
