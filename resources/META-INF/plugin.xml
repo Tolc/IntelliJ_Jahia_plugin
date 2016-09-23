@@ -72,7 +72,7 @@ k
     <!--<lang.formatter language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFormattingModelBuilder"/>-->
     <!--<codeStyleSettingsProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.CndCodeStyleSettingsProvider"/>-->
     <!--<langCodeStyleSettingsProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.CndLanguageCodeStyleSettingsProvider"/>-->
-    <!--<lang.commenter language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCommenter"/>-->
+    <lang.commenter language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCommenter"/>
     <!--<todoIndexer filetype="Cnd file" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndTodoIndexer"/>-->
   </extensions>
 </idea-plugin>
