@@ -1,5 +1,8 @@
 package fr.tolc.jahia.intellij.plugin.cnd;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -9,9 +12,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CndAnnotator implements Annotator {
 
@@ -47,7 +47,7 @@ public class CndAnnotator implements Annotator {
                             Annotation nodeTypeNameAnnotation = holder.createInfoAnnotation(nodeTypeNameRange, null);
                             nodeTypeNameAnnotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
                         } else {
-                            holder.createErrorAnnotation(nodeTypeNameRange, "Unresolved CND node type");
+                            holder.createErrorAnnotation(nodeTypeNameRange, "Unresolved CND node type").registerFix(new CreateNodeTypeQuickFix(namespace, nodeTypeName));
                         }
                     } else {
                         holder.createErrorAnnotation(namespaceRange, "Unresolved CND namespace");
