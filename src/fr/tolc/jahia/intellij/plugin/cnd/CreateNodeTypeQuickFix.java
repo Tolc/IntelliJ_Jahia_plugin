@@ -84,7 +84,6 @@ public class CreateNodeTypeQuickFix extends BaseIntentionAction {
                 ASTNode beforeLastChildNode = lastChildNode.getTreePrev();
 
                 //There should be an empty line between two node type declarations
-                //TODO: fix that
                 if (!lastChildNode.getElementType().equals(CndTypes.CRLF)) {
                     cndFile.getNode().addChild(CndElementFactory.createCRLF(project).getNode());
                 }
