@@ -92,9 +92,9 @@ public class CreateNodeTypeQuickFix extends BaseIntentionAction {
                     cndFile.getNode().addChild(CndElementFactory.createCRLF(project).getNode());
                 }
                 
-                CndNodeType property = CndElementFactory.createNodeType(project, nodeTypeName, namespace);
-                cndFile.getNode().addChild(property.getNode());
-                ((Navigatable) property.getLastChild().getNavigationElement()).navigate(true);
+                CndNodeType cndNodeType = CndElementFactory.createNodeType(project, nodeTypeName, namespace);
+                cndFile.getNode().addChild(cndNodeType.getNode());
+                ((Navigatable) cndNodeType.getLastChild().getNavigationElement()).navigate(true);
                 FileEditorManager.getInstance(project).getSelectedTextEditor().getCaretModel().moveCaretRelatively(2, 0, false, false, false);
 
                 // almost the same thing but manipulating plain text of the document instead of PSI
