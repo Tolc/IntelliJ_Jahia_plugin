@@ -60,13 +60,11 @@ public class CreateNodeTypeQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                Collection<VirtualFile> virtualFiles =
-                        FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
+                Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
                 if (virtualFiles.size() == 1) {
                     createNodeType(project, virtualFiles.iterator().next());
                 } else {
-                    final FileChooserDescriptor descriptor =
-                            FileChooserDescriptorFactory.createSingleFileDescriptor(CndFileType.INSTANCE);
+                    final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFileDescriptor(CndFileType.INSTANCE);
                     descriptor.setRoots(project.getBaseDir());
                     final VirtualFile file = FileChooser.chooseFile(descriptor, project, null);
                     if (file != null) {
@@ -83,13 +81,14 @@ public class CreateNodeTypeQuickFix extends BaseIntentionAction {
             public void run() {
                 CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(file);
                 ASTNode lastChildNode = cndFile.getNode().getLastChildNode();
+                ASTNode beforeLastChildNode = lastChildNode.getTreePrev();
 
                 //There should be an empty line between two node type declarations
                 //TODO: fix that
-                if (lastChildNode != null && !lastChildNode.getElementType().equals(CndTypes.CRLF)) {
+                if (!lastChildNode.getElementType().equals(CndTypes.CRLF)) {
                     cndFile.getNode().addChild(CndElementFactory.createCRLF(project).getNode());
-                    cndFile.getNode().addChild(CndElementFactory.createCRLF(project).getNode());
-                } else {
+                }
+                if (!beforeLastChildNode.getElementType().equals(CndTypes.CRLF)) {
                     cndFile.getNode().addChild(CndElementFactory.createCRLF(project).getNode());
                 }
                 
