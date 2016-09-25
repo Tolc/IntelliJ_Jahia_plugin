@@ -22,4 +22,46 @@ public class CndPropertyMinusImpl extends ASTWrapperPsiElement implements CndPro
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public CndPropertyBinary getPropertyBinary() {
+    return findChildByClass(CndPropertyBinary.class);
+  }
+
+  @Override
+  @Nullable
+  public CndPropertyBoolean getPropertyBoolean() {
+    return findChildByClass(CndPropertyBoolean.class);
+  }
+
+  @Override
+  @Nullable
+  public CndPropertyDate getPropertyDate() {
+    return findChildByClass(CndPropertyDate.class);
+  }
+
+  @Override
+  @Nullable
+  public CndPropertyDouble getPropertyDouble() {
+    return findChildByClass(CndPropertyDouble.class);
+  }
+
+  @Override
+  @Nullable
+  public CndPropertyLong getPropertyLong() {
+    return findChildByClass(CndPropertyLong.class);
+  }
+
+  @Override
+  @Nullable
+  public CndPropertyString getPropertyString() {
+    return findChildByClass(CndPropertyString.class);
+  }
+
+  @Override
+  @Nullable
+  public CndPropertyWeakreference getPropertyWeakreference() {
+    return findChildByClass(CndPropertyWeakreference.class);
+  }
+
 }

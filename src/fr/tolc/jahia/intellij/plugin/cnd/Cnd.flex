@@ -47,9 +47,9 @@ PROPERTY_NAME_CHARS=[:jletter:]([:jletterdigit:]|:)*
 PROPERTY_PLUS_NAME_CHARS={PROPERTY_NAME_CHARS}|"*"
 PROPERTY_TYPE_START={WHITE_SPACE}+"("
 PROPERTY_TYPE_END=")"
-PROPERTY_TYPE="string"(","{WHITE_SPACE}*("text"|"richtext"|"textarea"|"choicelist"("["("resourceBundle"|("country"(",flag"){0,1}))"]"){0,1})){0,1}|"long"|"double"|"boolean"|"date"|"binary"|"weakreference"(","{WHITE_SPACE}*"picker[type='"("image"|"file"|"page"|"category"|"folder"|"contentfolder")"'"(",mime='"[^\r\n]+"'"){0,1}"]"|","{WHITE_SPACE}*"category"("[autoSelectParent="("true"|"false")"]"){0,1}|","{WHITE_SPACE}*"file"("[folder]"){0,1}){0,1}
+//PROPERTY_TYPE="string"(","{WHITE_SPACE}*("text"|"richtext"|"textarea"|"choicelist"("["("resourceBundle"|("country"(",flag"){0,1}))"]"){0,1})){0,1}|"long"|"double"|"boolean"|"date"|"binary"|"weakreference"(","{WHITE_SPACE}*"picker[type='"("image"|"file"|"page"|"category"|"folder"|"contentfolder")"'"(",mime='"[^\r\n]+"'"){0,1}"]"|","{WHITE_SPACE}*"category"("[autoSelectParent="("true"|"false")"]"){0,1}|","{WHITE_SPACE}*"file"("[folder]"){0,1}){0,1}
 PROPERTY_DEFAULT={WHITE_SPACE}+"="{WHITE_SPACE}+
-PROPERTY_DEFAULT_VALUE="'"[^\r\n]*"'"|[:digit:]+|"true"|"false"|"now()"|[:jletter:][:jletterdigit:]*
+//PROPERTY_DEFAULT_VALUE="'"[^\r\n]*"'"|[:digit:]+|"true"|"false"|"now()"|[:jletter:][:jletterdigit:]*
 PROPERTY_PLUS_DEFAULT_VALUE={NAMESPACE_CHARS}{NODE_TYPE_DECLARATION_SEPARATOR}{NODE_TYPE_CHARS}
 PROPERTY_ATTRIBUTE="mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="("no"|"'untokenized'")|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict=sum"|"facetable"
 PROPERTY_PLUS_ATTRIBUTE={WHITE_SPACE}+"autocreated"
@@ -60,6 +60,38 @@ EXTEND_START="extends"{WHITE_SPACE}*"="
 EXTEND_ANOTHER={WHITE_SPACE}*","
 EXTEND_ITEM_TYPE_START="itemtype"{WHITE_SPACE}*"="
 EXTEND_ITEM_TYPE_VALUE="default"|"options"|"layout"
+
+
+//REGEX="'"(^(?:(?:[^?+*{}()[\]\\|]+|\\.|\[(?:\^?\\.|\^[^\\]|[^\\^])(?:[^\]\\]+|\\.)*\]|\((?:\?[:=!]|\?<[=!]|\?>|\?<[^\W\d]\w*>|\?'[^\W\d]\w*')?(?<N>)|\)(?<-N>))(?:(?:[?+*]|\{\d+(?:,\d*)?\})[?+]?)?|\|)*$(?(N)(?!)))"'"
+//REGEX="'"[^\r\n]*"'"
+
+
+PROPERTY_TYPE_PRECISION_COMMA={WHITE_SPACE}*","{WHITE_SPACE}*
+
+PROPERTY_TYPE_BINARY="binary"
+PROPERTY_TYPE_LONG="long"
+PROPERTY_DEFAULT_LONG=[:digit:]+
+PROPERTY_TYPE_DOUBLE="double"
+PROPERTY_DEFAULT_DOUBLE=[:digit:]+"."[:digit:]+
+PROPERTY_TYPE_BOOLEAN="boolean"
+PROPERTY_DEFAULT_BOOLEAN="true"|"false"
+PROPERTY_TYPE_DATE="date"
+PROPERTY_DEFAULT_DATE="now()"|"'"[:digit:]{4}"-"(0[1-9]|1[0-2])"-"(0[1-9]|[1-2][0-9]|3[0-1])"T"([0-1][0-9]|2[0-3])":"([0-5][0-9])":"([0-5][0-9])"."([0-9][0-9][0-9])"+"([0-1][0-9]|2[0-3])":"([0-5][0-9])"'"
+
+PROPERTY_TYPE_STRING="string"
+PROPERTY_TYPE_STRING_PRECISION_TEXT="text"|"richtext"|"textarea"
+PROPERTY_TYPE_STRING_TEXT={PROPERTY_TYPE_STRING} ({PROPERTY_TYPE_PRECISION_COMMA} {PROPERTY_TYPE_STRING_PRECISION_TEXT}){0,1}
+PROPERTY_DEFAULT_STRING_TEXT="'"[^\r\n]*"'"
+PROPERTY_TYPE_STRING_PRECISION_CHOICELIST="choicelist"("["("resourceBundle"|("country"(",flag"){0,1}))"]"){0,1}
+PROPERTY_TYPE_STRING_CHOICELIST={PROPERTY_TYPE_STRING} {PROPERTY_TYPE_PRECISION_COMMA} {PROPERTY_TYPE_STRING_PRECISION_CHOICELIST}
+PROPERTY_DEFAULT_STRING_CHOICELIST=[^\r\n]*
+
+PROPERTY_TYPE_WEAKREFERENCE="weakreference"
+PROPERTY_TYPE_WEAKREFERENCE_PRECISION_PICKER="picker[type='"("image"|"file"|"page"|"category"|"folder"|"contentfolder")"'"(",mime='"[-\w+]+"/"([-\w+]+|"*")"'"){0,1}"]"
+PROPERTY_TYPE_WEAKREFERENCE_PRECISION_CATEGORY="category"("[autoSelectParent="("true"|"false")"]"){0,1}
+PROPERTY_TYPE_WEAKREFERENCE_PRECISION_FILE="file"("[folder]"){0,1}
+PROPERTY_TYPE_WEAKREFERENCE_FINAL={PROPERTY_TYPE_WEAKREFERENCE} ({PROPERTY_TYPE_PRECISION_COMMA} ({PROPERTY_TYPE_WEAKREFERENCE_PRECISION_PICKER} | {PROPERTY_TYPE_WEAKREFERENCE_PRECISION_CATEGORY} | {PROPERTY_TYPE_WEAKREFERENCE_PRECISION_FILE})){0,1}
+
 
 %state NAMESPACE_BEGIN
 %state NAMESPACE_NAME_DONE
@@ -132,17 +164,30 @@ EXTEND_ITEM_TYPE_VALUE="default"|"options"|"layout"
 <NODE_TYPE_INHERITANCE> {NODE_TYPE_INHERITANCE_ABSTRACT}                    { yybegin(NODE_TYPE_INHERITANCE); return CndTypes.NODE_TYPE_ABSTRACT; }
 
 
-
+//TODO: transform into separate shit per type
 //Node type properties
 <YYINITIAL> {PROPERTY_MINUS_START}                         { yybegin(PROPERTY_MINUS_BEGIN); return CndTypes.PROPERTY_MINUS_OPENING; }
 <PROPERTY_MINUS_BEGIN> {PROPERTY_NAME_CHARS}               { yybegin(PROPERTY_NAME_DONE); return CndTypes.PROPERTY_NAME; }
 <PROPERTY_NAME_DONE> {PROPERTY_TYPE_START}                 { yybegin(PROPERTY_TYPE_BEGIN); return CndTypes.PROPERTY_TYPE_OPENING; }
-<PROPERTY_TYPE_BEGIN> {PROPERTY_TYPE}                      { yybegin(PROPERTY_TYPE_DONE); return CndTypes.PROPERTY_TYPE; }
+    <PROPERTY_TYPE_BEGIN> {PROPERTY_TYPE_BINARY}                    { yybegin(PROPERTY_TYPE_DONE); return CndTypes.PROPERTY_TYPE_BINARY; }
+    <PROPERTY_TYPE_BEGIN> {PROPERTY_TYPE_LONG}                      { yybegin(PROPERTY_TYPE_DONE); return CndTypes.PROPERTY_TYPE_LONG; }
+    <PROPERTY_TYPE_BEGIN> {PROPERTY_TYPE_DOUBLE}                    { yybegin(PROPERTY_TYPE_DONE); return CndTypes.PROPERTY_TYPE_DOUBLE; }
+    <PROPERTY_TYPE_BEGIN> {PROPERTY_TYPE_BOOLEAN}                   { yybegin(PROPERTY_TYPE_DONE); return CndTypes.PROPERTY_TYPE_BOOLEAN; }
+    <PROPERTY_TYPE_BEGIN> {PROPERTY_TYPE_DATE}                      { yybegin(PROPERTY_TYPE_DONE); return CndTypes.PROPERTY_TYPE_DATE; }
+    <PROPERTY_TYPE_BEGIN> {PROPERTY_TYPE_STRING_TEXT}               { yybegin(PROPERTY_TYPE_DONE); return CndTypes.PROPERTY_TYPE_STRING_TEXT; }
+    <PROPERTY_TYPE_BEGIN> {PROPERTY_TYPE_STRING_CHOICELIST}         { yybegin(PROPERTY_TYPE_DONE); return CndTypes.PROPERTY_TYPE_STRING_CHOICELIST; }
+    <PROPERTY_TYPE_BEGIN> {PROPERTY_TYPE_WEAKREFERENCE_FINAL}       { yybegin(PROPERTY_TYPE_DONE); return CndTypes.PROPERTY_TYPE_WEAKREFERENCE; }
 <PROPERTY_TYPE_DONE> {PROPERTY_TYPE_END}                   { yybegin(PROPERTY_ADDENDUM); return CndTypes.PROPERTY_TYPE_CLOSING; }
 <PROPERTY_ADDENDUM> {PROPERTY_DEFAULT}                     { yybegin(PROPERTY_DEFAULT_BEGIN); return CndTypes.PROPERTY_DEFAULT_OPENING; }
-<PROPERTY_DEFAULT_BEGIN> {PROPERTY_DEFAULT_VALUE}          { yybegin(PROPERTY_ADDENDUM); return CndTypes.PROPERTY_DEFAULT_VALUE; }
-<PROPERTY_ADDENDUM> {PROPERTY_ATTRIBUTE}                   { yybegin(PROPERTY_ADDENDUM); return CndTypes.PROPERTY_ATTRIBUTE; }
-<PROPERTY_ADDENDUM> {PROPERTY_CONSTRAINT_START}            { yybegin(PROPERTY_CONSTRAINT_BEGIN); return CndTypes.PROPERTY_CONSTRAINT_OPENING; }
+<PROPERTY_ADDENDUM> {WHITE_SPACE}                          { yybegin(PROPERTY_ADDENDUM_ATTR); return TokenType.WHITE_SPACE; }
+    <PROPERTY_DEFAULT_BEGIN> {PROPERTY_DEFAULT_LONG}                { yybegin(PROPERTY_ADDENDUM_ATTR); return CndTypes.PROPERTY_DEFAULT_LONG; }
+    <PROPERTY_DEFAULT_BEGIN> {PROPERTY_DEFAULT_DOUBLE}              { yybegin(PROPERTY_ADDENDUM_ATTR); return CndTypes.PROPERTY_DEFAULT_DOUBLE; }
+    <PROPERTY_DEFAULT_BEGIN> {PROPERTY_DEFAULT_BOOLEAN}             { yybegin(PROPERTY_ADDENDUM_ATTR); return CndTypes.PROPERTY_DEFAULT_BOOLEAN; }
+    <PROPERTY_DEFAULT_BEGIN> {PROPERTY_DEFAULT_DATE}                { yybegin(PROPERTY_ADDENDUM_ATTR); return CndTypes.PROPERTY_DEFAULT_DATE; }
+    <PROPERTY_DEFAULT_BEGIN> {PROPERTY_DEFAULT_STRING_TEXT}         { yybegin(PROPERTY_ADDENDUM_ATTR); return CndTypes.PROPERTY_DEFAULT_STRING_TEXT; }
+    <PROPERTY_DEFAULT_BEGIN> {PROPERTY_DEFAULT_STRING_CHOICELIST}   { yybegin(PROPERTY_ADDENDUM_ATTR); return CndTypes.PROPERTY_DEFAULT_STRING_CHOICELIST; }
+<PROPERTY_ADDENDUM_ATTR> {PROPERTY_ATTRIBUTE}              { yybegin(PROPERTY_ADDENDUM_ATTR); return CndTypes.PROPERTY_ATTRIBUTE; }
+<PROPERTY_ADDENDUM_ATTR> {PROPERTY_CONSTRAINT_START}       { yybegin(PROPERTY_CONSTRAINT_BEGIN); return CndTypes.PROPERTY_CONSTRAINT_OPENING; }
 <PROPERTY_CONSTRAINT_BEGIN> {PROPERTY_CONSTRAINT}          { yybegin(YYINITIAL); return CndTypes.PROPERTY_CONSTRAINT; }
 
 <YYINITIAL> {PROPERTY_PLUS_START}                                   { yybegin(PROPERTY_PLUS_BEGIN); return CndTypes.PROPERTY_PLUS_OPENING; }

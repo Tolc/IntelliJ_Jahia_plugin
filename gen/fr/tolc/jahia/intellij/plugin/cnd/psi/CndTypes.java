@@ -15,8 +15,17 @@ public interface CndTypes {
   IElementType NAMESPACE = new CndElementType("NAMESPACE");
   IElementType NODE_TYPE = new CndElementType("NODE_TYPE");
   IElementType PROPERTIES = new CndElementType("PROPERTIES");
+  IElementType PROPERTY_BINARY = new CndElementType("PROPERTY_BINARY");
+  IElementType PROPERTY_BOOLEAN = new CndElementType("PROPERTY_BOOLEAN");
+  IElementType PROPERTY_DATE = new CndElementType("PROPERTY_DATE");
+  IElementType PROPERTY_DOUBLE = new CndElementType("PROPERTY_DOUBLE");
+  IElementType PROPERTY_LONG = new CndElementType("PROPERTY_LONG");
   IElementType PROPERTY_MINUS = new CndElementType("PROPERTY_MINUS");
   IElementType PROPERTY_PLUS = new CndElementType("PROPERTY_PLUS");
+  IElementType PROPERTY_STRING = new CndElementType("PROPERTY_STRING");
+  IElementType PROPERTY_STRING_CHOICELIST = new CndElementType("PROPERTY_STRING_CHOICELIST");
+  IElementType PROPERTY_STRING_TEXT = new CndElementType("PROPERTY_STRING_TEXT");
+  IElementType PROPERTY_WEAKREFERENCE = new CndElementType("PROPERTY_WEAKREFERENCE");
 
   IElementType COMMENT = new CndTokenType("COMMENT");
   IElementType CRLF = new CndTokenType("CRLF");
@@ -45,16 +54,29 @@ public interface CndTypes {
   IElementType PROPERTY_ATTRIBUTE = new CndTokenType("PROPERTY_ATTRIBUTE");
   IElementType PROPERTY_CONSTRAINT = new CndTokenType("PROPERTY_CONSTRAINT");
   IElementType PROPERTY_CONSTRAINT_OPENING = new CndTokenType("PROPERTY_CONSTRAINT_OPENING");
+  IElementType PROPERTY_DEFAULT_BOOLEAN = new CndTokenType("PROPERTY_DEFAULT_BOOLEAN");
+  IElementType PROPERTY_DEFAULT_DATE = new CndTokenType("PROPERTY_DEFAULT_DATE");
+  IElementType PROPERTY_DEFAULT_DOUBLE = new CndTokenType("PROPERTY_DEFAULT_DOUBLE");
+  IElementType PROPERTY_DEFAULT_LONG = new CndTokenType("PROPERTY_DEFAULT_LONG");
   IElementType PROPERTY_DEFAULT_OPENING = new CndTokenType("PROPERTY_DEFAULT_OPENING");
+  IElementType PROPERTY_DEFAULT_STRING_CHOICELIST = new CndTokenType("PROPERTY_DEFAULT_STRING_CHOICELIST");
+  IElementType PROPERTY_DEFAULT_STRING_TEXT = new CndTokenType("PROPERTY_DEFAULT_STRING_TEXT");
   IElementType PROPERTY_DEFAULT_VALUE = new CndTokenType("PROPERTY_DEFAULT_VALUE");
   IElementType PROPERTY_MINUS_OPENING = new CndTokenType("PROPERTY_MINUS_OPENING");
   IElementType PROPERTY_NAME = new CndTokenType("PROPERTY_NAME");
   IElementType PROPERTY_PLUS_ATTRIBUTE = new CndTokenType("PROPERTY_PLUS_ATTRIBUTE");
   IElementType PROPERTY_PLUS_NAME = new CndTokenType("PROPERTY_PLUS_NAME");
   IElementType PROPERTY_PLUS_OPENING = new CndTokenType("PROPERTY_PLUS_OPENING");
-  IElementType PROPERTY_TYPE = new CndTokenType("PROPERTY_TYPE");
+  IElementType PROPERTY_TYPE_BINARY = new CndTokenType("PROPERTY_TYPE_BINARY");
+  IElementType PROPERTY_TYPE_BOOLEAN = new CndTokenType("PROPERTY_TYPE_BOOLEAN");
   IElementType PROPERTY_TYPE_CLOSING = new CndTokenType("PROPERTY_TYPE_CLOSING");
+  IElementType PROPERTY_TYPE_DATE = new CndTokenType("PROPERTY_TYPE_DATE");
+  IElementType PROPERTY_TYPE_DOUBLE = new CndTokenType("PROPERTY_TYPE_DOUBLE");
+  IElementType PROPERTY_TYPE_LONG = new CndTokenType("PROPERTY_TYPE_LONG");
   IElementType PROPERTY_TYPE_OPENING = new CndTokenType("PROPERTY_TYPE_OPENING");
+  IElementType PROPERTY_TYPE_STRING_CHOICELIST = new CndTokenType("PROPERTY_TYPE_STRING_CHOICELIST");
+  IElementType PROPERTY_TYPE_STRING_TEXT = new CndTokenType("PROPERTY_TYPE_STRING_TEXT");
+  IElementType PROPERTY_TYPE_WEAKREFERENCE = new CndTokenType("PROPERTY_TYPE_WEAKREFERENCE");
   IElementType WHITE_SPACE = new CndTokenType("WHITE_SPACE");
 
   class Factory {
@@ -81,11 +103,38 @@ public interface CndTypes {
       else if (type == PROPERTIES) {
         return new CndPropertiesImpl(node);
       }
+      else if (type == PROPERTY_BINARY) {
+        return new CndPropertyBinaryImpl(node);
+      }
+      else if (type == PROPERTY_BOOLEAN) {
+        return new CndPropertyBooleanImpl(node);
+      }
+      else if (type == PROPERTY_DATE) {
+        return new CndPropertyDateImpl(node);
+      }
+      else if (type == PROPERTY_DOUBLE) {
+        return new CndPropertyDoubleImpl(node);
+      }
+      else if (type == PROPERTY_LONG) {
+        return new CndPropertyLongImpl(node);
+      }
       else if (type == PROPERTY_MINUS) {
         return new CndPropertyMinusImpl(node);
       }
       else if (type == PROPERTY_PLUS) {
         return new CndPropertyPlusImpl(node);
+      }
+      else if (type == PROPERTY_STRING) {
+        return new CndPropertyStringImpl(node);
+      }
+      else if (type == PROPERTY_STRING_CHOICELIST) {
+        return new CndPropertyStringChoicelistImpl(node);
+      }
+      else if (type == PROPERTY_STRING_TEXT) {
+        return new CndPropertyStringTextImpl(node);
+      }
+      else if (type == PROPERTY_WEAKREFERENCE) {
+        return new CndPropertyWeakreferenceImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

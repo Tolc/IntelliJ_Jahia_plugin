@@ -35,11 +35,47 @@ public class CndVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitPropertyBinary(@NotNull CndPropertyBinary o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyBoolean(@NotNull CndPropertyBoolean o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyDate(@NotNull CndPropertyDate o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyDouble(@NotNull CndPropertyDouble o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyLong(@NotNull CndPropertyLong o) {
+    visitPsiElement(o);
+  }
+
   public void visitPropertyMinus(@NotNull CndPropertyMinus o) {
     visitPsiElement(o);
   }
 
   public void visitPropertyPlus(@NotNull CndPropertyPlus o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyString(@NotNull CndPropertyString o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyStringChoicelist(@NotNull CndPropertyStringChoicelist o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyStringText(@NotNull CndPropertyStringText o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyWeakreference(@NotNull CndPropertyWeakreference o) {
     visitPsiElement(o);
   }
 

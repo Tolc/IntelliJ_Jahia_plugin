@@ -44,11 +44,38 @@ public class CndParser implements PsiParser, LightPsiParser {
     else if (t == PROPERTIES) {
       r = properties(b, 0);
     }
+    else if (t == PROPERTY_BINARY) {
+      r = propertyBinary(b, 0);
+    }
+    else if (t == PROPERTY_BOOLEAN) {
+      r = propertyBoolean(b, 0);
+    }
+    else if (t == PROPERTY_DATE) {
+      r = propertyDate(b, 0);
+    }
+    else if (t == PROPERTY_DOUBLE) {
+      r = propertyDouble(b, 0);
+    }
+    else if (t == PROPERTY_LONG) {
+      r = propertyLong(b, 0);
+    }
     else if (t == PROPERTY_MINUS) {
       r = propertyMinus(b, 0);
     }
     else if (t == PROPERTY_PLUS) {
       r = propertyPlus(b, 0);
+    }
+    else if (t == PROPERTY_STRING) {
+      r = propertyString(b, 0);
+    }
+    else if (t == PROPERTY_STRING_CHOICELIST) {
+      r = propertyStringChoicelist(b, 0);
+    }
+    else if (t == PROPERTY_STRING_TEXT) {
+      r = propertyStringText(b, 0);
+    }
+    else if (t == PROPERTY_WEAKREFERENCE) {
+      r = propertyWeakreference(b, 0);
     }
     else {
       r = parse_root_(t, b, 0);
@@ -371,7 +398,7 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (propertyMinus CRLF |propertyPlus CRLF |CRLF)*
+  // (propertyMinus CRLF | propertyPlus CRLF | CRLF)*
   public static boolean properties(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "properties")) return false;
     Marker m = enter_section_(b, l, _NONE_, "<properties>");
@@ -385,7 +412,7 @@ public class CndParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // propertyMinus CRLF |propertyPlus CRLF |CRLF
+  // propertyMinus CRLF | propertyPlus CRLF | CRLF
   private static boolean properties_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "properties_0")) return false;
     boolean r;
@@ -420,51 +447,253 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_VALUE] [(PROPERTY_ATTRIBUTE)*] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
-  public static boolean propertyMinus(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "propertyMinus")) return false;
+  // PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE_BINARY PROPERTY_TYPE_CLOSING [(PROPERTY_ATTRIBUTE)*] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  public static boolean propertyBinary(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyBinary")) return false;
     if (!nextTokenIs(b, PROPERTY_MINUS_OPENING)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, PROPERTY_MINUS_OPENING, PROPERTY_NAME, PROPERTY_TYPE_OPENING, PROPERTY_TYPE, PROPERTY_TYPE_CLOSING);
-    r = r && propertyMinus_5(b, l + 1);
-    r = r && propertyMinus_6(b, l + 1);
-    r = r && propertyMinus_7(b, l + 1);
-    exit_section_(b, m, PROPERTY_MINUS, r);
+    r = consumeTokens(b, 0, PROPERTY_MINUS_OPENING, PROPERTY_NAME, PROPERTY_TYPE_OPENING, PROPERTY_TYPE_BINARY, PROPERTY_TYPE_CLOSING);
+    r = r && propertyBinary_5(b, l + 1);
+    r = r && propertyBinary_6(b, l + 1);
+    exit_section_(b, m, PROPERTY_BINARY, r);
     return r;
   }
 
-  // [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_VALUE]
-  private static boolean propertyMinus_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "propertyMinus_5")) return false;
-    parseTokens(b, 0, PROPERTY_DEFAULT_OPENING, PROPERTY_DEFAULT_VALUE);
-    return true;
-  }
-
   // [(PROPERTY_ATTRIBUTE)*]
-  private static boolean propertyMinus_6(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "propertyMinus_6")) return false;
-    propertyMinus_6_0(b, l + 1);
+  private static boolean propertyBinary_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyBinary_5")) return false;
+    propertyBinary_5_0(b, l + 1);
     return true;
   }
 
   // (PROPERTY_ATTRIBUTE)*
-  private static boolean propertyMinus_6_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "propertyMinus_6_0")) return false;
+  private static boolean propertyBinary_5_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyBinary_5_0")) return false;
     int c = current_position_(b);
     while (true) {
       if (!consumeToken(b, PROPERTY_ATTRIBUTE)) break;
-      if (!empty_element_parsed_guard_(b, "propertyMinus_6_0", c)) break;
+      if (!empty_element_parsed_guard_(b, "propertyBinary_5_0", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
   // [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
-  private static boolean propertyMinus_7(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "propertyMinus_7")) return false;
+  private static boolean propertyBinary_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyBinary_6")) return false;
     parseTokens(b, 0, PROPERTY_CONSTRAINT_OPENING, PROPERTY_CONSTRAINT);
     return true;
+  }
+
+  /* ********************************************************** */
+  // PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE_BOOLEAN PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_BOOLEAN] [(PROPERTY_ATTRIBUTE)*] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  public static boolean propertyBoolean(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyBoolean")) return false;
+    if (!nextTokenIs(b, PROPERTY_MINUS_OPENING)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, PROPERTY_MINUS_OPENING, PROPERTY_NAME, PROPERTY_TYPE_OPENING, PROPERTY_TYPE_BOOLEAN, PROPERTY_TYPE_CLOSING);
+    r = r && propertyBoolean_5(b, l + 1);
+    r = r && propertyBoolean_6(b, l + 1);
+    r = r && propertyBoolean_7(b, l + 1);
+    exit_section_(b, m, PROPERTY_BOOLEAN, r);
+    return r;
+  }
+
+  // [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_BOOLEAN]
+  private static boolean propertyBoolean_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyBoolean_5")) return false;
+    parseTokens(b, 0, PROPERTY_DEFAULT_OPENING, PROPERTY_DEFAULT_BOOLEAN);
+    return true;
+  }
+
+  // [(PROPERTY_ATTRIBUTE)*]
+  private static boolean propertyBoolean_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyBoolean_6")) return false;
+    propertyBoolean_6_0(b, l + 1);
+    return true;
+  }
+
+  // (PROPERTY_ATTRIBUTE)*
+  private static boolean propertyBoolean_6_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyBoolean_6_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, PROPERTY_ATTRIBUTE)) break;
+      if (!empty_element_parsed_guard_(b, "propertyBoolean_6_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  private static boolean propertyBoolean_7(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyBoolean_7")) return false;
+    parseTokens(b, 0, PROPERTY_CONSTRAINT_OPENING, PROPERTY_CONSTRAINT);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE_DATE PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_DATE] [(PROPERTY_ATTRIBUTE)*] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  public static boolean propertyDate(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyDate")) return false;
+    if (!nextTokenIs(b, PROPERTY_MINUS_OPENING)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, PROPERTY_MINUS_OPENING, PROPERTY_NAME, PROPERTY_TYPE_OPENING, PROPERTY_TYPE_DATE, PROPERTY_TYPE_CLOSING);
+    r = r && propertyDate_5(b, l + 1);
+    r = r && propertyDate_6(b, l + 1);
+    r = r && propertyDate_7(b, l + 1);
+    exit_section_(b, m, PROPERTY_DATE, r);
+    return r;
+  }
+
+  // [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_DATE]
+  private static boolean propertyDate_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyDate_5")) return false;
+    parseTokens(b, 0, PROPERTY_DEFAULT_OPENING, PROPERTY_DEFAULT_DATE);
+    return true;
+  }
+
+  // [(PROPERTY_ATTRIBUTE)*]
+  private static boolean propertyDate_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyDate_6")) return false;
+    propertyDate_6_0(b, l + 1);
+    return true;
+  }
+
+  // (PROPERTY_ATTRIBUTE)*
+  private static boolean propertyDate_6_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyDate_6_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, PROPERTY_ATTRIBUTE)) break;
+      if (!empty_element_parsed_guard_(b, "propertyDate_6_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  private static boolean propertyDate_7(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyDate_7")) return false;
+    parseTokens(b, 0, PROPERTY_CONSTRAINT_OPENING, PROPERTY_CONSTRAINT);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE_DOUBLE PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_DOUBLE] [(PROPERTY_ATTRIBUTE)*] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  public static boolean propertyDouble(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyDouble")) return false;
+    if (!nextTokenIs(b, PROPERTY_MINUS_OPENING)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, PROPERTY_MINUS_OPENING, PROPERTY_NAME, PROPERTY_TYPE_OPENING, PROPERTY_TYPE_DOUBLE, PROPERTY_TYPE_CLOSING);
+    r = r && propertyDouble_5(b, l + 1);
+    r = r && propertyDouble_6(b, l + 1);
+    r = r && propertyDouble_7(b, l + 1);
+    exit_section_(b, m, PROPERTY_DOUBLE, r);
+    return r;
+  }
+
+  // [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_DOUBLE]
+  private static boolean propertyDouble_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyDouble_5")) return false;
+    parseTokens(b, 0, PROPERTY_DEFAULT_OPENING, PROPERTY_DEFAULT_DOUBLE);
+    return true;
+  }
+
+  // [(PROPERTY_ATTRIBUTE)*]
+  private static boolean propertyDouble_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyDouble_6")) return false;
+    propertyDouble_6_0(b, l + 1);
+    return true;
+  }
+
+  // (PROPERTY_ATTRIBUTE)*
+  private static boolean propertyDouble_6_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyDouble_6_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, PROPERTY_ATTRIBUTE)) break;
+      if (!empty_element_parsed_guard_(b, "propertyDouble_6_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  private static boolean propertyDouble_7(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyDouble_7")) return false;
+    parseTokens(b, 0, PROPERTY_CONSTRAINT_OPENING, PROPERTY_CONSTRAINT);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE_LONG PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_LONG] [(PROPERTY_ATTRIBUTE)*] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  public static boolean propertyLong(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyLong")) return false;
+    if (!nextTokenIs(b, PROPERTY_MINUS_OPENING)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, PROPERTY_MINUS_OPENING, PROPERTY_NAME, PROPERTY_TYPE_OPENING, PROPERTY_TYPE_LONG, PROPERTY_TYPE_CLOSING);
+    r = r && propertyLong_5(b, l + 1);
+    r = r && propertyLong_6(b, l + 1);
+    r = r && propertyLong_7(b, l + 1);
+    exit_section_(b, m, PROPERTY_LONG, r);
+    return r;
+  }
+
+  // [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_LONG]
+  private static boolean propertyLong_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyLong_5")) return false;
+    parseTokens(b, 0, PROPERTY_DEFAULT_OPENING, PROPERTY_DEFAULT_LONG);
+    return true;
+  }
+
+  // [(PROPERTY_ATTRIBUTE)*]
+  private static boolean propertyLong_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyLong_6")) return false;
+    propertyLong_6_0(b, l + 1);
+    return true;
+  }
+
+  // (PROPERTY_ATTRIBUTE)*
+  private static boolean propertyLong_6_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyLong_6_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, PROPERTY_ATTRIBUTE)) break;
+      if (!empty_element_parsed_guard_(b, "propertyLong_6_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  private static boolean propertyLong_7(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyLong_7")) return false;
+    parseTokens(b, 0, PROPERTY_CONSTRAINT_OPENING, PROPERTY_CONSTRAINT);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // propertyBinary | propertyLong | propertyDouble | propertyBoolean | propertyDate | propertyString | propertyWeakreference
+  public static boolean propertyMinus(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyMinus")) return false;
+    if (!nextTokenIs(b, PROPERTY_MINUS_OPENING)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = propertyBinary(b, l + 1);
+    if (!r) r = propertyLong(b, l + 1);
+    if (!r) r = propertyDouble(b, l + 1);
+    if (!r) r = propertyBoolean(b, l + 1);
+    if (!r) r = propertyDate(b, l + 1);
+    if (!r) r = propertyString(b, l + 1);
+    if (!r) r = propertyWeakreference(b, l + 1);
+    exit_section_(b, m, PROPERTY_MINUS, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -504,6 +733,155 @@ public class CndParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "propertyPlus_8_0", c)) break;
       c = current_position_(b);
     }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // propertyStringText | propertyStringChoicelist
+  public static boolean propertyString(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyString")) return false;
+    if (!nextTokenIs(b, PROPERTY_MINUS_OPENING)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = propertyStringText(b, l + 1);
+    if (!r) r = propertyStringChoicelist(b, l + 1);
+    exit_section_(b, m, PROPERTY_STRING, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE_STRING_CHOICELIST PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_STRING_CHOICELIST] [(PROPERTY_ATTRIBUTE)*] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  public static boolean propertyStringChoicelist(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyStringChoicelist")) return false;
+    if (!nextTokenIs(b, PROPERTY_MINUS_OPENING)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, PROPERTY_MINUS_OPENING, PROPERTY_NAME, PROPERTY_TYPE_OPENING, PROPERTY_TYPE_STRING_CHOICELIST, PROPERTY_TYPE_CLOSING);
+    r = r && propertyStringChoicelist_5(b, l + 1);
+    r = r && propertyStringChoicelist_6(b, l + 1);
+    r = r && propertyStringChoicelist_7(b, l + 1);
+    exit_section_(b, m, PROPERTY_STRING_CHOICELIST, r);
+    return r;
+  }
+
+  // [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_STRING_CHOICELIST]
+  private static boolean propertyStringChoicelist_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyStringChoicelist_5")) return false;
+    parseTokens(b, 0, PROPERTY_DEFAULT_OPENING, PROPERTY_DEFAULT_STRING_CHOICELIST);
+    return true;
+  }
+
+  // [(PROPERTY_ATTRIBUTE)*]
+  private static boolean propertyStringChoicelist_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyStringChoicelist_6")) return false;
+    propertyStringChoicelist_6_0(b, l + 1);
+    return true;
+  }
+
+  // (PROPERTY_ATTRIBUTE)*
+  private static boolean propertyStringChoicelist_6_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyStringChoicelist_6_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, PROPERTY_ATTRIBUTE)) break;
+      if (!empty_element_parsed_guard_(b, "propertyStringChoicelist_6_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  private static boolean propertyStringChoicelist_7(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyStringChoicelist_7")) return false;
+    parseTokens(b, 0, PROPERTY_CONSTRAINT_OPENING, PROPERTY_CONSTRAINT);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE_STRING_TEXT PROPERTY_TYPE_CLOSING [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_STRING_TEXT] [(PROPERTY_ATTRIBUTE)*] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  public static boolean propertyStringText(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyStringText")) return false;
+    if (!nextTokenIs(b, PROPERTY_MINUS_OPENING)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, PROPERTY_MINUS_OPENING, PROPERTY_NAME, PROPERTY_TYPE_OPENING, PROPERTY_TYPE_STRING_TEXT, PROPERTY_TYPE_CLOSING);
+    r = r && propertyStringText_5(b, l + 1);
+    r = r && propertyStringText_6(b, l + 1);
+    r = r && propertyStringText_7(b, l + 1);
+    exit_section_(b, m, PROPERTY_STRING_TEXT, r);
+    return r;
+  }
+
+  // [PROPERTY_DEFAULT_OPENING PROPERTY_DEFAULT_STRING_TEXT]
+  private static boolean propertyStringText_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyStringText_5")) return false;
+    parseTokens(b, 0, PROPERTY_DEFAULT_OPENING, PROPERTY_DEFAULT_STRING_TEXT);
+    return true;
+  }
+
+  // [(PROPERTY_ATTRIBUTE)*]
+  private static boolean propertyStringText_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyStringText_6")) return false;
+    propertyStringText_6_0(b, l + 1);
+    return true;
+  }
+
+  // (PROPERTY_ATTRIBUTE)*
+  private static boolean propertyStringText_6_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyStringText_6_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, PROPERTY_ATTRIBUTE)) break;
+      if (!empty_element_parsed_guard_(b, "propertyStringText_6_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  private static boolean propertyStringText_7(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyStringText_7")) return false;
+    parseTokens(b, 0, PROPERTY_CONSTRAINT_OPENING, PROPERTY_CONSTRAINT);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // PROPERTY_MINUS_OPENING PROPERTY_NAME PROPERTY_TYPE_OPENING PROPERTY_TYPE_WEAKREFERENCE PROPERTY_TYPE_CLOSING [(PROPERTY_ATTRIBUTE)*] [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  public static boolean propertyWeakreference(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyWeakreference")) return false;
+    if (!nextTokenIs(b, PROPERTY_MINUS_OPENING)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, PROPERTY_MINUS_OPENING, PROPERTY_NAME, PROPERTY_TYPE_OPENING, PROPERTY_TYPE_WEAKREFERENCE, PROPERTY_TYPE_CLOSING);
+    r = r && propertyWeakreference_5(b, l + 1);
+    r = r && propertyWeakreference_6(b, l + 1);
+    exit_section_(b, m, PROPERTY_WEAKREFERENCE, r);
+    return r;
+  }
+
+  // [(PROPERTY_ATTRIBUTE)*]
+  private static boolean propertyWeakreference_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyWeakreference_5")) return false;
+    propertyWeakreference_5_0(b, l + 1);
+    return true;
+  }
+
+  // (PROPERTY_ATTRIBUTE)*
+  private static boolean propertyWeakreference_5_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyWeakreference_5_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, PROPERTY_ATTRIBUTE)) break;
+      if (!empty_element_parsed_guard_(b, "propertyWeakreference_5_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // [PROPERTY_CONSTRAINT_OPENING PROPERTY_CONSTRAINT]
+  private static boolean propertyWeakreference_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyWeakreference_6")) return false;
+    parseTokens(b, 0, PROPERTY_CONSTRAINT_OPENING, PROPERTY_CONSTRAINT);
     return true;
   }
 

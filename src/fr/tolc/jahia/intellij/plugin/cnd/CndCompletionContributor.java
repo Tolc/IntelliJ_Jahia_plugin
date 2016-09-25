@@ -124,9 +124,9 @@ public class CndCompletionContributor extends CompletionContributor {
                 }
         );
 
-        //Property types
+        //TODO:Property types
         extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement(CndTypes.PROPERTY_TYPE).withLanguage(CndLanguage.INSTANCE),
+                PlatformPatterns.psiElement(CndTypes.PROPERTY_TYPE_BINARY).withLanguage(CndLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,

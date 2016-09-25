@@ -7,4 +7,25 @@ import com.intellij.psi.PsiElement;
 
 public interface CndPropertyMinus extends PsiElement {
 
+  @Nullable
+  CndPropertyBinary getPropertyBinary();
+
+  @Nullable
+  CndPropertyBoolean getPropertyBoolean();
+
+  @Nullable
+  CndPropertyDate getPropertyDate();
+
+  @Nullable
+  CndPropertyDouble getPropertyDouble();
+
+  @Nullable
+  CndPropertyLong getPropertyLong();
+
+  @Nullable
+  CndPropertyString getPropertyString();
+
+  @Nullable
+  CndPropertyWeakreference getPropertyWeakreference();
+
 }
