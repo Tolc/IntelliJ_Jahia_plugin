@@ -17,8 +17,12 @@ public class CndInheritanceImpl extends ASTWrapperPsiElement implements CndInher
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitInheritance(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitInheritance(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 
