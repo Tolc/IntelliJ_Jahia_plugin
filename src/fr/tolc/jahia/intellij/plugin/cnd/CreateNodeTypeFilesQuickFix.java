@@ -92,12 +92,12 @@ public class CreateNodeTypeFilesQuickFix extends BaseIntentionAction {
         }
 
         //TODO: default content
-        
-        VirtualFile jspFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(jsp);
-        FileEditorManager.getInstance(project).openFile(jspFile, true);
 
         VirtualFile propertiesFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(properties);
         FileEditorManager.getInstance(project).openFile(propertiesFile, false);
+        
+        VirtualFile jspFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(jsp);
+        FileEditorManager.getInstance(project).openFile(jspFile, true);
 
         //TODO: expand new folder in project explorer
     }
