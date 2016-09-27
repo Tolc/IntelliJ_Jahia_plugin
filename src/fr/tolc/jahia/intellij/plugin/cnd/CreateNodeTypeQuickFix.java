@@ -32,7 +32,7 @@ public class CreateNodeTypeQuickFix extends BaseIntentionAction {
     private String namespace;
     private String nodeTypeName;
 
-    CreateNodeTypeQuickFix(String namespace, String nodeTypeName) {
+    public CreateNodeTypeQuickFix(String namespace, String nodeTypeName) {
         this.namespace = namespace;
         this.nodeTypeName = nodeTypeName;
     }

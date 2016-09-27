@@ -26,7 +26,7 @@ public class CreateNodeTypeFilesQuickFix extends BaseIntentionAction {
     private String namespace;
     private String nodeTypeName;
 
-    CreateNodeTypeFilesQuickFix(String namespace, String nodeTypeName) {
+    public CreateNodeTypeFilesQuickFix(String namespace, String nodeTypeName) {
         this.namespace = namespace;
         this.nodeTypeName = nodeTypeName;
     }

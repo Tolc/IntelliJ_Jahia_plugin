@@ -60,8 +60,9 @@
     <lang.parserDefinition language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndParserDefinition"/>
     <lang.syntaxHighlighterFactory key="Cnd" language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighterFactory"/>
     <!--<colorSettingsPage implementation="fr.tolc.jahia.intellij.plugin.cnd.CndColorSettingsPage"/>-->
-    <annotator language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndAnnotator"/>
-    <annotator language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCndAnnotator"/>
+    <annotator language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJavaAnnotator"/>
+    <annotator language="XML" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndXmlAnnotator"/>
+    <annotator language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndCndAnnotator"/>
     <!--<codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndLineMarkerProvider"/>-->
     <completion.contributor language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCompletionContributor"/>
     <!--<psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.CndReferenceContributor"/>-->
