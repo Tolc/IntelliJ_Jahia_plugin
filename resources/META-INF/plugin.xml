@@ -62,6 +62,7 @@ k
     <!--<colorSettingsPage implementation="fr.tolc.jahia.intellij.plugin.cnd.CndColorSettingsPage"/>-->
     <annotator language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJavaAnnotator"/>
     <annotator language="XML" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndXmlAnnotator"/>
+    <!--<annotator language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJspAnnotator"/>-->
     <annotator language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndCndAnnotator"/>
     <!--<codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndLineMarkerProvider"/>-->
     <completion.contributor language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCompletionContributor"/>

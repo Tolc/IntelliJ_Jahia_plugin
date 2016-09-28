@@ -18,7 +18,7 @@ public class CndCndAnnotator implements Annotator {
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
-        if (CndTypes.NODE_TYPE_NAME.equals(element.getNode().getElementType())) {
+        if (element.getNode() != null && CndTypes.NODE_TYPE_NAME.equals(element.getNode().getElementType())) {
             String nodeTypeName = element.getText();
 
             PsiElement nextSibling = element.getNextSibling();

@@ -1,5 +1,8 @@
 package fr.tolc.jahia.intellij.plugin.cnd.annotators;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -13,16 +16,13 @@ import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeQuickFix;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class CndXmlAnnotator implements Annotator {
 
     private static final Pattern nodeTypeRegex = Pattern.compile("^[A-Za-z]+" + ":" + "[A-Za-z0-9]+$");
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
-        if (XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN.equals(element.getNode().getElementType())) {
+        if (element.getNode() != null && XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN.equals(element.getNode().getElementType())) {
             String value = element.getText();
 
             if (value != null && value.contains(":")) {
