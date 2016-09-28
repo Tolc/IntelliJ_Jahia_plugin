@@ -10,7 +10,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlTokenType;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
-import fr.tolc.jahia.intellij.plugin.cnd.CreateNodeTypeQuickFix;
+import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeQuickFix;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
