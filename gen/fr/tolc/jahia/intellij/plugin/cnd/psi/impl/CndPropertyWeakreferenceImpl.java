@@ -17,12 +17,8 @@ public class CndPropertyWeakreferenceImpl extends ASTWrapperPsiElement implement
     super(node);
   }
 
-  public void accept(@NotNull CndVisitor visitor) {
-    visitor.visitPropertyWeakreference(this);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
+    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitPropertyWeakreference(this);
     else super.accept(visitor);
   }
 

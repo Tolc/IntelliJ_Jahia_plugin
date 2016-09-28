@@ -12,6 +12,7 @@ public interface CndTypes {
   IElementType EXTEND_NODE_TYPE = new CndElementType("EXTEND_NODE_TYPE");
   IElementType INHERITANCE = new CndElementType("INHERITANCE");
   IElementType INHERITANCES = new CndElementType("INHERITANCES");
+  IElementType ITEM_TYPE = new CndElementType("ITEM_TYPE");
   IElementType NAMESPACE = new CndElementType("NAMESPACE");
   IElementType NODE_TYPE = new CndElementType("NODE_TYPE");
   IElementType PROPERTIES = new CndElementType("PROPERTIES");
@@ -93,6 +94,9 @@ public interface CndTypes {
       }
       else if (type == INHERITANCES) {
         return new CndInheritancesImpl(node);
+      }
+      else if (type == ITEM_TYPE) {
+        return new CndItemTypeImpl(node);
       }
       else if (type == NAMESPACE) {
         return new CndNamespaceImpl(node);

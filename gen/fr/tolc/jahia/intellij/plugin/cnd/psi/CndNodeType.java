@@ -14,6 +14,9 @@ public interface CndNodeType extends CndNodeTypeElement {
   CndInheritances getInheritances();
 
   @Nullable
+  CndItemType getItemType();
+
+  @Nullable
   CndProperties getProperties();
 
   String getNodeTypeName();

@@ -23,6 +23,10 @@ public class CndVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitItemType(@NotNull CndItemType o) {
+    visitPsiElement(o);
+  }
+
   public void visitNamespace(@NotNull CndNamespace o) {
     visitNamespaceElement(o);
   }

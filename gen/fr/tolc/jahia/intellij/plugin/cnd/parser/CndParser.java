@@ -1,15 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package fr.tolc.jahia.intellij.plugin.cnd.parser;
 
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
-import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
-
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import com.intellij.lang.PsiParser;
+import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.tree.TokenSet;
+import com.intellij.lang.PsiParser;
+import com.intellij.lang.LightPsiParser;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class CndParser implements PsiParser, LightPsiParser {
@@ -34,6 +34,9 @@ public class CndParser implements PsiParser, LightPsiParser {
     }
     else if (t == INHERITANCES) {
       r = inheritances(b, 0);
+    }
+    else if (t == ITEM_TYPE) {
+      r = itemType(b, 0);
     }
     else if (t == NAMESPACE) {
       r = namespace(b, 0);
@@ -136,7 +139,7 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EXTEND_OPENING extendNodeType (EXTEND_COMMA extendNodeType)* [CRLF EXTEND_ITEM_START EXTEND_ITEM_TYPE]
+  // EXTEND_OPENING extendNodeType (EXTEND_COMMA extendNodeType)*
   public static boolean extend(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "extend")) return false;
     if (!nextTokenIs(b, EXTEND_OPENING)) return false;
@@ -145,7 +148,6 @@ public class CndParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, EXTEND_OPENING);
     r = r && extendNodeType(b, l + 1);
     r = r && extend_2(b, l + 1);
-    r = r && extend_3(b, l + 1);
     exit_section_(b, m, EXTEND, r);
     return r;
   }
@@ -171,13 +173,6 @@ public class CndParser implements PsiParser, LightPsiParser {
     r = r && extendNodeType(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
-  }
-
-  // [CRLF EXTEND_ITEM_START EXTEND_ITEM_TYPE]
-  private static boolean extend_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "extend_3")) return false;
-    parseTokens(b, 0, CRLF, EXTEND_ITEM_START, EXTEND_ITEM_TYPE);
-    return true;
   }
 
   /* ********************************************************** */
@@ -250,6 +245,18 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // EXTEND_ITEM_START EXTEND_ITEM_TYPE
+  public static boolean itemType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "itemType")) return false;
+    if (!nextTokenIs(b, EXTEND_ITEM_START)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, EXTEND_ITEM_START, EXTEND_ITEM_TYPE);
+    exit_section_(b, m, ITEM_TYPE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // NAMESPACE_OPENING NAMESPACE_NAME NAMESPACE_EQUAL NAMESPACE_URI NAMESPACE_CLOSING CRLF
   public static boolean namespace(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace")) return false;
@@ -262,7 +269,7 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // NODE_TYPE_DECLARATION_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME NODE_TYPE_DECLARATION_CLOSING [inheritances] [NODE_TYPE_ORDERABLE|NODE_TYPE_MIXIN|NODE_TYPE_MIXIN WHITE_SPACE+ NODE_TYPE_ORDERABLE|NODE_TYPE_ORDERABLE WHITE_SPACE+ NODE_TYPE_MIXIN|NODE_TYPE_ABSTRACT] [CRLF extend] [CRLF properties]
+  // NODE_TYPE_DECLARATION_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME NODE_TYPE_DECLARATION_CLOSING [inheritances] [NODE_TYPE_ORDERABLE|NODE_TYPE_MIXIN|NODE_TYPE_MIXIN WHITE_SPACE+ NODE_TYPE_ORDERABLE|NODE_TYPE_ORDERABLE WHITE_SPACE+ NODE_TYPE_MIXIN|NODE_TYPE_ABSTRACT] [CRLF extend] [CRLF itemType] [CRLF properties]
   public static boolean nodeType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "nodeType")) return false;
     if (!nextTokenIs(b, NODE_TYPE_DECLARATION_OPENING)) return false;
@@ -273,6 +280,7 @@ public class CndParser implements PsiParser, LightPsiParser {
     r = r && nodeType_6(b, l + 1);
     r = r && nodeType_7(b, l + 1);
     r = r && nodeType_8(b, l + 1);
+    r = r && nodeType_9(b, l + 1);
     exit_section_(b, m, NODE_TYPE, r);
     return r;
   }
@@ -379,16 +387,34 @@ public class CndParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [CRLF properties]
+  // [CRLF itemType]
   private static boolean nodeType_8(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "nodeType_8")) return false;
     nodeType_8_0(b, l + 1);
     return true;
   }
 
-  // CRLF properties
+  // CRLF itemType
   private static boolean nodeType_8_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "nodeType_8_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, CRLF);
+    r = r && itemType(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // [CRLF properties]
+  private static boolean nodeType_9(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_9")) return false;
+    nodeType_9_0(b, l + 1);
+    return true;
+  }
+
+  // CRLF properties
+  private static boolean nodeType_9_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_9_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, CRLF);
@@ -403,10 +429,10 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "properties")) return false;
     if (!nextTokenIs(b, "<properties>", PROPERTY_MINUS_OPENING, PROPERTY_PLUS_OPENING)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, PROPERTIES, "<properties>");
+    Marker m = enter_section_(b, l, _NONE_, "<properties>");
     r = properties_0(b, l + 1);
     r = r && properties_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, l, m, PROPERTIES, r, false, null);
     return r;
   }
 
