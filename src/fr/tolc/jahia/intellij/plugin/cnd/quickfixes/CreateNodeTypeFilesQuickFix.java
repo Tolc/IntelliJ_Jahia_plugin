@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
+import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileChooser.FileChooser;
@@ -99,6 +100,7 @@ public class CreateNodeTypeFilesQuickFix extends BaseIntentionAction {
         VirtualFile jspFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(jsp);
         FileEditorManager.getInstance(project).openFile(jspFile, true);
 
-        //TODO: expand new folder in project explorer
+        //Expand folder in Project view
+        ProjectView.getInstance(project).select(null, jspFile, false);
     }
 }
