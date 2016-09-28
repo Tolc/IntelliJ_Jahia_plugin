@@ -51,7 +51,7 @@ PROPERTY_TYPE_END=")"
 PROPERTY_DEFAULT="="
 PROPERTY_PLUS_DEFAULT_VALUE={NAMESPACE_CHARS}{NODE_TYPE_DECLARATION_SEPARATOR}{NODE_TYPE_CHARS}
 PROPERTY_ATTRIBUTE="mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="("no"|"'untokenized'")|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict=sum"|"facetable"
-PROPERTY_PLUS_ATTRIBUTE="autocreated"
+PROPERTY_PLUS_ATTRIBUTE="autocreated"|"version"
 PROPERTY_CONSTRAINT_START="<"
 PROPERTY_CONSTRAINT=("'"[^\r\n]+"',"{WHITE_SPACE}*)*"'"[^\r\n]+"'"|([:jletterdigit:]+","{WHITE_SPACE}*)*[:jletterdigit:]+|{NAMESPACE_CHARS}{NODE_TYPE_DECLARATION_SEPARATOR}{NODE_TYPE_CHARS}
 
