@@ -247,6 +247,8 @@ PROPERTY_TYPE_WEAKREFERENCE_FINAL={PROPERTY_TYPE_WEAKREFERENCE} ({PROPERTY_TYPE_
 <YYINITIAL> {EXTEND_ITEM_TYPE_START}                            { yybegin(EXTEND_ITEM_BEGIN); return CndTypes.EXTEND_ITEM_START; }
 <EXTEND_ITEM_BEGIN> {EXTEND_ITEM_TYPE_VALUE}                    { yybegin(YYINITIAL); return CndTypes.EXTEND_ITEM_TYPE; }
 
+{COMMENT}						{ return CndTypes.COMMENT; }
+
 {WHITE_SPACE}+                  { return TokenType.WHITE_SPACE; }
 
 {CRLF}                          { yybegin(YYINITIAL); return CndTypes.CRLF; }
