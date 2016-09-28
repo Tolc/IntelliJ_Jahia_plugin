@@ -257,6 +257,46 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // (NODE_TYPE_ORDERABLE | NODE_TYPE_MIXIN | NODE_TYPE_ABSTRACT)+ | CRLF NODE_TYPE_ORDERABLE
+  static boolean modifiers(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifiers")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = modifiers_0(b, l + 1);
+    if (!r) r = parseTokens(b, 0, CRLF, NODE_TYPE_ORDERABLE);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (NODE_TYPE_ORDERABLE | NODE_TYPE_MIXIN | NODE_TYPE_ABSTRACT)+
+  private static boolean modifiers_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifiers_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = modifiers_0_0(b, l + 1);
+    int c = current_position_(b);
+    while (r) {
+      if (!modifiers_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "modifiers_0", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // NODE_TYPE_ORDERABLE | NODE_TYPE_MIXIN | NODE_TYPE_ABSTRACT
+  private static boolean modifiers_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifiers_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NODE_TYPE_ORDERABLE);
+    if (!r) r = consumeToken(b, NODE_TYPE_MIXIN);
+    if (!r) r = consumeToken(b, NODE_TYPE_ABSTRACT);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // NAMESPACE_OPENING NAMESPACE_NAME NAMESPACE_EQUAL NAMESPACE_URI NAMESPACE_CLOSING CRLF
   public static boolean namespace(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace")) return false;
@@ -269,7 +309,7 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // NODE_TYPE_DECLARATION_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME NODE_TYPE_DECLARATION_CLOSING [inheritances] [NODE_TYPE_ORDERABLE|NODE_TYPE_MIXIN|NODE_TYPE_MIXIN WHITE_SPACE+ NODE_TYPE_ORDERABLE|NODE_TYPE_ORDERABLE WHITE_SPACE+ NODE_TYPE_MIXIN|NODE_TYPE_ABSTRACT] [CRLF extend] [CRLF itemType] [CRLF properties]
+  // NODE_TYPE_DECLARATION_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME NODE_TYPE_DECLARATION_CLOSING [inheritances] [modifiers] [CRLF extend] [CRLF itemType] [CRLF properties]
   public static boolean nodeType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "nodeType")) return false;
     if (!nextTokenIs(b, NODE_TYPE_DECLARATION_OPENING)) return false;
@@ -292,81 +332,11 @@ public class CndParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // [NODE_TYPE_ORDERABLE|NODE_TYPE_MIXIN|NODE_TYPE_MIXIN WHITE_SPACE+ NODE_TYPE_ORDERABLE|NODE_TYPE_ORDERABLE WHITE_SPACE+ NODE_TYPE_MIXIN|NODE_TYPE_ABSTRACT]
+  // [modifiers]
   private static boolean nodeType_6(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "nodeType_6")) return false;
-    nodeType_6_0(b, l + 1);
+    modifiers(b, l + 1);
     return true;
-  }
-
-  // NODE_TYPE_ORDERABLE|NODE_TYPE_MIXIN|NODE_TYPE_MIXIN WHITE_SPACE+ NODE_TYPE_ORDERABLE|NODE_TYPE_ORDERABLE WHITE_SPACE+ NODE_TYPE_MIXIN|NODE_TYPE_ABSTRACT
-  private static boolean nodeType_6_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "nodeType_6_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, NODE_TYPE_ORDERABLE);
-    if (!r) r = consumeToken(b, NODE_TYPE_MIXIN);
-    if (!r) r = nodeType_6_0_2(b, l + 1);
-    if (!r) r = nodeType_6_0_3(b, l + 1);
-    if (!r) r = consumeToken(b, NODE_TYPE_ABSTRACT);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // NODE_TYPE_MIXIN WHITE_SPACE+ NODE_TYPE_ORDERABLE
-  private static boolean nodeType_6_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "nodeType_6_0_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, NODE_TYPE_MIXIN);
-    r = r && nodeType_6_0_2_1(b, l + 1);
-    r = r && consumeToken(b, NODE_TYPE_ORDERABLE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // WHITE_SPACE+
-  private static boolean nodeType_6_0_2_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "nodeType_6_0_2_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, WHITE_SPACE);
-    int c = current_position_(b);
-    while (r) {
-      if (!consumeToken(b, WHITE_SPACE)) break;
-      if (!empty_element_parsed_guard_(b, "nodeType_6_0_2_1", c)) break;
-      c = current_position_(b);
-    }
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // NODE_TYPE_ORDERABLE WHITE_SPACE+ NODE_TYPE_MIXIN
-  private static boolean nodeType_6_0_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "nodeType_6_0_3")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, NODE_TYPE_ORDERABLE);
-    r = r && nodeType_6_0_3_1(b, l + 1);
-    r = r && consumeToken(b, NODE_TYPE_MIXIN);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // WHITE_SPACE+
-  private static boolean nodeType_6_0_3_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "nodeType_6_0_3_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, WHITE_SPACE);
-    int c = current_position_(b);
-    while (r) {
-      if (!consumeToken(b, WHITE_SPACE)) break;
-      if (!empty_element_parsed_guard_(b, "nodeType_6_0_3_1", c)) break;
-      c = current_position_(b);
-    }
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   // [CRLF extend]

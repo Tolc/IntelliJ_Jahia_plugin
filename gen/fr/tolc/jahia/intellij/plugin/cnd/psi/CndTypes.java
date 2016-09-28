@@ -78,7 +78,6 @@ public interface CndTypes {
   IElementType PROPERTY_TYPE_STRING_CHOICELIST = new CndTokenType("PROPERTY_TYPE_STRING_CHOICELIST");
   IElementType PROPERTY_TYPE_STRING_TEXT = new CndTokenType("PROPERTY_TYPE_STRING_TEXT");
   IElementType PROPERTY_TYPE_WEAKREFERENCE = new CndTokenType("PROPERTY_TYPE_WEAKREFERENCE");
-  IElementType WHITE_SPACE = new CndTokenType("WHITE_SPACE");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
