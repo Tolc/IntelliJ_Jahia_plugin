@@ -25,6 +25,8 @@ WHITE_SPACE=[\ \t\f]
 //KEY_CHARACTER=[^:=\ \n\r\t\f\\] | "\\ "
 
 COMMENT="//"[^\r\n]*
+COMMENT_BLOCK="/*" ~"*/"
+//~ = upto
 
 NAMESPACE_CHARS=[:jletter:]+
 NAMESPACE_START="<"
@@ -139,8 +141,8 @@ PROPERTY_TYPE_WEAKREFERENCE_FINAL={PROPERTY_TYPE_WEAKREFERENCE} ({PROPERTY_TYPE_
 
 
 %%
-//Comment
-<YYINITIAL> {COMMENT}               { yybegin(YYINITIAL); return CndTypes.COMMENT; }
+
+<YYINITIAL> {COMMENT_BLOCK}				{ return CndTypes.COMMENT; }
 
 //Namespaces "<snt = 'http://www.thomas-coquel.fr/jahia/nt/1.0'>"
 <YYINITIAL> {NAMESPACE_START}                   { yybegin(NAMESPACE_BEGIN); return CndTypes.NAMESPACE_OPENING; }
