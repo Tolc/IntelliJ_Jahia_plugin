@@ -77,5 +77,7 @@ k
     <!--<langCodeStyleSettingsProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.CndLanguageCodeStyleSettingsProvider"/>-->
     <lang.commenter language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCommenter"/>
     <!--<todoIndexer filetype="Cnd file" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndTodoIndexer"/>-->
+    <quoteHandler fileType="Cnd" className="fr.tolc.jahia.intellij.plugin.cnd.CndQuoteHandler"/>
+    <lang.braceMatcher language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndBraceMatcher"/>
   </extensions>
 </idea-plugin>
