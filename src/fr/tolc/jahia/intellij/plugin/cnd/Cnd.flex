@@ -45,6 +45,8 @@ NODE_TYPE_INHERITANCE_ORDERABLE="orderable"
 NODE_TYPE_INHERITANCE_ABSTRACT="abstract"
 
 PROPERTY_MINUS_START="-"
+
+
 PROPERTY_PLUS_START="+"
 PROPERTY_NAME_CHARS=[:jletter:]([:jletterdigit:]|:)*
 PROPERTY_PLUS_NAME_CHARS={PROPERTY_NAME_CHARS}|"*"
@@ -61,10 +63,6 @@ EXTEND_START="extends"{WHITE_SPACE}*"="
 EXTEND_ANOTHER=","
 EXTEND_ITEM_TYPE_START="itemtype"{WHITE_SPACE}*"="
 EXTEND_ITEM_TYPE_VALUE="default"|"options"|"layout"|"metadata"|"content"
-
-
-//REGEX="'"(^(?:(?:[^?+*{}()[\]\\|]+|\\.|\[(?:\^?\\.|\^[^\\]|[^\\^])(?:[^\]\\]+|\\.)*\]|\((?:\?[:=!]|\?<[=!]|\?>|\?<[^\W\d]\w*>|\?'[^\W\d]\w*')?(?<N>)|\)(?<-N>))(?:(?:[?+*]|\{\d+(?:,\d*)?\})[?+]?)?|\|)*$(?(N)(?!)))"'"
-//REGEX="'"[^\r\n]*"'"
 
 
 PROPERTY_TYPE_PRECISION_COMMA={WHITE_SPACE}*","{WHITE_SPACE}*
