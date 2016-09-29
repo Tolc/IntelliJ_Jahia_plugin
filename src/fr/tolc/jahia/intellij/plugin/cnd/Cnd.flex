@@ -88,11 +88,14 @@ PROPERTY_TYPE_STRING_CHOICELIST={PROPERTY_TYPE_STRING} {PROPERTY_TYPE_PRECISION_
 PROPERTY_DEFAULT_STRING_CHOICELIST=[^\r\n\s]+
 
 PROPERTY_TYPE_WEAKREFERENCE="weakreference"
-PROPERTY_TYPE_WEAKREFERENCE_PRECISION_PICKER="picker[type='"("image"|"file"|"page"|"category"|"folder"|"contentfolder")"'"(",mime='"[-\w+]+"/"([-\w+]+|"*")"'"){0,1}"]"
+PROPERTY_TYPE_WEAKREFERENCE_PRECISION_PICKER="picker[type='"({PROPERTY_TYPE_WEAKREFERENCE_PRECISION_PICKER_TYPE})"'"(",mime='"[-\w+]+"/"([-\w+]+|"*")"'"){0,1}"]"
+PROPERTY_TYPE_WEAKREFERENCE_PRECISION_PICKER_TYPE="image"|"file"|"page"|"category"|"folder"|"contentfolder"|"portlet"|"editorial"|"editoriallink"|"site"|"user"|"usergroup"
 PROPERTY_TYPE_WEAKREFERENCE_PRECISION_CATEGORY="category"("[autoSelectParent="("true"|"false")"]"){0,1}
 PROPERTY_TYPE_WEAKREFERENCE_PRECISION_FILE="file"("[folder]"){0,1}
 PROPERTY_TYPE_WEAKREFERENCE_FINAL={PROPERTY_TYPE_WEAKREFERENCE} ({PROPERTY_TYPE_PRECISION_COMMA} ({PROPERTY_TYPE_WEAKREFERENCE_PRECISION_PICKER} | {PROPERTY_TYPE_WEAKREFERENCE_PRECISION_CATEGORY} | {PROPERTY_TYPE_WEAKREFERENCE_PRECISION_FILE})){0,1}
 
+
+//See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
 
 %state NAMESPACE_BEGIN
 %state NAMESPACE_NAME_DONE
