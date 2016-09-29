@@ -28,31 +28,39 @@ COMMENT="//"[^\r\n]*
 COMMENT_BLOCK="/*" ~"*/"
 //~ = upto
 
-NAMESPACE_CHARS=[:jletter:]+
 NAMESPACE_START="<"
-NAMESPACE_SEPARATOR="="{WHITE_SPACE}*"'"
+NAMESPACE_CHARS=[:jletter:][:jletterdigit:]*
+NAMESPACE_SEPARATOR="="
+NAMESPACE_URI_BEGIN="'"
 NAMESPACE_URI="http"(s){0,1}":\/\/"[A-Za-z0-9.\/\-_]+
-NAMESPACE_END="'"{WHITE_SPACE}*">"
+NAMESPACE_URI_END="'"
+NAMESPACE_END=">"
 
-NODE_TYPE_CHARS=[:jletter:][:jletterdigit:]*
 NODE_TYPE_DECLARATION_START="["
 NODE_TYPE_DECLARATION_SEPARATOR=":"
+NODE_TYPE_CHARS=[:jletter:][:jletterdigit:]*
 NODE_TYPE_DECLARATION_END="]"
-NODE_TYPE_INHERITANCE_START=">"
-NODE_TYPE_INHERITANCE_ANOTHER=","
-NODE_TYPE_INHERITANCE_MIXIN="mixin"
-NODE_TYPE_INHERITANCE_ORDERABLE="orderable"
-NODE_TYPE_INHERITANCE_ABSTRACT="abstract"
+
+NODE_TYPE_SUPER_TYPES_START=">"
+NODE_TYPE_SUPER_TYPES_ANOTHER=","
+
+NODE_TYPE_OPTIONS_MIXIN="mixin"
+NODE_TYPE_OPTIONS_ORDERABLE="orderable"
+NODE_TYPE_OPTIONS_ABSTRACT="abstract"
+
+
+
+PROPERTY_NAME_CHARS=[:jletter:]([:jletterdigit:]|:)*
+PROPERTY_TYPE_START="("
+PROPERTY_TYPE_END=")"
+PROPERTY_DEFAULT="="
+
 
 PROPERTY_MINUS_START="-"
 
 
 PROPERTY_PLUS_START="+"
-PROPERTY_NAME_CHARS=[:jletter:]([:jletterdigit:]|:)*
 PROPERTY_PLUS_NAME_CHARS={PROPERTY_NAME_CHARS}|"*"
-PROPERTY_TYPE_START="("
-PROPERTY_TYPE_END=")"
-PROPERTY_DEFAULT="="
 PROPERTY_PLUS_DEFAULT_VALUE={NAMESPACE_CHARS}{NODE_TYPE_DECLARATION_SEPARATOR}{NODE_TYPE_CHARS}
 PROPERTY_ATTRIBUTE="mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="("no"|"'untokenized'")|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict=sum"|"facetable"
 PROPERTY_PLUS_ATTRIBUTE="autocreated"|"version"
@@ -250,6 +258,105 @@ PROPERTY_TYPE_WEAKREFERENCE_FINAL={PROPERTY_TYPE_WEAKREFERENCE} ({PROPERTY_TYPE_
 //Item type
 <YYINITIAL> {EXTEND_ITEM_TYPE_START}                            { yybegin(EXTEND_ITEM_BEGIN); return CndTypes.EXTEND_ITEM_START; }
 <EXTEND_ITEM_BEGIN> {EXTEND_ITEM_TYPE_VALUE}                    { yybegin(YYINITIAL); return CndTypes.EXTEND_ITEM_TYPE; }
+
+{COMMENT}						{ return CndTypes.COMMENT; }
+
+{WHITE_SPACE}+                  { return TokenType.WHITE_SPACE; }
+
+{CRLF}                          { yybegin(YYINITIAL); return CndTypes.CRLF; }
+
+.                               { return TokenType.BAD_CHARACTER; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<YYINITIAL> {COMMENT_BLOCK}				{ return CndTypes.COMMENT; }
+
+//Namespaces "<tnt = 'http://www.thomas-coquel.fr/jahia/nt/1.0'>"
+<YYINITIAL> "<" 						{ yybegin(NAMESPACE); return CndTypes.LEFT_ANGLE_BRACKET; }
+<NAMESPACE> {
+	[:jletter:][:jletterdigit:]*		{ return CndTypes.NAMESPACE_NAME; }
+    "="									{ return CndTypes.EQUAL; }
+    "'"									{ return CndTypes.SIMPLE_QUOTE; }
+    {NAMESPACE_URI}						{ return CndTypes.NAMESPACE_URI; }
+	">" 								{ yybegin(YYINITIAL); return CndTypes.RIGHT_ANGLE_BRACKET; }
+}
+
+//Node type declaration "[tnt:test]"
+<YYINITIAL> "["											{ yybegin(NODETYPE_NAMESPACE); return CndTypes.LEFT_BRACKET; }
+<NODETYPE_NAMESPACE> [:jletter:][:jletterdigit:]*		{ yybegin(NODETYPE); return CndTypes.NAMESPACE_NAME; }
+<NODETYPE> {
+	":"                                             	{ return CndTypes.COLON; }
+	[:jletter:][:jletterdigit:]*                       	{ return CndTypes.NODE_TYPE_NAME; }
+	"]"							                       	{ return CndTypes.RIGHT_BRACKET; }
+	">"							                       	{ yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.RIGHT_ANGLE_BRACKET; }
+	{WHITE_SPACE}+                  					{ return TokenType.WHITE_SPACE; }
+	.                               					{ yybegin(OPTIONS); }
+}
+
+//Node type super types "> jnt:content, smix:lmcuComponent"
+<SUPER_TYPES_NAMESPACE> {
+	[:jletter:][:jletterdigit:]*				{ yybegin(SUPER_TYPES); return CndTypes.NAMESPACE_NAME; }
+	{WHITE_SPACE}+                  			{ return TokenType.WHITE_SPACE; }
+	.                               			{ yybegin(OPTIONS); }
+}
+<SUPER_TYPES> {
+	":"											{ return CndTypes.COLON; }
+	[:jletter:][:jletterdigit:]*				{ return CndTypes.NODE_TYPE_NAME; }
+	","											{ yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.COMMA; }
+	{WHITE_SPACE}+                  			{ return TokenType.WHITE_SPACE; }
+	.                               			{ yybegin(OPTIONS); }
+}
+
+//Node type options "mixin", "orderable" or "abstract" at the end of line or on a new line
+<OPTIONS> {
+	"mixin"										{ return CndTypes.MIXIN; }
+	"abstract"									{ return CndTypes.ABSTRACT; }
+	"orderable"									{ return CndTypes.ORDERABLE; }
+	{CRLF}                          			{ return CndTypes.CRLF; }
+	{WHITE_SPACE}+                  			{ return TokenType.WHITE_SPACE; }
+	.                               			{ yybegin(YYINITIAL); }
+}
+
+
+//Node type property -
+<YYINITIAL> "-"									{ yybegin(PROPERTY); return CndTypes.MINUS; }
+<PROPERTY> {
+	[:jletter:]([:jletterdigit:]|:)*			{ return CndTypes.PROPERTY_NAME; }
+	"("											{ return CndTypes.LEFT_PARENTHESIS; }
+	"string"|"long"|"double"|"decimal"|"path"|"uri"|"boolean"|"date"|"binary"|"weakreference"		{ return CndTypes.PROPERTY_TYPE; }
+	","											{ return CndTypes.COMMA; }
+	"text"|"richtext"|"textarea"|"choicelist"|"datetimepicker"|"datepicker"|"picker"|"color"|"category"|"checkbox"		{ return CndTypes.PROPERTY_MASK; }
+	"["											{ return CndTypes.LEFT_BRACKET; }
+	//See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
+	"]"											{ return CndTypes.RIGHT_BRACKET; }
+	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
+}
+
+<PROPERTY_DEFAULT> {
+
+}
+
+<PROPERTY_ATTRIBUTES> {
+
+}
+
+<PROPERTY_CONSTRAINTS {
+
+}
+
+
 
 {COMMENT}						{ return CndTypes.COMMENT; }
 
