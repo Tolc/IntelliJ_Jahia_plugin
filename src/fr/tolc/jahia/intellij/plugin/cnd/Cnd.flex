@@ -33,9 +33,8 @@ COMMENT_BLOCK="/*" ~"*/"
 //See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
 
 %state NAMESPACE, NODETYPE_NAMESPACE, NODETYPE, SUPER_TYPES_NAMESPACE, SUPER_TYPES, OPTIONS
-%state EXTENDS, EXTEND_NAMESPACE, EXTEND
-%state ITEMTYPE, EXTEND_NAMESPACE, EXTEND
-%state PROPERTY, PROPERTY_MASK_OPTION_NAME, PROPERTY_MASK_OPTION, PROPERTY_DEFAULT, PROPERTY_DEFAULT_VALUE, PROPERTY_ATTRIBUTES, PROPERTY_CONSTRAINT, PROPERTY_CONSTRAINT_VALUE
+%state EXTENDS, EXTEND_NAMESPACE, EXTEND, ITEMTYPE
+%state PROPERTY, PROPERTY_MASK_OPTION_NAME, PROPERTY_MASK_OPTION, PROPERTY_DEFAULT, PROPERTY_DEFAULT_VALUE, PROPERTY_ATTRIBUTES, PROPERTY_CONSTRAINT
 %state NODE, NODE_NAMESPACE, NODE_NODETYPE, NODE_DEFAULT, NODE_DEFAULT_VALUE_NAMESPACE, NODE_DEFAULT_VALUE, NODE_ATTRIBUTES
 
 
@@ -61,34 +60,28 @@ COMMENT_BLOCK="/*" ~"*/"
 	[:jletter:][:jletterdigit:]*                       	{ return CndTypes.NODE_TYPE_NAME; }
 	"]"							                       	{ return CndTypes.RIGHT_BRACKET; }
 	">"							                       	{ yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.RIGHT_ANGLE_BRACKET; }
-	{WHITE_SPACE}+                  					{ return TokenType.WHITE_SPACE; }
-	.                               					{ yybegin(OPTIONS); }
+	"mixin"	| "abstract" | "orderable"					{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
 }
 
 //Node type super types "> jnt:content, smix:lmcuComponent"
 <SUPER_TYPES_NAMESPACE> {
 	[:jletter:][:jletterdigit:]*				{ yybegin(SUPER_TYPES); return CndTypes.NAMESPACE_NAME; }
-	{WHITE_SPACE}+                  			{ return TokenType.WHITE_SPACE; }
-	.                               			{ yybegin(OPTIONS); }
+	"mixin"	| "abstract" | "orderable"			{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
 }
 <SUPER_TYPES> {
 	":"											{ return CndTypes.COLON; }
 	[:jletter:][:jletterdigit:]*				{ return CndTypes.NODE_TYPE_NAME; }
 	","											{ yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.COMMA; }
-	{WHITE_SPACE}+                  			{ return TokenType.WHITE_SPACE; }
-	.                               			{ yybegin(OPTIONS); }
+	"mixin"	| "abstract" | "orderable"			{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
 }
 
 //Node type options "mixin", "orderable" or "abstract" at the end of line or on a new line
 <OPTIONS> {
-	"mixin"										{ return CndTypes.MIXIN; }
-	"abstract"									{ return CndTypes.ABSTRACT; }
-	"orderable"									{ return CndTypes.ORDERABLE; }
-	{CRLF}                          			{ return CndTypes.CRLF; }
-	{WHITE_SPACE}+                  			{ return TokenType.WHITE_SPACE; }
-	.                               			{ yybegin(YYINITIAL); }
+	"mixin"	| "abstract" | "orderable"			{ return CndTypes.OPTIONS; }
 }
-
+<YYINITIAL> {
+	"mixin"	| "abstract" | "orderable"			{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
+}
 
 
 
@@ -137,25 +130,21 @@ COMMENT_BLOCK="/*" ~"*/"
 }
 
 <PROPERTY_DEFAULT> {
-	{WHITE_SPACE}+ "="							{ yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
-	.											{ yybegin(PROPERTY_ATTRIBUTES); }
+	"="											{ yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
+	"mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict="("sum"|"latest"|"oldest"|"min"|"max")|"facetable"			{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
+	"<"											{ yybegin(PROPERTY_CONSTRAINT_VALUE); return CndTypes.LEFT_ANGLE_BRACKET; }
 }
 <PROPERTY_DEFAULT_VALUE> {
 	[^\r\n\s]+									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
-	{WHITE_SPACE}+                  			{ return TokenType.WHITE_SPACE; }
-	.                               			{ yybegin(PROPERTY_ATTRIBUTES); }
+	"mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict="("sum"|"latest"|"oldest"|"min"|"max")|"facetable"			{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
 }
 
 <PROPERTY_ATTRIBUTES> {
 	"mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict="("sum"|"latest"|"oldest"|"min"|"max")|"facetable"			{ return CndTypes.PROPERTY_ATTRIBUTE; }
-	{WHITE_SPACE}+                  			{ return TokenType.WHITE_SPACE; }
-	.                               			{ yybegin(PROPERTY_CONSTRAINT); }
+	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ANGLE_BRACKET; }
 }
 
-<PROPERTY_CONSTRAINT> "<"						{ yybegin(PROPERTY_CONSTRAINT_VALUE); return CndTypes.LEFT_ANGLE_BRACKET; }
-<PROPERTY_CONSTRAINT_VALUE> {
-	[^\r\n\s\t\f]+								{ yybegin(YYINITIAL); return CndTypes.PROPERTY_CONSTRAINT; }
-}
+<PROPERTY_CONSTRAINT> [^\r\n\s\t\f]+		{ return CndTypes.PROPERTY_CONSTRAINT; }
 
 
 
@@ -176,19 +165,16 @@ COMMENT_BLOCK="/*" ~"*/"
 }
 
 <NODE_DEFAULT> {
-	{WHITE_SPACE}+ "="							{ yybegin(NODE_DEFAULT_VALUE_NAMESPACE); return CndTypes.EQUAL; }
-	.											{ yybegin(NODE_ATTRIBUTES); }
-} //STOPPED HERE
+	{WHITE_SPACE}+ "="								{ yybegin(NODE_DEFAULT_VALUE_NAMESPACE); return CndTypes.EQUAL; }
+	"mandatory"|"autocreated"|"version"|"multiple"	{ yybegin(NODE_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
+}
 <NODE_DEFAULT_VALUE_NAMESPACE> [:jletter:][:jletterdigit:]*		{ yybegin(NODE_DEFAULT_VALUE); return CndTypes.NAMESPACE_NAME; }
 <NODE_DEFAULT_VALUE> {
 	":"                                             { return CndTypes.COLON; }
 	[:jletter:][:jletterdigit:]*                    { yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_TYPE_NAME; }
 }
 
-<NODE_ATTRIBUTES> {
-	"mandatory"|"autocreated"|"version"|"multiple"	{ return CndTypes.PROPERTY_ATTRIBUTE; }
-	{WHITE_SPACE}+                  				{ return TokenType.WHITE_SPACE; }
-}
+<NODE_ATTRIBUTES> "mandatory"|"autocreated"|"version"|"multiple"	{ return CndTypes.PROPERTY_ATTRIBUTE; }
 
 
 
