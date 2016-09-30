@@ -338,22 +338,39 @@ PROPERTY_TYPE_WEAKREFERENCE_FINAL={PROPERTY_TYPE_WEAKREFERENCE} ({PROPERTY_TYPE_
 	"string"|"long"|"double"|"decimal"|"path"|"uri"|"boolean"|"date"|"binary"|"weakreference"		{ return CndTypes.PROPERTY_TYPE; }
 	","											{ return CndTypes.COMMA; }
 	"text"|"richtext"|"textarea"|"choicelist"|"datetimepicker"|"datepicker"|"picker"|"color"|"category"|"checkbox"		{ return CndTypes.PROPERTY_MASK; }
-	"["											{ return CndTypes.LEFT_BRACKET; }
+	"["											{ yybegin(PROPERTY_MASK_OPTION_NAME); return CndTypes.LEFT_BRACKET; }
+	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
+}
+
+<PROPERTY_MASK_OPTION_NAME> "resourceBundle"|"country"|"templates"|"templatesNode"|"users"|"nodetypes"|"subnodetypes"|"nodes"|"menus"|"script"|"flag"|"sortableFieldnames"|"moduleImage"|"linkerProps"|"workflow"|"workflowTypes"|"sort"|"componenttypes"|"autoSelectParent"|"type"		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
+<PROPERTY_MASK_OPTION> {
 	//See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
+	"="											{ return CndTypes.EQUAL; }
+	"'"[^\r\n\]']+"'" | [^\r\n\])',]+			{ return CndTypes.PROPERTY_MASK_OPTION_VALUE; }
 	"]"											{ return CndTypes.RIGHT_BRACKET; }
+	","											{ yybegin(PROPERTY_MASK_OPTION_NAME); return CndTypes.COMMA; }
 	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
 }
 
 <PROPERTY_DEFAULT> {
-
+	{WHITE_SPACE}+ "="							{ yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
+	.											{ yybegin(PROPERTY_ATTRIBUTES); }
+}
+<PROPERTY_DEFAULT_VALUE> {
+	[^\r\n\s]+									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
+	{WHITE_SPACE}+                  			{ return TokenType.WHITE_SPACE; }
+	.                               			{ yybegin(PROPERTY_ATTRIBUTES); }
 }
 
 <PROPERTY_ATTRIBUTES> {
-
+	"mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="("no"|"'untokenized'")|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict=sum"|"facetable"			{ return CndTypes.PROPERTY_ATTRIBUTE; }
+	{WHITE_SPACE}+                  			{ return TokenType.WHITE_SPACE; }
+	.                               			{ yybegin(PROPERTY_CONSTRAINT); }
 }
 
-<PROPERTY_CONSTRAINTS {
-
+<PROPERTY_CONSTRAINT> "<"						{ yybegin(PROPERTY_CONSTRAINT_VALUE); return CndTypes.LEFT_ANGLE_BRACKET; }
+<PROPERTY_CONSTRAINT_VALUE> {
+	[^\r\n\s\t\f]+									{ yybegin(YYINITIAL); return CndTypes.PROPERTY_CONSTRAINT; }
 }
 
 
