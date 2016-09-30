@@ -28,7 +28,10 @@ COMMENT="//"[^\r\n]*
 COMMENT_BLOCK="/*" ~"*/"
 //~ = upto
 
-
+CHARS=[:jletter:][:jletterdigit:]*
+OPTIONS="mixin"	| "abstract" | "orderable"
+PROPERTY_ATTRIBUTES="mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict="("sum"|"latest"|"oldest"|"min"|"max")|"facetable"
+NODE_ATTRIBUTES="mandatory"|"autocreated"|"version"|"multiple"
 
 //See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
 
@@ -45,7 +48,7 @@ COMMENT_BLOCK="/*" ~"*/"
 //Namespaces "<tnt = 'http://www.thomas-coquel.fr/jahia/nt/1.0'>"
 <YYINITIAL> "<" 									{ yybegin(NAMESPACE); return CndTypes.LEFT_ANGLE_BRACKET; }
 <NAMESPACE> {
-	[:jletter:][:jletterdigit:]*					{ return CndTypes.NAMESPACE_NAME; }
+	{CHARS}											{ return CndTypes.NAMESPACE_NAME; }
     "="												{ return CndTypes.EQUAL; }
     "'"												{ return CndTypes.SIMPLE_QUOTE; }
     "http"(s){0,1}":\/\/"[A-Za-z0-9.\/\-_]+			{ return CndTypes.NAMESPACE_URI; }
@@ -53,34 +56,34 @@ COMMENT_BLOCK="/*" ~"*/"
 }
 
 //Node type declaration "[tnt:test]"
-<YYINITIAL> "["											{ yybegin(NODETYPE_NAMESPACE); return CndTypes.LEFT_BRACKET; }
-<NODETYPE_NAMESPACE> [:jletter:][:jletterdigit:]*		{ yybegin(NODETYPE); return CndTypes.NAMESPACE_NAME; }
+<YYINITIAL> "["									{ yybegin(NODETYPE_NAMESPACE); return CndTypes.LEFT_BRACKET; }
+<NODETYPE_NAMESPACE> {CHARS}					{ yybegin(NODETYPE); return CndTypes.NAMESPACE_NAME; }
 <NODETYPE> {
-	":"                                             	{ return CndTypes.COLON; }
-	[:jletter:][:jletterdigit:]*                       	{ return CndTypes.NODE_TYPE_NAME; }
-	"]"							                       	{ return CndTypes.RIGHT_BRACKET; }
-	">"							                       	{ yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.RIGHT_ANGLE_BRACKET; }
-	"mixin"	| "abstract" | "orderable"					{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
+	":"                                         { return CndTypes.COLON; }
+	{CHARS}                       				{ return CndTypes.NODE_TYPE_NAME; }
+	"]"							                { return CndTypes.RIGHT_BRACKET; }
+	">"							                { yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.RIGHT_ANGLE_BRACKET; }
+	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
 }
 
 //Node type super types "> jnt:content, smix:lmcuComponent"
 <SUPER_TYPES_NAMESPACE> {
-	[:jletter:][:jletterdigit:]*				{ yybegin(SUPER_TYPES); return CndTypes.NAMESPACE_NAME; }
-	"mixin"	| "abstract" | "orderable"			{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
+	{CHARS}										{ yybegin(SUPER_TYPES); return CndTypes.NAMESPACE_NAME; }
+	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
 }
 <SUPER_TYPES> {
 	":"											{ return CndTypes.COLON; }
-	[:jletter:][:jletterdigit:]*				{ return CndTypes.NODE_TYPE_NAME; }
+	{CHARS}										{ return CndTypes.NODE_TYPE_NAME; }
 	","											{ yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.COMMA; }
-	"mixin"	| "abstract" | "orderable"			{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
+	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
 }
 
 //Node type options "mixin", "orderable" or "abstract" at the end of line or on a new line
 <OPTIONS> {
-	"mixin"	| "abstract" | "orderable"			{ return CndTypes.OPTIONS; }
+	{OPTIONS}									{ return CndTypes.OPTIONS; }
 }
 <YYINITIAL> {
-	"mixin"	| "abstract" | "orderable"			{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
+	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
 }
 
 
@@ -90,10 +93,10 @@ COMMENT_BLOCK="/*" ~"*/"
 //Extends
 <YYINITIAL> "extends"                           	{ yybegin(EXTENDS); return CndTypes.EXTENDS; }
 <EXTENDS> "="										{ yybegin(EXTEND_NAMESPACE); return CndTypes.EQUAL; }
-<EXTEND_NAMESPACE> [:jletter:][:jletterdigit:]*		{ yybegin(EXTEND); return CndTypes.NAMESPACE_NAME; }
+<EXTEND_NAMESPACE> {CHARS}							{ yybegin(EXTEND); return CndTypes.NAMESPACE_NAME; }
 <EXTEND> {
 	":"												{ return CndTypes.COLON; }
-	[:jletter:][:jletterdigit:]*					{ return CndTypes.NODE_TYPE_NAME; }
+	{CHARS}											{ return CndTypes.NODE_TYPE_NAME; }
 	","												{ yybegin(EXTEND_NAMESPACE); return CndTypes.COMMA; }
 }
 
@@ -131,20 +134,20 @@ COMMENT_BLOCK="/*" ~"*/"
 
 <PROPERTY_DEFAULT> {
 	"="											{ yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
-	"mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict="("sum"|"latest"|"oldest"|"min"|"max")|"facetable"			{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
+	{PROPERTY_ATTRIBUTES}						{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
 	"<"											{ yybegin(PROPERTY_CONSTRAINT_VALUE); return CndTypes.LEFT_ANGLE_BRACKET; }
 }
 <PROPERTY_DEFAULT_VALUE> {
 	[^\r\n\s]+									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
-	"mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict="("sum"|"latest"|"oldest"|"min"|"max")|"facetable"			{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
+	{PROPERTY_ATTRIBUTES}						{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
 }
 
 <PROPERTY_ATTRIBUTES> {
-	"mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict="("sum"|"latest"|"oldest"|"min"|"max")|"facetable"			{ return CndTypes.PROPERTY_ATTRIBUTE; }
+	{PROPERTY_ATTRIBUTES}						{ return CndTypes.PROPERTY_ATTRIBUTE; }
 	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ANGLE_BRACKET; }
 }
 
-<PROPERTY_CONSTRAINT> [^\r\n\s\t\f]+		{ return CndTypes.PROPERTY_CONSTRAINT; }
+<PROPERTY_CONSTRAINT> [^\r\n\s\t\f]+			{ return CndTypes.PROPERTY_CONSTRAINT; }
 
 
 
@@ -157,24 +160,24 @@ COMMENT_BLOCK="/*" ~"*/"
 	[:jletter:]([:jletterdigit:]|:)* | "*"			{ return CndTypes.PROPERTY_NAME; }
 	"("												{ yybegin(NODE_NAMESPACE); return CndTypes.LEFT_PARENTHESIS; }
 }
-<NODE_NAMESPACE> [:jletter:][:jletterdigit:]*		{ yybegin(NODE_NODETYPE); return CndTypes.NAMESPACE_NAME; }
+<NODE_NAMESPACE> {CHARS}							{ yybegin(NODE_NODETYPE); return CndTypes.NAMESPACE_NAME; }
 <NODE_NODETYPE> {
 	":"                                             { return CndTypes.COLON; }
-	[:jletter:][:jletterdigit:]*                    { return CndTypes.NODE_TYPE_NAME; }
+	{CHARS}                   						{ return CndTypes.NODE_TYPE_NAME; }
 	")"							                    { yybegin(NODE_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
 }
 
 <NODE_DEFAULT> {
-	{WHITE_SPACE}+ "="								{ yybegin(NODE_DEFAULT_VALUE_NAMESPACE); return CndTypes.EQUAL; }
-	"mandatory"|"autocreated"|"version"|"multiple"	{ yybegin(NODE_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
+	"="												{ yybegin(NODE_DEFAULT_VALUE_NAMESPACE); return CndTypes.EQUAL; }
+	{NODE_ATTRIBUTES}								{ yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_ATTRIBUTE; }
 }
-<NODE_DEFAULT_VALUE_NAMESPACE> [:jletter:][:jletterdigit:]*		{ yybegin(NODE_DEFAULT_VALUE); return CndTypes.NAMESPACE_NAME; }
+<NODE_DEFAULT_VALUE_NAMESPACE> {CHARS}				{ yybegin(NODE_DEFAULT_VALUE); return CndTypes.NAMESPACE_NAME; }
 <NODE_DEFAULT_VALUE> {
 	":"                                             { return CndTypes.COLON; }
-	[:jletter:][:jletterdigit:]*                    { yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_TYPE_NAME; }
+	{CHARS}                    						{ yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_TYPE_NAME; }
 }
 
-<NODE_ATTRIBUTES> "mandatory"|"autocreated"|"version"|"multiple"	{ return CndTypes.PROPERTY_ATTRIBUTE; }
+<NODE_ATTRIBUTES> {NODE_ATTRIBUTES}					{ return CndTypes.NODE_ATTRIBUTE; }
 
 
 
