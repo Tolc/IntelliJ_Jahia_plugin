@@ -330,21 +330,37 @@ PROPERTY_TYPE_WEAKREFERENCE_FINAL={PROPERTY_TYPE_WEAKREFERENCE} ({PROPERTY_TYPE_
 }
 
 
+
+
+
+
+//Node type extends
+
+
+
+
+
+
+//Node type itemtype
+
+
+
+
+
 //Node type property -
 <YYINITIAL> "-"									{ yybegin(PROPERTY); return CndTypes.MINUS; }
 <PROPERTY> {
 	[:jletter:]([:jletterdigit:]|:)*			{ return CndTypes.PROPERTY_NAME; }
 	"("											{ return CndTypes.LEFT_PARENTHESIS; }
-	"string"|"long"|"double"|"decimal"|"path"|"uri"|"boolean"|"date"|"binary"|"weakreference"		{ return CndTypes.PROPERTY_TYPE; }
+	"string"|"long"|"double"|"decimal"|"path"|"uri"|"boolean"|"date"|"binary"|"weakreference"|"name"|"reference"		{ return CndTypes.PROPERTY_TYPE; }
 	","											{ return CndTypes.COMMA; }
-	"text"|"richtext"|"textarea"|"choicelist"|"datetimepicker"|"datepicker"|"picker"|"color"|"category"|"checkbox"		{ return CndTypes.PROPERTY_MASK; }
+	"text"|"richtext"|"textarea"|"choicelist"|"datetimepicker"|"datepicker"|"picker"|"color"|"category"|"checkbox"|"fileupload"		{ return CndTypes.PROPERTY_MASK; }
 	"["											{ yybegin(PROPERTY_MASK_OPTION_NAME); return CndTypes.LEFT_BRACKET; }
 	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
 }
 
 <PROPERTY_MASK_OPTION_NAME> "resourceBundle"|"country"|"templates"|"templatesNode"|"users"|"nodetypes"|"subnodetypes"|"nodes"|"menus"|"script"|"flag"|"sortableFieldnames"|"moduleImage"|"linkerProps"|"workflow"|"workflowTypes"|"sort"|"componenttypes"|"autoSelectParent"|"type"		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
 <PROPERTY_MASK_OPTION> {
-	//See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
 	"="											{ return CndTypes.EQUAL; }
 	"'"[^\r\n\]']+"'" | [^\r\n\])',]+			{ return CndTypes.PROPERTY_MASK_OPTION_VALUE; }
 	"]"											{ return CndTypes.RIGHT_BRACKET; }
@@ -363,15 +379,56 @@ PROPERTY_TYPE_WEAKREFERENCE_FINAL={PROPERTY_TYPE_WEAKREFERENCE} ({PROPERTY_TYPE_
 }
 
 <PROPERTY_ATTRIBUTES> {
-	"mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="("no"|"'untokenized'")|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict=sum"|"facetable"			{ return CndTypes.PROPERTY_ATTRIBUTE; }
+	"mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict="("sum"|"latest"|"oldest"|"min"|"max")|"facetable"			{ return CndTypes.PROPERTY_ATTRIBUTE; }
 	{WHITE_SPACE}+                  			{ return TokenType.WHITE_SPACE; }
 	.                               			{ yybegin(PROPERTY_CONSTRAINT); }
 }
 
 <PROPERTY_CONSTRAINT> "<"						{ yybegin(PROPERTY_CONSTRAINT_VALUE); return CndTypes.LEFT_ANGLE_BRACKET; }
 <PROPERTY_CONSTRAINT_VALUE> {
+	[^\r\n\s\t\f]+								{ yybegin(YYINITIAL); return CndTypes.PROPERTY_CONSTRAINT; }
+}
+
+
+
+
+
+
+//Node type nodes +
+<YYINITIAL> "+"										{ yybegin(NODE); return CndTypes.PLUS; }
+<NODE> {
+	[:jletter:]([:jletterdigit:]|:)* | "*"			{ return CndTypes.PROPERTY_NAME; }
+	"("												{ yybegin(NODE_NAMESPACE); return CndTypes.LEFT_PARENTHESIS; }
+}
+<NODE_NAMESPACE> [:jletter:][:jletterdigit:]*		{ yybegin(NODE_NODETYPE); return CndTypes.NAMESPACE_NAME; }
+<NODE_NODETYPE> {
+	":"                                             { return CndTypes.COLON; }
+	[:jletter:][:jletterdigit:]*                    { return CndTypes.NODE_TYPE_NAME; }
+	")"							                    { yybegin(NODE_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
+}
+
+<NODE_DEFAULT> {
+	{WHITE_SPACE}+ "="							{ yybegin(NODE_DEFAULT_VALUE); return CndTypes.EQUAL; }
+	.											{ yybegin(NODE_ATTRIBUTES); }
+} //STOPPED HERE
+<NODE_DEFAULT_VALUE> {
+	[^\r\n\s]+									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
+	{WHITE_SPACE}+                  			{ return TokenType.WHITE_SPACE; }
+	.                               			{ yybegin(PROPERTY_ATTRIBUTES); }
+}
+
+<NODE_ATTRIBUTES> {
+//mandatory autocreated version multiple
+	"mandatory"|"autocreated"|"version"|"multiple"	{ return CndTypes.PROPERTY_ATTRIBUTE; }
+	{WHITE_SPACE}+                  				{ return TokenType.WHITE_SPACE; }
+	.                               				{ yybegin(PROPERTY_CONSTRAINT); }
+}
+
+<PROPERTY_CONSTRAINT> "<"						{ yybegin(PROPERTY_CONSTRAINT_VALUE); return CndTypes.LEFT_ANGLE_BRACKET; }
+<PROPERTY_CONSTRAINT_VALUE> {
 	[^\r\n\s\t\f]+									{ yybegin(YYINITIAL); return CndTypes.PROPERTY_CONSTRAINT; }
 }
+
 
 
 
