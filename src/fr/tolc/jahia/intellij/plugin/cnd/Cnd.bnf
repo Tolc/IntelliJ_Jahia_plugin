@@ -15,12 +15,12 @@
   psiImplUtilClass="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndPsiImplUtil"
 }
 
-cndFile ::= namespace* (COMMENT|nodeType|CRLF)*
+cnd ::= namespace* nodeType*
 
-namespace ::= NAMESPACE_OPENING NAMESPACE_NAME NAMESPACE_EQUAL NAMESPACE_URI NAMESPACE_CLOSING CRLF { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNamespaceElementImpl"
+namespace ::= LEFT_ANGLE_BRACKET NAMESPACE_NAME EQUAL SINGLE_QUOTE NAMESPACE_URI SINGLE_QUOTE RIGHT_ANGLE_BRACKET { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNamespaceElementImpl"
   implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespaceElement" methods=[getNamespaceName getNamespaceURI]}
 
-nodeType ::= NODE_TYPE_DECLARATION_OPENING NODE_TYPE_NAMESPACE NODE_TYPE_DECLARATION_COLON NODE_TYPE_NAME NODE_TYPE_DECLARATION_CLOSING [inheritances] [modifiers] [CRLF extend] [CRLF itemType] [CRLF properties] {mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNodeTypeElementImpl"
+nodeType ::= LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [superTypes] [options] [extends] [itemType] [properties] {mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNodeTypeElementImpl"
   implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeElement" methods=[getNodeTypeName setNodeTypeName getNodeTypeNamespace getNameIdentifier getName setName]}
 
 private modifiers ::= (NODE_TYPE_ORDERABLE | NODE_TYPE_MIXIN | NODE_TYPE_ABSTRACT)+ | CRLF NODE_TYPE_ORDERABLE
