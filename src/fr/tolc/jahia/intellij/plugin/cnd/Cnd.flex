@@ -29,9 +29,9 @@ COMMENT_BLOCK="/*" ~"*/"
 //~ = upto
 
 CHARS=[:jletter:][:jletterdigit:]*
-OPTIONS="mixin"	| "abstract" | "orderable"
-PROPERTY_ATTRIBUTES="mandatory"|"protected"|"primary"|"i18n"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|"boost="[:digit:]"."[:digit:]|"onconflict="("sum"|"latest"|"oldest"|"min"|"max")|"facetable"
-NODE_ATTRIBUTES="mandatory"|"autocreated"|"version"|"multiple"
+OPTIONS="mixin"	| "abstract" | "orderable" | "noquery"
+PROPERTY_ATTRIBUTES="mandatory"|"protected"|"primary"|"i18n"|"internationalized"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|("boost"|"scoreboost")"="[:digit:]("."[:digit:]+){0,1}|"onconflict="("sum"|"latest"|"oldest"|"min"|"max")|"facetable"|"hierarchical"|"noqueryorder"|"itemtype = "("content"|"metadata"|"layout"|"options")|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"queryops '" (("<"|"<="|"<>"|"="|">"|">="|"like")(","){0,1})* "'"
+NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"multiple"|"protected"
 
 //See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
 
@@ -63,27 +63,27 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|"version"|"multiple"
 	{CHARS}                       				{ return CndTypes.NODE_TYPE_NAME; }
 	"]"							                { return CndTypes.RIGHT_BRACKET; }
 	">"							                { yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.RIGHT_ANGLE_BRACKET; }
-	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
+	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
 }
 
 //Node type super types "> jnt:content, smix:lmcuComponent"
 <SUPER_TYPES_NAMESPACE> {
 	{CHARS}										{ yybegin(SUPER_TYPES); return CndTypes.NAMESPACE_NAME; }
-	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
+	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
 }
 <SUPER_TYPES> {
 	":"											{ return CndTypes.COLON; }
 	{CHARS}										{ return CndTypes.NODE_TYPE_NAME; }
 	","											{ yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.COMMA; }
-	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
+	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
 }
 
-//Node type options "mixin", "orderable" or "abstract" at the end of line or on a new line
+//Node type options "mixin", "orderable", "abstract", ... at the end of line or on a new line
 <OPTIONS> {
-	{OPTIONS}									{ return CndTypes.OPTIONS; }
+	{OPTIONS}									{ return CndTypes.OPTION; }
 }
 <YYINITIAL> {
-	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTIONS; }
+	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
 }
 
 
@@ -104,7 +104,7 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|"version"|"multiple"
 <YYINITIAL> "itemtype"                          				{ yybegin(ITEMTYPE); return CndTypes.ITEMTYPE; }
 <ITEMTYPE> {
 	"="                           								{ return CndTypes.EQUAL; }
-	"default"|"options"|"layout"|"metadata"|"content"           { return CndTypes.EXTEND_ITEM_TYPE; }
+	"default"|"options"|"layout"|"metadata"|"content"           { return CndTypes.ITEMTYPE_TYPE; }
 }
 
 
@@ -157,13 +157,14 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|"version"|"multiple"
 //Node type nodes +
 <YYINITIAL> "+"										{ yybegin(NODE); return CndTypes.PLUS; }
 <NODE> {
-	[:jletter:]([:jletterdigit:]|:)* | "*"			{ return CndTypes.PROPERTY_NAME; }
+	[:jletter:]([:jletterdigit:]|:)* | "*"			{ return CndTypes.NODE_NAME; }
 	"("												{ yybegin(NODE_NAMESPACE); return CndTypes.LEFT_PARENTHESIS; }
 }
 <NODE_NAMESPACE> {CHARS}							{ yybegin(NODE_NODETYPE); return CndTypes.NAMESPACE_NAME; }
 <NODE_NODETYPE> {
 	":"                                             { return CndTypes.COLON; }
 	{CHARS}                   						{ return CndTypes.NODE_TYPE_NAME; }
+	","							                    { yybegin(NODE_NAMESPACE); return CndTypes.COMMA; }
 	")"							                    { yybegin(NODE_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
 }
 
