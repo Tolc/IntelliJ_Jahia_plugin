@@ -152,7 +152,6 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 	{PROPERTY_ATTRIBUTES}						{ return CndTypes.PROPERTY_ATTRIBUTE; }
 	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ANGLE_BRACKET; }
 }
-<YYINITIAL> "<"									{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ANGLE_BRACKET; }
 
 <PROPERTY_CONSTRAINT> [^\r\n]+					{ return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
 
