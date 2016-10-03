@@ -11,27 +11,31 @@ import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
-public class CndPropertiesImpl extends ASTWrapperPsiElement implements CndProperties {
+public class CndSubNodeImpl extends ASTWrapperPsiElement implements CndSubNode {
 
-  public CndPropertiesImpl(ASTNode node) {
+  public CndSubNodeImpl(ASTNode node) {
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitSubNode(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitProperties(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 
   @Override
-  @NotNull
-  public List<CndPropertyMinus> getPropertyMinusList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CndPropertyMinus.class);
+  @Nullable
+  public CndSubNodeAttributes getSubNodeAttributes() {
+    return findChildByClass(CndSubNodeAttributes.class);
   }
 
   @Override
-  @NotNull
-  public List<CndPropertyPlus> getPropertyPlusList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, CndPropertyPlus.class);
+  @Nullable
+  public CndSubNodeDefault getSubNodeDefault() {
+    return findChildByClass(CndSubNodeDefault.class);
   }
 
 }

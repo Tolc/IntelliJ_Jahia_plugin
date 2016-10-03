@@ -7,19 +7,11 @@ import com.intellij.psi.PsiElement;
 
 public class CndVisitor extends PsiElementVisitor {
 
-  public void visitExtend(@NotNull CndExtend o) {
+  public void visitExtension(@NotNull CndExtension o) {
     visitPsiElement(o);
   }
 
-  public void visitExtendNodeType(@NotNull CndExtendNodeType o) {
-    visitPsiElement(o);
-  }
-
-  public void visitInheritance(@NotNull CndInheritance o) {
-    visitPsiElement(o);
-  }
-
-  public void visitInheritances(@NotNull CndInheritances o) {
+  public void visitExtensions(@NotNull CndExtensions o) {
     visitPsiElement(o);
   }
 
@@ -35,51 +27,43 @@ public class CndVisitor extends PsiElementVisitor {
     visitNodeTypeElement(o);
   }
 
-  public void visitProperties(@NotNull CndProperties o) {
+  public void visitOptions(@NotNull CndOptions o) {
     visitPsiElement(o);
   }
 
-  public void visitPropertyBinary(@NotNull CndPropertyBinary o) {
+  public void visitProperty(@NotNull CndProperty o) {
     visitPsiElement(o);
   }
 
-  public void visitPropertyBoolean(@NotNull CndPropertyBoolean o) {
+  public void visitPropertyAttributes(@NotNull CndPropertyAttributes o) {
     visitPsiElement(o);
   }
 
-  public void visitPropertyDate(@NotNull CndPropertyDate o) {
+  public void visitPropertyConstraint(@NotNull CndPropertyConstraint o) {
     visitPsiElement(o);
   }
 
-  public void visitPropertyDouble(@NotNull CndPropertyDouble o) {
+  public void visitPropertyDefault(@NotNull CndPropertyDefault o) {
     visitPsiElement(o);
   }
 
-  public void visitPropertyLong(@NotNull CndPropertyLong o) {
+  public void visitSubNode(@NotNull CndSubNode o) {
     visitPsiElement(o);
   }
 
-  public void visitPropertyMinus(@NotNull CndPropertyMinus o) {
+  public void visitSubNodeAttributes(@NotNull CndSubNodeAttributes o) {
     visitPsiElement(o);
   }
 
-  public void visitPropertyPlus(@NotNull CndPropertyPlus o) {
+  public void visitSubNodeDefault(@NotNull CndSubNodeDefault o) {
     visitPsiElement(o);
   }
 
-  public void visitPropertyString(@NotNull CndPropertyString o) {
+  public void visitSuperType(@NotNull CndSuperType o) {
     visitPsiElement(o);
   }
 
-  public void visitPropertyStringChoicelist(@NotNull CndPropertyStringChoicelist o) {
-    visitPsiElement(o);
-  }
-
-  public void visitPropertyStringText(@NotNull CndPropertyStringText o) {
-    visitPsiElement(o);
-  }
-
-  public void visitPropertyWeakreference(@NotNull CndPropertyWeakreference o) {
+  public void visitSuperTypes(@NotNull CndSuperTypes o) {
     visitPsiElement(o);
   }
 

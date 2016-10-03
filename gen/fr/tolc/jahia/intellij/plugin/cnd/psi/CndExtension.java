@@ -5,9 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CndExtend extends PsiElement {
-
-  @NotNull
-  List<CndExtendNodeType> getExtendNodeTypeList();
+public interface CndExtension extends PsiElement {
 
 }

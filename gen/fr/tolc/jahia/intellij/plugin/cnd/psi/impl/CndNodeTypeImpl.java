@@ -16,21 +16,19 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitNodeType(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitNodeType(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 
   @Override
   @Nullable
-  public CndExtend getExtend() {
-    return findChildByClass(CndExtend.class);
-  }
-
-  @Override
-  @Nullable
-  public CndInheritances getInheritances() {
-    return findChildByClass(CndInheritances.class);
+  public CndExtensions getExtensions() {
+    return findChildByClass(CndExtensions.class);
   }
 
   @Override
@@ -41,8 +39,26 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
 
   @Override
   @Nullable
-  public CndProperties getProperties() {
-    return findChildByClass(CndProperties.class);
+  public CndOptions getOptions() {
+    return findChildByClass(CndOptions.class);
+  }
+
+  @Override
+  @Nullable
+  public CndProperty getProperty() {
+    return findChildByClass(CndProperty.class);
+  }
+
+  @Override
+  @Nullable
+  public CndSubNode getSubNode() {
+    return findChildByClass(CndSubNode.class);
+  }
+
+  @Override
+  @Nullable
+  public CndSuperTypes getSuperTypes() {
+    return findChildByClass(CndSuperTypes.class);
   }
 
   public String getNodeTypeName() {

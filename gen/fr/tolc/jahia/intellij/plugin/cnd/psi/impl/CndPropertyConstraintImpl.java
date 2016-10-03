@@ -11,14 +11,18 @@ import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
-public class CndPropertyDateImpl extends ASTWrapperPsiElement implements CndPropertyDate {
+public class CndPropertyConstraintImpl extends ASTWrapperPsiElement implements CndPropertyConstraint {
 
-  public CndPropertyDateImpl(ASTNode node) {
+  public CndPropertyConstraintImpl(ASTNode node) {
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitPropertyConstraint(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitPropertyDate(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 

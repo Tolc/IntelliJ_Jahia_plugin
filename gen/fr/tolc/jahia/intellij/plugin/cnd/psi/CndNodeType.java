@@ -8,16 +8,22 @@ import com.intellij.psi.PsiElement;
 public interface CndNodeType extends CndNodeTypeElement {
 
   @Nullable
-  CndExtend getExtend();
-
-  @Nullable
-  CndInheritances getInheritances();
+  CndExtensions getExtensions();
 
   @Nullable
   CndItemType getItemType();
 
   @Nullable
-  CndProperties getProperties();
+  CndOptions getOptions();
+
+  @Nullable
+  CndProperty getProperty();
+
+  @Nullable
+  CndSubNode getSubNode();
+
+  @Nullable
+  CndSuperTypes getSuperTypes();
 
   String getNodeTypeName();
 

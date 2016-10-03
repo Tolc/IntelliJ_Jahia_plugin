@@ -11,15 +11,25 @@ import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
-public class CndPropertyStringChoicelistImpl extends ASTWrapperPsiElement implements CndPropertyStringChoicelist {
+public class CndSuperTypesImpl extends ASTWrapperPsiElement implements CndSuperTypes {
 
-  public CndPropertyStringChoicelistImpl(ASTNode node) {
+  public CndSuperTypesImpl(ASTNode node) {
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitSuperTypes(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitPropertyStringChoicelist(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public List<CndSuperType> getSuperTypeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CndSuperType.class);
   }
 
 }

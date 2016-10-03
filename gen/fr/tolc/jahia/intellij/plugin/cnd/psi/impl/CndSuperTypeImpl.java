@@ -11,14 +11,18 @@ import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
-public class CndPropertyBooleanImpl extends ASTWrapperPsiElement implements CndPropertyBoolean {
+public class CndSuperTypeImpl extends ASTWrapperPsiElement implements CndSuperType {
 
-  public CndPropertyBooleanImpl(ASTNode node) {
+  public CndSuperTypeImpl(ASTNode node) {
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitSuperType(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitPropertyBoolean(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 

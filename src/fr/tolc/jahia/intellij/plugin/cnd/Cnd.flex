@@ -29,7 +29,7 @@ COMMENT_BLOCK="/*" ~"*/"
 //~ = upto
 
 CHARS=[:jletter:][:jletterdigit:]*
-OPTIONS="mixin"	| "abstract" | "orderable" | "noquery"
+OPTIONS="mixin"|"abstract"|"orderable"|"noquery"
 PROPERTY_ATTRIBUTES="mandatory"|"protected"|"primary"|"i18n"|"internationalized"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|("boost"|"scoreboost")"="[:digit:]("."[:digit:]+){0,1}|"onconflict="("sum"|"latest"|"oldest"|"min"|"max")|"facetable"|"hierarchical"|"noqueryorder"|"itemtype = "("content"|"metadata"|"layout"|"options")|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"queryops '" (("<"|"<="|"<>"|"="|">"|">="|"like")(","){0,1})* "'"
 NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"multiple"|"protected"
 
@@ -54,6 +54,10 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
     "http"(s){0,1}":\/\/"[A-Za-z0-9.\/\-_]+			{ return CndTypes.NAMESPACE_URI; }
 	">" 											{ yybegin(YYINITIAL); return CndTypes.RIGHT_ANGLE_BRACKET; }
 }
+
+
+
+
 
 //Node type declaration "[tnt:test]"
 <YYINITIAL> "["									{ yybegin(NODETYPE_NAMESPACE); return CndTypes.LEFT_BRACKET; }
@@ -137,7 +141,7 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 <PROPERTY_DEFAULT> {
 	"="											{ yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
 	{PROPERTY_ATTRIBUTES}						{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
-	"<"											{ yybegin(PROPERTY_CONSTRAINT_VALUE); return CndTypes.LEFT_ANGLE_BRACKET; }
+	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ANGLE_BRACKET; }
 }
 <PROPERTY_DEFAULT_VALUE> {
 	[^\r\n\s]+									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
@@ -149,7 +153,7 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ANGLE_BRACKET; }
 }
 
-<PROPERTY_CONSTRAINT> [^\r\n\s\t\f]+			{ return CndTypes.PROPERTY_CONSTRAINT; }
+<PROPERTY_CONSTRAINT> [^\r\n\s\t\f]+			{ return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
 
 
 

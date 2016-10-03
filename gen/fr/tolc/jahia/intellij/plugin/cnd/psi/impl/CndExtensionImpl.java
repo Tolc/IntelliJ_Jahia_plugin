@@ -11,14 +11,18 @@ import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
-public class CndPropertyBinaryImpl extends ASTWrapperPsiElement implements CndPropertyBinary {
+public class CndExtensionImpl extends ASTWrapperPsiElement implements CndExtension {
 
-  public CndPropertyBinaryImpl(ASTNode node) {
+  public CndExtensionImpl(ASTNode node) {
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitExtension(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitPropertyBinary(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 

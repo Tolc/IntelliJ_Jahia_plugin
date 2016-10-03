@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CndInheritances extends PsiElement {
+public interface CndSubNode extends PsiElement {
 
-  @NotNull
-  List<CndInheritance> getInheritanceList();
+  @Nullable
+  CndSubNodeAttributes getSubNodeAttributes();
+
+  @Nullable
+  CndSubNodeDefault getSubNodeDefault();
 
 }

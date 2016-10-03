@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CndPropertyString extends PsiElement {
+public interface CndSuperTypes extends PsiElement {
 
-  @Nullable
-  CndPropertyStringChoicelist getPropertyStringChoicelist();
-
-  @Nullable
-  CndPropertyStringText getPropertyStringText();
+  @NotNull
+  List<CndSuperType> getSuperTypeList();
 
 }

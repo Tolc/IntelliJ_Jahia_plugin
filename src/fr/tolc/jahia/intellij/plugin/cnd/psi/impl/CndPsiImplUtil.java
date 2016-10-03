@@ -39,7 +39,7 @@ public class CndPsiImplUtil {
     public static PsiElement setNodeTypeName(CndNodeType element, String newName) {
         ASTNode nameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
         if (nameNode != null) {
-            ASTNode namespaceNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAMESPACE);
+            ASTNode namespaceNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
             String namespace = "dummyNameSpace";
             if (namespaceNode != null) {
                 namespace = namespaceNode.getText();
@@ -52,7 +52,7 @@ public class CndPsiImplUtil {
     }
 
     public static String getNodeTypeNamespace(CndNodeType element) {
-        ASTNode namespaceName= element.getNode().findChildByType(CndTypes.NODE_TYPE_NAMESPACE);
+        ASTNode namespaceName= element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
         if (namespaceName != null) {
             return namespaceName.getText();
         }

@@ -15,25 +15,29 @@
   psiImplUtilClass="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndPsiImplUtil"
 }
 
-cnd ::= namespace* nodeType*
+cnd ::= [COMMENT] namespace* (nodeType | COMMENT | CRLF)*
 
 
 
-namespace ::= LEFT_ANGLE_BRACKET NAMESPACE_NAME EQUAL SINGLE_QUOTE NAMESPACE_URI SINGLE_QUOTE RIGHT_ANGLE_BRACKET { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNamespaceElementImpl"
-  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespaceElement" methods=[getNamespaceName getNamespaceURI] }
+namespace ::= LEFT_ANGLE_BRACKET NAMESPACE_NAME EQUAL SINGLE_QUOTE NAMESPACE_URI SINGLE_QUOTE RIGHT_ANGLE_BRACKET 
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNamespaceElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespaceElement" 
+  methods=[getNamespaceName getNamespaceURI] }
 
 
 
-nodeType ::= LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [superTypes] [options] [extends] [itemType] {property | node} { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNodeTypeElementImpl"
-  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeElement" methods=[getNodeTypeName setNodeTypeName getNodeTypeNamespace getNameIdentifier getName setName] }
+nodeType ::= LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [superTypes] [options] [extensions] [itemType] {property | subNode} 
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNodeTypeElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeElement" 
+  methods=[getNodeTypeName setNodeTypeName getNodeTypeNamespace getNameIdentifier getName setName] }
 
 superTypes ::= RIGHT_ANGLE_BRACKET superType (COMMA superType)*
 superType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
 
 options ::= OPTION+
 
-extends ::= EXTENDS EQUAL extendNodeType (COMMA extendNodeType)*
-extendNodeType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
+extensions ::= EXTENDS EQUAL extension (COMMA extension)*
+extension ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
 
 itemType ::= ITEMTYPE EQUAL ITEMTYPE_TYPE
 
@@ -48,14 +52,14 @@ propertyDefault ::= EQUAL PROPERTY_DEFAULT_VALUE
 
 propertyAttributes ::= PROPERTY_ATTRIBUTE+
 
-propertyConstraint ::= LEFT_ANGLE_BRACKET PROPERTY_CONSTRAINT
+propertyConstraint ::= LEFT_ANGLE_BRACKET PROPERTY_CONSTRAINT_VALUE
 
 
 
-node ::= PLUS NODE_NAME LEFT_PARENTHESIS subnodeTypes RIGHT_PARENTHESIS [nodeDefault] [nodeAttributes]
-private subnodeTypes ::= subnodeType (COMMA subnodeType)*
-private subnodeType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
+subNode ::= PLUS NODE_NAME LEFT_PARENTHESIS subNodeTypes RIGHT_PARENTHESIS [subNodeDefault] [subNodeAttributes]
+private subNodeTypes ::= subNodeType (COMMA subNodeType)*
+private subNodeType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
 
-nodeDefault ::= EQUAL NAMESPACE_NAME COLON NODE_TYPE_NAME
+subNodeDefault ::= EQUAL NAMESPACE_NAME COLON NODE_TYPE_NAME
 
-nodeAttributes ::= NODE_ATTRIBUTE+
+subNodeAttributes ::= NODE_ATTRIBUTE+

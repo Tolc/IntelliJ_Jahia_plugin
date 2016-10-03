@@ -5,6 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface CndPropertyStringChoicelist extends PsiElement {
+public interface CndPropertyConstraint extends PsiElement {
 
 }

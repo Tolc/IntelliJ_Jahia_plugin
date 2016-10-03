@@ -11,27 +11,37 @@ import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
-public class CndPropertyStringImpl extends ASTWrapperPsiElement implements CndPropertyString {
+public class CndPropertyImpl extends ASTWrapperPsiElement implements CndProperty {
 
-  public CndPropertyStringImpl(ASTNode node) {
+  public CndPropertyImpl(ASTNode node) {
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitProperty(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitPropertyString(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 
   @Override
   @Nullable
-  public CndPropertyStringChoicelist getPropertyStringChoicelist() {
-    return findChildByClass(CndPropertyStringChoicelist.class);
+  public CndPropertyAttributes getPropertyAttributes() {
+    return findChildByClass(CndPropertyAttributes.class);
   }
 
   @Override
   @Nullable
-  public CndPropertyStringText getPropertyStringText() {
-    return findChildByClass(CndPropertyStringText.class);
+  public CndPropertyConstraint getPropertyConstraint() {
+    return findChildByClass(CndPropertyConstraint.class);
+  }
+
+  @Override
+  @Nullable
+  public CndPropertyDefault getPropertyDefault() {
+    return findChildByClass(CndPropertyDefault.class);
   }
 
 }

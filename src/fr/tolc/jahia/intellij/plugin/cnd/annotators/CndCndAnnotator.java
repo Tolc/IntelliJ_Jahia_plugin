@@ -22,13 +22,13 @@ public class CndCndAnnotator implements Annotator {
             String nodeTypeName = element.getText();
 
             PsiElement nextSibling = element.getNextSibling();
-            if (nextSibling != null && CndTypes.NODE_TYPE_DECLARATION_CLOSING.equals(nextSibling.getNode().getElementType())) { //Make sure this is a node type declaration, and not use
+            if (nextSibling != null && CndTypes.RIGHT_BRACKET.equals(nextSibling.getNode().getElementType())) { //Make sure this is a node type declaration, and not use
                 
                 PsiElement colonEl = element.getPrevSibling();
-                if (colonEl != null && CndTypes.NODE_TYPE_DECLARATION_COLON.equals(colonEl.getNode().getElementType())) {
+                if (colonEl != null && CndTypes.COLON.equals(colonEl.getNode().getElementType())) {
 
                     PsiElement namespaceEl = colonEl.getPrevSibling();
-                    if (namespaceEl != null && CndTypes.NODE_TYPE_NAMESPACE.equals(namespaceEl.getNode().getElementType())) {
+                    if (namespaceEl != null && CndTypes.NAMESPACE_NAME.equals(namespaceEl.getNode().getElementType())) {
                         String namespace = namespaceEl.getText();
 
                         Project project = element.getProject();
