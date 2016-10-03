@@ -16,11 +16,11 @@ public interface CndNodeType extends CndNodeTypeElement {
   @Nullable
   CndOptions getOptions();
 
-  @Nullable
-  CndProperty getProperty();
+  @NotNull
+  List<CndProperty> getPropertyList();
 
-  @Nullable
-  CndSubNode getSubNode();
+  @NotNull
+  List<CndSubNode> getSubNodeList();
 
   @Nullable
   CndSuperTypes getSuperTypes();

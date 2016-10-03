@@ -30,8 +30,8 @@ COMMENT_BLOCK="/*" ~"*/"
 
 CHARS=[:jletter:][:jletterdigit:]*
 OPTIONS="mixin"|"abstract"|"orderable"|"noquery"
-PROPERTY_ATTRIBUTES="mandatory"|"protected"|"primary"|"i18n"|"internationalized"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|("boost"|"scoreboost")"="[:digit:]("."[:digit:]+){0,1}|"onconflict="("sum"|"latest"|"oldest"|"min"|"max")|"facetable"|"hierarchical"|"noqueryorder"|"itemtype = "("content"|"metadata"|"layout"|"options")|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"queryops '" (("<"|"<="|"<>"|"="|">"|">="|"like")(","){0,1})* "'"
-NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"multiple"|"protected"
+PROPERTY_ATTRIBUTES="mandatory"|"protected"|"primary"|"i18n"|"internationalized"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="((')?"no"|"tokenized"|"untokenized"(')?)|"analyzer='keyword'"|"autocreated"|("boost"|"scoreboost")"="[:digit:]("."[:digit:]+){0,1}|"onconflict="("sum"|"latest"|"oldest"|"min"|"max"|"ignore")|"facetable"|"hierarchical"|"noqueryorder"|"itemtype = "("content"|"metadata"|"layout"|"options"|"codeEditor")|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"queryops '" (("<"|"<="|"<>"|"="|">"|">="|"like")(","){0,1})* "'"
+NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"multiple"|"protected"|"sns"
 
 //See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
 
@@ -63,23 +63,23 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 <YYINITIAL> "["									{ yybegin(NODETYPE_NAMESPACE); return CndTypes.LEFT_BRACKET; }
 <NODETYPE_NAMESPACE> {CHARS}					{ yybegin(NODETYPE); return CndTypes.NAMESPACE_NAME; }
 <NODETYPE> {
+	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
 	":"                                         { return CndTypes.COLON; }
 	{CHARS}                       				{ return CndTypes.NODE_TYPE_NAME; }
 	"]"							                { return CndTypes.RIGHT_BRACKET; }
 	">"							                { yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.RIGHT_ANGLE_BRACKET; }
-	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
 }
 
 //Node type super types "> jnt:content, smix:lmcuComponent"
 <SUPER_TYPES_NAMESPACE> {
-	{CHARS}										{ yybegin(SUPER_TYPES); return CndTypes.NAMESPACE_NAME; }
 	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
+	{CHARS}										{ yybegin(SUPER_TYPES); return CndTypes.NAMESPACE_NAME; }
 }
 <SUPER_TYPES> {
+	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
 	":"											{ return CndTypes.COLON; }
 	{CHARS}										{ return CndTypes.NODE_TYPE_NAME; }
 	","											{ yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.COMMA; }
-	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
 }
 
 //Node type options "mixin", "orderable", "abstract", ... at the end of line or on a new line
@@ -108,7 +108,7 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 <YYINITIAL> "itemtype"                          				{ yybegin(ITEMTYPE); return CndTypes.ITEMTYPE; }
 <ITEMTYPE> {
 	"="                           								{ return CndTypes.EQUAL; }
-	"default"|"options"|"layout"|"metadata"|"content"           { return CndTypes.ITEMTYPE_TYPE; }
+	"default"|"options"|"layout"|"metadata"|"content"|"classification"|"permissions"|"listOrdering"|"contributeMode"|"propertiesView"           { return CndTypes.ITEMTYPE_TYPE; }
 }
 
 
@@ -118,21 +118,21 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 //Node type property -
 <YYINITIAL> "-"									{ yybegin(PROPERTY); return CndTypes.MINUS; }
 <PROPERTY> {
-	[:jletter:]([:jletterdigit:]|:)*			{ return CndTypes.PROPERTY_NAME; }
+	[:jletter:]([:jletterdigit:]|":"|".")* | "*"		{ return CndTypes.PROPERTY_NAME; }
 	"("											{ yybegin(PROPERTY_TYPE); return CndTypes.LEFT_PARENTHESIS; }
 }
 <PROPERTY_TYPE> {
-	"string"|"long"|"double"|"decimal"|"path"|"uri"|"boolean"|"date"|"binary"|"weakreference"|"name"|"reference"		{ return CndTypes.PROPERTY_TYPE; }
+	"string"|"long"|"double"|"decimal"|"path"|"uri"|"boolean"|"date"|"binary"|"weakreference"|"name"|"reference"|"UNDEFINED"		{ return CndTypes.PROPERTY_TYPE; }
 	","											{ return CndTypes.COMMA; }
-	"text"|"richtext"|"textarea"|"choicelist"|"datetimepicker"|"datepicker"|"picker"|"color"|"category"|"checkbox"|"fileupload"		{ return CndTypes.PROPERTY_MASK; }
+	"text"|"richtext"|"textarea"|"choicelist"|"datetimepicker"|"datepicker"|"picker"|"color"|"category"|"checkbox"|"fileupload"|"tag"		{ return CndTypes.PROPERTY_MASK; }
 	"["											{ yybegin(PROPERTY_MASK_OPTION_NAME); return CndTypes.LEFT_BRACKET; }
 	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
 }
 
-<PROPERTY_MASK_OPTION_NAME> "resourceBundle"|"country"|"templates"|"templatesNode"|"users"|"nodetypes"|"subnodetypes"|"nodes"|"menus"|"script"|"flag"|"sortableFieldnames"|"moduleImage"|"linkerProps"|"workflow"|"workflowTypes"|"sort"|"componenttypes"|"autoSelectParent"|"type"		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
+<PROPERTY_MASK_OPTION_NAME> "resourceBundle"|"country"|"templates"|"templatesNode"|"users"|"nodetypes"|"subnodetypes"|"nodes"|"menus"|"script"|"flag"|"sortableFieldnames"|"moduleImage"|"linkerProps"|"workflow"|"workflowTypes"|"sort"|"componenttypes"|"autoSelectParent"|"type"|"image"|"dependentProperties"|"mime"|"renderModes"|"permissions"|"autocomplete"|"separator"		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
 <PROPERTY_MASK_OPTION> {
 	"="											{ return CndTypes.EQUAL; }
-	"'"[^\r\n\]']+"'" | [^\r\n\])',]+			{ return CndTypes.PROPERTY_MASK_OPTION_VALUE; }
+	"'"[^\r\n\]']+"'" | [^\r\n\s\]=)',]+		{ return CndTypes.PROPERTY_MASK_OPTION_VALUE; }
 	"]"											{ return CndTypes.RIGHT_BRACKET; }
 	","											{ yybegin(PROPERTY_MASK_OPTION_NAME); return CndTypes.COMMA; }
 	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
@@ -144,7 +144,7 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ANGLE_BRACKET; }
 }
 <PROPERTY_DEFAULT_VALUE> {
-	[^\r\n\s]+									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
+	[^\r\n\s]+ | "'"[^\r\n]+"'"									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
 	{PROPERTY_ATTRIBUTES}						{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
 }
 
@@ -152,8 +152,9 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 	{PROPERTY_ATTRIBUTES}						{ return CndTypes.PROPERTY_ATTRIBUTE; }
 	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ANGLE_BRACKET; }
 }
+<YYINITIAL> "<"									{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ANGLE_BRACKET; }
 
-<PROPERTY_CONSTRAINT> [^\r\n\s\t\f]+			{ return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
+<PROPERTY_CONSTRAINT> [^\r\n]+					{ return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
 
 
 

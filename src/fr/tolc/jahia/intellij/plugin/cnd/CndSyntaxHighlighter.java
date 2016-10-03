@@ -17,7 +17,7 @@ public class CndSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey NAMESPACE = createTextAttributesKey("CND_NAMESPACE", DefaultLanguageHighlighterColors.CONSTANT);
     public static final TextAttributesKey NODE_TYPE = createTextAttributesKey("CND_NODE_TYPE", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey KEYWORD = createTextAttributesKey("CND_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
-    public static final TextAttributesKey TYPE = createTextAttributesKey("CND_KEYWORD", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
+    public static final TextAttributesKey TYPE = createTextAttributesKey("CND_TYPE", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
     public static final TextAttributesKey STRING = createTextAttributesKey("CND_STRING", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("CND_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
 
@@ -53,7 +53,7 @@ public class CndSyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType.equals(CndTypes.PROPERTY_ATTRIBUTE)
                 || tokenType.equals(CndTypes.NODE_ATTRIBUTE)
                 || tokenType.equals(CndTypes.EXTENDS)
-                || tokenType.equals(CndTypes.ITEM_TYPE)) {
+                || tokenType.equals(CndTypes.ITEMTYPE)) {
             return KEYWORD_KEYS;
         } else if (tokenType.equals(CndTypes.PROPERTY_NAME)
                 || tokenType.equals(CndTypes.NODE_NAME)

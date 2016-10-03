@@ -15,26 +15,26 @@
   psiImplUtilClass="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndPsiImplUtil"
 }
 
-cnd ::= [COMMENT] namespace* (nodeType | COMMENT | CRLF)*
+cnd ::= (COMMENT|CRLF)* (namespace CRLF)* (nodeType | COMMENT | CRLF)*
 
 
 
-namespace ::= LEFT_ANGLE_BRACKET NAMESPACE_NAME EQUAL SINGLE_QUOTE NAMESPACE_URI SINGLE_QUOTE RIGHT_ANGLE_BRACKET 
+namespace ::= LEFT_ANGLE_BRACKET NAMESPACE_NAME EQUAL SINGLE_QUOTE NAMESPACE_URI SINGLE_QUOTE RIGHT_ANGLE_BRACKET
 { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNamespaceElementImpl"
   implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespaceElement" 
   methods=[getNamespaceName getNamespaceURI] }
 
 
 
-nodeType ::= LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [superTypes] [options] [extensions] [itemType] {property | subNode} 
+nodeType ::= LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [superTypes] [options] [COMMENT] [CRLF extensions] [COMMENT] [CRLF itemType] (CRLF property | CRLF subNode)* [CRLF]
 { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNodeTypeElementImpl"
   implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeElement" 
   methods=[getNodeTypeName setNodeTypeName getNodeTypeNamespace getNameIdentifier getName setName] }
 
-superTypes ::= RIGHT_ANGLE_BRACKET superType (COMMA superType)*
+superTypes ::= RIGHT_ANGLE_BRACKET superType (COMMA superType)* [COMMA]
 superType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
 
-options ::= OPTION+
+options ::= ([CRLF] OPTION)+
 
 extensions ::= EXTENDS EQUAL extension (COMMA extension)*
 extension ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
@@ -43,8 +43,8 @@ itemType ::= ITEMTYPE EQUAL ITEMTYPE_TYPE
 
 
 
-property ::= MINUS PROPERTY_NAME LEFT_PARENTHESIS propertyType RIGHT_PARENTHESIS [propertyDefault] [propertyAttributes] [propertyConstraint]
-private propertyType ::= PROPERTY_TYPE [COMMA PROPERTY_MASK [propertyMaskOptions]]
+property ::= MINUS PROPERTY_NAME [propertyType] [propertyDefault] [propertyAttributes] [propertyConstraint]
+private propertyType ::= LEFT_PARENTHESIS PROPERTY_TYPE [COMMA PROPERTY_MASK [propertyMaskOptions]] RIGHT_PARENTHESIS
 private propertyMaskOptions ::= LEFT_BRACKET propertyMaskOption (COMMA propertyMaskOption)* RIGHT_BRACKET 
 private propertyMaskOption ::= PROPERTY_MASK_OPTION [EQUAL PROPERTY_MASK_OPTION_VALUE]
 

@@ -2,13 +2,21 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
 
 import java.util.List;
-import org.jetbrains.annotations.*;
+
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtensions;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndItemType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndOptions;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNode;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperTypes;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndVisitor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeType {
 
@@ -44,15 +52,15 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
   }
 
   @Override
-  @Nullable
-  public CndProperty getProperty() {
-    return findChildByClass(CndProperty.class);
+  @NotNull
+  public List<CndProperty> getPropertyList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CndProperty.class);
   }
 
   @Override
-  @Nullable
-  public CndSubNode getSubNode() {
-    return findChildByClass(CndSubNode.class);
+  @NotNull
+  public List<CndSubNode> getSubNodeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CndSubNode.class);
   }
 
   @Override
