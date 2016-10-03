@@ -2,21 +2,13 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
 
 import java.util.List;
-
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtensions;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndItemType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndOptions;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNode;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperTypes;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndVisitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
 public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeType {
 
@@ -24,19 +16,15 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
     super(node);
   }
 
-  public void accept(@NotNull CndVisitor visitor) {
-    visitor.visitNodeType(this);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
+    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitNodeType(this);
     else super.accept(visitor);
   }
 
   @Override
-  @Nullable
-  public CndExtensions getExtensions() {
-    return findChildByClass(CndExtensions.class);
+  @NotNull
+  public List<CndExtensions> getExtensionsList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CndExtensions.class);
   }
 
   @Override

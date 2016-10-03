@@ -7,8 +7,8 @@ import com.intellij.psi.PsiElement;
 
 public interface CndNodeType extends CndNodeTypeElement {
 
-  @Nullable
-  CndExtensions getExtensions();
+  @NotNull
+  List<CndExtensions> getExtensionsList();
 
   @Nullable
   CndItemType getItemType();

@@ -26,7 +26,7 @@ namespace ::= LEFT_ANGLE_BRACKET NAMESPACE_NAME EQUAL SINGLE_QUOTE NAMESPACE_URI
 
 
 
-nodeType ::= LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [superTypes] [options] [COMMENT] [CRLF extensions] [COMMENT] [CRLF itemType] (CRLF property | CRLF subNode)* [CRLF]
+nodeType ::= LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [superTypes] [options] [COMMENT] [CRLF extensions] [COMMENT] [CRLF itemType] [COMMENT] [CRLF extensions] (CRLF+ COMMENT | CRLF+ property | CRLF+ subNode)* [CRLF]
 { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNodeTypeElementImpl"
   implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeElement" 
   methods=[getNodeTypeName setNodeTypeName getNodeTypeNamespace getNameIdentifier getName setName] }

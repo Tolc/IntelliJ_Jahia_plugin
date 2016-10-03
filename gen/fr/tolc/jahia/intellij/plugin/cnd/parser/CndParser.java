@@ -1,15 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package fr.tolc.jahia.intellij.plugin.cnd.parser;
 
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
-import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
-
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import com.intellij.lang.PsiParser;
+import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.tree.TokenSet;
+import com.intellij.lang.PsiParser;
+import com.intellij.lang.LightPsiParser;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class CndParser implements PsiParser, LightPsiParser {
@@ -235,7 +235,7 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [superTypes] [options] [COMMENT] [CRLF extensions] [COMMENT] [CRLF itemType] (CRLF COMMENT | CRLF property | CRLF subNode)* [CRLF]
+  // LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [superTypes] [options] [COMMENT] [CRLF extensions] [COMMENT] [CRLF itemType] [COMMENT] [CRLF extensions] (CRLF+ COMMENT | CRLF+ property | CRLF+ subNode)* [CRLF]
   public static boolean nodeType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "nodeType")) return false;
     if (!nextTokenIs(b, LEFT_BRACKET)) return false;
@@ -250,6 +250,8 @@ public class CndParser implements PsiParser, LightPsiParser {
     r = r && nodeType_10(b, l + 1);
     r = r && nodeType_11(b, l + 1);
     r = r && nodeType_12(b, l + 1);
+    r = r && nodeType_13(b, l + 1);
+    r = r && nodeType_14(b, l + 1);
     exit_section_(b, m, NODE_TYPE, r);
     return r;
   }
@@ -318,55 +320,139 @@ public class CndParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (CRLF COMMENT | CRLF property | CRLF subNode)*
+  // [COMMENT]
   private static boolean nodeType_11(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "nodeType_11")) return false;
+    consumeToken(b, COMMENT);
+    return true;
+  }
+
+  // [CRLF extensions]
+  private static boolean nodeType_12(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_12")) return false;
+    nodeType_12_0(b, l + 1);
+    return true;
+  }
+
+  // CRLF extensions
+  private static boolean nodeType_12_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_12_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, CRLF);
+    r = r && extensions(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (CRLF+ COMMENT | CRLF+ property | CRLF+ subNode)*
+  private static boolean nodeType_13(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_13")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!nodeType_11_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "nodeType_11", c)) break;
+      if (!nodeType_13_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "nodeType_13", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
-  // CRLF COMMENT | CRLF property | CRLF subNode
-  private static boolean nodeType_11_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "nodeType_11_0")) return false;
+  // CRLF+ COMMENT | CRLF+ property | CRLF+ subNode
+  private static boolean nodeType_13_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_13_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = parseTokens(b, 0, CRLF, COMMENT);
-    if (!r) r = nodeType_11_0_1(b, l + 1);
-    if (!r) r = nodeType_11_0_2(b, l + 1);
+    r = nodeType_13_0_0(b, l + 1);
+    if (!r) r = nodeType_13_0_1(b, l + 1);
+    if (!r) r = nodeType_13_0_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // CRLF property
-  private static boolean nodeType_11_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "nodeType_11_0_1")) return false;
+  // CRLF+ COMMENT
+  private static boolean nodeType_13_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_13_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = nodeType_13_0_0_0(b, l + 1);
+    r = r && consumeToken(b, COMMENT);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // CRLF+
+  private static boolean nodeType_13_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_13_0_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, CRLF);
+    int c = current_position_(b);
+    while (r) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "nodeType_13_0_0_0", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // CRLF+ property
+  private static boolean nodeType_13_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_13_0_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = nodeType_13_0_1_0(b, l + 1);
     r = r && property(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // CRLF subNode
-  private static boolean nodeType_11_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "nodeType_11_0_2")) return false;
+  // CRLF+
+  private static boolean nodeType_13_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_13_0_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, CRLF);
+    int c = current_position_(b);
+    while (r) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "nodeType_13_0_1_0", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // CRLF+ subNode
+  private static boolean nodeType_13_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_13_0_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = nodeType_13_0_2_0(b, l + 1);
     r = r && subNode(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
+  // CRLF+
+  private static boolean nodeType_13_0_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_13_0_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, CRLF);
+    int c = current_position_(b);
+    while (r) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "nodeType_13_0_2_0", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
   // [CRLF]
-  private static boolean nodeType_12(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "nodeType_12")) return false;
+  private static boolean nodeType_14(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeType_14")) return false;
     consumeToken(b, CRLF);
     return true;
   }
@@ -377,7 +463,7 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "options")) return false;
     if (!nextTokenIs(b, "<options>", CRLF, OPTION)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, OPTIONS, "<options>");
+    Marker m = enter_section_(b, l, _NONE_, "<options>");
     r = options_0(b, l + 1);
     int c = current_position_(b);
     while (r) {
@@ -385,7 +471,7 @@ public class CndParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "options", c)) break;
       c = current_position_(b);
     }
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, l, m, OPTIONS, r, false, null);
     return r;
   }
 
