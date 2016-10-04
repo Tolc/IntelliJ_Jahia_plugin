@@ -80,13 +80,49 @@ public class CndCompletionContributor extends CompletionContributor {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
-                        String[] types = {"string", "string, richtext", "string, textarea", "string, choicelist", "string, choicelist[resourceBundle]",
-                                "long", "boolean", "date",
-                                "weakreference", "weakreference, picker[type='image']", "weakreference, picker[type='file']", "weakreference, picker[type='page']", "weakreference, picker[type='category']",
-                                "weakreference, category", "weakreference, category[autoSelectParent=true]", "weakreference, category[autoSelectParent=false]"
+                        String[] types = {
+                                "string", "long", "double", "decimal", "path", "uri", "boolean", "date", "binary",
+                                "weakreference", "name", "reference", "UNDEFINED"
                         };
                         for (String type : types) {
                             resultSet.addElement(LookupElementBuilder.create(type));
+                        }
+                    }
+                }
+        );
+
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.PROPERTY_MASK).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+                        String[] masks = {
+                                "text", "richtext", "textarea", "choicelist", "datetimepicker", "datepicker", "picker",
+                                "color", "category", "checkbox", "fileupload", "tag", "file"
+                        };
+                        for (String mask : masks) {
+                            resultSet.addElement(LookupElementBuilder.create(mask));
+                        }
+                    }
+                }
+        );
+
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.PROPERTY_MASK_OPTION).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+                        String[] masks = {
+                                "resourceBundle", "country", "templates", "templatesNode", "users", "nodetypes",
+                                "subnodetypes", "nodes", "menus", "script", "flag", "sortableFieldnames", "moduleImage",
+                                "linkerProps", "workflow", "workflowTypes", "sort", "componenttypes",
+                                "autoSelectParent", "type", "image", "dependentProperties", "mime", "renderModes",
+                                "permissions", "autocomplete", "separator", "folder"
+                        };
+                        for (String mask : masks) {
+                            resultSet.addElement(LookupElementBuilder.create(mask));
                         }
                     }
                 }
@@ -99,8 +135,15 @@ public class CndCompletionContributor extends CompletionContributor {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
-                        String[] attributes = {"mandatory", "protected", "primary", "i18n", "hidden", "multiple", "nofulltext",
-                                "indexed=no", "autocreated", "boost=", "onconflict=sum"
+                        String[] attributes = {"mandatory", "protected", "primary", "i18n", "internationalized",
+                                "sortable", "hidden", "multiple", "nofulltext",
+                                "analyzer='keyword'", "autocreated", "facetable", "hierarchical", "noqueryorder",
+                                "indexed=no", "indexed=tokenized", "indexed=untokenized",
+                                "boost=2.0", "scoreboost=2.0",
+                                "onconflict=sum", "onconflict=latest", "onconflict=oldest", "onconflict=min", "onconflict=max", "onconflict=ignore",
+                                "itemtype = content", "itemtype = metadata", "itemtype = layout", "itemtype = options", "itemtype = codeEditor",
+                                "copy", "version", "initialize", "compute", "ignore", "abort",
+                                "queryops '<,<=,<>,=,>,>=,like'"
                         };
                         for (String attribute : attributes) {
                             resultSet.addElement(LookupElementBuilder.create(attribute));
@@ -117,6 +160,46 @@ public class CndCompletionContributor extends CompletionContributor {
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
                         String[] names = {"*"};
+                        for (String name : names) {
+                            resultSet.addElement(LookupElementBuilder.create(name));
+                        }
+                    }
+                }
+        );
+
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.COLON).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+                        String[] names = {":"};
+                        for (String name : names) {
+                            resultSet.addElement(LookupElementBuilder.create(name));
+                        }
+                    }
+                }
+        );
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.COMMA).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+                        String[] names = {","};
+                        for (String name : names) {
+                            resultSet.addElement(LookupElementBuilder.create(name));
+                        }
+                    }
+                }
+        );
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.EQUAL).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+                        String[] names = {"="};
                         for (String name : names) {
                             resultSet.addElement(LookupElementBuilder.create(name));
                         }
