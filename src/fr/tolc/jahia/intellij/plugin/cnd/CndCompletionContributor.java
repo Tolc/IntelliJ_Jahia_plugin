@@ -74,6 +74,7 @@ public class CndCompletionContributor extends CompletionContributor {
                 }
         );
 
+        //TODO: see http://stackoverflow.com/questions/34328133/intellij-completion-contributor
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement(CndTypes.PROPERTY_TYPE).withLanguage(CndLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {
