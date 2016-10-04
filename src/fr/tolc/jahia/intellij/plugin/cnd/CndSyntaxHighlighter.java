@@ -17,6 +17,7 @@ public class CndSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey NAMESPACE = createTextAttributesKey("CND_NAMESPACE", DefaultLanguageHighlighterColors.CONSTANT);
     public static final TextAttributesKey NODE_TYPE = createTextAttributesKey("CND_NODE_TYPE", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey KEYWORD = createTextAttributesKey("CND_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey ATTRIBUTE = createTextAttributesKey("CND_ATTRIBUTE", DefaultLanguageHighlighterColors.NUMBER);
     public static final TextAttributesKey TYPE = createTextAttributesKey("CND_TYPE", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
     public static final TextAttributesKey STRING = createTextAttributesKey("CND_STRING", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("CND_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
@@ -25,6 +26,7 @@ public class CndSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] NAMESPACE_KEYS = new TextAttributesKey[]{NAMESPACE};
     private static final TextAttributesKey[] NODE_TYPE_KEYS = new TextAttributesKey[]{NODE_TYPE};
     private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{KEYWORD};
+    private static final TextAttributesKey[] ATTRIBUTE_KEYS = new TextAttributesKey[]{ATTRIBUTE};
     private static final TextAttributesKey[] TYPE_KEYS = new TextAttributesKey[]{TYPE};
     private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{STRING};
     private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
@@ -50,11 +52,12 @@ public class CndSyntaxHighlighter extends SyntaxHighlighterBase {
         } else if (tokenType.equals(CndTypes.NODE_TYPE_NAME)) {
             return NODE_TYPE_KEYS;
         } else if (tokenType.equals(CndTypes.OPTION)
-                || tokenType.equals(CndTypes.PROPERTY_ATTRIBUTE)
-                || tokenType.equals(CndTypes.NODE_ATTRIBUTE)
                 || tokenType.equals(CndTypes.EXTENDS)
                 || tokenType.equals(CndTypes.ITEMTYPE)) {
             return KEYWORD_KEYS;
+        } else if (tokenType.equals(CndTypes.PROPERTY_ATTRIBUTE)
+                || tokenType.equals(CndTypes.NODE_ATTRIBUTE)) {
+            return ATTRIBUTE_KEYS;
         } else if (tokenType.equals(CndTypes.PROPERTY_NAME)
                 || tokenType.equals(CndTypes.NODE_NAME)
                 || tokenType.equals(CndTypes.PROPERTY_CONSTRAINT)
