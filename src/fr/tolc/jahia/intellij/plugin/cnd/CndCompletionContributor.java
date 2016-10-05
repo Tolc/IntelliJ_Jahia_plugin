@@ -12,6 +12,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
+import fr.tolc.jahia.intellij.plugin.cnd.constants.CndConstants;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
@@ -74,18 +75,13 @@ public class CndCompletionContributor extends CompletionContributor {
                 }
         );
 
-        //TODO: see http://stackoverflow.com/questions/34328133/intellij-completion-contributor
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement(CndTypes.PROPERTY_TYPE).withLanguage(CndLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
-                        String[] types = {
-                                "string", "long", "double", "decimal", "path", "uri", "boolean", "date", "binary",
-                                "weakreference", "name", "reference", "UNDEFINED"
-                        };
-                        for (String type : types) {
+                        for (String type : CndConstants.PROPERTY_TYPES) {
                             resultSet.addElement(LookupElementBuilder.create(type));
                         }
                     }
@@ -98,11 +94,7 @@ public class CndCompletionContributor extends CompletionContributor {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
-                        String[] masks = {
-                                "text", "richtext", "textarea", "choicelist", "datetimepicker", "datepicker", "picker",
-                                "color", "category", "checkbox", "fileupload", "tag", "file"
-                        };
-                        for (String mask : masks) {
+                        for (String mask : CndConstants.PROPERTY_MASKS) {
                             resultSet.addElement(LookupElementBuilder.create(mask));
                         }
                     }

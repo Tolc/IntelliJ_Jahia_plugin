@@ -37,7 +37,7 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 
 %state NAMESPACE, NODETYPE_NAMESPACE, NODETYPE, SUPER_TYPES_NAMESPACE, SUPER_TYPES, OPTIONS
 %state EXTENDS, EXTEND_NAMESPACE, EXTEND, ITEMTYPE
-%state PROPERTY, PROPERTY_TYPE, PROPERTY_MASK_OPTION_NAME, PROPERTY_MASK_OPTION, PROPERTY_DEFAULT, PROPERTY_DEFAULT_VALUE, PROPERTY_ATTRIBUTES, PROPERTY_CONSTRAINT, PROPERTY_CONSTRAINT_NEWLINE
+%state PROPERTY, PROPERTY_TYPE, PROPERTY_MASK_OPTION_NAME, PROPERTY_MASK, PROPERTY_MASK_OPTION, PROPERTY_DEFAULT, PROPERTY_DEFAULT_VALUE, PROPERTY_ATTRIBUTES, PROPERTY_CONSTRAINT, PROPERTY_CONSTRAINT_NEWLINE
 %state NODE, NODE_NAMESPACE, NODE_NODETYPE, NODE_DEFAULT, NODE_DEFAULT_VALUE_NAMESPACE, NODE_DEFAULT_VALUE, NODE_ATTRIBUTES
 
 
@@ -122,13 +122,18 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 	"("											{ yybegin(PROPERTY_TYPE); return CndTypes.LEFT_PARENTHESIS; }
 }
 <PROPERTY_TYPE> {
-	"string"|"long"|"double"|"decimal"|"path"|"uri"|"boolean"|"date"|"binary"|"weakreference"|"name"|"reference"|"UNDEFINED"		{ return CndTypes.PROPERTY_TYPE; }
-	","											{ return CndTypes.COMMA; }
-	"text"|"richtext"|"textarea"|"choicelist"|"datetimepicker"|"datepicker"|"picker"|"color"|"category"|"checkbox"|"fileupload"|"tag"|"file"		{ return CndTypes.PROPERTY_MASK; }
-	"["											{ yybegin(PROPERTY_MASK_OPTION_NAME); return CndTypes.LEFT_BRACKET; }
+//	"string"|"long"|"double"|"decimal"|"path"|"uri"|"boolean"|"date"|"binary"|"weakreference"|"name"|"reference"|"UNDEFINED"		{ return CndTypes.PROPERTY_TYPE; }
+	[:jletter:]+								{ return CndTypes.PROPERTY_TYPE; }
+	","											{ yybegin(PROPERTY_MASK); return CndTypes.COMMA; }
 	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
 }
 
+<PROPERTY_MASK> {
+//	"text"|"richtext"|"textarea"|"choicelist"|"datetimepicker"|"datepicker"|"picker"|"color"|"category"|"checkbox"|"fileupload"|"tag"|"file"		{ return CndTypes.PROPERTY_MASKS; }
+	[:jletter:]+								{ return CndTypes.PROPERTY_MASK; }
+	"["											{ yybegin(PROPERTY_MASK_OPTION_NAME); return CndTypes.LEFT_BRACKET; }
+	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
+}
 <PROPERTY_MASK_OPTION_NAME> "resourceBundle"|"country"|"templates"|"templatesNode"|"users"|"nodetypes"|"subnodetypes"|"nodes"|"menus"|"script"|"flag"|"sortableFieldnames"|"moduleImage"|"linkerProps"|"workflow"|"workflowTypes"|"sort"|"componenttypes"|"autoSelectParent"|"type"|"image"|"dependentProperties"|"mime"|"renderModes"|"permissions"|"autocomplete"|"separator"|"folder"		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
 <PROPERTY_MASK_OPTION> {
 	"="											{ return CndTypes.EQUAL; }

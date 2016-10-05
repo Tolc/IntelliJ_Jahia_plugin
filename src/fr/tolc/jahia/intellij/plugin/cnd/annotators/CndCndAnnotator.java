@@ -10,8 +10,10 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
+import fr.tolc.jahia.intellij.plugin.cnd.constants.CndConstants;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeFilesQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
+import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class CndCndAnnotator implements Annotator {
@@ -49,6 +51,22 @@ public class CndCndAnnotator implements Annotator {
                         }
                     }
                 }
+            }
+        }
+
+        if (element.getNode() != null && CndTypes.PROPERTY_TYPE.equals(element.getNode().getElementType())) {
+            String propertyType = element.getText().toLowerCase();
+
+            if (!ArrayUtils.contains(CndConstants.PROPERTY_TYPES, propertyType)) {
+                holder.createErrorAnnotation(element.getTextRange(), "Invalid property type");
+            }
+        }
+
+        if (element.getNode() != null && CndTypes.PROPERTY_MASK.equals(element.getNode().getElementType())) {
+            String propertyMask = element.getText().toLowerCase();
+
+            if (!ArrayUtils.contains(CndConstants.PROPERTY_MASKS, propertyMask)) {
+                holder.createErrorAnnotation(element.getTextRange(), "Invalid property type mask");
             }
         }
     }
