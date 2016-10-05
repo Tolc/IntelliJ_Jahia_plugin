@@ -69,5 +69,13 @@ public class CndCndAnnotator implements Annotator {
                 holder.createErrorAnnotation(element.getTextRange(), "Invalid property type mask");
             }
         }
+
+        if (element.getNode() != null && CndTypes.PROPERTY_ATTRIBUTE.equals(element.getNode().getElementType())) {
+            String attribute = element.getText().toLowerCase();
+            //TODO: compare without spaces
+            if (!ArrayUtils.contains(CndConstants.PROPERTY_ATTRIBUTES, attribute)) {
+                holder.createErrorAnnotation(element.getTextRange(), "Invalid property attribute");
+            }
+        }
     }
 }

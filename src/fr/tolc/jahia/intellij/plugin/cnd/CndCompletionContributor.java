@@ -149,17 +149,7 @@ public class CndCompletionContributor extends CompletionContributor {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
-                        String[] attributes = {"mandatory", "protected", "primary", "i18n", "internationalized",
-                                "sortable", "hidden", "multiple", "nofulltext",
-                                "analyzer='keyword'", "autocreated", "facetable", "hierarchical", "noqueryorder",
-                                "indexed=no", "indexed=tokenized", "indexed=untokenized",
-                                "boost=2.0", "scoreboost=2.0",
-                                "onconflict=sum", "onconflict=latest", "onconflict=oldest", "onconflict=min", "onconflict=max", "onconflict=ignore",
-                                "itemtype = content", "itemtype = metadata", "itemtype = layout", "itemtype = options", "itemtype = codeEditor",
-                                "copy", "version", "initialize", "compute", "ignore", "abort",
-                                "queryops '<,<=,<>,=,>,>=,like'"
-                        };
-                        for (String attribute : attributes) {
+                        for (String attribute : CndConstants.PROPERTY_ATTRIBUTES) {
                             resultSet.addElement(LookupElementBuilder.create(attribute));
                         }
                     }
