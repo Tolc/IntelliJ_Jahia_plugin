@@ -75,6 +75,29 @@ public class CndCompletionContributor extends CompletionContributor {
         );
 
         //TODO: see http://stackoverflow.com/questions/34328133/intellij-completion-contributor
+        
+//        extend(CompletionType.BASIC,
+//                PlatformPatterns.psiElement(), new CompletionProvider<CompletionParameters>() {
+//                    public void addCompletions(@NotNull CompletionParameters parameters,
+//                                               ProcessingContext context,
+//                                               @NotNull CompletionResultSet resultSet) {
+//                        String ctxMsg = parameters.getPosition().getContext().toString();
+//                        String prevCtxMsg = parameters.getPosition().getContext().getPrevSibling().toString();
+//                        String msg = ctxMsg + prevCtxMsg;
+//                        if (msg.contains("CndTokenType.PROPERTY_TYPE")) {
+//                            String[] types = {
+//                                    "string", "long", "double", "decimal", "path", "uri", "boolean", "date", "binary",
+//                                    "weakreference", "name", "reference", "UNDEFINED"
+//                            };
+//                            for (String type : types) {
+//                                resultSet.addElement(LookupElementBuilder.create(type));
+//                            }
+//                        }
+//                    }
+//                }
+//        );
+
+        //TODO: refactor PROPERTY_TYPE to accept any characters, and validate value afterwards
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement(CndTypes.PROPERTY_TYPE).withLanguage(CndLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {
