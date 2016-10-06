@@ -72,8 +72,9 @@ public class CndCndAnnotator implements Annotator {
             //Property attribute
             if (CndTypes.PROPERTY_ATTRIBUTE.equals(element.getNode().getElementType())) {
                 if (!CndConstants.matches(CndConstants.PROPERTY_ATTRIBUTES_REGEX, element.getText())) {
-                    Annotation annotation = holder.createErrorAnnotation(element.getTextRange(), "Invalid property attribute");
-                    annotation.registerFix(new ChangeToClosestQuickFix(element, CndConstants.PROPERTY_ATTRIBUTES));
+                    holder.createErrorAnnotation(element.getTextRange(), "Invalid property attribute");
+//                    Annotation annotation = holder.createErrorAnnotation(element.getTextRange(), "Invalid property attribute");
+//                    annotation.registerFix(new ChangeToClosestQuickFix(element, CndConstants.PROPERTY_ATTRIBUTES));
                 }
             }
         }
