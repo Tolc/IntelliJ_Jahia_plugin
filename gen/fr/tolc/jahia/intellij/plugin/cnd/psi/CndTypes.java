@@ -46,7 +46,7 @@ public interface CndTypes {
   IElementType PROPERTY_ATTRIBUTE = new CndTokenType("PROPERTY_ATTRIBUTE");
   IElementType PROPERTY_CONSTRAINT_VALUE = new CndTokenType("PROPERTY_CONSTRAINT_VALUE");
   IElementType PROPERTY_DEFAULT_VALUE = new CndTokenType("PROPERTY_DEFAULT_VALUE");
-  IElementType PROPERTY_MASK = new CndTokenType("PROPERTY_MASKS");
+  IElementType PROPERTY_MASK = new CndTokenType("PROPERTY_MASK");
   IElementType PROPERTY_MASK_OPTION = new CndTokenType("PROPERTY_MASK_OPTION");
   IElementType PROPERTY_MASK_OPTION_VALUE = new CndTokenType("PROPERTY_MASK_OPTION_VALUE");
   IElementType PROPERTY_NAME = new CndTokenType("PROPERTY_NAME");

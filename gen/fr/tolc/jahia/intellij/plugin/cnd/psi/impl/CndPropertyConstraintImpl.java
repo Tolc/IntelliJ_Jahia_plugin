@@ -17,8 +17,12 @@ public class CndPropertyConstraintImpl extends ASTWrapperPsiElement implements C
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitPropertyConstraint(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitPropertyConstraint(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 

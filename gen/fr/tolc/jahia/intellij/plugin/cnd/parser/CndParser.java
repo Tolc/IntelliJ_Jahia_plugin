@@ -463,7 +463,7 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "options")) return false;
     if (!nextTokenIs(b, "<options>", CRLF, OPTION)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<options>");
+    Marker m = enter_section_(b, l, _NONE_, OPTIONS, "<options>");
     r = options_0(b, l + 1);
     int c = current_position_(b);
     while (r) {
@@ -471,7 +471,7 @@ public class CndParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "options", c)) break;
       c = current_position_(b);
     }
-    exit_section_(b, l, m, OPTIONS, r, false, null);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 

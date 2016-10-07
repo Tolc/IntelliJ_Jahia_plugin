@@ -17,8 +17,12 @@ public class CndExtensionImpl extends ASTWrapperPsiElement implements CndExtensi
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitExtension(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitExtension(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -17,8 +17,12 @@ public class CndSuperTypesImpl extends ASTWrapperPsiElement implements CndSuperT
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitSuperTypes(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitSuperTypes(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 

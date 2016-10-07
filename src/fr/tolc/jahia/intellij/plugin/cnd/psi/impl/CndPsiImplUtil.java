@@ -1,11 +1,17 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
 
+import javax.swing.*;
+
 import com.intellij.lang.ASTNode;
+import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import fr.tolc.jahia.intellij.plugin.cnd.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndElementFactory;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
+import org.jetbrains.annotations.Nullable;
 
 public class CndPsiImplUtil {
 
@@ -76,26 +82,26 @@ public class CndPsiImplUtil {
         return getNodeTypeName(element);
     }
 
-//    public static ItemPresentation getPresentation(final SimpleProperty element) {
-//        return new ItemPresentation() {
-//            @Nullable
-//            @Override
-//            public String getPresentableText() {
-//                return element.getKey();
-//            }
-//
-//            @Nullable
-//            @Override
-//            public String getLocationString() {
-//                PsiFile containingFile = element.getContainingFile();
-//                return containingFile == null ? null : containingFile.getName();
-//            }
-//
-//            @Nullable
-//            @Override
-//            public Icon getIcon(boolean unused) {
-//                return SimpleIcons.FILE;
-//            }
-//        };
-//    }
+    public static ItemPresentation getPresentation(final CndNodeType element) {
+        return new ItemPresentation() {
+            @Nullable
+            @Override
+            public String getPresentableText() {
+                return element.getNodeTypeNamespace() + ":" + element.getNodeTypeName();
+            }
+
+            @Nullable
+            @Override
+            public String getLocationString() {
+                PsiFile containingFile = element.getContainingFile();
+                return containingFile == null ? null : containingFile.getName();
+            }
+
+            @Nullable
+            @Override
+            public Icon getIcon(boolean unused) {
+                return CndIcons.FILE;
+            }
+        };
+    }
 }

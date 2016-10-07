@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
+import com.intellij.navigation.ItemPresentation;
 
 public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeType {
 
@@ -16,8 +17,12 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitNodeType(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitNodeType(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -71,6 +76,10 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
 
   public PsiElement getNameIdentifier() {
     return CndPsiImplUtil.getNameIdentifier(this);
+  }
+
+  public ItemPresentation getPresentation() {
+    return CndPsiImplUtil.getPresentation(this);
   }
 
   public String getName() {
