@@ -67,7 +67,7 @@
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndLineMarkerProvider"/>
     <completion.contributor language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCompletionContributor"/>
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.CndReferenceContributor"/>
-    <!--<lang.findUsagesProvider language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFindUsagesProvider"/>-->
+    <lang.findUsagesProvider language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFindUsagesProvider"/>
     <!--<lang.refactoringSupport language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndRefactoringSupportProvider"/>-->
     <!--<lang.foldingBuilder language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFoldingBuilder"/>-->
     <!--<gotoSymbolContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.CndChooseByNameContributor"/>-->

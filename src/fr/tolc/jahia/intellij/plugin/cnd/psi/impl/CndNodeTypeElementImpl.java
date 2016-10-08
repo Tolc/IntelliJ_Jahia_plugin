@@ -2,8 +2,6 @@ package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.simpleplugin.psi.SimpleNamedElement;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeElement;
 import org.jetbrains.annotations.NotNull;
 
