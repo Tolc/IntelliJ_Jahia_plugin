@@ -8,29 +8,22 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
-public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndNamespace {
+public class CndPropertyConstraintImpl extends ASTWrapperPsiElement implements CndPropertyConstraint {
 
-  public CndNamespaceImpl(ASTNode node) {
+  public CndPropertyConstraintImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CndVisitor visitor) {
-    visitor.visitNamespace(this);
+    visitor.visitPropertyConstraint(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  public String getNamespaceName() {
-    return CndPsiImplUtil.getNamespaceName(this);
-  }
-
-  public String getNamespaceURI() {
-    return CndPsiImplUtil.getNamespaceURI(this);
   }
 
 }

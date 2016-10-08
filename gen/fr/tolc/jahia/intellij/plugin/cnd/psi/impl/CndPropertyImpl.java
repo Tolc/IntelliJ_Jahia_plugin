@@ -8,16 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
-public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndNamespace {
+public class CndPropertyImpl extends ASTWrapperPsiElement implements CndProperty {
 
-  public CndNamespaceImpl(ASTNode node) {
+  public CndPropertyImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CndVisitor visitor) {
-    visitor.visitNamespace(this);
+    visitor.visitProperty(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -25,12 +26,22 @@ public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndName
     else super.accept(visitor);
   }
 
-  public String getNamespaceName() {
-    return CndPsiImplUtil.getNamespaceName(this);
+  @Override
+  @Nullable
+  public CndPropertyAttributes getPropertyAttributes() {
+    return findChildByClass(CndPropertyAttributes.class);
   }
 
-  public String getNamespaceURI() {
-    return CndPsiImplUtil.getNamespaceURI(this);
+  @Override
+  @Nullable
+  public CndPropertyConstraint getPropertyConstraint() {
+    return findChildByClass(CndPropertyConstraint.class);
+  }
+
+  @Override
+  @Nullable
+  public CndPropertyDefault getPropertyDefault() {
+    return findChildByClass(CndPropertyDefault.class);
   }
 
 }

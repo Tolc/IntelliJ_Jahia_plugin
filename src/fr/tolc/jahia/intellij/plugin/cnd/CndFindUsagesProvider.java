@@ -1,4 +1,4 @@
-package com.simpleplugin;
+package fr.tolc.jahia.intellij.plugin.cnd;
 
 import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
 import com.intellij.lang.cacheBuilder.WordsScanner;
@@ -6,17 +6,21 @@ import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.tree.TokenSet;
-import com.simpleplugin.psi.SimpleProperty;
-import com.simpleplugin.psi.SimpleTypes;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SimpleFindUsagesProvider implements FindUsagesProvider {
+public class CndFindUsagesProvider implements FindUsagesProvider {
     @Nullable
     @Override
     public WordsScanner getWordsScanner() {
-        return new DefaultWordsScanner(new SimpleLexerAdapter(),
-                    TokenSet.create(SimpleTypes.KEY), TokenSet.create(SimpleTypes.COMMENT), TokenSet.EMPTY);
+        return new DefaultWordsScanner(
+                new CndLexerAdapter(),
+                TokenSet.create(CndTypes.NODE_TYPE),
+                TokenSet.create(CndTypes.COMMENT),
+                TokenSet.EMPTY
+                );
     }
 
     @Override
@@ -33,30 +37,27 @@ public class SimpleFindUsagesProvider implements FindUsagesProvider {
     @NotNull
     @Override
     public String getType(@NotNull PsiElement element) {
-        if (element instanceof SimpleProperty) {
-            return "simple property";
-        } else {
-            return "";
+        if (element instanceof CndNodeType) {
+            return "node type";
         }
+        return "";
     }
 
     @NotNull
     @Override
     public String getDescriptiveName(@NotNull PsiElement element) {
-        if (element instanceof SimpleProperty) {
-            return ((SimpleProperty) element).getKey();
-        } else {
-            return "";
+        if (element instanceof CndNodeType) {
+            return ((CndNodeType) element).getNodeTypeName();
         }
+        return "";
     }
 
     @NotNull
     @Override
     public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
-        if (element instanceof SimpleProperty) {
-            return ((SimpleProperty) element).getKey() + "=" + ((SimpleProperty) element).getValue();
-        } else {
-            return "";
+        if (element instanceof CndNodeType) {
+            return ((CndNodeType) element).getNodeTypeNamespace() + ":" + ((CndNodeType) element).getNodeTypeName();
         }
+        return "";
     }
 }

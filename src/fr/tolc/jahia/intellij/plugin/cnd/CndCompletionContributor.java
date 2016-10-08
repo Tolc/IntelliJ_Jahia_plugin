@@ -12,6 +12,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
+import fr.tolc.jahia.intellij.plugin.cnd.constants.CndConstants;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
@@ -35,76 +36,25 @@ public class CndCompletionContributor extends CompletionContributor {
                 }
         );
 
-        extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement(CndTypes.NODE_TYPE_NAMESPACE).withLanguage(CndLanguage.INSTANCE),
-                new CompletionProvider<CompletionParameters>() {
-                    public void addCompletions(@NotNull CompletionParameters parameters,
-                                               ProcessingContext context,
-                                               @NotNull CompletionResultSet resultSet) {
-
-                        List<CndNamespace> namespaces = CndUtil.findNamespaces(parameters.getPosition().getProject());
-                        for (CndNamespace namespace : namespaces) {
-                            resultSet.addElement(LookupElementBuilder.create(namespace.getNamespaceName() + ":"));
-                        }
-                    }
-                }
-        );
-
         //Node types
-        extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement(CndTypes.NODE_TYPE_INHERITANCE_NAMESPACE).withLanguage(CndLanguage.INSTANCE),
-                new CompletionProvider<CompletionParameters>() {
-                    public void addCompletions(@NotNull CompletionParameters parameters,
-                                               ProcessingContext context,
-                                               @NotNull CompletionResultSet resultSet) {
-
-                        Project project = parameters.getPosition().getProject();
-                        List<CndNamespace> namespaces = CndUtil.findNamespaces(project);
-                        for (CndNamespace namespace : namespaces) {
-                            List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace.getNamespaceName());
-                            for (CndNodeType nodeType : nodeTypes) {
-                                resultSet.addElement(LookupElementBuilder.create(namespace.getNamespaceName() + ":" + nodeType.getNodeTypeName()));
-                            }
-                        }
-                    }
-                }
-        );
-
-        extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement(CndTypes.NODE_TYPE_INHERITANCE_COLON).withLanguage(CndLanguage.INSTANCE),
-                new CompletionProvider<CompletionParameters>() {
-                    public void addCompletions(@NotNull CompletionParameters parameters,
-                                               ProcessingContext context,
-                                               @NotNull CompletionResultSet resultSet) {
-
-                        Project project = parameters.getPosition().getProject();
-                        PsiElement namespace = parameters.getPosition().getPrevSibling();
-
-                        List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace.getText());
-                        for (CndNodeType nodeType : nodeTypes) {
-                            resultSet.addElement(LookupElementBuilder.create(":" + nodeType.getNodeTypeName()));
-                        }
-                    }
-                }
-        );
-
-        extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement(CndTypes.NODE_TYPE_INHERITANCE_TYPE_NAME).withLanguage(CndLanguage.INSTANCE),
-                new CompletionProvider<CompletionParameters>() {
-                    public void addCompletions(@NotNull CompletionParameters parameters,
-                                               ProcessingContext context,
-                                               @NotNull CompletionResultSet resultSet) {
-
-                        Project project = parameters.getPosition().getProject();
-                        PsiElement namespace = parameters.getPosition().getPrevSibling().getPrevSibling();
-
-                        List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace.getText());
-                        for (CndNodeType nodeType : nodeTypes) {
-                            resultSet.addElement(LookupElementBuilder.create(nodeType.getNodeTypeName()));
-                        }
-                    }
-                }
-        );
+//        extend(CompletionType.BASIC,
+//                PlatformPatterns.psiElement(CndTypes.NODE_TYPE_NAME).withLanguage(CndLanguage.INSTANCE),
+//                new CompletionProvider<CompletionParameters>() {
+//                    public void addCompletions(@NotNull CompletionParameters parameters,
+//                                               ProcessingContext context,
+//                                               @NotNull CompletionResultSet resultSet) {
+//
+//                        Project project = parameters.getPosition().getProject();
+//                        List<CndNamespace> namespaces = CndUtil.findNamespaces(project);
+//                        for (CndNamespace namespace : namespaces) {
+//                            List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace.getNamespaceName());
+//                            for (CndNodeType nodeType : nodeTypes) {
+//                                resultSet.addElement(LookupElementBuilder.create(namespace.getNamespaceName() + ":" + nodeType.getNodeTypeName()));
+//                            }
+//                        }
+//                    }
+//                }
+//        );
 
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement(CndTypes.NODE_TYPE_NAME).withLanguage(CndLanguage.INSTANCE),
@@ -114,6 +64,7 @@ public class CndCompletionContributor extends CompletionContributor {
                                                @NotNull CompletionResultSet resultSet) {
 
                         Project project = parameters.getPosition().getProject();
+                        //TODO: check for NPE
                         PsiElement namespace = parameters.getPosition().getPrevSibling().getPrevSibling();
 
                         List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace.getText());
@@ -124,20 +75,68 @@ public class CndCompletionContributor extends CompletionContributor {
                 }
         );
 
-        //TODO:Property types
+//        extend(CompletionType.BASIC,
+//                PlatformPatterns.psiElement(), new CompletionProvider<CompletionParameters>() {
+//                    public void addCompletions(@NotNull CompletionParameters parameters,
+//                                               ProcessingContext context,
+//                                               @NotNull CompletionResultSet resultSet) {
+//                        String ctxMsg = parameters.getPosition().getContext().toString();
+//                        String prevCtxMsg = parameters.getPosition().getContext().getPrevSibling().toString();
+//                        String msg = ctxMsg + prevCtxMsg;
+//                        if (msg.contains("CndTokenType.PROPERTY_TYPE")) {
+//                            String[] types = {
+//                                    "string", "long", "double", "decimal", "path", "uri", "boolean", "date", "binary",
+//                                    "weakreference", "name", "reference", "UNDEFINED"
+//                            };
+//                            for (String type : types) {
+//                                resultSet.addElement(LookupElementBuilder.create(type));
+//                            }
+//                        }
+//                    }
+//                }
+//        );
+
         extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement(CndTypes.PROPERTY_TYPE_BINARY).withLanguage(CndLanguage.INSTANCE),
+                PlatformPatterns.psiElement(CndTypes.PROPERTY_TYPE).withLanguage(CndLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
-                        String[] types = {"string", "string, richtext", "string, textarea", "string, choicelist", "string, choicelist[resourceBundle]",
-                                "long", "boolean", "date",
-                                "weakreference", "weakreference, picker[type='image']", "weakreference, picker[type='file']", "weakreference, picker[type='page']", "weakreference, picker[type='category']",
-                                "weakreference, category", "weakreference, category[autoSelectParent=true]", "weakreference, category[autoSelectParent=false]"
-                        };
-                        for (String type : types) {
+                        for (String type : CndConstants.PROPERTY_TYPES) {
                             resultSet.addElement(LookupElementBuilder.create(type));
+                        }
+                    }
+                }
+        );
+
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.PROPERTY_MASK).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+                        for (String mask : CndConstants.PROPERTY_MASKS) {
+                            resultSet.addElement(LookupElementBuilder.create(mask));
+                        }
+                    }
+                }
+        );
+
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.PROPERTY_MASK_OPTION).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+                        String[] masks = {
+                                "resourceBundle", "country", "templates", "templatesNode", "users", "nodetypes",
+                                "subnodetypes", "nodes", "menus", "script", "flag", "sortableFieldnames", "moduleImage",
+                                "linkerProps", "workflow", "workflowTypes", "sort", "componenttypes",
+                                "autoSelectParent", "type", "image", "dependentProperties", "mime", "renderModes",
+                                "permissions", "autocomplete", "separator", "folder"
+                        };
+                        for (String mask : masks) {
+                            resultSet.addElement(LookupElementBuilder.create(mask));
                         }
                     }
                 }
@@ -150,24 +149,61 @@ public class CndCompletionContributor extends CompletionContributor {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
-                        String[] attributes = {"mandatory", "protected", "primary", "i18n", "hidden", "multiple", "nofulltext",
-                                "indexed=no", "autocreated", "boost=", "onconflict=sum"
-                        };
-                        for (String attribute : attributes) {
+                        for (String attribute : CndConstants.PROPERTY_ATTRIBUTES) {
                             resultSet.addElement(LookupElementBuilder.create(attribute));
                         }
                     }
                 }
         );
 
-        //Property "+" name
+        //Sub node name
         extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement(CndTypes.PROPERTY_PLUS_NAME).withLanguage(CndLanguage.INSTANCE),
+                PlatformPatterns.psiElement(CndTypes.NODE_NAME).withLanguage(CndLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
                         String[] names = {"*"};
+                        for (String name : names) {
+                            resultSet.addElement(LookupElementBuilder.create(name));
+                        }
+                    }
+                }
+        );
+
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.COLON).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+                        String[] names = {":"};
+                        for (String name : names) {
+                            resultSet.addElement(LookupElementBuilder.create(name));
+                        }
+                    }
+                }
+        );
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.COMMA).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+                        String[] names = {","};
+                        for (String name : names) {
+                            resultSet.addElement(LookupElementBuilder.create(name));
+                        }
+                    }
+                }
+        );
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.EQUAL).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+                        String[] names = {"="};
                         for (String name : names) {
                             resultSet.addElement(LookupElementBuilder.create(name));
                         }

@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
+import com.intellij.navigation.ItemPresentation;
 
 public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeType {
 
@@ -16,21 +17,19 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitNodeType(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitNodeType(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 
   @Override
-  @Nullable
-  public CndExtend getExtend() {
-    return findChildByClass(CndExtend.class);
-  }
-
-  @Override
-  @Nullable
-  public CndInheritances getInheritances() {
-    return findChildByClass(CndInheritances.class);
+  @NotNull
+  public List<CndExtensions> getExtensionsList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CndExtensions.class);
   }
 
   @Override
@@ -41,8 +40,26 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
 
   @Override
   @Nullable
-  public CndProperties getProperties() {
-    return findChildByClass(CndProperties.class);
+  public CndOptions getOptions() {
+    return findChildByClass(CndOptions.class);
+  }
+
+  @Override
+  @NotNull
+  public List<CndProperty> getPropertyList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CndProperty.class);
+  }
+
+  @Override
+  @NotNull
+  public List<CndSubNode> getSubNodeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CndSubNode.class);
+  }
+
+  @Override
+  @Nullable
+  public CndSuperTypes getSuperTypes() {
+    return findChildByClass(CndSuperTypes.class);
   }
 
   public String getNodeTypeName() {
@@ -59,6 +76,10 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
 
   public PsiElement getNameIdentifier() {
     return CndPsiImplUtil.getNameIdentifier(this);
+  }
+
+  public ItemPresentation getPresentation() {
+    return CndPsiImplUtil.getPresentation(this);
   }
 
   public String getName() {
