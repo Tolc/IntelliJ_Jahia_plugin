@@ -24,6 +24,16 @@ public class CndPsiImplUtil {
         return null;
     }
 
+    public static PsiElement setNamespaceName(CndNamespace element, String newName) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
+        if (nameNode != null) {
+            CndNodeType namespace = CndElementFactory.createNamespace(element.getProject(), newName);
+            ASTNode newNamespaceNode = namespace.getChildren()[1].getNode();
+            element.getNode().replaceChild(nameNode, newNamespaceNode);
+        }
+        return element;
+    }
+
     public static String getNamespaceURI(CndNamespace element) {
         ASTNode uriNode= element.getNode().findChildByType(CndTypes.NAMESPACE_URI);
         if (uriNode != null) {
@@ -31,6 +41,47 @@ public class CndPsiImplUtil {
         }
         return null;
     }
+
+    public static PsiElement getNameIdentifier(CndNamespace element) {
+        ASTNode namespaceNameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
+        if (namespaceNameNode != null) {
+            return namespaceNameNode.getPsi();
+        } else {
+            return null;
+        }
+    }
+
+    public static PsiElement setName(CndNamespace element, String newName) {
+        return setNamespaceName(element, newName);
+    }
+
+    public static String getName(CndNamespace element) {
+        return getNamespaceName(element);
+    }
+
+    public static ItemPresentation getPresentation(final CndNamespace element) {
+        return new ItemPresentation() {
+            @Nullable
+            @Override
+            public String getPresentableText() {
+                return element.getNamespaceName() + " = '" + element.getNamespaceURI() + "'";
+            }
+
+            @Nullable
+            @Override
+            public String getLocationString() {
+                PsiFile containingFile = element.getContainingFile();
+                return containingFile == null ? null : containingFile.getName();
+            }
+
+            @Nullable
+            @Override
+            public Icon getIcon(boolean unused) {
+                return CndIcons.FILE;
+            }
+        };
+    }
+
 
 
     //NodeType

@@ -36,7 +36,9 @@ public class CndReferenceContributor extends PsiReferenceContributor {
                                 TextRange nodeTypeNameRange = new TextRange(offset + namespace.length() + 1, element.getTextRange().getEndOffset() - 1); //because of closing "
 
                                 return new PsiReference[]{
-                                        new CndNodeTypeReference(element, nodeTypeNameRange, namespace, nodeTypeName)
+                                        //Text range here is relative!!
+                                        new CndNamespaceReference(element, new TextRange(1, namespace.length() + 1), namespace),
+                                        new CndNodeTypeReference(element, new TextRange(namespace.length() + 2, value.length() + 1), namespace, nodeTypeName)
                                 };
                             }
                         }

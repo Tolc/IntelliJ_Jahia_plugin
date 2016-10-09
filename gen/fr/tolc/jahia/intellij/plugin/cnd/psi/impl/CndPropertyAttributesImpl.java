@@ -17,12 +17,8 @@ public class CndPropertyAttributesImpl extends ASTWrapperPsiElement implements C
     super(node);
   }
 
-  public void accept(@NotNull CndVisitor visitor) {
-    visitor.visitPropertyAttributes(this);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
+    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitPropertyAttributes(this);
     else super.accept(visitor);
   }
 

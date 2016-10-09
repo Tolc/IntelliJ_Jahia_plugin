@@ -5,6 +5,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,32 +13,30 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CndNodeTypeReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
+public class CndNamespaceReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
     private String namespace;
-    private String nodeType;
 
-    public CndNodeTypeReference(@NotNull PsiElement element, TextRange textRange, String namespace, String nodeType) {
+    public CndNamespaceReference(@NotNull PsiElement element, TextRange textRange, String namespace) {
         super(element, textRange);
         this.namespace = namespace;
-        this.nodeType = nodeType;
     }
 
     @Nullable
     @Override
     public PsiElement resolve() {
         Project project = myElement.getProject();
-        return CndUtil.findNodeType(project, namespace, nodeType);
+        return CndUtil.findNamespace(project, namespace);
     }
 
     @NotNull
     @Override
     public Object[] getVariants() {
         Project project = myElement.getProject();
-        List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace);
+        List<CndNamespace> namespaces = CndUtil.findNamespaces(project);
         List<LookupElement> variants = new ArrayList<LookupElement>();
-        for (final CndNodeType nodeType : nodeTypes) {
-            if (nodeType.getNodeTypeName() != null && nodeType.getNodeTypeName().length() > 0) {
-                variants.add(LookupElementBuilder.create(nodeType).withIcon(CndIcons.FILE).withTypeText(nodeType.getContainingFile().getName()));
+        for (final CndNamespace namespace : namespaces) {
+            if (namespace.getNamespaceName() != null && namespace.getNamespaceName().length() > 0) {
+                variants.add(LookupElementBuilder.create(namespace).withIcon(CndIcons.FILE).withTypeText(namespace.getContainingFile().getName()));
             }
         }
         return variants.toArray();
