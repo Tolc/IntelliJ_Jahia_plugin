@@ -6,6 +6,7 @@ import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.tree.TokenSet;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,7 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     public WordsScanner getWordsScanner() {
         return new DefaultWordsScanner(
                 new CndLexerAdapter(),
-                TokenSet.create(CndTypes.NODE_TYPE),
+                TokenSet.create(CndTypes.NODE_TYPE, CndTypes.NAMESPACE),
                 TokenSet.create(CndTypes.COMMENT),
                 TokenSet.EMPTY
                 );
@@ -38,7 +39,9 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     @Override
     public String getType(@NotNull PsiElement element) {
         if (element instanceof CndNodeType) {
-            return "node type";
+            return "Node type";
+        } else if (element instanceof CndNamespace) {
+            return "Namespace";
         }
         return "";
     }
@@ -48,6 +51,8 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     public String getDescriptiveName(@NotNull PsiElement element) {
         if (element instanceof CndNodeType) {
             return ((CndNodeType) element).getNodeTypeName();
+        } else if (element instanceof CndNamespace) {
+            return ((CndNamespace) element).getNamespaceName();
         }
         return "";
     }
@@ -57,6 +62,8 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
         if (element instanceof CndNodeType) {
             return ((CndNodeType) element).getNodeTypeNamespace() + ":" + ((CndNodeType) element).getNodeTypeName();
+        } else if (element instanceof CndNamespace) {
+            return ((CndNamespace) element).getNamespaceName() + " = '" + ((CndNamespace) element).getNamespaceURI() + "'";
         }
         return "";
     }

@@ -1,6 +1,6 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi;
 
-import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNameIdentifierOwner;
 
-public interface CndNamespaceElement extends PsiElement {
+public interface CndNamespaceElement extends PsiNameIdentifierOwner {
 }

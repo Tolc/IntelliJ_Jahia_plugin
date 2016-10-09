@@ -6,6 +6,11 @@ import com.intellij.psi.PsiFileFactory;
 import fr.tolc.jahia.intellij.plugin.cnd.CndFileType;
 
 public class CndElementFactory {
+    public static CndNodeType createNamespace(Project project, String namespaceName) {
+        final CndFile file = createFile(project, "<" + namespaceName + " = 'http://dummy.dummy'>");
+        return (CndNodeType) file.getFirstChild();
+    }
+
     public static CndNodeType createNodeType(Project project, String nodeTypeName, String namespace) {
         final CndFile file = createFile(project, "[" + namespace + ":" + nodeTypeName + "]");
         return (CndNodeType) file.getFirstChild();

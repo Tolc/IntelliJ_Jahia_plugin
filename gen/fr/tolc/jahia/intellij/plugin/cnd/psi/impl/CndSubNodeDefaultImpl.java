@@ -17,12 +17,8 @@ public class CndSubNodeDefaultImpl extends ASTWrapperPsiElement implements CndSu
     super(node);
   }
 
-  public void accept(@NotNull CndVisitor visitor) {
-    visitor.visitSubNodeDefault(this);
-  }
-
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
+    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitSubNodeDefault(this);
     else super.accept(visitor);
   }
 
