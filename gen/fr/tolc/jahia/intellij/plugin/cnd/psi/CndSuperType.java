@@ -4,7 +4,10 @@ package fr.tolc.jahia.intellij.plugin.cnd.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 
-public interface CndSuperType extends PsiElement {
+public interface CndSuperType extends CndSuperTypeElement {
+
+  PsiReference[] getReferences();
 
 }

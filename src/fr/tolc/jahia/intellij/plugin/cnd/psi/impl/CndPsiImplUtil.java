@@ -6,11 +6,10 @@ import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
 import fr.tolc.jahia.intellij.plugin.cnd.CndIcons;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndElementFactory;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 import org.jetbrains.annotations.Nullable;
 
 public class CndPsiImplUtil {
@@ -154,5 +153,12 @@ public class CndPsiImplUtil {
                 return CndIcons.FILE;
             }
         };
+    }
+
+
+
+    //SuperType
+    public static PsiReference[] getReferences(CndSuperType element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
     }
 }

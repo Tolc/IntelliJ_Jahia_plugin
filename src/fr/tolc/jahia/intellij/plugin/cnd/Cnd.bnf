@@ -33,6 +33,9 @@ nodeType ::= LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [sup
 
 superTypes ::= RIGHT_ONLY_ANGLE_BRACKET superType (COMMA superType)* [COMMA]
 superType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndSuperTypeElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperTypeElement"
+  methods=[getReferences] }
 
 options ::= ([CRLF] OPTION)+
 

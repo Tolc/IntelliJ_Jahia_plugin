@@ -60,7 +60,7 @@ public class CndVisitor extends PsiElementVisitor {
   }
 
   public void visitSuperType(@NotNull CndSuperType o) {
-    visitPsiElement(o);
+    visitSuperTypeElement(o);
   }
 
   public void visitSuperTypes(@NotNull CndSuperTypes o) {
@@ -72,6 +72,10 @@ public class CndVisitor extends PsiElementVisitor {
   }
 
   public void visitNodeTypeElement(@NotNull CndNodeTypeElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSuperTypeElement(@NotNull CndSuperTypeElement o) {
     visitPsiElement(o);
   }
 
