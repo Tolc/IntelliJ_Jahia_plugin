@@ -4,13 +4,21 @@ import com.intellij.lang.BracePair;
 import com.intellij.lang.PairedBraceMatcher;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CndBraceMatcher implements PairedBraceMatcher {
+
+    private static final BracePair[] PAIRS = new BracePair[]{
+            new BracePair(CndTypes.LEFT_ANGLE_BRACKET, CndTypes.RIGHT_ANGLE_BRACKET, false),
+            new BracePair(CndTypes.LEFT_BRACKET, CndTypes.RIGHT_BRACKET, false),
+            new BracePair(CndTypes.LEFT_PARENTHESIS, CndTypes.RIGHT_PARENTHESIS, false),
+    };
+
     @Override
     public BracePair[] getPairs() {
-        return new BracePair[0];
+        return PAIRS;
     }
 
     @Override
@@ -20,7 +28,6 @@ public class CndBraceMatcher implements PairedBraceMatcher {
 
     @Override
     public int getCodeConstructStart(PsiFile file, int openingBraceOffset) {
-        return 0;
+        return openingBraceOffset;
     }
 }
-//TODO: see https://github.com/yifanz/Intellij-Dust/blob/master/src/com/linkedin/intellij/dust/DustBraceMatcher.java
