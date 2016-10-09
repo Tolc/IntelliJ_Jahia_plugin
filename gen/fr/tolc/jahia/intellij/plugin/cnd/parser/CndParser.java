@@ -556,13 +556,13 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_ANGLE_BRACKET PROPERTY_CONSTRAINT_VALUE
+  // LEFT_ONLY_ANGLE_BRACKET PROPERTY_CONSTRAINT_VALUE
   public static boolean propertyConstraint(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyConstraint")) return false;
-    if (!nextTokenIs(b, LEFT_ANGLE_BRACKET)) return false;
+    if (!nextTokenIs(b, LEFT_ONLY_ANGLE_BRACKET)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, LEFT_ANGLE_BRACKET, PROPERTY_CONSTRAINT_VALUE);
+    r = consumeTokens(b, 0, LEFT_ONLY_ANGLE_BRACKET, PROPERTY_CONSTRAINT_VALUE);
     exit_section_(b, m, PROPERTY_CONSTRAINT, r);
     return r;
   }
@@ -797,13 +797,13 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // RIGHT_ANGLE_BRACKET superType (COMMA superType)* [COMMA]
+  // RIGHT_ONLY_ANGLE_BRACKET superType (COMMA superType)* [COMMA]
   public static boolean superTypes(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "superTypes")) return false;
-    if (!nextTokenIs(b, RIGHT_ANGLE_BRACKET)) return false;
+    if (!nextTokenIs(b, RIGHT_ONLY_ANGLE_BRACKET)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, RIGHT_ANGLE_BRACKET);
+    r = consumeToken(b, RIGHT_ONLY_ANGLE_BRACKET);
     r = r && superType(b, l + 1);
     r = r && superTypes_2(b, l + 1);
     r = r && superTypes_3(b, l + 1);

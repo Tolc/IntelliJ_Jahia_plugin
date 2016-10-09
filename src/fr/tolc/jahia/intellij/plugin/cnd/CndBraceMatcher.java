@@ -8,12 +8,13 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+//TODO: find a way for < and > to complete in namespace declarations
 public class CndBraceMatcher implements PairedBraceMatcher {
 
     private static final BracePair[] PAIRS = new BracePair[]{
-            new BracePair(CndTypes.LEFT_ANGLE_BRACKET, CndTypes.RIGHT_ANGLE_BRACKET, false),
-            new BracePair(CndTypes.LEFT_BRACKET, CndTypes.RIGHT_BRACKET, false),
-            new BracePair(CndTypes.LEFT_PARENTHESIS, CndTypes.RIGHT_PARENTHESIS, false),
+            new BracePair(CndTypes.LEFT_ANGLE_BRACKET, CndTypes.RIGHT_ANGLE_BRACKET, true),
+            new BracePair(CndTypes.LEFT_BRACKET, CndTypes.RIGHT_BRACKET, true),
+            new BracePair(CndTypes.LEFT_PARENTHESIS, CndTypes.RIGHT_PARENTHESIS, true),
     };
 
     @Override

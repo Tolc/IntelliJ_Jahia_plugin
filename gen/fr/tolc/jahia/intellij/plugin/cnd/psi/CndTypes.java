@@ -34,6 +34,7 @@ public interface CndTypes {
   IElementType ITEMTYPE_TYPE = new CndTokenType("ITEMTYPE_TYPE");
   IElementType LEFT_ANGLE_BRACKET = new CndTokenType("LEFT_ANGLE_BRACKET");
   IElementType LEFT_BRACKET = new CndTokenType("LEFT_BRACKET");
+  IElementType LEFT_ONLY_ANGLE_BRACKET = new CndTokenType("LEFT_ONLY_ANGLE_BRACKET");
   IElementType LEFT_PARENTHESIS = new CndTokenType("LEFT_PARENTHESIS");
   IElementType MINUS = new CndTokenType("MINUS");
   IElementType NAMESPACE_NAME = new CndTokenType("NAMESPACE_NAME");
@@ -53,6 +54,7 @@ public interface CndTypes {
   IElementType PROPERTY_TYPE = new CndTokenType("PROPERTY_TYPE");
   IElementType RIGHT_ANGLE_BRACKET = new CndTokenType("RIGHT_ANGLE_BRACKET");
   IElementType RIGHT_BRACKET = new CndTokenType("RIGHT_BRACKET");
+  IElementType RIGHT_ONLY_ANGLE_BRACKET = new CndTokenType("RIGHT_ONLY_ANGLE_BRACKET");
   IElementType RIGHT_PARENTHESIS = new CndTokenType("RIGHT_PARENTHESIS");
   IElementType SINGLE_QUOTE = new CndTokenType("SINGLE_QUOTE");
 
