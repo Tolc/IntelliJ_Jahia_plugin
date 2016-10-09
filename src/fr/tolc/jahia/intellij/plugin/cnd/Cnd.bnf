@@ -31,7 +31,7 @@ nodeType ::= LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [sup
   implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeElement" 
   methods=[getNodeTypeName setNodeTypeName getNodeTypeNamespace getNameIdentifier getPresentation getName setName] }
 
-superTypes ::= RIGHT_ANGLE_BRACKET superType (COMMA superType)* [COMMA]
+superTypes ::= RIGHT_ONLY_ANGLE_BRACKET superType (COMMA superType)* [COMMA]
 superType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
 
 options ::= ([CRLF] OPTION)+
@@ -52,7 +52,7 @@ propertyDefault ::= EQUAL PROPERTY_DEFAULT_VALUE
 
 propertyAttributes ::= PROPERTY_ATTRIBUTE+
 
-propertyConstraint ::= LEFT_ANGLE_BRACKET PROPERTY_CONSTRAINT_VALUE
+propertyConstraint ::= LEFT_ONLY_ANGLE_BRACKET PROPERTY_CONSTRAINT_VALUE
 
 
 

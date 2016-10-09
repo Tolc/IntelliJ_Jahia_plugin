@@ -67,7 +67,7 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 	":"                                         { return CndTypes.COLON; }
 	{CHARS}                       				{ return CndTypes.NODE_TYPE_NAME; }
 	"]"							                { return CndTypes.RIGHT_BRACKET; }
-	">"							                { yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.RIGHT_ANGLE_BRACKET; }
+	">"							                { yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.RIGHT_ONLY_ANGLE_BRACKET; }
 }
 
 //Node type super types "> jnt:content, smix:lmcuComponent"
@@ -146,8 +146,8 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 <PROPERTY_DEFAULT> {
 //	{PROPERTY_ATTRIBUTES}						{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
 	"="											{ yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
-	{CRLF}+{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT_NEWLINE); return CndTypes.LEFT_ANGLE_BRACKET; }
-	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ANGLE_BRACKET; }
+	{CRLF}+{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT_NEWLINE); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
+	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
 	[^\r\n\ =][^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
 }
 <PROPERTY_DEFAULT_VALUE> {
@@ -156,8 +156,8 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 
 <PROPERTY_ATTRIBUTES> {
 //	{PROPERTY_ATTRIBUTES}						{ return CndTypes.PROPERTY_ATTRIBUTE; }
-	{CRLF}+{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT_NEWLINE); return CndTypes.LEFT_ANGLE_BRACKET; }
-	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ANGLE_BRACKET; }
+	{CRLF}+{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT_NEWLINE); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
+	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
 	[^\r\n\ =][^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+									{ return CndTypes.PROPERTY_ATTRIBUTE; }
 }
 
