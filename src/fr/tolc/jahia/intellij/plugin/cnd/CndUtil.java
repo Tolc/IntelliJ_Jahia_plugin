@@ -20,9 +20,9 @@ import java.util.List;
 
 public class CndUtil {
 
-    public static CndNodeType findNodeType(Project project, String namespace, String nodeTypeName) {
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE,
-                GlobalSearchScope.allScope(project));
+    public static List<CndNodeType> findNodeTypes(Project project, String namespace, String nodeTypeName) {
+        List<CndNodeType> result = new ArrayList<CndNodeType>();
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
         for (VirtualFile virtualFile : virtualFiles) {
             CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
             if (cndFile != null) {
@@ -31,19 +31,26 @@ public class CndUtil {
                     for (CndNodeType nodeType : nodeTypes) {
                         if (namespace.equals(nodeType.getNodeTypeNamespace())
                                 && nodeTypeName.equals(nodeType.getNodeTypeName())) {
-                            return nodeType;
+                            result.add(nodeType);
                         }
                     }
                 }
             }
+        }
+        return result;
+    }
+
+    public static CndNodeType findNodeType(Project project, String namespace, String nodeTypeName) {
+        List<CndNodeType> nodeTypes = findNodeTypes(project, namespace, nodeTypeName);
+        if (nodeTypes.size() > 0) {
+            return nodeTypes.get(0);
         }
         return null;
     }
 
     public static List<CndNodeType> findNodeTypes(Project project, String namespace) {
         List<CndNodeType> result = new ArrayList<CndNodeType>();
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE,
-                GlobalSearchScope.allScope(project));
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
         for (VirtualFile virtualFile : virtualFiles) {
             CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
             if (cndFile != null) {
@@ -62,8 +69,7 @@ public class CndUtil {
 
     public static List<CndNodeType> findNodeTypes(Project project) {
         List<CndNodeType> result = new ArrayList<CndNodeType>();
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE,
-                GlobalSearchScope.allScope(project));
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
         for (VirtualFile virtualFile : virtualFiles) {
             CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
             if (cndFile != null) {
@@ -78,8 +84,7 @@ public class CndUtil {
 
     public static List<CndNamespace> findNamespaces(Project project) {
         List<CndNamespace> result = new ArrayList<CndNamespace>();
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE,
-                GlobalSearchScope.allScope(project));
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
         for (VirtualFile virtualFile : virtualFiles) {
             CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
             if (cndFile != null) {
@@ -92,9 +97,9 @@ public class CndUtil {
         return result;
     }
 
-    public static CndNamespace findNamespace(Project project, String namespace) {
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE,
-                GlobalSearchScope.allScope(project));
+    public static List<CndNamespace> findNamespaces(Project project, String namespace) {
+        List<CndNamespace> result = new ArrayList<CndNamespace>();
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
         for (VirtualFile virtualFile : virtualFiles) {
             CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
             if (cndFile != null) {
@@ -102,11 +107,19 @@ public class CndUtil {
                 if (namespaces != null) {
                     for (CndNamespace cndNamespace: namespaces) {
                         if (namespace.equals(cndNamespace.getNamespaceName())) {
-                            return cndNamespace;
+                            result.add(cndNamespace);
                         }
                     }
                 }
             }
+        }
+        return result;
+    }
+
+    public static CndNamespace findNamespace(Project project, String namespace) {
+        List<CndNamespace> namespaces = findNamespaces(project, namespace);
+        if (namespaces.size() > 0) {
+            return namespaces.get(0);
         }
         return null;
     }

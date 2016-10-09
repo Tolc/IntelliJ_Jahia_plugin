@@ -25,8 +25,8 @@ public class CndNodeTypeReference extends PsiReferenceBase<PsiElement> implement
     @Nullable
     @Override
     public PsiElement resolve() {
-        Project project = myElement.getProject();
-        return CndUtil.findNodeType(project, namespace, nodeType);
+        ResolveResult[] resolveResults = multiResolve(false);
+        return resolveResults.length == 1 ? resolveResults[0].getElement() : null;
     }
 
     @NotNull
@@ -46,10 +46,11 @@ public class CndNodeTypeReference extends PsiReferenceBase<PsiElement> implement
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
+        Project project = myElement.getProject();
+        List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace, nodeType);
         List<ResolveResult> results = new ArrayList<ResolveResult>();
-        PsiElement resolveResult = resolve();
-        if (resolveResult != null) {
-            results.add(new PsiElementResolveResult(resolveResult));
+        for (CndNodeType nodeType : nodeTypes) {
+            results.add(new PsiElementResolveResult(nodeType));
         }
         return results.toArray(new ResolveResult[results.size()]);
     }

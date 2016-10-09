@@ -24,8 +24,8 @@ public class CndNamespaceReference extends PsiReferenceBase<PsiElement> implemen
     @Nullable
     @Override
     public PsiElement resolve() {
-        Project project = myElement.getProject();
-        return CndUtil.findNamespace(project, namespace);
+        ResolveResult[] resolveResults = multiResolve(false);
+        return resolveResults.length == 1 ? resolveResults[0].getElement() : null;
     }
 
     @NotNull
@@ -45,10 +45,11 @@ public class CndNamespaceReference extends PsiReferenceBase<PsiElement> implemen
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
+        Project project = myElement.getProject();
+        List<CndNamespace> namespaces = CndUtil.findNamespaces(project, namespace);
         List<ResolveResult> results = new ArrayList<ResolveResult>();
-        PsiElement resolveResult = resolve();
-        if (resolveResult != null) {
-            results.add(new PsiElementResolveResult(resolveResult));
+        for (CndNamespace namespace : namespaces) {
+            results.add(new PsiElementResolveResult(namespace));
         }
         return results.toArray(new ResolveResult[results.size()]);
     }
