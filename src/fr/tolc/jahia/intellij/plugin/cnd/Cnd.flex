@@ -30,7 +30,7 @@ COMMENT_BLOCK="/*"~"*/"
 
 CHARS=[:jletter:][:jletterdigit:]*
 OPTIONS="mixin"|"abstract"|"orderable"|"noquery"
-PROPERTY_ATTRIBUTES="mandatory"|"protected"|"primary"|"i18n"|"internationalized"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="("'")?("no"|"tokenized"|"untokenized")("'")?|"analyzer='keyword'"|"autocreated"|("boost"|"scoreboost")"="[:digit:]+("."[:digit:]+){0,1}|"onconflict="("sum"|"latest"|"oldest"|"min"|"max"|"ignore")|"facetable"|"hierarchical"|"noqueryorder"|"itemtype = "("content"|"metadata"|"layout"|"options"|"codeEditor")|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"queryops '" (("<"|"<="|"<>"|"="|">"|">="|"like")(","){0,1})+ "'"
+//PROPERTY_ATTRIBUTES="mandatory"|"protected"|"primary"|"i18n"|"internationalized"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="("'")?("no"|"tokenized"|"untokenized")("'")?|"analyzer='keyword'"|"autocreated"|("boost"|"scoreboost")"="[:digit:]+("."[:digit:]+){0,1}|"onconflict="("sum"|"latest"|"oldest"|"min"|"max"|"ignore")|"facetable"|"hierarchical"|"noqueryorder"|"itemtype = "("content"|"metadata"|"layout"|"options"|"codeEditor")|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"queryops '" (("<"|"<="|"<>"|"="|">"|">="|"like")(","){0,1})+ "'"
 NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"multiple"|"protected"|"sns"
 
 //See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
@@ -134,7 +134,7 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 	"["											{ yybegin(PROPERTY_MASK_OPTION_NAME); return CndTypes.LEFT_BRACKET; }
 	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
 }
-<PROPERTY_MASK_OPTION_NAME> "resourceBundle"|"country"|"templates"|"templatesNode"|"users"|"nodetypes"|"subnodetypes"|"nodes"|"menus"|"script"|"flag"|"sortableFieldnames"|"moduleImage"|"linkerProps"|"workflow"|"workflowTypes"|"sort"|"componenttypes"|"autoSelectParent"|"type"|"image"|"dependentProperties"|"mime"|"renderModes"|"permissions"|"autocomplete"|"separator"|"folder"		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
+<PROPERTY_MASK_OPTION_NAME> "resourceBundle"|"country"|"templates"|"templatesNode"|"users"|"nodetypes"|"subnodetypes"|"nodes"|"menus"|"script"|"flag"|"sortableFieldnames"|"moduleImage"|"linkerProps"|"workflow"|"workflowTypes"|"sort"|"componenttypes"|"autoSelectParent"|"type"|"image"|"dependentProperties"|"mime"|"renderModes"|"permissions"|"autocomplete"|"separator"|"folder"|"root"		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
 <PROPERTY_MASK_OPTION> {
 	"="											{ return CndTypes.EQUAL; }
 	"'"[^\r\n\]']+"'" | [^\r\n\ \]=)',]+		{ return CndTypes.PROPERTY_MASK_OPTION_VALUE; }
