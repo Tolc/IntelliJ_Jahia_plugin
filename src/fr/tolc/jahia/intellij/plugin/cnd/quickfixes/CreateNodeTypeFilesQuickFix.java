@@ -2,6 +2,9 @@ package fr.tolc.jahia.intellij.plugin.cnd.quickfixes;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.ide.projectView.ProjectView;
@@ -55,7 +58,7 @@ public class CreateNodeTypeFilesQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                String finalDirectory = "main/webapp/" + namespace + "_" + nodeTypeName;
+                String finalDirectory = "main/webapp/" + namespace + "_" + nodeTypeName + "/html";
 
                 Module currentModule = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(file.getVirtualFile());
                 VirtualFile[] sourceRoots = ModuleRootManager.getInstance(currentModule).getSourceRoots();
@@ -85,15 +88,19 @@ public class CreateNodeTypeFilesQuickFix extends BaseIntentionAction {
 
         File jsp = new File(nodeTypeFolder.getCanonicalPath(),nodeTypeName + ".jsp");
         File properties = new File(nodeTypeFolder.getCanonicalPath(),nodeTypeName + ".properties");
+
+        //Copying default content files to create the new files
         try {
-            jsp.createNewFile();
-            properties.createNewFile();
+            Path defaultViewPath = Paths.get(getClass().getClassLoader().getResource("default/view.jsp").getFile().substring(1));   //Because of starting "/" /E:/...
+            Files.copy(defaultViewPath, jsp.toPath());
+
+            Path defaultPropertiesPath = Paths.get(getClass().getClassLoader().getResource("default/view.properties").getFile().substring(1));  //Because of starting "/" /E:/...
+            Files.copy(defaultPropertiesPath, properties.toPath());
         } catch (IOException e) {
             throw new IncorrectOperationException(e);
         }
 
-        //TODO: default content
-
+        //Open new files in editor
         VirtualFile propertiesFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(properties);
         FileEditorManager.getInstance(project).openFile(propertiesFile, false);
         
