@@ -1,0 +1,14 @@
+<jmix = 'http://www.jahia.org/jahia/mix/1.0'>
+<jnt = 'http://www.jahia.org/jahia/nt/1.0'>
+
+[jmix:rating] mixin
+ - j:nbOfVotes (long) = 0  autocreated hidden onconflict=sum
+ - j:sumOfVotes (long) = 0 autocreated hidden onconflict=sum
+ - j:lastVote (long) hidden onconflict=latest
+ - j:type (string,choicelist[resourceBundle]) = 'average' indexed=no < 'average','plusminus'
+
+[jnt:topRated] > jnt:content, jmix:list, jmix:socialComponent
+ - j:typeOfContent (string,choicelist[nodetypes,resourceBundle]) mandatory indexed=no
+ - j:minNbOfVotes (long) = 10 autocreated
+
+[jnt:rateable] > jnt:content, jmix:bindedComponent, jmix:socialComponent
