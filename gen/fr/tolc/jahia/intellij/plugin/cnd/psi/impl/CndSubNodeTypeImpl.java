@@ -8,18 +8,26 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
+import com.intellij.psi.PsiReference;
 
-public class CndSubNodeDefaultImpl extends ASTWrapperPsiElement implements CndSubNodeDefault {
+public class CndSubNodeTypeImpl extends CndSubNodeTypeElementImpl implements CndSubNodeType {
 
-  public CndSubNodeDefaultImpl(ASTNode node) {
+  public CndSubNodeTypeImpl(ASTNode node) {
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitSubNodeType(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitSubNodeDefault(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  public PsiReference[] getReferences() {
+    return CndPsiImplUtil.getReferences(this);
   }
 
 }

@@ -1,10 +1,12 @@
-package fr.tolc.jahia.intellij.plugin.cnd;
+package fr.tolc.jahia.intellij.plugin.cnd.references;
 
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
+import fr.tolc.jahia.intellij.plugin.cnd.CndIcons;
+import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

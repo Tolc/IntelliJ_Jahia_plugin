@@ -66,7 +66,7 @@
     <annotator language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndCndAnnotator"/>
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndLineMarkerProvider"/>
     <completion.contributor language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCompletionContributor"/>
-    <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.CndReferenceContributor"/>
+    <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.CndReferenceContributor"/>
     <lang.findUsagesProvider language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFindUsagesProvider"/>
     <!--<lang.refactoringSupport language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndRefactoringSupportProvider"/>-->
     <!--<lang.foldingBuilder language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFoldingBuilder"/>-->

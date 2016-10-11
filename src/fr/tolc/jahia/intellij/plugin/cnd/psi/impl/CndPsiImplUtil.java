@@ -161,4 +161,18 @@ public class CndPsiImplUtil {
     public static PsiReference[] getReferences(CndSuperType element) {
         return ReferenceProvidersRegistry.getReferencesFromProviders(element);
     }
+
+    //Extension
+    public static PsiReference[] getReferences(CndExtension element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
+    }
+
+    //SubNodeType
+    public static PsiReference[] getReferences(CndSubNodeType element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
+    }
+    //SubNodeDefaultType
+    public static PsiReference[] getReferences(CndSubNodeDefaultType element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
+    }
 }

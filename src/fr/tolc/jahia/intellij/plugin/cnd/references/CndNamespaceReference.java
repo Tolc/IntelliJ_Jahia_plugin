@@ -1,17 +1,22 @@
-package fr.tolc.jahia.intellij.plugin.cnd;
+package fr.tolc.jahia.intellij.plugin.cnd.references;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementResolveResult;
+import com.intellij.psi.PsiPolyVariantReference;
+import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.ResolveResult;
+import fr.tolc.jahia.intellij.plugin.cnd.CndIcons;
+import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CndNamespaceReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
     private String namespace;

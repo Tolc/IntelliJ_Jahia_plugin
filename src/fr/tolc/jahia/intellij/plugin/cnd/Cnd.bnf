@@ -41,6 +41,9 @@ options ::= ([CRLF] OPTION)+
 
 extensions ::= EXTENDS EQUAL extension (COMMA extension)*
 extension ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndExtensionElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtensionElement"
+  methods=[getReferences] }
 
 itemType ::= ITEMTYPE EQUAL ITEMTYPE_TYPE
 
@@ -61,8 +64,15 @@ propertyConstraint ::= LEFT_ONLY_ANGLE_BRACKET PROPERTY_CONSTRAINT_VALUE
 
 subNode ::= PLUS NODE_NAME LEFT_PARENTHESIS subNodeTypes RIGHT_PARENTHESIS [subNodeDefault] [subNodeAttributes]
 private subNodeTypes ::= subNodeType (COMMA subNodeType)*
-private subNodeType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
+subNodeType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndSubNodeTypeElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeTypeElement"
+  methods=[getReferences] }
 
-subNodeDefault ::= EQUAL NAMESPACE_NAME COLON NODE_TYPE_NAME
+private subNodeDefault ::= EQUAL subNodeDefaultType
+subNodeDefaultType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndSubNodeDefaultTypeElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeDefaultTypeElement"
+  methods=[getReferences] }
 
 subNodeAttributes ::= NODE_ATTRIBUTE+

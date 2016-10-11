@@ -17,8 +17,12 @@ public class CndSubNodeImpl extends ASTWrapperPsiElement implements CndSubNode {
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitSubNode(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitSubNode(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -30,8 +34,14 @@ public class CndSubNodeImpl extends ASTWrapperPsiElement implements CndSubNode {
 
   @Override
   @Nullable
-  public CndSubNodeDefault getSubNodeDefault() {
-    return findChildByClass(CndSubNodeDefault.class);
+  public CndSubNodeDefaultType getSubNodeDefaultType() {
+    return findChildByClass(CndSubNodeDefaultType.class);
+  }
+
+  @Override
+  @NotNull
+  public List<CndSubNodeType> getSubNodeTypeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CndSubNodeType.class);
   }
 
 }

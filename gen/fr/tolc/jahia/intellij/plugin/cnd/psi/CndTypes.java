@@ -20,7 +20,8 @@ public interface CndTypes {
   IElementType PROPERTY_DEFAULT = new CndElementType("PROPERTY_DEFAULT");
   IElementType SUB_NODE = new CndElementType("SUB_NODE");
   IElementType SUB_NODE_ATTRIBUTES = new CndElementType("SUB_NODE_ATTRIBUTES");
-  IElementType SUB_NODE_DEFAULT = new CndElementType("SUB_NODE_DEFAULT");
+  IElementType SUB_NODE_DEFAULT_TYPE = new CndElementType("SUB_NODE_DEFAULT_TYPE");
+  IElementType SUB_NODE_TYPE = new CndElementType("SUB_NODE_TYPE");
   IElementType SUPER_TYPE = new CndElementType("SUPER_TYPE");
   IElementType SUPER_TYPES = new CndElementType("SUPER_TYPES");
 
@@ -97,8 +98,11 @@ public interface CndTypes {
       else if (type == SUB_NODE_ATTRIBUTES) {
         return new CndSubNodeAttributesImpl(node);
       }
-      else if (type == SUB_NODE_DEFAULT) {
-        return new CndSubNodeDefaultImpl(node);
+      else if (type == SUB_NODE_DEFAULT_TYPE) {
+        return new CndSubNodeDefaultTypeImpl(node);
+      }
+      else if (type == SUB_NODE_TYPE) {
+        return new CndSubNodeTypeImpl(node);
       }
       else if (type == SUPER_TYPE) {
         return new CndSuperTypeImpl(node);

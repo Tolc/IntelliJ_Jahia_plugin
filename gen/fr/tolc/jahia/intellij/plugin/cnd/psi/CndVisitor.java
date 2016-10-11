@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public class CndVisitor extends PsiElementVisitor {
 
   public void visitExtension(@NotNull CndExtension o) {
-    visitPsiElement(o);
+    visitExtensionElement(o);
   }
 
   public void visitExtensions(@NotNull CndExtensions o) {
@@ -55,8 +55,12 @@ public class CndVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitSubNodeDefault(@NotNull CndSubNodeDefault o) {
-    visitPsiElement(o);
+  public void visitSubNodeDefaultType(@NotNull CndSubNodeDefaultType o) {
+    visitSubNodeDefaultTypeElement(o);
+  }
+
+  public void visitSubNodeType(@NotNull CndSubNodeType o) {
+    visitSubNodeTypeElement(o);
   }
 
   public void visitSuperType(@NotNull CndSuperType o) {
@@ -67,11 +71,23 @@ public class CndVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitExtensionElement(@NotNull CndExtensionElement o) {
+    visitPsiElement(o);
+  }
+
   public void visitNamespaceElement(@NotNull CndNamespaceElement o) {
     visitPsiElement(o);
   }
 
   public void visitNodeTypeElement(@NotNull CndNodeTypeElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSubNodeDefaultTypeElement(@NotNull CndSubNodeDefaultTypeElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSubNodeTypeElement(@NotNull CndSubNodeTypeElement o) {
     visitPsiElement(o);
   }
 

@@ -17,8 +17,12 @@ public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndName
     super(node);
   }
 
+  public void accept(@NotNull CndVisitor visitor) {
+    visitor.visitNamespace(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof CndVisitor) ((CndVisitor)visitor).visitNamespace(this);
+    if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 

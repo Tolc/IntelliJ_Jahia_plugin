@@ -1,15 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package fr.tolc.jahia.intellij.plugin.cnd.parser;
 
+import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
-import com.intellij.lang.LightPsiParser;
+import com.intellij.psi.tree.IElementType;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class CndParser implements PsiParser, LightPsiParser {
@@ -59,8 +59,11 @@ public class CndParser implements PsiParser, LightPsiParser {
     else if (t == SUB_NODE_ATTRIBUTES) {
       r = subNodeAttributes(b, 0);
     }
-    else if (t == SUB_NODE_DEFAULT) {
-      r = subNodeDefault(b, 0);
+    else if (t == SUB_NODE_DEFAULT_TYPE) {
+      r = subNodeDefaultType(b, 0);
+    }
+    else if (t == SUB_NODE_TYPE) {
+      r = subNodeType(b, 0);
     }
     else if (t == SUPER_TYPE) {
       r = superType(b, 0);
@@ -463,7 +466,7 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "options")) return false;
     if (!nextTokenIs(b, "<options>", CRLF, OPTION)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<options>");
+    Marker m = enter_section_(b, l, _NONE_, OPTIONS, "<options>");
     r = options_0(b, l + 1);
     int c = current_position_(b);
     while (r) {
@@ -471,7 +474,7 @@ public class CndParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "options", c)) break;
       c = current_position_(b);
     }
-    exit_section_(b, l, m, OPTIONS, r, false, null);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -725,26 +728,39 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EQUAL NAMESPACE_NAME COLON NODE_TYPE_NAME
-  public static boolean subNodeDefault(PsiBuilder b, int l) {
+  // EQUAL subNodeDefaultType
+  static boolean subNodeDefault(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "subNodeDefault")) return false;
     if (!nextTokenIs(b, EQUAL)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, EQUAL, NAMESPACE_NAME, COLON, NODE_TYPE_NAME);
-    exit_section_(b, m, SUB_NODE_DEFAULT, r);
+    r = consumeToken(b, EQUAL);
+    r = r && subNodeDefaultType(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
   // NAMESPACE_NAME COLON NODE_TYPE_NAME
-  static boolean subNodeType(PsiBuilder b, int l) {
+  public static boolean subNodeDefaultType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "subNodeDefaultType")) return false;
+    if (!nextTokenIs(b, NAMESPACE_NAME)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, NAMESPACE_NAME, COLON, NODE_TYPE_NAME);
+    exit_section_(b, m, SUB_NODE_DEFAULT_TYPE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // NAMESPACE_NAME COLON NODE_TYPE_NAME
+  public static boolean subNodeType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "subNodeType")) return false;
     if (!nextTokenIs(b, NAMESPACE_NAME)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, NAMESPACE_NAME, COLON, NODE_TYPE_NAME);
-    exit_section_(b, m, null, r);
+    exit_section_(b, m, SUB_NODE_TYPE, r);
     return r;
   }
 

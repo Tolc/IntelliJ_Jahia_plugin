@@ -11,6 +11,9 @@ public interface CndSubNode extends PsiElement {
   CndSubNodeAttributes getSubNodeAttributes();
 
   @Nullable
-  CndSubNodeDefault getSubNodeDefault();
+  CndSubNodeDefaultType getSubNodeDefaultType();
+
+  @NotNull
+  List<CndSubNodeType> getSubNodeTypeList();
 
 }
