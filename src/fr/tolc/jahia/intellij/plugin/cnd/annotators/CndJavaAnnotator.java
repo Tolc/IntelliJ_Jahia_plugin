@@ -10,51 +10,45 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeQuickFix;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class CndJavaAnnotator implements Annotator {
-
-    private static final Pattern nodeTypeRegex = Pattern.compile("^[A-Za-z]+" + ":" + "[A-Za-z0-9]+$");
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         if (element instanceof PsiLiteralExpression) {
             PsiLiteralExpression literalExpression = (PsiLiteralExpression) element;
-            String value = literalExpression.getValue() instanceof String ? (String)literalExpression.getValue() : null;
+            String value = literalExpression.getValue() instanceof String ? (String) literalExpression.getValue() : null;
+            NodeTypeModel nodeTypeModel = CndUtil.getNodeTypeModel(value);
 
-            if (value != null && value.contains(":")) {
-                Matcher matcher = nodeTypeRegex.matcher(value);
-                if (matcher.matches()) {
-                    String[] splitValue = value.split(":");
-                    String namespace = splitValue[0];
-                    String nodeTypeName = splitValue[1];
-                    Project project = element.getProject();
-                    int offset = element.getTextRange().getStartOffset() + 1; //because of starting "
-                    TextRange namespaceRange = new TextRange(offset, offset + namespace.length());
-                    TextRange colonRange = new TextRange(offset + namespace.length(), offset + namespace.length() + 1);
-                    TextRange nodeTypeNameRange = new TextRange(offset + namespace.length() + 1, element.getTextRange().getEndOffset() - 1); //because of closing "
+            if (nodeTypeModel != null) {
+                String namespace = nodeTypeModel.getNamespace();
+                String nodeTypeName = nodeTypeModel.getNodeTypeName();
 
-                    //Color ":"
-                    Annotation colonAnnotation = holder.createInfoAnnotation(colonRange, null);
-                    colonAnnotation.setTextAttributes(DefaultLanguageHighlighterColors.LINE_COMMENT);
+                Project project = element.getProject();
+                int offset = element.getTextRange().getStartOffset() + 1; //because of starting "
+                TextRange namespaceRange = new TextRange(offset, offset + namespace.length());
+                TextRange colonRange = new TextRange(offset + namespace.length(), offset + namespace.length() + 1);
+                TextRange nodeTypeNameRange = new TextRange(offset + namespace.length() + 1, element.getTextRange().getEndOffset() - 1); //because of closing "
 
-                    if (CndUtil.findNamespace(project, namespace) != null) {
-                        Annotation namespaceAnnotation = holder.createInfoAnnotation(namespaceRange, null);
-                        namespaceAnnotation.setTextAttributes(CndSyntaxHighlighter.NAMESPACE);
+                //Color ":"
+                Annotation colonAnnotation = holder.createInfoAnnotation(colonRange, null);
+                colonAnnotation.setTextAttributes(DefaultLanguageHighlighterColors.LINE_COMMENT);
 
-                        if (CndUtil.findNodeType(project, namespace, nodeTypeName) != null) {
-                            Annotation nodeTypeNameAnnotation = holder.createInfoAnnotation(nodeTypeNameRange, null);
-                            nodeTypeNameAnnotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
-                        } else {
-                            holder.createErrorAnnotation(nodeTypeNameRange, "Unresolved CND node type").registerFix(new CreateNodeTypeQuickFix(namespace, nodeTypeName));
-                        }
+                if (CndUtil.findNamespace(project, namespace) != null) {
+                    Annotation namespaceAnnotation = holder.createInfoAnnotation(namespaceRange, null);
+                    namespaceAnnotation.setTextAttributes(CndSyntaxHighlighter.NAMESPACE);
+
+                    if (CndUtil.findNodeType(project, namespace, nodeTypeName) != null) {
+                        Annotation nodeTypeNameAnnotation = holder.createInfoAnnotation(nodeTypeNameRange, null);
+                        nodeTypeNameAnnotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
                     } else {
-                        holder.createErrorAnnotation(namespaceRange, "Unresolved CND namespace");
+                        holder.createErrorAnnotation(nodeTypeNameRange, "Unresolved CND node type").registerFix(new CreateNodeTypeQuickFix(namespace, nodeTypeName));
                     }
+                } else {
+                    holder.createErrorAnnotation(namespaceRange, "Unresolved CND namespace");
                 }
             }
         }

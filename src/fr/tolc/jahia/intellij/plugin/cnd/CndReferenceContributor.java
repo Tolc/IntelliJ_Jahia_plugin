@@ -2,18 +2,20 @@ package fr.tolc.jahia.intellij.plugin.cnd;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.patterns.PlatformPatterns;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiReferenceContributor;
+import com.intellij.psi.PsiReferenceProvider;
+import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.util.ProcessingContext;
+import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class CndReferenceContributor extends PsiReferenceContributor {
 
-    private static final Pattern nodeTypeRegex = Pattern.compile("^[A-Za-z]+" + ":" + "[A-Za-z0-9]+$");
 
     @Override
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
@@ -24,25 +26,17 @@ public class CndReferenceContributor extends PsiReferenceContributor {
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                         PsiLiteralExpression literalExpression = (PsiLiteralExpression) element;
                         String value = literalExpression.getValue() instanceof String ? (String) literalExpression.getValue() : null;
+                        NodeTypeModel nodeTypeModel = CndUtil.getNodeTypeModel(value);
+                        
+                        if (nodeTypeModel != null) {
+                            String namespace = nodeTypeModel.getNamespace();
+                            String nodeTypeName = nodeTypeModel.getNodeTypeName();
 
-                        if (value != null && value.contains(":")) {
-                            Matcher matcher = nodeTypeRegex.matcher(value);
-                            if (matcher.matches()) {
-                                String[] splitValue = value.split(":");
-                                String namespace = splitValue[0];
-                                String nodeTypeName = splitValue[1];
-
-                                int offset = element.getTextRange().getStartOffset() + 1; //because of starting "
-                                TextRange namespaceRange = new TextRange(offset, offset + namespace.length());
-                                TextRange colonRange = new TextRange(offset + namespace.length(), offset + namespace.length() + 1);
-                                TextRange nodeTypeNameRange = new TextRange(offset + namespace.length() + 1, element.getTextRange().getEndOffset() - 1); //because of closing "
-
-                                return new PsiReference[]{
-                                        //Text range here is relative!!
-                                        new CndNamespaceReference(element, new TextRange(1, namespace.length() + 1), namespace),
-                                        new CndNodeTypeReference(element, new TextRange(namespace.length() + 2, value.length() + 1), namespace, nodeTypeName)
-                                };
-                            }
+                            return new PsiReference[]{
+                                    //Text range here is relative!!
+                                    new CndNamespaceReference(element, new TextRange(1, namespace.length() + 1), namespace),
+                                    new CndNodeTypeReference(element, new TextRange(namespace.length() + 2, value.length() + 1), namespace, nodeTypeName)
+                            };
                         }
                         return new PsiReference[0];
                     }
@@ -56,25 +50,17 @@ public class CndReferenceContributor extends PsiReferenceContributor {
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                         CndSuperType superType = (CndSuperType) element;
                         String text = superType.getText();
+                        NodeTypeModel nodeTypeModel = CndUtil.getNodeTypeModel(superType.getText());
 
-                        if (text != null && text.contains(":")) {
-                            Matcher matcher = nodeTypeRegex.matcher(text);
-                            if (matcher.matches()) {
-                                String[] splitValue = text.split(":");
-                                String namespace = splitValue[0];
-                                String nodeTypeName = splitValue[1];
-
-                                int offset = element.getTextRange().getStartOffset() + 1; //because of starting "
-                                TextRange namespaceRange = new TextRange(offset, offset + namespace.length());
-                                TextRange colonRange = new TextRange(offset + namespace.length(), offset + namespace.length() + 1);
-                                TextRange nodeTypeNameRange = new TextRange(offset + namespace.length() + 1, element.getTextRange().getEndOffset() - 1); //because of closing "
-
-                                return new PsiReference[]{
-                                        //Text range here is relative!!
-                                        new CndNamespaceReference(element, new TextRange(0, namespace.length()), namespace),
-                                        new CndNodeTypeReference(element, new TextRange(namespace.length() + 1, text.length()), namespace, nodeTypeName)
-                                };
-                            }
+                        if (nodeTypeModel != null) {
+                            String namespace = nodeTypeModel.getNamespace();
+                            String nodeTypeName = nodeTypeModel.getNodeTypeName();
+                            
+                            return new PsiReference[]{
+                                    //Text range here is relative!!
+                                    new CndNamespaceReference(element, new TextRange(0, namespace.length()), namespace),
+                                    new CndNodeTypeReference(element, new TextRange(namespace.length() + 1, text.length()), namespace, nodeTypeName)
+                            };
                         }
                         return new PsiReference[0];
                     }

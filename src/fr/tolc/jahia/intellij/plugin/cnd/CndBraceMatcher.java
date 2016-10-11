@@ -14,7 +14,7 @@ public class CndBraceMatcher implements PairedBraceMatcher {
     private static final BracePair[] PAIRS = new BracePair[]{
             new BracePair(CndTypes.LEFT_ANGLE_BRACKET, CndTypes.RIGHT_ANGLE_BRACKET, true),
             new BracePair(CndTypes.LEFT_BRACKET, CndTypes.RIGHT_BRACKET, true),
-            new BracePair(CndTypes.LEFT_PARENTHESIS, CndTypes.RIGHT_PARENTHESIS, true),
+            new BracePair(CndTypes.LEFT_PARENTHESIS, CndTypes.RIGHT_PARENTHESIS, true)
     };
 
     @Override

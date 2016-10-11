@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.jsp.JspTokenType;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Class not needed because XML annotator gets called when IntelliJ analyzes JSP files
+ */
 public class CndJspAnnotator implements Annotator {
 
     private static final Pattern nodeTypeRegex = Pattern.compile("^[A-Za-z]+" + ":" + "[A-Za-z0-9]+$");

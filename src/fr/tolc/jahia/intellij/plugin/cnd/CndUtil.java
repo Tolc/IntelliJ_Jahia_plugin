@@ -1,5 +1,12 @@
 package fr.tolc.jahia.intellij.plugin.cnd;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiManager;
@@ -7,16 +14,10 @@ import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
+import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndFile;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 public class CndUtil {
 
@@ -120,6 +121,22 @@ public class CndUtil {
         List<CndNamespace> namespaces = findNamespaces(project, namespace);
         if (namespaces.size() > 0) {
             return namespaces.get(0);
+        }
+        return null;
+    }
+
+
+    private static final Pattern nodeTypeRegex = Pattern.compile("^[A-Za-z]+" + ":" + "[A-Za-z0-9]+$");
+    
+    public static NodeTypeModel getNodeTypeModel(String value) {
+        if (value != null && value.contains(":")) {
+            Matcher matcher = nodeTypeRegex.matcher(value);
+            if (matcher.matches()) {
+                String[] splitValue = value.split(":");
+                String namespace = splitValue[0];
+                String nodeTypeName = splitValue[1];
+                return new NodeTypeModel(value, namespace, nodeTypeName);
+            }
         }
         return null;
     }
