@@ -1,24 +1,25 @@
-package fr.tolc.jahia.intellij.plugin.cnd;
-
-import java.util.Collection;
+package fr.tolc.jahia.intellij.plugin.cnd.lineMarker;
 
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.psi.xml.XmlTokenType;
+import fr.tolc.jahia.intellij.plugin.cnd.CndIcons;
+import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import org.jetbrains.annotations.NotNull;
 
-public class CndLineMarkerProvider extends RelatedItemLineMarkerProvider {
+import java.util.Collection;
+
+public class CndXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
-        if (element instanceof PsiLiteralExpression) {
-            PsiLiteralExpression literalExpression = (PsiLiteralExpression) element;
-            String value = literalExpression.getValue() instanceof String ? (String) literalExpression.getValue() : null;
+        if (element.getNode() != null && XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN.equals(element.getNode().getElementType())) {
+            String value = element.getText();
             NodeTypeModel nodeTypeModel = CndUtil.getNodeTypeModel(value);
 
             if (nodeTypeModel != null) {
