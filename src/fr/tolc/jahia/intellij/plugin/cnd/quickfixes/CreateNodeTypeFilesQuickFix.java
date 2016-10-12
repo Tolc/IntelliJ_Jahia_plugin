@@ -10,27 +10,24 @@ import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
+import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 public class CreateNodeTypeFilesQuickFix extends BaseIntentionAction {
 
+    private String jahiaWorkFolderPath;
     private String namespace;
     private String nodeTypeName;
 
-    public CreateNodeTypeFilesQuickFix(String namespace, String nodeTypeName) {
+    public CreateNodeTypeFilesQuickFix(String jahiaWorkFolderPath, String namespace, String nodeTypeName) {
+        this.jahiaWorkFolderPath = jahiaWorkFolderPath;
         this.namespace = namespace;
         this.nodeTypeName = nodeTypeName;
     }
@@ -38,7 +35,7 @@ public class CreateNodeTypeFilesQuickFix extends BaseIntentionAction {
     @NotNull
     @Override
     public String getText() {
-        return "Create node type associated files";
+        return "Create node type associated folders and files";
     }
     
     @Nls
@@ -58,30 +55,30 @@ public class CreateNodeTypeFilesQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                String finalDirectory = "main/webapp/" + namespace + "_" + nodeTypeName + "/html";
+                String finalDirectory = CndUtil.getNodeTypeDefaultViewsFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName);
+                createNodeTypeFiles(project, finalDirectory);
+                
+//                Module currentModule = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(file.getVirtualFile());
+//                VirtualFile[] sourceRoots = ModuleRootManager.getInstance(currentModule).getSourceRoots();
 
-                Module currentModule = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(file.getVirtualFile());
-                VirtualFile[] sourceRoots = ModuleRootManager.getInstance(currentModule).getSourceRoots();
-
-                if (sourceRoots.length == 1) {
-                    createNodeTypeFiles(project, sourceRoots[0], finalDirectory);
-                } else {
-                    //TODO: only allow to choose between source folders
-                    final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
-                    descriptor.setTitle("Select Root Folder");
-                    descriptor.setRoots(sourceRoots);
-                    final VirtualFile file = FileChooser.chooseFile(descriptor, project, null);
-                    if (file != null) {
-                        createNodeTypeFiles(project, file, finalDirectory);
-                    }
-                }
+//                if (sourceRoots.length == 1) {
+//                    createNodeTypeFiles(project, sourceRoots[0], finalDirectory);
+//                } else {
+//                    final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
+//                    descriptor.setTitle("Select Root Folder");
+//                    descriptor.setRoots(sourceRoots);
+//                    final VirtualFile file = FileChooser.chooseFile(descriptor, project, null);
+//                    if (file != null) {
+//                        createNodeTypeFiles(project, file, finalDirectory);
+//                    }
+//                }
             }
         });
     }
     
-    private void createNodeTypeFiles(final Project project, final VirtualFile sourceDirectory, final String directory) {
-        File folder = new File(sourceDirectory.getCanonicalPath(), directory);
-        if(!folder.exists()) {
+    private void createNodeTypeFiles(final Project project, final String directory) {
+        File folder = new File(directory);
+        if(!folder.exists() || !folder.isDirectory()) {
             folder.mkdirs();
         }
         VirtualFile nodeTypeFolder = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(folder);

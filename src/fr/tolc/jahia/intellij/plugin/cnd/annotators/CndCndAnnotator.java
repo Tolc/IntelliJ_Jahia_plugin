@@ -1,18 +1,15 @@
 package fr.tolc.jahia.intellij.plugin.cnd.annotators;
 
+import java.io.File;
+
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
+import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.constants.CndConstants;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
-import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.ChangeToClosestQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeFilesQuickFix;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,21 +31,30 @@ public class CndCndAnnotator implements Annotator {
                         if (namespaceEl != null && CndTypes.NAMESPACE_NAME.equals(namespaceEl.getNode().getElementType())) {
                             String namespace = namespaceEl.getText();
 
-                            Project project = element.getProject();
-                            Module currentModule = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(element.getContainingFile().getVirtualFile());
-                            VirtualFile[] sourceRoots = ModuleRootManager.getInstance(currentModule).getSourceRoots();
+//                            Project project = element.getProject();
+//                            Module currentModule = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(element.getContainingFile().getVirtualFile());
+//                            VirtualFile[] sourceRoots = ModuleRootManager.getInstance(currentModule).getSourceRoots();
 
-                            VirtualFile nodeTypeFolder = null;
-                            for (VirtualFile sourceRoot : sourceRoots) {
-                                nodeTypeFolder = sourceRoot.findFileByRelativePath("main/webapp/" + namespace + "_" + nodeTypeName);
-                                if (nodeTypeFolder != null) {
-                                    break;
+                            String jahiaWorkFolderPath = CndUtil.getJahiaWorkFolderPath(element);
+
+                            if (jahiaWorkFolderPath != null) {
+                                //                            VirtualFile nodeTypeFolder = null;
+                                //                            for (VirtualFile sourceRoot : sourceRoots) {
+                                //                                nodeTypeFolder = sourceRoot.findFileByRelativePath("main/webapp/" + namespace + "_" + nodeTypeName);
+                                //                                if (nodeTypeFolder != null) {
+                                //                                    break;
+                                //                                }
+                                //                            }
+
+                                String nodeTypeFolderPath = CndUtil.getNodeTypeFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName);
+                                File nodeTypeFolder = new File(nodeTypeFolderPath);
+                                if (!nodeTypeFolder.exists() || !nodeTypeFolder.isDirectory()) {
+                                    Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + " does not have any associated folder");
+                                    annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
+                                    annotation.registerFix(new CreateNodeTypeFilesQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
+//                                } else {
+                                    //TODO: Create view Quick Fix
                                 }
-                            }
-                            if (nodeTypeFolder == null) {
-                                Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + " does not have any associated files");
-                                annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
-                                annotation.registerFix(new CreateNodeTypeFilesQuickFix(namespace, nodeTypeName));
                             }
                         }
                     }
