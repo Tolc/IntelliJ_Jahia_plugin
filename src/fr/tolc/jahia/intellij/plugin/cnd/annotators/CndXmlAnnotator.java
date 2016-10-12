@@ -7,7 +7,7 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.xml.XmlTokenType;
+import com.intellij.psi.xml.XmlAttributeValue;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
@@ -18,8 +18,8 @@ public class CndXmlAnnotator implements Annotator {
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
-        if (element.getNode() != null && XmlTokenType.XML_ATTRIBUTE_VALUE_TOKEN.equals(element.getNode().getElementType())) {
-            String value = element.getText();
+        if (element instanceof XmlAttributeValue) {
+            String value = ((XmlAttributeValue) element).getValue();
             NodeTypeModel nodeTypeModel = CndUtil.getNodeTypeModel(value);
 
             if (nodeTypeModel != null) {
@@ -27,10 +27,10 @@ public class CndXmlAnnotator implements Annotator {
                 String nodeTypeName = nodeTypeModel.getNodeTypeName();
 
                 Project project = element.getProject();
-                int offset = element.getTextRange().getStartOffset();
+                int offset = element.getTextRange().getStartOffset() + 1;   //because of starting "
                 TextRange namespaceRange = new TextRange(offset, offset + namespace.length());
                 TextRange colonRange = new TextRange(offset + namespace.length(), offset + namespace.length() + 1);
-                TextRange nodeTypeNameRange = new TextRange(offset + namespace.length() + 1, element.getTextRange().getEndOffset());
+                TextRange nodeTypeNameRange = new TextRange(offset + namespace.length() + 1, element.getTextRange().getEndOffset() - 1); //because of ending "
 
                 //Color ":"
                 Annotation colonAnnotation = holder.createInfoAnnotation(colonRange, null);

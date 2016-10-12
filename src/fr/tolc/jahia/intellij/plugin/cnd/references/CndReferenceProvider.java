@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
+import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.ProcessingContext;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
@@ -47,17 +48,15 @@ public class CndReferenceProvider extends PsiReferenceProvider {
             PsiLiteralExpression literalExpression = (PsiLiteralExpression) element;
             return literalExpression.getValue() instanceof String ? (String) literalExpression.getValue() : null;
         } else if (element instanceof CndSuperType) {   //Cnd super types
-            CndSuperType superType = (CndSuperType) element;
-            return  superType.getText();
+            return  element.getText();
         } else if (element instanceof CndExtension) {   //Cnd extends types
-            CndExtension extension = (CndExtension) element;
-            return  extension.getText();
+            return  element.getText();
         } else if (element instanceof CndSubNodeType) {   //Cnd subnode types
-            CndSubNodeType subNodeType = (CndSubNodeType) element;
-            return  subNodeType.getText();
+            return  element.getText();
         } else if (element instanceof CndSubNodeDefaultType) {   //Cnd subnode default type
-            CndSubNodeDefaultType  subNodeDefaultType = (CndSubNodeDefaultType) element;
-            return  subNodeDefaultType.getText();
+            return  element.getText();
+        } else if (element instanceof XmlAttributeValue) {    //XML
+            return ((XmlAttributeValue) element).getValue();
         }
         return null;
     }
@@ -73,6 +72,8 @@ public class CndReferenceProvider extends PsiReferenceProvider {
             return 0;
         } else if (element instanceof CndSubNodeDefaultType) {   //Cnd subnode default type
             return 0;
+        } else if (element instanceof XmlAttributeValue) {    //XML
+            return 1;
         }
         return 0;
     }
