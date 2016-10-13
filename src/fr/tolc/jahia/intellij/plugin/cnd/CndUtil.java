@@ -175,8 +175,20 @@ public class CndUtil {
     }
 
     public static String getNodeTypeDefaultViewsFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName) {
-        return getNodeTypeFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName) + "/html";
+        return getNodeTypeViewsFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName, "html");
     }
 
-    
+    public static String getNodeTypeViewsFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName, String viewType) {
+        return getNodeTypeFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName) + "/" + viewType;
+    }
+
+    public static String getNodeTypeViewFileName(String nodeTypeName, String viewName, String viewLanguage, boolean isHiddenView) {
+        String fileName = nodeTypeName + ".";
+        if (isHiddenView) {
+            fileName += "hidden.";
+        }
+        fileName += viewName + "." + viewLanguage;
+        return fileName;
+    }
+
 }

@@ -11,6 +11,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.constants.CndConstants;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeFilesQuickFix;
+import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeViewQuickFix;
 import org.jetbrains.annotations.NotNull;
 
 public class CndCndAnnotator implements Annotator {
@@ -52,8 +53,10 @@ public class CndCndAnnotator implements Annotator {
                                     Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + " does not have any associated folder");
                                     annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
                                     annotation.registerFix(new CreateNodeTypeFilesQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
-//                                } else {
-                                    //TODO: Create view Quick Fix
+                                } else {
+                                    Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Create a new view for " + namespace + ":" + nodeTypeName);
+                                    annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
+                                    annotation.registerFix(new CreateNodeTypeViewQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
                                 }
                             }
                         }
