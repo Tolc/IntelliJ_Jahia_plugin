@@ -21,6 +21,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndFile;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import org.apache.commons.lang.StringUtils;
 
 public class CndUtil {
 
@@ -187,7 +188,10 @@ public class CndUtil {
         if (isHiddenView) {
             fileName += "hidden.";
         }
-        fileName += viewName + "." + viewLanguage;
+        if (StringUtils.isNotBlank(viewName) && !"default".equals(viewName)) {
+            fileName += viewName + ".";
+        }
+        fileName += viewLanguage;
         return fileName;
     }
 

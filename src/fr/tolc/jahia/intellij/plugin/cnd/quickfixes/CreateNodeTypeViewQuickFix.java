@@ -1,5 +1,14 @@
 package fr.tolc.jahia.intellij.plugin.cnd.quickfixes;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import javax.swing.*;
+
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.application.ApplicationManager;
@@ -11,17 +20,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-
-import javax.accessibility.AccessibleContext;
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
 
@@ -58,10 +59,7 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                CreateNodeTypeViewDialog createNodeTypeViewDialog = new CreateNodeTypeViewDialog();
-                createNodeTypeViewDialog.pack();
-                createNodeTypeViewDialog.setLocationRelativeTo(createNodeTypeViewDialog.getContentPane());
-                //TODO: center on window
+                CreateNodeTypeViewDialog createNodeTypeViewDialog = new CreateNodeTypeViewDialog(project);
                 createNodeTypeViewDialog.setVisible(true);
 
                 if (createNodeTypeViewDialog.isOkClicked()) {
@@ -70,11 +68,13 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
                     String viewType = createNodeTypeViewDialog.getViewType();
                     String viewLanguage = createNodeTypeViewDialog.getViewLanguage();
 
-                    String finalDirectory = CndUtil.getNodeTypeViewsFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName, viewType);
-                    String fileName = CndUtil.getNodeTypeViewFileName(nodeTypeName, viewName, viewLanguage, isHiddenView);
-                    String propertiesFileName = CndUtil.getNodeTypeViewFileName(nodeTypeName, viewName, "properties", isHiddenView);
+                    if (StringUtils.isNotBlank(viewType) && StringUtils.isNotBlank(viewLanguage)) {
+                        String finalDirectory = CndUtil.getNodeTypeViewsFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName, viewType);
+                        String fileName = CndUtil.getNodeTypeViewFileName(nodeTypeName, viewName, viewLanguage, isHiddenView);
+                        String propertiesFileName = CndUtil.getNodeTypeViewFileName(nodeTypeName, viewName, "properties", isHiddenView);
 
-                    createNodeTypeView(project, finalDirectory, fileName, propertiesFileName);
+                        createNodeTypeView(project, finalDirectory, fileName, propertiesFileName);
+                    }
                 }
             }
         });
@@ -92,16 +92,20 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
 
         //Copying default content files to create the new files
         try {
-            Path defaultViewPath;
-            if (viewFileName.endsWith(".jsp")) {
-                defaultViewPath = Paths.get(getClass().getClassLoader().getResource("default/view.jsp").getFile().substring(1));   //Because of starting "/" /E:/...
-            } else {
-                defaultViewPath = Paths.get(getClass().getClassLoader().getResource("default/view.default").getFile().substring(1));   //Because of starting "/" /E:/...
+            if (!viewFile.exists()) {
+                Path defaultViewPath;
+                if (viewFileName.endsWith(".jsp")) {
+                    defaultViewPath = Paths.get(getClass().getClassLoader().getResource("default/view.jsp").getFile().substring(1));   //Because of starting "/" /E:/...
+                } else {
+                    defaultViewPath = Paths.get(getClass().getClassLoader().getResource("default/view.default").getFile().substring(1));   //Because of starting "/" /E:/...
+                }
+                Files.copy(defaultViewPath, viewFile.toPath());
             }
-            Files.copy(defaultViewPath, viewFile.toPath());
 
-            Path defaultPropertiesPath = Paths.get(getClass().getClassLoader().getResource("default/view.properties").getFile().substring(1));  //Because of starting "/" /E:/...
-            Files.copy(defaultPropertiesPath, properties.toPath());
+            if (!properties.exists()) {
+                Path defaultPropertiesPath = Paths.get(getClass().getClassLoader().getResource("default/view.properties").getFile().substring(1));  //Because of starting "/" /E:/...
+                Files.copy(defaultPropertiesPath, properties.toPath());
+            }
         } catch (IOException e) {
             throw new IncorrectOperationException(e);
         }

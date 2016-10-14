@@ -1,7 +1,15 @@
 package fr.tolc.jahia.intellij.plugin.cnd.quickfixes;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.*;
-import java.awt.event.*;
+
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.WindowManager;
 
 public class CreateNodeTypeViewDialog extends JDialog {
     private JPanel contentPane;
@@ -14,7 +22,7 @@ public class CreateNodeTypeViewDialog extends JDialog {
 
     private boolean okClicked = false;
 
-    public CreateNodeTypeViewDialog() {
+    public CreateNodeTypeViewDialog(Project project) {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -31,7 +39,7 @@ public class CreateNodeTypeViewDialog extends JDialog {
             }
         });
 
-// call onCancel() when cross is clicked
+        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -39,29 +47,28 @@ public class CreateNodeTypeViewDialog extends JDialog {
             }
         });
 
-// call onCancel() on ESCAPE
+        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        setTitle("Create new view");
+        pack();
+        setSize(275, 275);
+        setLocationRelativeTo(WindowManager.getInstance().getFrame(project));
     }
 
     private void onOK() {
-// add your code here
+        // add your code here
         okClicked = true;
         dispose();
     }
 
     private void onCancel() {
-// add your code here if necessary
+        // add your code here if necessary
         dispose();
-    }
-
-    public static void main(String[] args) {
-        CreateNodeTypeViewDialog dialog = new CreateNodeTypeViewDialog();
-        dialog.pack();
-        dialog.setVisible(true);
     }
 
     public String getViewName() {
