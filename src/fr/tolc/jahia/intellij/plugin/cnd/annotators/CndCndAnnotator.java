@@ -7,10 +7,12 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
+import fr.tolc.jahia.intellij.plugin.cnd.CndTranslationUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.constants.CndConstants;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeFilesQuickFix;
+import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeTranslationsQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeViewQuickFix;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,6 +60,15 @@ public class CndCndAnnotator implements Annotator {
                                     annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
                                     annotation.registerFix(new CreateNodeTypeViewQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
                                 }
+
+
+                                //Translation
+                                if (CndTranslationUtil.getNodeTypeTranslation(element.getProject(), namespace, nodeTypeName) == null) {
+                                    Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + "does not have any translation");
+                                    annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
+                                    annotation.registerFix(new CreateNodeTypeTranslationsQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
+                                }
+
                             }
                         }
                     }

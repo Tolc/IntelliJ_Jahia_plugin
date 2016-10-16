@@ -32,7 +32,7 @@ public class CndVisitor extends PsiElementVisitor {
   }
 
   public void visitProperty(@NotNull CndProperty o) {
-    visitPsiElement(o);
+    visitPropertyElement(o);
   }
 
   public void visitPropertyAttributes(@NotNull CndPropertyAttributes o) {
@@ -80,6 +80,10 @@ public class CndVisitor extends PsiElementVisitor {
   }
 
   public void visitNodeTypeElement(@NotNull CndNodeTypeElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyElement(@NotNull CndPropertyElement o) {
     visitPsiElement(o);
   }
 
