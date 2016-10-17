@@ -43,7 +43,7 @@ public class PropertiesFileCndKeyModel {
         } else if (propertyMatcher.matches()) {
             isProperty = true;
             
-            String[] splitValue = sourceString.split(".");
+            String[] splitValue = sourceString.split("\\.");
             String nodeType = splitValue[0];
             propertyName = splitValue[1].replace("_", ":");
             
@@ -53,7 +53,7 @@ public class PropertiesFileCndKeyModel {
         } else if (propertyTooltipMatcher.matches()) {
             isPropertyTooltip = true;
 
-            String[] splitValue = sourceString.split(".");
+            String[] splitValue = sourceString.split("\\.");
             String nodeType = splitValue[0];
             propertyName = splitValue[1].replace("_", ":");
 
@@ -64,7 +64,7 @@ public class PropertiesFileCndKeyModel {
         } else if (choicelistMatcher.matches()) {
             isChoicelistElement = true;
 
-            String[] splitValue = sourceString.split(".");
+            String[] splitValue = sourceString.split("\\.");
             String nodeType = splitValue[0];
             propertyName = splitValue[1].replace("_", ":");
             choicelistElement = splitValue[2];
