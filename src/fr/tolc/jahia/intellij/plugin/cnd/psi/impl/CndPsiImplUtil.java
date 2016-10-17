@@ -201,7 +201,11 @@ public class CndPsiImplUtil {
     public static PropertyTypeEnum getType(CndProperty element) {
         ASTNode propertyType = element.getNode().findChildByType(CndTypes.PROPERTY_TYPE);
         if (propertyType != null) {
-            return PropertyTypeEnum.fromValue(propertyType.getText());
+            try {
+                return PropertyTypeEnum.fromValue(propertyType.getText());
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
         }
         return null;
     }
@@ -209,7 +213,11 @@ public class CndPsiImplUtil {
     public static PropertyTypeMaskEnum getTypeMask(CndProperty element) {
         ASTNode propertyMask = element.getNode().findChildByType(CndTypes.PROPERTY_MASK);
         if (propertyMask != null) {
-            return PropertyTypeMaskEnum.fromValue(propertyMask.getText());
+            try {
+                return PropertyTypeMaskEnum.fromValue(propertyMask.getText());
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
         }
         return null;
     }
