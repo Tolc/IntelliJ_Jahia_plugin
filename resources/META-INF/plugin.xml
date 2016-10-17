@@ -70,6 +70,7 @@
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndJavaLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="XML" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndXmlLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndXmlLineMarkerProvider"/>
+    <codeInsight.lineMarkerProvider language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndPropertiesLineMarkerProvider"/>
     <completion.contributor language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCompletionContributor"/>
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.CndReferenceContributor"/>
     <lang.findUsagesProvider language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFindUsagesProvider"/>

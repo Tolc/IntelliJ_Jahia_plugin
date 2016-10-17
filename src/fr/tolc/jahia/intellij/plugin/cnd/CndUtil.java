@@ -131,7 +131,6 @@ public class CndUtil {
 
 
     private static final Pattern nodeTypeRegex = Pattern.compile("^[A-Za-z]+" + ":" + "[A-Za-z0-9]+$");
-    private static final Pattern nodeTypePropertyKeyRegex = Pattern.compile("^[A-Za-z]+" + "_" + "[A-Za-z0-9]+$");
 
     public static NodeTypeModel getNodeTypeModel(String value) {
         if (value != null) {
@@ -139,15 +138,6 @@ public class CndUtil {
                 Matcher matcher = nodeTypeRegex.matcher(value);
                 if (matcher.matches()) {
                     String[] splitValue = value.split(":");
-                    String namespace = splitValue[0];
-                    String nodeTypeName = splitValue[1];
-                    return new NodeTypeModel(value, namespace, nodeTypeName);
-                }
-            }
-            if (value.contains("_")) {
-                Matcher matcher = nodeTypePropertyKeyRegex.matcher(value);
-                if (matcher.matches()) {
-                    String[] splitValue = value.split("_");
                     String namespace = splitValue[0];
                     String nodeTypeName = splitValue[1];
                     return new NodeTypeModel(value, namespace, nodeTypeName);

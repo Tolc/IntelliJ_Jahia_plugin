@@ -26,6 +26,8 @@ public class CndPropertiesAnnotator implements Annotator {
         if (element instanceof PropertyKeyImpl) {
             PropertyKeyImpl propertyKey = (PropertyKeyImpl) element;
             
+            //TODO: refactor
+            
             String key = element.getText();
             String nodeTypePart;
             String propertyPart = null;
