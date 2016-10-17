@@ -1,5 +1,7 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
 
+import java.util.List;
+
 import javax.swing.*;
 
 import com.intellij.lang.ASTNode;
@@ -11,10 +13,16 @@ import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import fr.tolc.jahia.intellij.plugin.cnd.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndElementFactory;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeDefaultType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class CndPsiImplUtil {
 
@@ -195,7 +203,7 @@ public class CndPsiImplUtil {
         if (propertyType != null) {
             return PropertyTypeEnum.fromValue(propertyType.getText());
         }
-        return PropertyTypeEnum.UNDEFINED;
+        return null;
     }
 
     public static PropertyTypeMaskEnum getTypeMask(CndProperty element) {
@@ -203,7 +211,7 @@ public class CndPsiImplUtil {
         if (propertyMask != null) {
             return PropertyTypeMaskEnum.fromValue(propertyMask.getText());
         }
-        return PropertyTypeMaskEnum.NONE;
+        return null;
     }
 
     public static PsiElement getNameIdentifier(CndProperty element) {

@@ -21,12 +21,13 @@ public enum PropertyTypeEnum {
         this.value = value;
     }
 
-    public static PropertyTypeEnum fromValue(String value) {
-        try {
-            return PropertyTypeEnum.valueOf(value.toLowerCase());
-        } catch (IllegalArgumentException e) {
-            return UNDEFINED;
+    public static PropertyTypeEnum fromValue(String value) throws IllegalArgumentException {
+        for (PropertyTypeEnum type : PropertyTypeEnum.values()) {
+            if (type.value.equalsIgnoreCase(value)) {
+                return type;
+            }
         }
+        throw new IllegalArgumentException("Unknown property type [" + value + "]");
     }
 
     public String toString() {

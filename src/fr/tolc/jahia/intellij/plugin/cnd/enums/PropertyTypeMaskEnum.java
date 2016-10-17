@@ -13,21 +13,21 @@ public enum PropertyTypeMaskEnum {
     CHECKBOX("checkbox"),
     FILEUPLOAD("fileupload"),
     TAG("tag"),
-    FILE("file"),
-    NONE("none");
-
+    FILE("file");
+    
     private String value;
 
     PropertyTypeMaskEnum(String value) {
         this.value = value;
     }
 
-    public static PropertyTypeMaskEnum fromValue(String value) {
-        try {
-            return PropertyTypeMaskEnum.valueOf(value.toLowerCase());
-        } catch (IllegalArgumentException e) {
-            return NONE;
+    public static PropertyTypeMaskEnum fromValue(String value) throws IllegalArgumentException {
+        for (PropertyTypeMaskEnum mask : PropertyTypeMaskEnum.values()) {
+            if (mask.value.equalsIgnoreCase(value)) {
+                return mask;
+            }
         }
+        throw new IllegalArgumentException("Unknown property type mask [" + value + "]");
     }
 
     public String toString() {

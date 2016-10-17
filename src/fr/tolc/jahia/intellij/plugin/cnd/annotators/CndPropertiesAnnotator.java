@@ -8,7 +8,6 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.xml.XmlAttributeValue;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
@@ -25,12 +24,14 @@ public class CndPropertiesAnnotator implements Annotator {
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         if (element instanceof PropertyKeyImpl) {
+            PropertyKeyImpl propertyKey = (PropertyKeyImpl) element;
+            
             String key = element.getText();
-            String nodeTypePart = null;
+            String nodeTypePart;
             String propertyPart = null;
 
             if (key.contains(".")) {
-                int pointIndex = key.indexOf(".");
+                int pointIndex = key.indexOf('.');
                 nodeTypePart = key.substring(0, pointIndex);
                 propertyPart = key.substring(pointIndex + 1);
             } else {
@@ -65,7 +66,7 @@ public class CndPropertiesAnnotator implements Annotator {
                         if (StringUtils.isNotBlank(propertyPart)) {
                             String listPart = null;
                             if (propertyPart.contains(".")) {
-                                int pointIndex = propertyPart.indexOf(".");
+                                int pointIndex = propertyPart.indexOf('.');
                                 listPart = propertyPart.substring(pointIndex + 1);
                                 propertyPart = propertyPart.substring(0, pointIndex);
                             }
