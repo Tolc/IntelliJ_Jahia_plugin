@@ -15,18 +15,21 @@ import com.intellij.psi.ResolveResult;
 import fr.tolc.jahia.intellij.plugin.cnd.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CndNodeTypeReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
+public class CndPropertyReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
     private String namespace;
     private String nodeType;
+    private String propertyName;
 
-    public CndNodeTypeReference(@NotNull PsiElement element, TextRange textRange, String namespace, String nodeType) {
+    public CndPropertyReference(@NotNull PsiElement element, TextRange textRange, String namespace, String nodeType, String propertyName) {
         super(element, textRange);
         this.namespace = namespace;
         this.nodeType = nodeType;
+        this.propertyName = propertyName;
     }
 
     @Nullable
@@ -40,11 +43,14 @@ public class CndNodeTypeReference extends PsiReferenceBase<PsiElement> implement
     @Override
     public Object[] getVariants() {
         Project project = myElement.getProject();
-        List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace);
+        CndNodeType cndNodeType = CndUtil.findNodeType(project, namespace, nodeType);
         List<LookupElement> variants = new ArrayList<LookupElement>();
-        for (final CndNodeType cndNodeType : nodeTypes) {
-            if (StringUtils.isNotBlank(cndNodeType.getNodeTypeName())) {
-                variants.add(LookupElementBuilder.create(cndNodeType).withIcon(CndIcons.FILE).withTypeText(cndNodeType.getContainingFile().getName()));
+        if (cndNodeType != null) {
+            List<CndProperty> properties = cndNodeType.getPropertyList();
+            for (final CndProperty property : properties) {
+                if (StringUtils.isNotBlank(property.getPropertyName())) {
+                    variants.add(LookupElementBuilder.create(property).withIcon(CndIcons.FILE).withTypeText(property.getContainingFile().getName()));
+                }
             }
         }
         return variants.toArray();
@@ -54,10 +60,10 @@ public class CndNodeTypeReference extends PsiReferenceBase<PsiElement> implement
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         Project project = myElement.getProject();
-        List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace, nodeType);
+        List<CndProperty> properties = CndUtil.findProperties(project, namespace, nodeType, propertyName);
         List<ResolveResult> results = new ArrayList<ResolveResult>();
-        for (CndNodeType cndNodeType : nodeTypes) {
-            results.add(new PsiElementResolveResult(cndNodeType));
+        for (CndProperty property : properties) {
+            results.add(new PsiElementResolveResult(property));
         }
         return results.toArray(new ResolveResult[results.size()]);
     }
