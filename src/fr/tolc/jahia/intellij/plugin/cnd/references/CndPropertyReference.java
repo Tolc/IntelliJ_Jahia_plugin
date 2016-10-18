@@ -49,7 +49,7 @@ public class CndPropertyReference extends PsiReferenceBase<PsiElement> implement
             List<CndProperty> properties = cndNodeType.getPropertyList();
             for (final CndProperty property : properties) {
                 if (StringUtils.isNotBlank(property.getPropertyName())) {
-                    variants.add(LookupElementBuilder.create(property).withIcon(CndIcons.FILE).withTypeText(property.getContainingFile().getName()));
+                    variants.add(LookupElementBuilder.create(property.getPropertyName().replace(':', '_')).withIcon(CndIcons.FILE).withTypeText(property.getContainingFile().getName()));
                 }
             }
         }

@@ -40,7 +40,7 @@ public class CndReferenceProvider extends PsiReferenceProvider {
                 
                 String namespace = cndKeyModel.getNamespace();
                 String nodeTypeName = cndKeyModel.getNodeTypeName();
-                CndNamespaceReference cndNamespaceReference = new CndNamespaceReference(element, new TextRange(0, namespace.length()), namespace);
+                CndNamespaceReference cndNamespaceReference = new CndNamespaceReference(element, new TextRange(0, namespace.length()), namespace);  //Text ranges here are relative!!
                 CndNodeTypeReference cndNodeTypeReference = new CndNodeTypeReference(element, new TextRange(namespace.length() + 1, namespace.length() + 1 + nodeTypeName.length()), namespace, nodeTypeName);
                 psiReferences[0] = cndNamespaceReference;
                 psiReferences[1] = cndNodeTypeReference;
@@ -64,7 +64,7 @@ public class CndReferenceProvider extends PsiReferenceProvider {
                     String nodeTypeName = nodeTypeModel.getNodeTypeName();
 
                     return new PsiReference[] {
-                            //Text range here is relative!!
+                            //Text ranges here are relative!!
                             new CndNamespaceReference(element, new TextRange(offset, namespace.length() + offset), namespace),
                             new CndNodeTypeReference(element, new TextRange(namespace.length() + offset + 1, nodetypeText.length() + offset), namespace, nodeTypeName)
                     };
