@@ -1,5 +1,7 @@
 package fr.tolc.jahia.intellij.plugin.cnd;
 
+import java.util.Collection;
+
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.PropertiesFileType;
 import com.intellij.lang.properties.psi.PropertiesFile;
@@ -10,8 +12,6 @@ import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 public class CndTranslationUtil {
 
@@ -31,7 +31,7 @@ public class CndTranslationUtil {
     }
 
     public static String convertNodeTypeIdentifierToPropertyName(@NotNull String nodeTypeIdentifier) {
-        return nodeTypeIdentifier.replace(":", "_");
+        return nodeTypeIdentifier.replace(':', '_');
     }
 
     public static String convertNodeTypeIdentifierToPropertyName(@NotNull String namespace, @NotNull String nodeTypeName) {
@@ -39,10 +39,10 @@ public class CndTranslationUtil {
     }
 
     public static String convertNodeTypePropertyNameToPropertyName(@NotNull String nodeTypeIdentifier, @NotNull String nodePropertyName) {
-        return convertNodeTypeIdentifierToPropertyName(nodeTypeIdentifier) + "." + nodePropertyName;
+        return convertNodeTypeIdentifierToPropertyName(nodeTypeIdentifier) + "." + nodePropertyName.replace(':', '_');
     }
 
     public static String convertNodeTypePropertyNameToPropertyName(@NotNull String namespace, @NotNull String nodeTypeName, @NotNull String nodePropertyName) {
-        return convertNodeTypeIdentifierToPropertyName(namespace, nodeTypeName) + "." + nodePropertyName;
+        return convertNodeTypeIdentifierToPropertyName(namespace, nodeTypeName) + "." + nodePropertyName.replace(':', '_');
     }
 }
