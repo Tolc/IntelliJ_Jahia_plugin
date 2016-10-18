@@ -90,4 +90,8 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
     return CndPsiImplUtil.setName(this, newName);
   }
 
+  public CndProperty getProperty(String propertyName) {
+    return CndPsiImplUtil.getProperty(this, propertyName);
+  }
+
 }

@@ -15,6 +15,7 @@ import com.intellij.psi.ResolveResult;
 import fr.tolc.jahia.intellij.plugin.cnd.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,9 +40,9 @@ public class CndNamespaceReference extends PsiReferenceBase<PsiElement> implemen
         Project project = myElement.getProject();
         List<CndNamespace> namespaces = CndUtil.findNamespaces(project);
         List<LookupElement> variants = new ArrayList<LookupElement>();
-        for (final CndNamespace namespace : namespaces) {
-            if (namespace.getNamespaceName() != null && namespace.getNamespaceName().length() > 0) {
-                variants.add(LookupElementBuilder.create(namespace).withIcon(CndIcons.FILE).withTypeText(namespace.getContainingFile().getName()));
+        for (final CndNamespace cndNamespace : namespaces) {
+            if (StringUtils.isNotBlank(cndNamespace.getNamespaceName())) {
+                variants.add(LookupElementBuilder.create(cndNamespace).withIcon(CndIcons.FILE).withTypeText(cndNamespace.getContainingFile().getName()));
             }
         }
         return variants.toArray();

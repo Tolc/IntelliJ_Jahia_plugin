@@ -40,4 +40,6 @@ public interface CndNodeType extends CndNodeTypeElement {
 
   PsiElement setName(String newName);
 
+  CndProperty getProperty(String propertyName);
+
 }

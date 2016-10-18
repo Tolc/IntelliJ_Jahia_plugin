@@ -94,6 +94,8 @@ public class CreateNodeTypeQuickFix extends BaseIntentionAction {
                 
                 CndNodeType cndNodeType = CndElementFactory.createNodeType(project, nodeTypeName, namespace);
                 cndFile.getNode().addChild(cndNodeType.getNode());
+
+                //Caret at the end of new node type
                 ((Navigatable) cndNodeType.getLastChild().getNavigationElement()).navigate(true);
                 FileEditorManager.getInstance(project).getSelectedTextEditor().getCaretModel().moveCaretRelatively(2, 0, false, false, false);
 

@@ -8,10 +8,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
+import com.intellij.navigation.ItemPresentation;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
 
-public class CndPropertyImpl extends ASTWrapperPsiElement implements CndProperty {
+public class CndPropertyImpl extends CndPropertyElementImpl implements CndProperty {
 
   public CndPropertyImpl(ASTNode node) {
     super(node);
@@ -42,6 +44,38 @@ public class CndPropertyImpl extends ASTWrapperPsiElement implements CndProperty
   @Nullable
   public CndPropertyDefault getPropertyDefault() {
     return findChildByClass(CndPropertyDefault.class);
+  }
+
+  public String getPropertyName() {
+    return CndPsiImplUtil.getPropertyName(this);
+  }
+
+  public PsiElement setPropertyName(String newName) {
+    return CndPsiImplUtil.setPropertyName(this, newName);
+  }
+
+  public PropertyTypeEnum getType() {
+    return CndPsiImplUtil.getType(this);
+  }
+
+  public PropertyTypeMaskEnum getTypeMask() {
+    return CndPsiImplUtil.getTypeMask(this);
+  }
+
+  public PsiElement getNameIdentifier() {
+    return CndPsiImplUtil.getNameIdentifier(this);
+  }
+
+  public ItemPresentation getPresentation() {
+    return CndPsiImplUtil.getPresentation(this);
+  }
+
+  public String getName() {
+    return CndPsiImplUtil.getName(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return CndPsiImplUtil.setName(this, newName);
   }
 
 }

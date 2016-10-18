@@ -7,10 +7,14 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
+import fr.tolc.jahia.intellij.plugin.cnd.CndTranslationUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
-import fr.tolc.jahia.intellij.plugin.cnd.constants.CndConstants;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyAttributeEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeFilesQuickFix;
+import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeTranslationsQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeViewQuickFix;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,6 +62,15 @@ public class CndCndAnnotator implements Annotator {
                                     annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
                                     annotation.registerFix(new CreateNodeTypeViewQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
                                 }
+
+
+                                //Translation
+                                if (CndTranslationUtil.getNodeTypeTranslation(element.getProject(), namespace, nodeTypeName) == null) {
+                                    Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + "does not have any translation");
+                                    annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
+                                    annotation.registerFix(new CreateNodeTypeTranslationsQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
+                                }
+
                             }
                         }
                     }
@@ -66,21 +79,27 @@ public class CndCndAnnotator implements Annotator {
 
             //Property type
             if (CndTypes.PROPERTY_TYPE.equals(element.getNode().getElementType())) {
-                if (!CndConstants.containsIgnoreCase(CndConstants.PROPERTY_TYPES, element.getText())) {
+                try {
+                    PropertyTypeEnum.fromValue(element.getText());
+                } catch (IllegalArgumentException e) {
                     holder.createErrorAnnotation(element.getTextRange(), "Invalid property type");
                 }
             }
 
             //Property mask
             if (CndTypes.PROPERTY_MASK.equals(element.getNode().getElementType())) {
-                if (!CndConstants.containsIgnoreCase(CndConstants.PROPERTY_MASKS, element.getText())) {
+                try {
+                    PropertyTypeMaskEnum.fromValue(element.getText());
+                } catch (IllegalArgumentException e) {
                     holder.createErrorAnnotation(element.getTextRange(), "Invalid property type mask");
                 }
             }
 
             //Property attribute
             if (CndTypes.PROPERTY_ATTRIBUTE.equals(element.getNode().getElementType())) {
-                if (!CndConstants.matches(CndConstants.PROPERTY_ATTRIBUTES_REGEX, element.getText())) {
+                try {
+                    PropertyAttributeEnum.fromValue(element.getText());
+                } catch (IllegalArgumentException e) {
                     holder.createErrorAnnotation(element.getTextRange(), "Invalid property attribute");
 //                    Annotation annotation = holder.createErrorAnnotation(element.getTextRange(), "Invalid property attribute");
 //                    annotation.registerFix(new ChangeToClosestQuickFix(element, CndConstants.PROPERTY_ATTRIBUTES));

@@ -21,9 +21,43 @@ import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndFile;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
 import org.apache.commons.lang.StringUtils;
 
 public class CndUtil {
+    private CndUtil() {}
+
+    public static List<CndProperty> findProperties(Project project, String namespace, String nodeTypeName, String propertyName) {
+        List<CndProperty> result = new ArrayList<CndProperty>();
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
+        for (VirtualFile virtualFile : virtualFiles) {
+            CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
+            if (cndFile != null) {
+                CndNodeType[] nodeTypes = PsiTreeUtil.getChildrenOfType(cndFile, CndNodeType.class);
+                if (nodeTypes != null) {
+                    for (CndNodeType nodeType : nodeTypes) {
+                        if (namespace.equals(nodeType.getNodeTypeNamespace()) && nodeTypeName.equals(nodeType.getNodeTypeName())) {
+                            List<CndProperty> properties = nodeType.getPropertyList();
+                            for (CndProperty property : properties) {
+                                if (propertyName.equals(property.getPropertyName())) {
+                                    result.add(property);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public static CndProperty findProperty(Project project, String namespace, String nodeTypeName, String propertyName) {
+        List<CndProperty> properties = findProperties(project, namespace, nodeTypeName, propertyName);
+        if (!properties.isEmpty()) {
+            return properties.get(0);
+        }
+        return null;
+    }
 
     public static List<CndNodeType> findNodeTypes(Project project, String namespace, String nodeTypeName) {
         List<CndNodeType> result = new ArrayList<CndNodeType>();
@@ -34,8 +68,7 @@ public class CndUtil {
                 CndNodeType[] nodeTypes = PsiTreeUtil.getChildrenOfType(cndFile, CndNodeType.class);
                 if (nodeTypes != null) {
                     for (CndNodeType nodeType : nodeTypes) {
-                        if (namespace.equals(nodeType.getNodeTypeNamespace())
-                                && nodeTypeName.equals(nodeType.getNodeTypeName())) {
+                        if (namespace.equals(nodeType.getNodeTypeNamespace()) && nodeTypeName.equals(nodeType.getNodeTypeName())) {
                             result.add(nodeType);
                         }
                     }
@@ -47,7 +80,7 @@ public class CndUtil {
 
     public static CndNodeType findNodeType(Project project, String namespace, String nodeTypeName) {
         List<CndNodeType> nodeTypes = findNodeTypes(project, namespace, nodeTypeName);
-        if (nodeTypes.size() > 0) {
+        if (!nodeTypes.isEmpty()) {
             return nodeTypes.get(0);
         }
         return null;
@@ -131,15 +164,17 @@ public class CndUtil {
 
 
     private static final Pattern nodeTypeRegex = Pattern.compile("^[A-Za-z]+" + ":" + "[A-Za-z0-9]+$");
-    
+
     public static NodeTypeModel getNodeTypeModel(String value) {
-        if (value != null && value.contains(":")) {
-            Matcher matcher = nodeTypeRegex.matcher(value);
-            if (matcher.matches()) {
-                String[] splitValue = value.split(":");
-                String namespace = splitValue[0];
-                String nodeTypeName = splitValue[1];
-                return new NodeTypeModel(value, namespace, nodeTypeName);
+        if (value != null) {
+            if (value.contains(":")) {
+                Matcher matcher = nodeTypeRegex.matcher(value);
+                if (matcher.matches()) {
+                    String[] splitValue = value.split(":");
+                    String namespace = splitValue[0];
+                    String nodeTypeName = splitValue[1];
+                    return new NodeTypeModel(value, namespace, nodeTypeName);
+                }
             }
         }
         return null;

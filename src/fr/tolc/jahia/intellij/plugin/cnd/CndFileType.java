@@ -22,7 +22,7 @@ public class CndFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getDescription() {
-        return "jahia Content Node Definitions file";
+        return "Jahia Content Node Definitions file";
     }
 
     @NotNull

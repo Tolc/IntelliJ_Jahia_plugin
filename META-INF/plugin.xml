@@ -21,6 +21,8 @@
   <!-- uncomment to enable plugin in all products
   <depends>com.intellij.modules.lang</depends>
   -->
+  <depends>com.intellij.properties</depends>
+  <depends>com.intellij.jsp</depends>
 
   <application-components>
     <!-- Add your application components here -->
@@ -63,10 +65,12 @@
     <annotator language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJavaAnnotator"/>
     <annotator language="XML" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndXmlAnnotator"/>
     <!--<annotator language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJspAnnotator"/>-->
+    <annotator language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndPropertiesAnnotator"/>
     <annotator language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndCndAnnotator"/>
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndJavaLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="XML" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndXmlLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndXmlLineMarkerProvider"/>
+    <codeInsight.lineMarkerProvider language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndPropertiesLineMarkerProvider"/>
     <completion.contributor language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCompletionContributor"/>
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.CndReferenceContributor"/>
     <lang.findUsagesProvider language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFindUsagesProvider"/>
