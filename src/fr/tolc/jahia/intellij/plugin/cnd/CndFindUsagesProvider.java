@@ -6,7 +6,7 @@ import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.tree.TokenSet;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespaceIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
@@ -41,7 +41,7 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     public String getType(@NotNull PsiElement element) {
         if (element instanceof CndNodeType) {
             return "Node type";
-        } else if (element instanceof CndNamespace) {
+        } else if (element instanceof CndNamespaceIdentifier) {
             return "Namespace";
         } else if (element instanceof CndPropertyIdentifier) {
             return "Property";
@@ -54,8 +54,8 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     public String getDescriptiveName(@NotNull PsiElement element) {
         if (element instanceof CndNodeType) {
             return ((CndNodeType) element).getNodeTypeName();
-        } else if (element instanceof CndNamespace) {
-            return ((CndNamespace) element).getNamespaceName();
+        } else if (element instanceof CndNamespaceIdentifier) {
+            return ((CndNamespaceIdentifier) element).getNamespaceName();
         } else if (element instanceof CndPropertyIdentifier) {
             return ((CndPropertyIdentifier) element).getPropertyName();
         }        
@@ -67,10 +67,11 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
         if (element instanceof CndNodeType) {
             return ((CndNodeType) element).getNodeTypeNamespace() + ":" + ((CndNodeType) element).getNodeTypeName();
-        } else if (element instanceof CndNamespace) {
-            return ((CndNamespace) element).getNamespaceName() + " = '" + ((CndNamespace) element).getNamespaceURI() + "'";
+        } else if (element instanceof CndNamespaceIdentifier) {
+            CndNamespaceIdentifier id = (CndNamespaceIdentifier) element;
+            return id.getNamespaceName() + " = '" + id.getNamespace().getNamespaceURI() + "'";
         }else if (element instanceof CndPropertyIdentifier) {
-            CndPropertyIdentifier id = ((CndPropertyIdentifier) element);
+            CndPropertyIdentifier id = (CndPropertyIdentifier) element;
             return id.getPropertyName() + " (" + id.getProperty().getType() + ", " + id.getProperty().getTypeMask() +  ")";
         }
         return "";

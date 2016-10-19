@@ -1,15 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package fr.tolc.jahia.intellij.plugin.cnd.parser;
 
+import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
-import com.intellij.lang.LightPsiParser;
+import com.intellij.psi.tree.IElementType;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class CndParser implements PsiParser, LightPsiParser {
@@ -34,6 +34,9 @@ public class CndParser implements PsiParser, LightPsiParser {
     }
     else if (t == NAMESPACE) {
       r = namespace(b, 0);
+    }
+    else if (t == NAMESPACE_IDENTIFIER) {
+      r = namespaceIdentifier(b, 0);
     }
     else if (t == NODE_TYPE) {
       r = nodeType(b, 0);
@@ -229,14 +232,28 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_ANGLE_BRACKET NAMESPACE_NAME EQUAL SINGLE_QUOTE NAMESPACE_URI SINGLE_QUOTE RIGHT_ANGLE_BRACKET
+  // LEFT_ANGLE_BRACKET namespaceIdentifier EQUAL SINGLE_QUOTE NAMESPACE_URI SINGLE_QUOTE RIGHT_ANGLE_BRACKET
   public static boolean namespace(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace")) return false;
     if (!nextTokenIs(b, LEFT_ANGLE_BRACKET)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, LEFT_ANGLE_BRACKET, NAMESPACE_NAME, EQUAL, SINGLE_QUOTE, NAMESPACE_URI, SINGLE_QUOTE, RIGHT_ANGLE_BRACKET);
+    r = consumeToken(b, LEFT_ANGLE_BRACKET);
+    r = r && namespaceIdentifier(b, l + 1);
+    r = r && consumeTokens(b, 0, EQUAL, SINGLE_QUOTE, NAMESPACE_URI, SINGLE_QUOTE, RIGHT_ANGLE_BRACKET);
     exit_section_(b, m, NAMESPACE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // NAMESPACE_NAME
+  public static boolean namespaceIdentifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "namespaceIdentifier")) return false;
+    if (!nextTokenIs(b, NAMESPACE_NAME)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NAMESPACE_NAME);
+    exit_section_(b, m, NAMESPACE_IDENTIFIER, r);
     return r;
   }
 

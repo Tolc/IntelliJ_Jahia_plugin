@@ -19,10 +19,10 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CndNamespaceReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
+public class CndNamespaceIdentifierReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
     private String namespace;
 
-    public CndNamespaceReference(@NotNull PsiElement element, TextRange textRange, String namespace) {
+    public CndNamespaceIdentifierReference(@NotNull PsiElement element, TextRange textRange, String namespace) {
         super(element, textRange);
         this.namespace = namespace;
     }
@@ -55,7 +55,7 @@ public class CndNamespaceReference extends PsiReferenceBase<PsiElement> implemen
         List<CndNamespace> namespaces = CndUtil.findNamespaces(project, namespace);
         List<ResolveResult> results = new ArrayList<ResolveResult>();
         for (CndNamespace namespace : namespaces) {
-            results.add(new PsiElementResolveResult(namespace));
+            results.add(new PsiElementResolveResult(namespace.getNamespaceIdentifier()));
         }
         return results.toArray(new ResolveResult[results.size()]);
     }

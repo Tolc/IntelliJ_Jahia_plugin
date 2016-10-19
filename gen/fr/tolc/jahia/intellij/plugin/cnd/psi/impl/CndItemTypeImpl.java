@@ -1,12 +1,16 @@
 // This is a generated file. Not intended for manual editing.
 package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndItemType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndVisitor;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.psi.util.PsiTreeUtil;
+import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.util.CndPsiImplUtil;
 
 public class CndItemTypeImpl extends ASTWrapperPsiElement implements CndItemType {
 

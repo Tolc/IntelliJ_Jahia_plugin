@@ -15,7 +15,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeDefaultType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperType;
-import fr.tolc.jahia.intellij.plugin.cnd.references.CndNamespaceReference;
+import fr.tolc.jahia.intellij.plugin.cnd.references.CndNamespaceIdentifierReference;
 import fr.tolc.jahia.intellij.plugin.cnd.references.CndNodeTypeReference;
 import fr.tolc.jahia.intellij.plugin.cnd.references.CndPropertyIdentifierReference;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ public class CndReferenceProvider extends PsiReferenceProvider {
                 
                 String namespace = cndKeyModel.getNamespace();
                 String nodeTypeName = cndKeyModel.getNodeTypeName();
-                CndNamespaceReference cndNamespaceReference = new CndNamespaceReference(element, new TextRange(0, namespace.length()), namespace);  //Text ranges here are relative!!
+                CndNamespaceIdentifierReference cndNamespaceReference = new CndNamespaceIdentifierReference(element, new TextRange(0, namespace.length()), namespace);  //Text ranges here are relative!!
                 CndNodeTypeReference cndNodeTypeReference = new CndNodeTypeReference(element, new TextRange(namespace.length() + 1, namespace.length() + 1 + nodeTypeName.length()), namespace, nodeTypeName);
                 psiReferences[0] = cndNamespaceReference;
                 psiReferences[1] = cndNodeTypeReference;
@@ -66,7 +66,7 @@ public class CndReferenceProvider extends PsiReferenceProvider {
 
                     return new PsiReference[] {
                             //Text ranges here are relative!!
-                            new CndNamespaceReference(element, new TextRange(offset, namespace.length() + offset), namespace),
+                            new CndNamespaceIdentifierReference(element, new TextRange(offset, namespace.length() + offset), namespace),
                             new CndNodeTypeReference(element, new TextRange(namespace.length() + offset + 1, nodetypeText.length() + offset), namespace, nodeTypeName)
                     };
                 }

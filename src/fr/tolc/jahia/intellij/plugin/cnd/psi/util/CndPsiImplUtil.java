@@ -16,6 +16,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndElementFactory;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespaceIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyIdentifier;
@@ -29,21 +30,11 @@ public class CndPsiImplUtil {
 
     //Namespace
     public static String getNamespaceName(CndNamespace element) {
-        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
-        if (nameNode != null) {
-            return nameNode.getText();
-        }
-        return null;
+        return element.getNamespaceIdentifier().getNamespaceName();
     }
 
     public static PsiElement setNamespaceName(CndNamespace element, String newName) {
-        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
-        if (nameNode != null) {
-            CndNodeType namespace = CndElementFactory.createNamespace(element.getProject(), newName);
-            ASTNode newNamespaceNode = namespace.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
-            element.getNode().replaceChild(nameNode, newNamespaceNode);
-        }
-        return element;
+        return element.getNamespaceIdentifier().setNamespaceName(newName);
     }
 
     public static String getNamespaceURI(CndNamespace element) {
@@ -52,23 +43,6 @@ public class CndPsiImplUtil {
             return uriNode.getText();
         }
         return null;
-    }
-
-    public static PsiElement getNameIdentifier(CndNamespace element) {
-        ASTNode namespaceNameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
-        if (namespaceNameNode != null) {
-            return namespaceNameNode.getPsi();
-        } else {
-            return null;
-        }
-    }
-
-    public static PsiElement setName(CndNamespace element, String newName) {
-        return setNamespaceName(element, newName);
-    }
-
-    public static String getName(CndNamespace element) {
-        return getNamespaceName(element);
     }
 
     public static ItemPresentation getPresentation(final CndNamespace element) {
@@ -93,6 +67,54 @@ public class CndPsiImplUtil {
             }
         };
     }
+
+
+
+    //Namespace Identifier
+    public static String getNamespaceName(CndNamespaceIdentifier element) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
+        if (nameNode != null) {
+            return nameNode.getText();
+        }
+        return null;
+    }
+
+    public static PsiElement setNamespaceName(CndNamespaceIdentifier element, String newName) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
+        if (nameNode != null) {
+            CndNamespace namespace = CndElementFactory.createNamespace(element.getProject(), newName);
+            ASTNode newNamespaceNode = namespace.getNamespaceIdentifier().getNode().findChildByType(CndTypes.NAMESPACE_NAME);
+            element.getNode().replaceChild(nameNode, newNamespaceNode);
+        }
+        return element;
+    }
+
+    public static PsiElement getNameIdentifier(CndNamespaceIdentifier element) {
+        ASTNode namespaceNameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
+        if (namespaceNameNode != null) {
+            return namespaceNameNode.getPsi();
+        } else {
+            return null;
+        }
+    }
+
+    public static PsiElement setName(CndNamespaceIdentifier element, String newName) {
+        return setNamespaceName(element, newName);
+    }
+
+    public static String getName(CndNamespaceIdentifier element) {
+        return getNamespaceName(element);
+    }
+
+    public static CndNamespace getNamespace(CndNamespaceIdentifier element) {
+        return (CndNamespace) element.getParent();
+    }
+
+    public static ItemPresentation getPresentation(final CndNamespaceIdentifier element) {
+        return getPresentation(element.getNamespace());
+    }
+    
+    
 
 
 
@@ -182,19 +204,11 @@ public class CndPsiImplUtil {
 
     //Property
     public static String getPropertyName(CndProperty element) {
-        CndPropertyIdentifier propertyIdentifier = element.getPropertyIdentifier();
-        if (propertyIdentifier != null) {
-            return propertyIdentifier.getPropertyName();
-        }
-        return null;
+        return element.getPropertyIdentifier().getPropertyName();
     }
 
     public static PsiElement setPropertyName(CndProperty element, String newName) {
-        CndPropertyIdentifier propertyIdentifier = element.getPropertyIdentifier();
-        if (propertyIdentifier != null) {
-            return propertyIdentifier.setPropertyName(newName);
-        }
-        return element;
+        return element.getPropertyIdentifier().setPropertyName(newName);
     }
 
     public static PropertyTypeEnum getType(CndProperty element) {

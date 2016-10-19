@@ -19,10 +19,14 @@ cnd ::= (COMMENT|CRLF)* (namespace CRLF)* (nodeType | COMMENT | CRLF)*
 
 
 
-namespace ::= LEFT_ANGLE_BRACKET NAMESPACE_NAME EQUAL SINGLE_QUOTE NAMESPACE_URI SINGLE_QUOTE RIGHT_ANGLE_BRACKET
+namespace ::= LEFT_ANGLE_BRACKET namespaceIdentifier EQUAL SINGLE_QUOTE NAMESPACE_URI SINGLE_QUOTE RIGHT_ANGLE_BRACKET
 { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNamespaceElementImpl"
   implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespaceElement" 
-  methods=[getNamespaceName setNamespaceName getNamespaceURI getNameIdentifier getPresentation getName setName] }
+  methods=[getNamespaceName setNamespaceName getNamespaceURI getPresentation] }
+namespaceIdentifier ::= NAMESPACE_NAME
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.impl.CndNamespaceIdentifierElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndNamespaceIdentifierElement"
+  methods=[getNamespaceName setNamespaceName getNameIdentifier getPresentation getName setName getNamespace] }
 
 
 

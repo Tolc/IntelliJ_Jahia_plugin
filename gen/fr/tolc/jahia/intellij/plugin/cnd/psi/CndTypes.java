@@ -12,6 +12,7 @@ public interface CndTypes {
   IElementType EXTENSIONS = new CndElementType("EXTENSIONS");
   IElementType ITEM_TYPE = new CndElementType("ITEM_TYPE");
   IElementType NAMESPACE = new CndElementType("NAMESPACE");
+  IElementType NAMESPACE_IDENTIFIER = new CndElementType("NAMESPACE_IDENTIFIER");
   IElementType NODE_TYPE = new CndElementType("NODE_TYPE");
   IElementType OPTIONS = new CndElementType("OPTIONS");
   IElementType PROPERTY = new CndElementType("PROPERTY");
@@ -74,6 +75,9 @@ public interface CndTypes {
       }
       else if (type == NAMESPACE) {
         return new CndNamespaceImpl(node);
+      }
+      else if (type == NAMESPACE_IDENTIFIER) {
+        return new CndNamespaceIdentifierImpl(node);
       }
       else if (type == NODE_TYPE) {
         return new CndNodeTypeImpl(node);
