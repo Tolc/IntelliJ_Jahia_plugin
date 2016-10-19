@@ -35,7 +35,7 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 
 //See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
 
-%state NAMESPACE, NODETYPE_NAMESPACE, NODETYPE, SUPER_TYPES_NAMESPACE, SUPER_TYPES, OPTIONS
+%state NAMESPACE, NODETYPE_NAMESPACE, NODETYPE, SUPER_TYPES_NAMESPACE, SUPER_TYPES, SUPER_TYPES_NAME, OPTIONS
 %state EXTENDS, EXTEND_NAMESPACE, EXTEND, ITEMTYPE
 %state PROPERTY, PROPERTY_TYPE, PROPERTY_MASK_OPTION_NAME, PROPERTY_MASK, PROPERTY_MASK_OPTION, PROPERTY_DEFAULT, PROPERTY_DEFAULT_VALUE, PROPERTY_ATTRIBUTES, PROPERTY_CONSTRAINT, PROPERTY_CONSTRAINT_NEWLINE
 %state NODE, NODE_NAMESPACE, NODE_NODETYPE, NODE_DEFAULT, NODE_DEFAULT_VALUE_NAMESPACE, NODE_DEFAULT_VALUE, NODE_ATTRIBUTES
@@ -77,9 +77,13 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 }
 <SUPER_TYPES> {
 	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
-	":"											{ return CndTypes.COLON; }
-	{CHARS}										{ return CndTypes.NODE_TYPE_NAME; }
+	":"											{ yybegin(SUPER_TYPES_NAME); return CndTypes.COLON; }
+//	{CHARS}									    { return CndTypes.NODE_TYPE_NAME; }
 	","											{ yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.COMMA; }
+}
+<SUPER_TYPES_NAME> {
+    {CHARS}									    { yybegin(SUPER_TYPES); return CndTypes.NODE_TYPE_NAME; }
+    {CRLF}									    { yybegin(YYINITIAL); yypushback(yylength()); return CndTypes.NODE_TYPE_NAME; }     //For completion purposes
 }
 
 //Node type options "mixin", "orderable", "abstract", ... at the end of line or on a new line
@@ -135,7 +139,8 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 	"["											{ yybegin(PROPERTY_MASK_OPTION_NAME); return CndTypes.LEFT_BRACKET; }
 	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
 }
-<PROPERTY_MASK_OPTION_NAME> "resourceBundle"|"country"|"templates"|"templatesNode"|"users"|"nodetypes"|"subnodetypes"|"nodes"|"menus"|"script"|"flag"|"sortableFieldnames"|"moduleImage"|"linkerProps"|"workflow"|"workflowTypes"|"sort"|"componenttypes"|"autoSelectParent"|"type"|"image"|"dependentProperties"|"mime"|"renderModes"|"permissions"|"autocomplete"|"separator"|"folder"|"root"		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
+//<PROPERTY_MASK_OPTION_NAME> "resourceBundle"|"country"|"templates"|"templatesNode"|"users"|"nodetypes"|"subnodetypes"|"nodes"|"menus"|"script"|"flag"|"sortableFieldnames"|"moduleImage"|"linkerProps"|"workflow"|"workflowTypes"|"sort"|"componenttypes"|"autoSelectParent"|"type"|"image"|"dependentProperties"|"mime"|"renderModes"|"permissions"|"autocomplete"|"separator"|"folder"|"root"		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
+<PROPERTY_MASK_OPTION_NAME> [:jletter:]+		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
 <PROPERTY_MASK_OPTION> {
 	"="											{ return CndTypes.EQUAL; }
 	"'"[^\r\n\]']+"'" | [^\r\n\ \]=)',]+		{ return CndTypes.PROPERTY_MASK_OPTION_VALUE; }

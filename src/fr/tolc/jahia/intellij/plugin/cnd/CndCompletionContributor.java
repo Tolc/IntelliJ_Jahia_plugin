@@ -36,25 +36,29 @@ public class CndCompletionContributor extends CompletionContributor {
                 }
         );
 
-        extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement(CndTypes.NODE_TYPE_NAME).withLanguage(CndLanguage.INSTANCE),
-                new CompletionProvider<CompletionParameters>() {
-                    public void addCompletions(@NotNull CompletionParameters parameters,
-                                               ProcessingContext context,
-                                               @NotNull CompletionResultSet resultSet) {
+//        extend(CompletionType.BASIC,
+//                PlatformPatterns.psiElement(CndTypes.NODE_TYPE_NAME).withLanguage(CndLanguage.INSTANCE),
+//                new CompletionProvider<CompletionParameters>() {
+//                    public void addCompletions(@NotNull CompletionParameters parameters,
+//                                               ProcessingContext context,
+//                                               @NotNull CompletionResultSet resultSet) {
+//                        PsiElement colon = parameters.getPosition().getPrevSibling();
+//                        if (colon != null) {
+//                            PsiElement namespace = colon.getPrevSibling();
+//
+//                            if (namespace != null) {
+//                                Project project = parameters.getPosition().getProject();
+//                                List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace.getText());
+//                                for (CndNodeType nodeType : nodeTypes) {
+//                                    resultSet.addElement(LookupElementBuilder.create(nodeType.getNodeTypeName()));
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//        );
 
-                        Project project = parameters.getPosition().getProject();
-                        //TODO: check for NPE
-                        PsiElement namespace = parameters.getPosition().getPrevSibling().getPrevSibling();
-
-                        List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace.getText());
-                        for (CndNodeType nodeType : nodeTypes) {
-                            resultSet.addElement(LookupElementBuilder.create(nodeType.getNodeTypeName()));
-                        }
-                    }
-                }
-        );
-
+        //Property type
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement(CndTypes.PROPERTY_TYPE).withLanguage(CndLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {
@@ -68,6 +72,7 @@ public class CndCompletionContributor extends CompletionContributor {
                 }
         );
 
+        //Property type mask
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement(CndTypes.PROPERTY_MASK).withLanguage(CndLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {
@@ -81,6 +86,7 @@ public class CndCompletionContributor extends CompletionContributor {
                 }
         );
 
+        //Property type mask option
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement(CndTypes.PROPERTY_MASK_OPTION).withLanguage(CndLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {
