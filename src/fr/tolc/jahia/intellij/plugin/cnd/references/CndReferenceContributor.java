@@ -7,7 +7,6 @@ import com.intellij.psi.PsiReferenceContributor;
 import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.psi.xml.XmlElementType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
-import fr.tolc.jahia.intellij.plugin.cnd.references.referenceProviders.CndReferenceProvider;
 import org.jetbrains.annotations.NotNull;
 
 public class CndReferenceContributor extends PsiReferenceContributor {

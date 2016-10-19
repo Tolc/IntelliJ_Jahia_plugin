@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd.references;
+package fr.tolc.jahia.intellij.plugin.cnd.references.types;
 
 import java.util.ArrayList;
 import java.util.List;

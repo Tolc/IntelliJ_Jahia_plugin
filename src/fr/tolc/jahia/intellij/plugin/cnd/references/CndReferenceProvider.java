@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd.references.referenceProviders;
+package fr.tolc.jahia.intellij.plugin.cnd.references;
 
 import com.intellij.lang.properties.psi.impl.PropertyKeyImpl;
 import com.intellij.openapi.util.TextRange;
@@ -15,9 +15,9 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeDefaultType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperType;
-import fr.tolc.jahia.intellij.plugin.cnd.references.CndNamespaceIdentifierReference;
-import fr.tolc.jahia.intellij.plugin.cnd.references.CndNodeTypeIdentifierReference;
-import fr.tolc.jahia.intellij.plugin.cnd.references.CndPropertyIdentifierReference;
+import fr.tolc.jahia.intellij.plugin.cnd.references.types.CndNamespaceIdentifierReference;
+import fr.tolc.jahia.intellij.plugin.cnd.references.types.CndNodeTypeIdentifierReference;
+import fr.tolc.jahia.intellij.plugin.cnd.references.types.CndPropertyIdentifierReference;
 import org.jetbrains.annotations.NotNull;
 
 public class CndReferenceProvider extends PsiReferenceProvider {
