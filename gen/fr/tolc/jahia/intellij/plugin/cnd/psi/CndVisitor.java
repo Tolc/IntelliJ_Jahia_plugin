@@ -4,6 +4,7 @@ package fr.tolc.jahia.intellij.plugin.cnd.psi;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndPropertyIdentifierElement;
 
 public class CndVisitor extends PsiElementVisitor {
 
@@ -47,6 +48,10 @@ public class CndVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitPropertyIdentifier(@NotNull CndPropertyIdentifier o) {
+    visitPropertyIdentifierElement(o);
+  }
+
   public void visitSubNode(@NotNull CndSubNode o) {
     visitPsiElement(o);
   }
@@ -84,6 +89,10 @@ public class CndVisitor extends PsiElementVisitor {
   }
 
   public void visitPropertyElement(@NotNull CndPropertyElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyIdentifierElement(@NotNull CndPropertyIdentifierElement o) {
     visitPsiElement(o);
   }
 

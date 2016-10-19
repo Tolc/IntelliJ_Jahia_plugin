@@ -19,6 +19,9 @@ public interface CndProperty extends CndPropertyElement {
   @Nullable
   CndPropertyDefault getPropertyDefault();
 
+  @NotNull
+  CndPropertyIdentifier getPropertyIdentifier();
+
   String getPropertyName();
 
   PsiElement setPropertyName(String newName);
@@ -27,12 +30,6 @@ public interface CndProperty extends CndPropertyElement {
 
   PropertyTypeMaskEnum getTypeMask();
 
-  PsiElement getNameIdentifier();
-
   ItemPresentation getPresentation();
-
-  String getName();
-
-  PsiElement setName(String newName);
 
 }

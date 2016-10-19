@@ -8,18 +8,19 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.impl.CndPropertyIdentifierElementImpl;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.util.CndPsiImplUtil;
 import com.intellij.navigation.ItemPresentation;
 
-public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndNamespace {
+public class CndPropertyIdentifierImpl extends CndPropertyIdentifierElementImpl implements CndPropertyIdentifier {
 
-  public CndNamespaceImpl(ASTNode node) {
+  public CndPropertyIdentifierImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CndVisitor visitor) {
-    visitor.visitNamespace(this);
+    visitor.visitPropertyIdentifier(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -27,16 +28,12 @@ public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndName
     else super.accept(visitor);
   }
 
-  public String getNamespaceName() {
-    return CndPsiImplUtil.getNamespaceName(this);
+  public String getPropertyName() {
+    return CndPsiImplUtil.getPropertyName(this);
   }
 
-  public PsiElement setNamespaceName(String newName) {
-    return CndPsiImplUtil.setNamespaceName(this, newName);
-  }
-
-  public String getNamespaceURI() {
-    return CndPsiImplUtil.getNamespaceURI(this);
+  public PsiElement setPropertyName(String newName) {
+    return CndPsiImplUtil.setPropertyName(this, newName);
   }
 
   public PsiElement getNameIdentifier() {
@@ -53,6 +50,10 @@ public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndName
 
   public PsiElement setName(String newName) {
     return CndPsiImplUtil.setName(this, newName);
+  }
+
+  public CndProperty getProperty() {
+    return CndPsiImplUtil.getProperty(this);
   }
 
 }

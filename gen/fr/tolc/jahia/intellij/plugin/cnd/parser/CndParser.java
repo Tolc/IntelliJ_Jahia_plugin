@@ -53,6 +53,9 @@ public class CndParser implements PsiParser, LightPsiParser {
     else if (t == PROPERTY_DEFAULT) {
       r = propertyDefault(b, 0);
     }
+    else if (t == PROPERTY_IDENTIFIER) {
+      r = propertyIdentifier(b, 0);
+    }
     else if (t == SUB_NODE) {
       r = subNode(b, 0);
     }
@@ -497,13 +500,14 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MINUS PROPERTY_NAME [propertyType] [propertyDefault] [propertyAttributes] [propertyConstraint]
+  // MINUS propertyIdentifier [propertyType] [propertyDefault] [propertyAttributes] [propertyConstraint]
   public static boolean property(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "property")) return false;
     if (!nextTokenIs(b, MINUS)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, MINUS, PROPERTY_NAME);
+    r = consumeToken(b, MINUS);
+    r = r && propertyIdentifier(b, l + 1);
     r = r && property_2(b, l + 1);
     r = r && property_3(b, l + 1);
     r = r && property_4(b, l + 1);
@@ -579,6 +583,18 @@ public class CndParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, EQUAL, PROPERTY_DEFAULT_VALUE);
     exit_section_(b, m, PROPERTY_DEFAULT, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // PROPERTY_NAME
+  public static boolean propertyIdentifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyIdentifier")) return false;
+    if (!nextTokenIs(b, PROPERTY_NAME)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PROPERTY_NAME);
+    exit_section_(b, m, PROPERTY_IDENTIFIER, r);
     return r;
   }
 

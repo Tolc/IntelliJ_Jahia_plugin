@@ -12,7 +12,7 @@
   elementTypeClass="fr.tolc.jahia.intellij.plugin.cnd.psi.CndElementType"
   tokenTypeClass="fr.tolc.jahia.intellij.plugin.cnd.psi.CndTokenType"
 
-  psiImplUtilClass="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndPsiImplUtil"
+  psiImplUtilClass="fr.tolc.jahia.intellij.plugin.cnd.psi.util.CndPsiImplUtil"
 }
 
 cnd ::= (COMMENT|CRLF)* (namespace CRLF)* (nodeType | COMMENT | CRLF)*
@@ -49,10 +49,14 @@ itemType ::= ITEMTYPE EQUAL ITEMTYPE_TYPE
 
 
 
-property ::= MINUS PROPERTY_NAME [propertyType] [propertyDefault] [propertyAttributes] [propertyConstraint]
+property ::= MINUS propertyIdentifier [propertyType] [propertyDefault] [propertyAttributes] [propertyConstraint]
 { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndPropertyElementImpl"
   implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyElement"
-  methods=[getPropertyName setPropertyName getType getTypeMask getNameIdentifier getPresentation getName setName] }
+  methods=[getPropertyName setPropertyName getType getTypeMask getPresentation] }
+propertyIdentifier ::= PROPERTY_NAME
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.impl.CndPropertyIdentifierElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndPropertyIdentifierElement"
+  methods=[getPropertyName setPropertyName getNameIdentifier getPresentation getName setName getProperty] }
 private propertyType ::= LEFT_PARENTHESIS PROPERTY_TYPE [COMMA PROPERTY_MASK [propertyMaskOptions]] RIGHT_PARENTHESIS
 private propertyMaskOptions ::= LEFT_BRACKET propertyMaskOption (COMMA propertyMaskOption)* RIGHT_BRACKET 
 private propertyMaskOption ::= PROPERTY_MASK_OPTION [EQUAL PROPERTY_MASK_OPTION_VALUE]

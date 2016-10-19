@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
+package fr.tolc.jahia.intellij.plugin.cnd.psi.util;
 
 import java.util.List;
 
@@ -18,6 +18,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeDefaultType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperType;
@@ -181,19 +182,17 @@ public class CndPsiImplUtil {
 
     //Property
     public static String getPropertyName(CndProperty element) {
-        ASTNode nameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
-        if (nameNode != null) {
-            return nameNode.getText();
+        CndPropertyIdentifier propertyIdentifier = element.getPropertyIdentifier();
+        if (propertyIdentifier != null) {
+            return propertyIdentifier.getPropertyName();
         }
         return null;
     }
 
     public static PsiElement setPropertyName(CndProperty element, String newName) {
-        ASTNode nameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
-        if (nameNode != null) {
-            CndProperty property = CndElementFactory.createProperty(element.getProject(), newName);
-            ASTNode newPropertyNameNode = property.getNode().findChildByType(CndTypes.PROPERTY_NAME);
-            element.getNode().replaceChild(nameNode, newPropertyNameNode);
+        CndPropertyIdentifier propertyIdentifier = element.getPropertyIdentifier();
+        if (propertyIdentifier != null) {
+            return propertyIdentifier.setPropertyName(newName);
         }
         return element;
     }
@@ -222,23 +221,6 @@ public class CndPsiImplUtil {
         return null;
     }
 
-    public static PsiElement getNameIdentifier(CndProperty element) {
-        ASTNode propertyNameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
-        if (propertyNameNode != null) {
-            return propertyNameNode.getPsi();
-        } else {
-            return null;
-        }
-    }
-
-    public static PsiElement setName(CndProperty element, String newName) {
-        return setPropertyName(element, newName);
-    }
-
-    public static String getName(CndProperty element) {
-        return getPropertyName(element);
-    }
-
     public static ItemPresentation getPresentation(final CndProperty element) {
         return new ItemPresentation() {
             @Nullable
@@ -262,6 +244,52 @@ public class CndPsiImplUtil {
         };
     }
 
+    
+    
+    //Property Identifier
+    public static String getPropertyName(CndPropertyIdentifier element) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
+        if (nameNode != null) {
+            return nameNode.getText();
+        }
+        return null;
+    }
+
+    public static PsiElement setPropertyName(CndPropertyIdentifier element, String newName) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
+        if (nameNode != null) {
+            CndProperty property = CndElementFactory.createProperty(element.getProject(), newName);
+            ASTNode newPropertyNameNode = property.getPropertyIdentifier().getNode().findChildByType(CndTypes.PROPERTY_NAME);
+            element.getNode().replaceChild(nameNode, newPropertyNameNode);
+        }
+        return element;
+    }
+
+    public static PsiElement getNameIdentifier(CndPropertyIdentifier element) {
+        ASTNode propertyNameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
+        if (propertyNameNode != null) {
+            return propertyNameNode.getPsi();
+        } else {
+            return null;
+        }
+    }
+
+    public static PsiElement setName(CndPropertyIdentifier element, String newName) {
+        return setPropertyName(element, newName);
+    }
+
+    public static String getName(CndPropertyIdentifier element) {
+        return getPropertyName(element);
+    }
+
+    public static CndProperty getProperty(CndPropertyIdentifier element) {
+        return (CndProperty) element.getParent();
+    }
+    
+    public static ItemPresentation getPresentation(final CndPropertyIdentifier element) {
+        return getPresentation(getProperty(element));
+    }
+    
 
 
     //SuperType

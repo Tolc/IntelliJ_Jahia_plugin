@@ -17,7 +17,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperType;
 import fr.tolc.jahia.intellij.plugin.cnd.references.CndNamespaceReference;
 import fr.tolc.jahia.intellij.plugin.cnd.references.CndNodeTypeReference;
-import fr.tolc.jahia.intellij.plugin.cnd.references.CndPropertyReference;
+import fr.tolc.jahia.intellij.plugin.cnd.references.CndPropertyIdentifierReference;
 import org.jetbrains.annotations.NotNull;
 
 public class CndReferenceProvider extends PsiReferenceProvider {
@@ -26,6 +26,7 @@ public class CndReferenceProvider extends PsiReferenceProvider {
     @Override
     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
         if (element instanceof PropertyKeyImpl) {
+            //Properties files
             String key = element.getText();
 
             PropertiesFileCndKeyModel cndKeyModel = null;
@@ -47,7 +48,7 @@ public class CndReferenceProvider extends PsiReferenceProvider {
                 
                 if (cndKeyModel.isProperty() || cndKeyModel.isChoicelistElement() || cndKeyModel.isPropertyTooltip()) {
                     String propertyName = cndKeyModel.getPropertyName();
-                    CndPropertyReference propertyReference = new CndPropertyReference(element, new TextRange(namespace.length() + 1 + nodeTypeName.length() + 1, namespace.length() + 1 + nodeTypeName.length() + 1 + propertyName.length()), namespace, nodeTypeName, propertyName);
+                    CndPropertyIdentifierReference propertyReference = new CndPropertyIdentifierReference(element, new TextRange(namespace.length() + 1 + nodeTypeName.length() + 1, namespace.length() + 1 + nodeTypeName.length() + 1 + propertyName.length()), namespace, nodeTypeName, propertyName, true);
                     psiReferences[2] = propertyReference;
                 }
                 return psiReferences;

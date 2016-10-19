@@ -8,7 +8,7 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.tree.TokenSet;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +19,7 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     public WordsScanner getWordsScanner() {
         return new DefaultWordsScanner(
                 new CndLexerAdapter(),
-                TokenSet.create(CndTypes.NODE_TYPE, CndTypes.NAMESPACE),
+                TokenSet.EMPTY,
                 TokenSet.create(CndTypes.COMMENT),
                 TokenSet.EMPTY
                 );
@@ -43,7 +43,7 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
             return "Node type";
         } else if (element instanceof CndNamespace) {
             return "Namespace";
-        } else if (element instanceof CndProperty) {
+        } else if (element instanceof CndPropertyIdentifier) {
             return "Property";
         }
         return "";
@@ -56,8 +56,8 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
             return ((CndNodeType) element).getNodeTypeName();
         } else if (element instanceof CndNamespace) {
             return ((CndNamespace) element).getNamespaceName();
-        } else if (element instanceof CndProperty) {
-            return ((CndProperty) element).getPropertyName();
+        } else if (element instanceof CndPropertyIdentifier) {
+            return ((CndPropertyIdentifier) element).getPropertyName();
         }        
         return "";
     }
@@ -69,8 +69,9 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
             return ((CndNodeType) element).getNodeTypeNamespace() + ":" + ((CndNodeType) element).getNodeTypeName();
         } else if (element instanceof CndNamespace) {
             return ((CndNamespace) element).getNamespaceName() + " = '" + ((CndNamespace) element).getNamespaceURI() + "'";
-        }else if (element instanceof CndProperty) {
-            return ((CndProperty) element).getPropertyName() + " (" + ((CndProperty) element).getType() + ", " + ((CndProperty) element).getTypeMask() +  ")";
+        }else if (element instanceof CndPropertyIdentifier) {
+            CndPropertyIdentifier id = ((CndPropertyIdentifier) element);
+            return id.getPropertyName() + " (" + id.getProperty().getType() + ", " + id.getProperty().getTypeMask() +  ")";
         }
         return "";
     }

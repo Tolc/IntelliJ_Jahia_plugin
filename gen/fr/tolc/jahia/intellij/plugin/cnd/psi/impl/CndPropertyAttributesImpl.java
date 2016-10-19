@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.util.CndPsiImplUtil;
 
 public class CndPropertyAttributesImpl extends ASTWrapperPsiElement implements CndPropertyAttributes {
 
