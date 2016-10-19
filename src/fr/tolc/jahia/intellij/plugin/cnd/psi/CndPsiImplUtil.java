@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
+package fr.tolc.jahia.intellij.plugin.cnd.psi;
 
 import java.util.List;
 
@@ -13,36 +13,17 @@ import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import fr.tolc.jahia.intellij.plugin.cnd.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndElementFactory;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeDefaultType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.Nullable;
 
 public class CndPsiImplUtil {
 
     //Namespace
     public static String getNamespaceName(CndNamespace element) {
-        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
-        if (nameNode != null) {
-            return nameNode.getText();
-        }
-        return null;
+        return element.getNamespaceIdentifier().getNamespaceName();
     }
 
     public static PsiElement setNamespaceName(CndNamespace element, String newName) {
-        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
-        if (nameNode != null) {
-            CndNodeType namespace = CndElementFactory.createNamespace(element.getProject(), newName);
-            ASTNode newNamespaceNode = namespace.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
-            element.getNode().replaceChild(nameNode, newNamespaceNode);
-        }
-        return element;
+        return element.getNamespaceIdentifier().setNamespaceName(newName);
     }
 
     public static String getNamespaceURI(CndNamespace element) {
@@ -51,23 +32,6 @@ public class CndPsiImplUtil {
             return uriNode.getText();
         }
         return null;
-    }
-
-    public static PsiElement getNameIdentifier(CndNamespace element) {
-        ASTNode namespaceNameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
-        if (namespaceNameNode != null) {
-            return namespaceNameNode.getPsi();
-        } else {
-            return null;
-        }
-    }
-
-    public static PsiElement setName(CndNamespace element, String newName) {
-        return setNamespaceName(element, newName);
-    }
-
-    public static String getName(CndNamespace element) {
-        return getNamespaceName(element);
     }
 
     public static ItemPresentation getPresentation(final CndNamespace element) {
@@ -95,28 +59,61 @@ public class CndPsiImplUtil {
 
 
 
-    //NodeType
-    public static String getNodeTypeName(CndNodeType element) {
-        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
+    //Namespace Identifier
+    public static String getNamespaceName(CndNamespaceIdentifier element) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
         if (nameNode != null) {
             return nameNode.getText();
         }
         return null;
     }
 
-    public static PsiElement setNodeTypeName(CndNodeType element, String newName) {
-        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
+    public static PsiElement setNamespaceName(CndNamespaceIdentifier element, String newName) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
         if (nameNode != null) {
-            ASTNode namespaceNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
-            String namespace = "dummyNameSpace";
-            if (namespaceNode != null) {
-                namespace = namespaceNode.getText();
-            }
-            CndNodeType nodeType = CndElementFactory.createNodeType(element.getProject(), newName, namespace);
-            ASTNode newNodeTypeNode = nodeType.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
-            element.getNode().replaceChild(nameNode, newNodeTypeNode);
+            CndNamespace namespace = CndElementFactory.createNamespace(element.getProject(), newName);
+            ASTNode newNamespaceNode = namespace.getNamespaceIdentifier().getNode().findChildByType(CndTypes.NAMESPACE_NAME);
+            element.getNode().replaceChild(nameNode, newNamespaceNode);
         }
         return element;
+    }
+
+    public static PsiElement getNameIdentifier(CndNamespaceIdentifier element) {
+        ASTNode namespaceNameNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
+        if (namespaceNameNode != null) {
+            return namespaceNameNode.getPsi();
+        } else {
+            return null;
+        }
+    }
+
+    public static PsiElement setName(CndNamespaceIdentifier element, String newName) {
+        return setNamespaceName(element, newName);
+    }
+
+    public static String getName(CndNamespaceIdentifier element) {
+        return getNamespaceName(element);
+    }
+
+    public static CndNamespace getNamespace(CndNamespaceIdentifier element) {
+        return (CndNamespace) element.getParent();
+    }
+
+    public static ItemPresentation getPresentation(final CndNamespaceIdentifier element) {
+        return element.getNamespace().getPresentation();
+    }
+    
+    
+
+
+
+    //NodeType
+    public static String getNodeTypeName(CndNodeType element) {
+        return element.getNodeTypeIdentifier().getNodeTypeName();
+    }
+
+    public static PsiElement setNodeTypeName(CndNodeType element, String newName) {
+        return element.getNodeTypeIdentifier().setNodeTypeName(newName);
     }
 
     public static String getNodeTypeNamespace(CndNodeType element) {
@@ -135,23 +132,6 @@ public class CndPsiImplUtil {
             }
         }
         return null;
-    }
-
-    public static PsiElement getNameIdentifier(CndNodeType element) {
-        ASTNode nodeTypeNameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
-        if (nodeTypeNameNode != null) {
-            return nodeTypeNameNode.getPsi();
-        } else {
-            return null;
-        }
-    }
-
-    public static PsiElement setName(CndNodeType element, String newName) {
-        return setNodeTypeName(element, newName);
-    }
-
-    public static String getName(CndNodeType element) {
-        return getNodeTypeName(element);
     }
 
     public static ItemPresentation getPresentation(final CndNodeType element) {
@@ -179,23 +159,61 @@ public class CndPsiImplUtil {
 
 
 
-    //Property
-    public static String getPropertyName(CndProperty element) {
-        ASTNode nameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
+    //NodeType Identifier
+    public static String getNodeTypeName(CndNodeTypeIdentifier element) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
         if (nameNode != null) {
             return nameNode.getText();
         }
         return null;
     }
 
-    public static PsiElement setPropertyName(CndProperty element, String newName) {
-        ASTNode nameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
+    public static PsiElement setNodeTypeName(CndNodeTypeIdentifier element, String newName) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
         if (nameNode != null) {
-            CndProperty property = CndElementFactory.createProperty(element.getProject(), newName);
-            ASTNode newPropertyNameNode = property.getNode().findChildByType(CndTypes.PROPERTY_NAME);
-            element.getNode().replaceChild(nameNode, newPropertyNameNode);
+            CndNodeType nodeType = CndElementFactory.createNodeType(element.getProject(), newName);
+            ASTNode newNodeTypeNode = nodeType.getNodeTypeIdentifier().getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
+            element.getNode().replaceChild(nameNode, newNodeTypeNode);
         }
         return element;
+    }
+
+    public static PsiElement getNameIdentifier(CndNodeTypeIdentifier element) {
+        ASTNode nodeTypeNameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
+        if (nodeTypeNameNode != null) {
+            return nodeTypeNameNode.getPsi();
+        } else {
+            return null;
+        }
+    }
+
+    public static PsiElement setName(CndNodeTypeIdentifier element, String newName) {
+        return setNodeTypeName(element, newName);
+    }
+
+    public static String getName(CndNodeTypeIdentifier element) {
+        return getNodeTypeName(element);
+    }
+    
+    public static CndNodeType getNodeType(CndNodeTypeIdentifier element) {
+        return (CndNodeType) element.getParent();
+    }
+
+    public static ItemPresentation getPresentation(final CndNodeTypeIdentifier element) {
+        return element.getNodeType().getPresentation();
+    }
+    
+    
+    
+
+
+    //Property
+    public static String getPropertyName(CndProperty element) {
+        return element.getPropertyIdentifier().getPropertyName();
+    }
+
+    public static PsiElement setPropertyName(CndProperty element, String newName) {
+        return element.getPropertyIdentifier().setPropertyName(newName);
     }
 
     public static PropertyTypeEnum getType(CndProperty element) {
@@ -222,23 +240,6 @@ public class CndPsiImplUtil {
         return null;
     }
 
-    public static PsiElement getNameIdentifier(CndProperty element) {
-        ASTNode propertyNameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
-        if (propertyNameNode != null) {
-            return propertyNameNode.getPsi();
-        } else {
-            return null;
-        }
-    }
-
-    public static PsiElement setName(CndProperty element, String newName) {
-        return setPropertyName(element, newName);
-    }
-
-    public static String getName(CndProperty element) {
-        return getPropertyName(element);
-    }
-
     public static ItemPresentation getPresentation(final CndProperty element) {
         return new ItemPresentation() {
             @Nullable
@@ -262,6 +263,52 @@ public class CndPsiImplUtil {
         };
     }
 
+    
+    
+    //Property Identifier
+    public static String getPropertyName(CndPropertyIdentifier element) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
+        if (nameNode != null) {
+            return nameNode.getText();
+        }
+        return null;
+    }
+
+    public static PsiElement setPropertyName(CndPropertyIdentifier element, String newName) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
+        if (nameNode != null) {
+            CndProperty property = CndElementFactory.createProperty(element.getProject(), newName);
+            ASTNode newPropertyNameNode = property.getPropertyIdentifier().getNode().findChildByType(CndTypes.PROPERTY_NAME);
+            element.getNode().replaceChild(nameNode, newPropertyNameNode);
+        }
+        return element;
+    }
+
+    public static PsiElement getNameIdentifier(CndPropertyIdentifier element) {
+        ASTNode propertyNameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
+        if (propertyNameNode != null) {
+            return propertyNameNode.getPsi();
+        } else {
+            return null;
+        }
+    }
+
+    public static PsiElement setName(CndPropertyIdentifier element, String newName) {
+        return setPropertyName(element, newName);
+    }
+
+    public static String getName(CndPropertyIdentifier element) {
+        return getPropertyName(element);
+    }
+
+    public static CndProperty getProperty(CndPropertyIdentifier element) {
+        return (CndProperty) element.getParent();
+    }
+    
+    public static ItemPresentation getPresentation(final CndPropertyIdentifier element) {
+        return element.getProperty().getPresentation();
+    }
+    
 
 
     //SuperType
@@ -278,6 +325,7 @@ public class CndPsiImplUtil {
     public static PsiReference[] getReferences(CndSubNodeType element) {
         return ReferenceProvidersRegistry.getReferencesFromProviders(element);
     }
+    
     //SubNodeDefaultType
     public static PsiReference[] getReferences(CndSubNodeDefaultType element) {
         return ReferenceProvidersRegistry.getReferencesFromProviders(element);

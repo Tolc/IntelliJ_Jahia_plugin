@@ -12,12 +12,15 @@ public interface CndTypes {
   IElementType EXTENSIONS = new CndElementType("EXTENSIONS");
   IElementType ITEM_TYPE = new CndElementType("ITEM_TYPE");
   IElementType NAMESPACE = new CndElementType("NAMESPACE");
+  IElementType NAMESPACE_IDENTIFIER = new CndElementType("NAMESPACE_IDENTIFIER");
   IElementType NODE_TYPE = new CndElementType("NODE_TYPE");
+  IElementType NODE_TYPE_IDENTIFIER = new CndElementType("NODE_TYPE_IDENTIFIER");
   IElementType OPTIONS = new CndElementType("OPTIONS");
   IElementType PROPERTY = new CndElementType("PROPERTY");
   IElementType PROPERTY_ATTRIBUTES = new CndElementType("PROPERTY_ATTRIBUTES");
   IElementType PROPERTY_CONSTRAINT = new CndElementType("PROPERTY_CONSTRAINT");
   IElementType PROPERTY_DEFAULT = new CndElementType("PROPERTY_DEFAULT");
+  IElementType PROPERTY_IDENTIFIER = new CndElementType("PROPERTY_IDENTIFIER");
   IElementType SUB_NODE = new CndElementType("SUB_NODE");
   IElementType SUB_NODE_ATTRIBUTES = new CndElementType("SUB_NODE_ATTRIBUTES");
   IElementType SUB_NODE_DEFAULT_TYPE = new CndElementType("SUB_NODE_DEFAULT_TYPE");
@@ -74,8 +77,14 @@ public interface CndTypes {
       else if (type == NAMESPACE) {
         return new CndNamespaceImpl(node);
       }
+      else if (type == NAMESPACE_IDENTIFIER) {
+        return new CndNamespaceIdentifierImpl(node);
+      }
       else if (type == NODE_TYPE) {
         return new CndNodeTypeImpl(node);
+      }
+      else if (type == NODE_TYPE_IDENTIFIER) {
+        return new CndNodeTypeIdentifierImpl(node);
       }
       else if (type == OPTIONS) {
         return new CndOptionsImpl(node);
@@ -91,6 +100,9 @@ public interface CndTypes {
       }
       else if (type == PROPERTY_DEFAULT) {
         return new CndPropertyDefaultImpl(node);
+      }
+      else if (type == PROPERTY_IDENTIFIER) {
+        return new CndPropertyIdentifierImpl(node);
       }
       else if (type == SUB_NODE) {
         return new CndSubNodeImpl(node);

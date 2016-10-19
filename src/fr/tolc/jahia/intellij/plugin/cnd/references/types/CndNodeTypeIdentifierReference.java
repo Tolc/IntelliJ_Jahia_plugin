@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd.references;
+package fr.tolc.jahia.intellij.plugin.cnd.references.types;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +19,11 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CndNodeTypeReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
+public class CndNodeTypeIdentifierReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
     private String namespace;
     private String nodeType;
 
-    public CndNodeTypeReference(@NotNull PsiElement element, TextRange textRange, String namespace, String nodeType) {
+    public CndNodeTypeIdentifierReference(@NotNull PsiElement element, TextRange textRange, String namespace, String nodeType) {
         super(element, textRange);
         this.namespace = namespace;
         this.nodeType = nodeType;
@@ -44,7 +44,7 @@ public class CndNodeTypeReference extends PsiReferenceBase<PsiElement> implement
         List<LookupElement> variants = new ArrayList<LookupElement>();
         for (final CndNodeType cndNodeType : nodeTypes) {
             if (StringUtils.isNotBlank(cndNodeType.getNodeTypeName())) {
-                variants.add(LookupElementBuilder.create(cndNodeType).withIcon(CndIcons.FILE).withTypeText(cndNodeType.getContainingFile().getName()));
+                variants.add(LookupElementBuilder.create(cndNodeType.getNodeTypeIdentifier()).withIcon(CndIcons.FILE).withTypeText(cndNodeType.getContainingFile().getName()));
             }
         }
         return variants.toArray();
@@ -57,7 +57,7 @@ public class CndNodeTypeReference extends PsiReferenceBase<PsiElement> implement
         List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project, namespace, nodeType);
         List<ResolveResult> results = new ArrayList<ResolveResult>();
         for (CndNodeType cndNodeType : nodeTypes) {
-            results.add(new PsiElementResolveResult(cndNodeType));
+            results.add(new PsiElementResolveResult(cndNodeType.getNodeTypeIdentifier()));
         }
         return results.toArray(new ResolveResult[results.size()]);
     }

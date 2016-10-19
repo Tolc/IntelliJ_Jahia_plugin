@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd.references;
+package fr.tolc.jahia.intellij.plugin.cnd.references.types;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +20,25 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CndPropertyReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
+public class CndPropertyIdentifierReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
     private String namespace;
     private String nodeType;
     private String propertyName;
+    private boolean forPropertiesFile = false;
 
-    public CndPropertyReference(@NotNull PsiElement element, TextRange textRange, String namespace, String nodeType, String propertyName) {
+    public CndPropertyIdentifierReference(@NotNull PsiElement element, TextRange textRange, String namespace, String nodeType, String propertyName) {
         super(element, textRange);
         this.namespace = namespace;
         this.nodeType = nodeType;
         this.propertyName = propertyName;
+    }
+
+    public CndPropertyIdentifierReference(@NotNull PsiElement element, TextRange textRange, String namespace, String nodeType, String propertyName, boolean forPropertiesFile) {
+        super(element, textRange);
+        this.namespace = namespace;
+        this.nodeType = nodeType;
+        this.propertyName = propertyName;
+        this.forPropertiesFile = forPropertiesFile;
     }
 
     @Nullable
@@ -49,7 +58,11 @@ public class CndPropertyReference extends PsiReferenceBase<PsiElement> implement
             List<CndProperty> properties = cndNodeType.getPropertyList();
             for (final CndProperty property : properties) {
                 if (StringUtils.isNotBlank(property.getPropertyName())) {
-                    variants.add(LookupElementBuilder.create(property.getPropertyName().replace(':', '_')).withIcon(CndIcons.FILE).withTypeText(property.getContainingFile().getName()));
+                    if (forPropertiesFile) {
+                        variants.add(LookupElementBuilder.create(property.getPropertyName().replace(':', '_')).withIcon(CndIcons.FILE).withTypeText(property.getContainingFile().getName()));
+                    } else {
+                        variants.add(LookupElementBuilder.create(property.getPropertyIdentifier()).withIcon(CndIcons.FILE).withTypeText(property.getContainingFile().getName()));
+                    }
                 }
             }
         }
@@ -63,7 +76,7 @@ public class CndPropertyReference extends PsiReferenceBase<PsiElement> implement
         List<CndProperty> properties = CndUtil.findProperties(project, namespace, nodeType, propertyName);
         List<ResolveResult> results = new ArrayList<ResolveResult>();
         for (CndProperty property : properties) {
-            results.add(new PsiElementResolveResult(property));
+            results.add(new PsiElementResolveResult(property.getPropertyIdentifier()));
         }
         return results.toArray(new ResolveResult[results.size()]);
     }

@@ -1,15 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package fr.tolc.jahia.intellij.plugin.cnd.parser;
 
+import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.LightPsiParser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
-import com.intellij.lang.LightPsiParser;
+import com.intellij.psi.tree.IElementType;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class CndParser implements PsiParser, LightPsiParser {
@@ -35,8 +35,14 @@ public class CndParser implements PsiParser, LightPsiParser {
     else if (t == NAMESPACE) {
       r = namespace(b, 0);
     }
+    else if (t == NAMESPACE_IDENTIFIER) {
+      r = namespaceIdentifier(b, 0);
+    }
     else if (t == NODE_TYPE) {
       r = nodeType(b, 0);
+    }
+    else if (t == NODE_TYPE_IDENTIFIER) {
+      r = nodeTypeIdentifier(b, 0);
     }
     else if (t == OPTIONS) {
       r = options(b, 0);
@@ -52,6 +58,9 @@ public class CndParser implements PsiParser, LightPsiParser {
     }
     else if (t == PROPERTY_DEFAULT) {
       r = propertyDefault(b, 0);
+    }
+    else if (t == PROPERTY_IDENTIFIER) {
+      r = propertyIdentifier(b, 0);
     }
     else if (t == SUB_NODE) {
       r = subNode(b, 0);
@@ -226,25 +235,41 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_ANGLE_BRACKET NAMESPACE_NAME EQUAL SINGLE_QUOTE NAMESPACE_URI SINGLE_QUOTE RIGHT_ANGLE_BRACKET
+  // LEFT_ANGLE_BRACKET namespaceIdentifier EQUAL SINGLE_QUOTE NAMESPACE_URI SINGLE_QUOTE RIGHT_ANGLE_BRACKET
   public static boolean namespace(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namespace")) return false;
     if (!nextTokenIs(b, LEFT_ANGLE_BRACKET)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, LEFT_ANGLE_BRACKET, NAMESPACE_NAME, EQUAL, SINGLE_QUOTE, NAMESPACE_URI, SINGLE_QUOTE, RIGHT_ANGLE_BRACKET);
+    r = consumeToken(b, LEFT_ANGLE_BRACKET);
+    r = r && namespaceIdentifier(b, l + 1);
+    r = r && consumeTokens(b, 0, EQUAL, SINGLE_QUOTE, NAMESPACE_URI, SINGLE_QUOTE, RIGHT_ANGLE_BRACKET);
     exit_section_(b, m, NAMESPACE, r);
     return r;
   }
 
   /* ********************************************************** */
-  // LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [superTypes] [options] [COMMENT] [CRLF extensions] [COMMENT] [CRLF itemType] [COMMENT] [CRLF extensions] (CRLF+ COMMENT | CRLF+ property | CRLF+ subNode)* [CRLF]
+  // NAMESPACE_NAME
+  public static boolean namespaceIdentifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "namespaceIdentifier")) return false;
+    if (!nextTokenIs(b, NAMESPACE_NAME)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NAMESPACE_NAME);
+    exit_section_(b, m, NAMESPACE_IDENTIFIER, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // LEFT_BRACKET NAMESPACE_NAME COLON nodeTypeIdentifier RIGHT_BRACKET [superTypes] [options] [COMMENT] [CRLF extensions] [COMMENT] [CRLF itemType] [COMMENT] [CRLF extensions] (CRLF+ COMMENT | CRLF+ property | CRLF+ subNode)* [CRLF]
   public static boolean nodeType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "nodeType")) return false;
     if (!nextTokenIs(b, LEFT_BRACKET)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, LEFT_BRACKET, NAMESPACE_NAME, COLON, NODE_TYPE_NAME, RIGHT_BRACKET);
+    r = consumeTokens(b, 0, LEFT_BRACKET, NAMESPACE_NAME, COLON);
+    r = r && nodeTypeIdentifier(b, l + 1);
+    r = r && consumeToken(b, RIGHT_BRACKET);
     r = r && nodeType_5(b, l + 1);
     r = r && nodeType_6(b, l + 1);
     r = r && nodeType_7(b, l + 1);
@@ -461,6 +486,18 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // NODE_TYPE_NAME
+  public static boolean nodeTypeIdentifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeTypeIdentifier")) return false;
+    if (!nextTokenIs(b, NODE_TYPE_NAME)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NODE_TYPE_NAME);
+    exit_section_(b, m, NODE_TYPE_IDENTIFIER, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // ([CRLF] OPTION)+
   public static boolean options(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "options")) return false;
@@ -497,13 +534,14 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MINUS PROPERTY_NAME [propertyType] [propertyDefault] [propertyAttributes] [propertyConstraint]
+  // MINUS propertyIdentifier [propertyType] [propertyDefault] [propertyAttributes] [propertyConstraint]
   public static boolean property(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "property")) return false;
     if (!nextTokenIs(b, MINUS)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, MINUS, PROPERTY_NAME);
+    r = consumeToken(b, MINUS);
+    r = r && propertyIdentifier(b, l + 1);
     r = r && property_2(b, l + 1);
     r = r && property_3(b, l + 1);
     r = r && property_4(b, l + 1);
@@ -579,6 +617,18 @@ public class CndParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, EQUAL, PROPERTY_DEFAULT_VALUE);
     exit_section_(b, m, PROPERTY_DEFAULT, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // PROPERTY_NAME
+  public static boolean propertyIdentifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyIdentifier")) return false;
+    if (!nextTokenIs(b, PROPERTY_NAME)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PROPERTY_NAME);
+    exit_section_(b, m, PROPERTY_IDENTIFIER, r);
     return r;
   }
 

@@ -8,6 +8,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndNodeTypeElementImpl;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 import com.intellij.navigation.ItemPresentation;
 
@@ -36,6 +37,12 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
   @Nullable
   public CndItemType getItemType() {
     return findChildByClass(CndItemType.class);
+  }
+
+  @Override
+  @NotNull
+  public CndNodeTypeIdentifier getNodeTypeIdentifier() {
+    return findNotNullChildByClass(CndNodeTypeIdentifier.class);
   }
 
   @Override
@@ -74,20 +81,8 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
     return CndPsiImplUtil.getNodeTypeNamespace(this);
   }
 
-  public PsiElement getNameIdentifier() {
-    return CndPsiImplUtil.getNameIdentifier(this);
-  }
-
   public ItemPresentation getPresentation() {
     return CndPsiImplUtil.getPresentation(this);
-  }
-
-  public String getName() {
-    return CndPsiImplUtil.getName(this);
-  }
-
-  public PsiElement setName(String newName) {
-    return CndPsiImplUtil.setName(this, newName);
   }
 
   public CndProperty getProperty(String propertyName) {

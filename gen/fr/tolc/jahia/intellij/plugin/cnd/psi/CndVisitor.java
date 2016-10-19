@@ -4,6 +4,16 @@ package fr.tolc.jahia.intellij.plugin.cnd.psi;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndExtensionElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNamespaceElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndNamespaceIdentifierElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndNodeTypeIdentifierElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndPropertyElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndPropertyIdentifierElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeDefaultTypeElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeTypeElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSuperTypeElement;
 
 public class CndVisitor extends PsiElementVisitor {
 
@@ -23,8 +33,16 @@ public class CndVisitor extends PsiElementVisitor {
     visitNamespaceElement(o);
   }
 
+  public void visitNamespaceIdentifier(@NotNull CndNamespaceIdentifier o) {
+    visitNamespaceIdentifierElement(o);
+  }
+
   public void visitNodeType(@NotNull CndNodeType o) {
     visitNodeTypeElement(o);
+  }
+
+  public void visitNodeTypeIdentifier(@NotNull CndNodeTypeIdentifier o) {
+    visitNodeTypeIdentifierElement(o);
   }
 
   public void visitOptions(@NotNull CndOptions o) {
@@ -45,6 +63,10 @@ public class CndVisitor extends PsiElementVisitor {
 
   public void visitPropertyDefault(@NotNull CndPropertyDefault o) {
     visitPsiElement(o);
+  }
+
+  public void visitPropertyIdentifier(@NotNull CndPropertyIdentifier o) {
+    visitPropertyIdentifierElement(o);
   }
 
   public void visitSubNode(@NotNull CndSubNode o) {
@@ -79,11 +101,23 @@ public class CndVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitNamespaceIdentifierElement(@NotNull CndNamespaceIdentifierElement o) {
+    visitPsiElement(o);
+  }
+
   public void visitNodeTypeElement(@NotNull CndNodeTypeElement o) {
     visitPsiElement(o);
   }
 
+  public void visitNodeTypeIdentifierElement(@NotNull CndNodeTypeIdentifierElement o) {
+    visitPsiElement(o);
+  }
+
   public void visitPropertyElement(@NotNull CndPropertyElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyIdentifierElement(@NotNull CndPropertyIdentifierElement o) {
     visitPsiElement(o);
   }
 
