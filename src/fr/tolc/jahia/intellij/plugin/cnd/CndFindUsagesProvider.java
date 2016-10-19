@@ -19,7 +19,8 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     public WordsScanner getWordsScanner() {
         return new DefaultWordsScanner(
                 new CndLexerAdapter(),
-                TokenSet.EMPTY,
+//                TokenSet.EMPTY,
+                TokenSet.create(CndTypes.NAMESPACE_NAME, CndTypes.NODE_TYPE_NAME, CndTypes.PROPERTY_NAME),
                 TokenSet.create(CndTypes.COMMENT),
                 TokenSet.EMPTY
                 );
