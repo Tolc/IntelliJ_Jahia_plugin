@@ -42,7 +42,7 @@ public class CndNamespaceIdentifierReference extends PsiReferenceBase<PsiElement
         List<LookupElement> variants = new ArrayList<LookupElement>();
         for (final CndNamespace cndNamespace : namespaces) {
             if (StringUtils.isNotBlank(cndNamespace.getNamespaceName())) {
-                variants.add(LookupElementBuilder.create(cndNamespace).withIcon(CndIcons.FILE).withTypeText(cndNamespace.getContainingFile().getName()));
+                variants.add(LookupElementBuilder.create(cndNamespace.getNamespaceIdentifier()).withIcon(CndIcons.FILE).withTypeText(cndNamespace.getContainingFile().getName()));
             }
         }
         return variants.toArray();

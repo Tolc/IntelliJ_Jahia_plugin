@@ -10,7 +10,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.impl.CndPropertyIdentifierElementImpl;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.util.CndPsiImplUtil;
 import com.intellij.navigation.ItemPresentation;
 
 public class CndPropertyIdentifierImpl extends CndPropertyIdentifierElementImpl implements CndPropertyIdentifier {

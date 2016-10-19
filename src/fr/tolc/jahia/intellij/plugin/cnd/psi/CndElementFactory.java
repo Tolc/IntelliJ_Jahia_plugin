@@ -17,6 +17,10 @@ public class CndElementFactory {
         return (CndNodeType) file.getFirstChild();
     }
 
+    public static CndNodeType createNodeType(Project project, String nodeTypeName) {
+        return createNodeType(project, nodeTypeName, "dummyNamespace");
+    }
+
     public static CndProperty createProperty(Project project, String propertyName, PropertyTypeEnum propertyType) {
         final CndFile file = createFile(project,    "[dummyNamespace:dummyNodeTypeName]" +
                                                     "\r\n - " + propertyName + "(" + propertyType + ")");

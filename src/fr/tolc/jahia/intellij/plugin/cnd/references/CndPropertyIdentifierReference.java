@@ -61,7 +61,7 @@ public class CndPropertyIdentifierReference extends PsiReferenceBase<PsiElement>
                     if (forPropertiesFile) {
                         variants.add(LookupElementBuilder.create(property.getPropertyName().replace(':', '_')).withIcon(CndIcons.FILE).withTypeText(property.getContainingFile().getName()));
                     } else {
-                        variants.add(LookupElementBuilder.create(property).withIcon(CndIcons.FILE).withTypeText(property.getContainingFile().getName()));
+                        variants.add(LookupElementBuilder.create(property.getPropertyIdentifier()).withIcon(CndIcons.FILE).withTypeText(property.getContainingFile().getName()));
                     }
                 }
             }

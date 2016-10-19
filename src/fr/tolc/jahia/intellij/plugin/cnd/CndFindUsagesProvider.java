@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.tree.TokenSet;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespaceIdentifier;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +39,7 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     @NotNull
     @Override
     public String getType(@NotNull PsiElement element) {
-        if (element instanceof CndNodeType) {
+        if (element instanceof CndNodeTypeIdentifier) {
             return "Node type";
         } else if (element instanceof CndNamespaceIdentifier) {
             return "Namespace";
@@ -52,8 +52,9 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     @NotNull
     @Override
     public String getDescriptiveName(@NotNull PsiElement element) {
-        if (element instanceof CndNodeType) {
-            return ((CndNodeType) element).getNodeTypeName();
+        if (element instanceof CndNodeTypeIdentifier) {
+            CndNodeTypeIdentifier id = (CndNodeTypeIdentifier) element;
+            return id.getNodeType().getNodeTypeNamespace() + ":" + id.getNodeTypeName();
         } else if (element instanceof CndNamespaceIdentifier) {
             return ((CndNamespaceIdentifier) element).getNamespaceName();
         } else if (element instanceof CndPropertyIdentifier) {
@@ -65,8 +66,9 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     @NotNull
     @Override
     public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
-        if (element instanceof CndNodeType) {
-            return ((CndNodeType) element).getNodeTypeNamespace() + ":" + ((CndNodeType) element).getNodeTypeName();
+        if (element instanceof CndNodeTypeIdentifier) {
+            CndNodeTypeIdentifier id = (CndNodeTypeIdentifier) element;
+            return id.getNodeType().getNodeTypeNamespace() + ":" + id.getNodeTypeName();
         } else if (element instanceof CndNamespaceIdentifier) {
             CndNamespaceIdentifier id = (CndNamespaceIdentifier) element;
             return id.getNamespaceName() + " = '" + id.getNamespace().getNamespaceURI() + "'";

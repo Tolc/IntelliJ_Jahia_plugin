@@ -12,7 +12,7 @@
   elementTypeClass="fr.tolc.jahia.intellij.plugin.cnd.psi.CndElementType"
   tokenTypeClass="fr.tolc.jahia.intellij.plugin.cnd.psi.CndTokenType"
 
-  psiImplUtilClass="fr.tolc.jahia.intellij.plugin.cnd.psi.util.CndPsiImplUtil"
+  psiImplUtilClass="fr.tolc.jahia.intellij.plugin.cnd.psi.CndPsiImplUtil"
 }
 
 cnd ::= (COMMENT|CRLF)* (namespace CRLF)* (nodeType | COMMENT | CRLF)*
@@ -20,8 +20,8 @@ cnd ::= (COMMENT|CRLF)* (namespace CRLF)* (nodeType | COMMENT | CRLF)*
 
 
 namespace ::= LEFT_ANGLE_BRACKET namespaceIdentifier EQUAL SINGLE_QUOTE NAMESPACE_URI SINGLE_QUOTE RIGHT_ANGLE_BRACKET
-{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNamespaceElementImpl"
-  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespaceElement" 
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndNamespaceElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNamespaceElement" 
   methods=[getNamespaceName setNamespaceName getNamespaceURI getPresentation] }
 namespaceIdentifier ::= NAMESPACE_NAME
 { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.impl.CndNamespaceIdentifierElementImpl"
@@ -30,23 +30,27 @@ namespaceIdentifier ::= NAMESPACE_NAME
 
 
 
-nodeType ::= LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [superTypes] [options] [COMMENT] [CRLF extensions] [COMMENT] [CRLF itemType] [COMMENT] [CRLF extensions] (CRLF+ COMMENT | CRLF+ property | CRLF+ subNode)* [CRLF]
-{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndNodeTypeElementImpl"
-  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeElement" 
-  methods=[getNodeTypeName setNodeTypeName getNodeTypeNamespace getNameIdentifier getPresentation getName setName getProperty] }
+nodeType ::= LEFT_BRACKET NAMESPACE_NAME COLON nodeTypeIdentifier RIGHT_BRACKET [superTypes] [options] [COMMENT] [CRLF extensions] [COMMENT] [CRLF itemType] [COMMENT] [CRLF extensions] (CRLF+ COMMENT | CRLF+ property | CRLF+ subNode)* [CRLF]
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndNodeTypeElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement" 
+  methods=[getNodeTypeName setNodeTypeName getNodeTypeNamespace getPresentation getProperty] }
+nodeTypeIdentifier ::= NODE_TYPE_NAME
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.impl.CndNodeTypeIdentifierElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndNodeTypeIdentifierElement" 
+  methods=[getNodeTypeName setNodeTypeName getNameIdentifier getPresentation getName setName getNodeType] }
 
 superTypes ::= RIGHT_ONLY_ANGLE_BRACKET superType (COMMA superType)* [COMMA]
 superType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
-{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndSuperTypeElementImpl"
-  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperTypeElement"
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndSuperTypeElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSuperTypeElement"
   methods=[getReferences] }
 
 options ::= ([CRLF] OPTION)+
 
 extensions ::= EXTENDS EQUAL extension (COMMA extension)*
 extension ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
-{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndExtensionElementImpl"
-  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtensionElement"
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndExtensionElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndExtensionElement"
   methods=[getReferences] }
 
 itemType ::= ITEMTYPE EQUAL ITEMTYPE_TYPE
@@ -54,8 +58,8 @@ itemType ::= ITEMTYPE EQUAL ITEMTYPE_TYPE
 
 
 property ::= MINUS propertyIdentifier [propertyType] [propertyDefault] [propertyAttributes] [propertyConstraint]
-{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndPropertyElementImpl"
-  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyElement"
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndPropertyElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndPropertyElement"
   methods=[getPropertyName setPropertyName getType getTypeMask getPresentation] }
 propertyIdentifier ::= PROPERTY_NAME
 { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.impl.CndPropertyIdentifierElementImpl"
@@ -76,14 +80,14 @@ propertyConstraint ::= LEFT_ONLY_ANGLE_BRACKET PROPERTY_CONSTRAINT_VALUE
 subNode ::= PLUS NODE_NAME LEFT_PARENTHESIS subNodeTypes RIGHT_PARENTHESIS [subNodeDefault] [subNodeAttributes]
 private subNodeTypes ::= subNodeType (COMMA subNodeType)*
 subNodeType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
-{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndSubNodeTypeElementImpl"
-  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeTypeElement"
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndSubNodeTypeElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeTypeElement"
   methods=[getReferences] }
 
 private subNodeDefault ::= EQUAL subNodeDefaultType
 subNodeDefaultType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
-{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.impl.CndSubNodeDefaultTypeElementImpl"
-  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeDefaultTypeElement"
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndSubNodeDefaultTypeElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeDefaultTypeElement"
   methods=[getReferences] }
 
 subNodeAttributes ::= NODE_ATTRIBUTE+

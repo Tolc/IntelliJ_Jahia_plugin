@@ -4,8 +4,16 @@ package fr.tolc.jahia.intellij.plugin.cnd.psi;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndExtensionElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNamespaceElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndNamespaceIdentifierElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndNodeTypeIdentifierElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndPropertyElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndPropertyIdentifierElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeDefaultTypeElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeTypeElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSuperTypeElement;
 
 public class CndVisitor extends PsiElementVisitor {
 
@@ -31,6 +39,10 @@ public class CndVisitor extends PsiElementVisitor {
 
   public void visitNodeType(@NotNull CndNodeType o) {
     visitNodeTypeElement(o);
+  }
+
+  public void visitNodeTypeIdentifier(@NotNull CndNodeTypeIdentifier o) {
+    visitNodeTypeIdentifierElement(o);
   }
 
   public void visitOptions(@NotNull CndOptions o) {
@@ -94,6 +106,10 @@ public class CndVisitor extends PsiElementVisitor {
   }
 
   public void visitNodeTypeElement(@NotNull CndNodeTypeElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNodeTypeIdentifierElement(@NotNull CndNodeTypeIdentifierElement o) {
     visitPsiElement(o);
   }
 

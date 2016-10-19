@@ -8,8 +8,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndNamespaceElementImpl;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.util.CndPsiImplUtil;
 import com.intellij.navigation.ItemPresentation;
 
 public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndNamespace {

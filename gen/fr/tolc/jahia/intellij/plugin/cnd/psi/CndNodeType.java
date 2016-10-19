@@ -4,6 +4,7 @@ package fr.tolc.jahia.intellij.plugin.cnd.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement;
 import com.intellij.navigation.ItemPresentation;
 
 public interface CndNodeType extends CndNodeTypeElement {
@@ -13,6 +14,9 @@ public interface CndNodeType extends CndNodeTypeElement {
 
   @Nullable
   CndItemType getItemType();
+
+  @NotNull
+  CndNodeTypeIdentifier getNodeTypeIdentifier();
 
   @Nullable
   CndOptions getOptions();
@@ -32,13 +36,7 @@ public interface CndNodeType extends CndNodeTypeElement {
 
   String getNodeTypeNamespace();
 
-  PsiElement getNameIdentifier();
-
   ItemPresentation getPresentation();
-
-  String getName();
-
-  PsiElement setName(String newName);
 
   CndProperty getProperty(String propertyName);
 

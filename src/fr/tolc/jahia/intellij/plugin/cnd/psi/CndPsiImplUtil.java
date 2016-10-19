@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd.psi.util;
+package fr.tolc.jahia.intellij.plugin.cnd.psi;
 
 import java.util.List;
 
@@ -13,17 +13,6 @@ import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import fr.tolc.jahia.intellij.plugin.cnd.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndElementFactory;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespaceIdentifier;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyIdentifier;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeDefaultType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.Nullable;
 
 public class CndPsiImplUtil {
@@ -111,7 +100,7 @@ public class CndPsiImplUtil {
     }
 
     public static ItemPresentation getPresentation(final CndNamespaceIdentifier element) {
-        return getPresentation(element.getNamespace());
+        return element.getNamespace().getPresentation();
     }
     
     
@@ -120,26 +109,11 @@ public class CndPsiImplUtil {
 
     //NodeType
     public static String getNodeTypeName(CndNodeType element) {
-        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
-        if (nameNode != null) {
-            return nameNode.getText();
-        }
-        return null;
+        return element.getNodeTypeIdentifier().getNodeTypeName();
     }
 
     public static PsiElement setNodeTypeName(CndNodeType element, String newName) {
-        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
-        if (nameNode != null) {
-            ASTNode namespaceNode = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
-            String namespace = "dummyNameSpace";
-            if (namespaceNode != null) {
-                namespace = namespaceNode.getText();
-            }
-            CndNodeType nodeType = CndElementFactory.createNodeType(element.getProject(), newName, namespace);
-            ASTNode newNodeTypeNode = nodeType.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
-            element.getNode().replaceChild(nameNode, newNodeTypeNode);
-        }
-        return element;
+        return element.getNodeTypeIdentifier().setNodeTypeName(newName);
     }
 
     public static String getNodeTypeNamespace(CndNodeType element) {
@@ -158,23 +132,6 @@ public class CndPsiImplUtil {
             }
         }
         return null;
-    }
-
-    public static PsiElement getNameIdentifier(CndNodeType element) {
-        ASTNode nodeTypeNameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
-        if (nodeTypeNameNode != null) {
-            return nodeTypeNameNode.getPsi();
-        } else {
-            return null;
-        }
-    }
-
-    public static PsiElement setName(CndNodeType element, String newName) {
-        return setNodeTypeName(element, newName);
-    }
-
-    public static String getName(CndNodeType element) {
-        return getNodeTypeName(element);
     }
 
     public static ItemPresentation getPresentation(final CndNodeType element) {
@@ -200,6 +157,54 @@ public class CndPsiImplUtil {
         };
     }
 
+
+
+    //NodeType Identifier
+    public static String getNodeTypeName(CndNodeTypeIdentifier element) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
+        if (nameNode != null) {
+            return nameNode.getText();
+        }
+        return null;
+    }
+
+    public static PsiElement setNodeTypeName(CndNodeTypeIdentifier element, String newName) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
+        if (nameNode != null) {
+            CndNodeType nodeType = CndElementFactory.createNodeType(element.getProject(), newName);
+            ASTNode newNodeTypeNode = nodeType.getNodeTypeIdentifier().getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
+            element.getNode().replaceChild(nameNode, newNodeTypeNode);
+        }
+        return element;
+    }
+
+    public static PsiElement getNameIdentifier(CndNodeTypeIdentifier element) {
+        ASTNode nodeTypeNameNode = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
+        if (nodeTypeNameNode != null) {
+            return nodeTypeNameNode.getPsi();
+        } else {
+            return null;
+        }
+    }
+
+    public static PsiElement setName(CndNodeTypeIdentifier element, String newName) {
+        return setNodeTypeName(element, newName);
+    }
+
+    public static String getName(CndNodeTypeIdentifier element) {
+        return getNodeTypeName(element);
+    }
+    
+    public static CndNodeType getNodeType(CndNodeTypeIdentifier element) {
+        return (CndNodeType) element.getParent();
+    }
+
+    public static ItemPresentation getPresentation(final CndNodeTypeIdentifier element) {
+        return element.getNodeType().getPresentation();
+    }
+    
+    
+    
 
 
     //Property
@@ -301,7 +306,7 @@ public class CndPsiImplUtil {
     }
     
     public static ItemPresentation getPresentation(final CndPropertyIdentifier element) {
-        return getPresentation(getProperty(element));
+        return element.getProperty().getPresentation();
     }
     
 
@@ -320,6 +325,7 @@ public class CndPsiImplUtil {
     public static PsiReference[] getReferences(CndSubNodeType element) {
         return ReferenceProvidersRegistry.getReferencesFromProviders(element);
     }
+    
     //SubNodeDefaultType
     public static PsiReference[] getReferences(CndSubNodeDefaultType element) {
         return ReferenceProvidersRegistry.getReferencesFromProviders(element);

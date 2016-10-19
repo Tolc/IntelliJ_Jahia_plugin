@@ -41,6 +41,9 @@ public class CndParser implements PsiParser, LightPsiParser {
     else if (t == NODE_TYPE) {
       r = nodeType(b, 0);
     }
+    else if (t == NODE_TYPE_IDENTIFIER) {
+      r = nodeTypeIdentifier(b, 0);
+    }
     else if (t == OPTIONS) {
       r = options(b, 0);
     }
@@ -258,13 +261,15 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_BRACKET NAMESPACE_NAME COLON NODE_TYPE_NAME RIGHT_BRACKET [superTypes] [options] [COMMENT] [CRLF extensions] [COMMENT] [CRLF itemType] [COMMENT] [CRLF extensions] (CRLF+ COMMENT | CRLF+ property | CRLF+ subNode)* [CRLF]
+  // LEFT_BRACKET NAMESPACE_NAME COLON nodeTypeIdentifier RIGHT_BRACKET [superTypes] [options] [COMMENT] [CRLF extensions] [COMMENT] [CRLF itemType] [COMMENT] [CRLF extensions] (CRLF+ COMMENT | CRLF+ property | CRLF+ subNode)* [CRLF]
   public static boolean nodeType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "nodeType")) return false;
     if (!nextTokenIs(b, LEFT_BRACKET)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, LEFT_BRACKET, NAMESPACE_NAME, COLON, NODE_TYPE_NAME, RIGHT_BRACKET);
+    r = consumeTokens(b, 0, LEFT_BRACKET, NAMESPACE_NAME, COLON);
+    r = r && nodeTypeIdentifier(b, l + 1);
+    r = r && consumeToken(b, RIGHT_BRACKET);
     r = r && nodeType_5(b, l + 1);
     r = r && nodeType_6(b, l + 1);
     r = r && nodeType_7(b, l + 1);
@@ -478,6 +483,18 @@ public class CndParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "nodeType_14")) return false;
     consumeToken(b, CRLF);
     return true;
+  }
+
+  /* ********************************************************** */
+  // NODE_TYPE_NAME
+  public static boolean nodeTypeIdentifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeTypeIdentifier")) return false;
+    if (!nextTokenIs(b, NODE_TYPE_NAME)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, NODE_TYPE_NAME);
+    exit_section_(b, m, NODE_TYPE_IDENTIFIER, r);
+    return r;
   }
 
   /* ********************************************************** */

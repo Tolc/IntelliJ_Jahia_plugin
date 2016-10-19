@@ -10,7 +10,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.impl.CndNamespaceIdentifierElementImpl;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.util.CndPsiImplUtil;
 import com.intellij.navigation.ItemPresentation;
 
 public class CndNamespaceIdentifierImpl extends CndNamespaceIdentifierElementImpl implements CndNamespaceIdentifier {
