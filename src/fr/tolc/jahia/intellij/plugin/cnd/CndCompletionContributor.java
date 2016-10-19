@@ -12,10 +12,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyAttributeEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskOptionEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.*;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
@@ -128,6 +125,23 @@ public class CndCompletionContributor extends CompletionContributor {
                 }
         );
 
+
+        //Item type
+        extend(CompletionType.BASIC,
+                PlatformPatterns.psiElement(CndTypes.ITEMTYPE_TYPE).withLanguage(CndLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    public void addCompletions(@NotNull CompletionParameters parameters,
+                                               ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
+                        for (ItemTypeEnum itemType : ItemTypeEnum.values()) {
+                            resultSet.addElement(LookupElementBuilder.create(itemType));
+                        }
+                    }
+                }
+        );
+
+
+        //Common symbols
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement(CndTypes.COLON).withLanguage(CndLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {

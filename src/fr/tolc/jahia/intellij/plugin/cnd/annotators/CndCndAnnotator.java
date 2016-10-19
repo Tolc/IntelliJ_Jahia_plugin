@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
 import fr.tolc.jahia.intellij.plugin.cnd.CndTranslationUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.ItemTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyAttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
@@ -103,6 +104,15 @@ public class CndCndAnnotator implements Annotator {
                     holder.createErrorAnnotation(element.getTextRange(), "Invalid property attribute");
 //                    Annotation annotation = holder.createErrorAnnotation(element.getTextRange(), "Invalid property attribute");
 //                    annotation.registerFix(new ChangeToClosestQuickFix(element, CndConstants.PROPERTY_ATTRIBUTES));
+                }
+            }
+
+            //Item type
+            if (CndTypes.ITEMTYPE_TYPE.equals(element.getNode().getElementType())) {
+                try {
+                    ItemTypeEnum.fromValue(element.getText());
+                } catch (IllegalArgumentException e) {
+                    holder.createErrorAnnotation(element.getTextRange(), "Invalid item type");
                 }
             }
         }

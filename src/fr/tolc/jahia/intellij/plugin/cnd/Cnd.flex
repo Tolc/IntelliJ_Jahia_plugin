@@ -108,7 +108,8 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 <YYINITIAL> "itemtype"                          				{ yybegin(ITEMTYPE); return CndTypes.ITEMTYPE; }
 <ITEMTYPE> {
 	"="                           								{ return CndTypes.EQUAL; }
-	"default"|"options"|"layout"|"metadata"|"content"|"classification"|"permissions"|"listOrdering"|"contributeMode"|"propertiesView"           { return CndTypes.ITEMTYPE_TYPE; }
+//	"default"|"options"|"layout"|"metadata"|"content"|"classification"|"permissions"|"listOrdering"|"contributeMode"|"propertiesView"           { return CndTypes.ITEMTYPE_TYPE; }
+	[^\r\n\ ]+                                                { return CndTypes.ITEMTYPE_TYPE; }
 }
 
 
