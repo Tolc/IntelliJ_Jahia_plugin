@@ -31,7 +31,7 @@ COMMENT_BLOCK="/*"~"*/"
 CHARS=[:jletter:][:jletterdigit:]*
 OPTIONS="mixin"|"abstract"|"orderable"|"noquery"
 //PROPERTY_ATTRIBUTES="mandatory"|"protected"|"primary"|"i18n"|"internationalized"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="("'")?("no"|"tokenized"|"untokenized")("'")?|"analyzer='keyword'"|"autocreated"|("boost"|"scoreboost")"="[:digit:]+("."[:digit:]+){0,1}|"onconflict="("sum"|"latest"|"oldest"|"min"|"max"|"ignore")|"facetable"|"hierarchical"|"noqueryorder"|"itemtype = "("content"|"metadata"|"layout"|"options"|"codeEditor")|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"queryops '" (("<"|"<="|"<>"|"="|">"|">="|"like")(","){0,1})+ "'"
-NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"multiple"|"protected"|"sns"
+//NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"multiple"|"protected"|"sns"
 
 //See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
 
@@ -191,7 +191,8 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 
 <NODE_DEFAULT> {
 	"="												{ yybegin(NODE_DEFAULT_VALUE_NAMESPACE); return CndTypes.EQUAL; }
-	{NODE_ATTRIBUTES}								{ yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_ATTRIBUTE; }
+//	{NODE_ATTRIBUTES}								{ yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_ATTRIBUTE; }
+	[^\r\n\ =]+     								{ yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_ATTRIBUTE; }
 }
 <NODE_DEFAULT_VALUE_NAMESPACE> {CHARS}				{ yybegin(NODE_DEFAULT_VALUE); return CndTypes.NAMESPACE_NAME; }
 <NODE_DEFAULT_VALUE> {
@@ -199,7 +200,8 @@ NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"comput
 	{CHARS}                    						{ yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_TYPE_NAME; }
 }
 
-<NODE_ATTRIBUTES> {NODE_ATTRIBUTES}					{ return CndTypes.NODE_ATTRIBUTE; }
+//<NODE_ATTRIBUTES> {NODE_ATTRIBUTES}					{ return CndTypes.NODE_ATTRIBUTE; }
+<NODE_ATTRIBUTES> [^\r\n\ =]+       				{ return CndTypes.NODE_ATTRIBUTE; }
 
 
 

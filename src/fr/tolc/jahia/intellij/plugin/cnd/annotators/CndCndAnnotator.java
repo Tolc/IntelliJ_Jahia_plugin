@@ -9,10 +9,7 @@ import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
 import fr.tolc.jahia.intellij.plugin.cnd.CndTranslationUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.ItemTypeEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyAttributeEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.*;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
@@ -84,6 +81,15 @@ public class CndCndAnnotator implements Annotator {
                 }
             }
 
+            //Option
+            else if (CndTypes.OPTION.equals(element.getNode().getElementType())) {
+                try {
+                    OptionEnum.fromValue(element.getText());
+                } catch (IllegalArgumentException e) {
+                    holder.createErrorAnnotation(element.getTextRange(), "Invalid option");
+                }
+            }
+
             //Property type
             else if (CndTypes.PROPERTY_TYPE.equals(element.getNode().getElementType())) {
                 try {
@@ -121,7 +127,16 @@ public class CndCndAnnotator implements Annotator {
                     holder.createErrorAnnotation(element.getTextRange(), "Invalid item type");
                 }
             }
-            
+
+            //Sub node attribute
+            else if (CndTypes.NODE_ATTRIBUTE.equals(element.getNode().getElementType())) {
+                try {
+                    SubNodeAttributeEnum.fromValue(element.getText());
+                } catch (IllegalArgumentException e) {
+                    holder.createErrorAnnotation(element.getTextRange(), "Invalid sub node attribute");
+                }
+            }
+
             //Check for invalid namespaces and nodetypes
             else if (CndTypes.SUPER_TYPE.equals(element.getNode().getElementType())
                 || CndTypes.EXTENSION.equals(element.getNode().getElementType())
