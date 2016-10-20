@@ -13,10 +13,13 @@ import fr.tolc.jahia.intellij.plugin.cnd.enums.ItemTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyAttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeFilesQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeTranslationsQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeViewQuickFix;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class CndCndAnnotator implements Annotator {
@@ -24,6 +27,7 @@ public class CndCndAnnotator implements Annotator {
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         if (element.getNode() != null) {
+            //Node type declaration
             if (CndTypes.NODE_TYPE_NAME.equals(element.getNode().getElementType())) {
                 String nodeTypeName = element.getText();
 
@@ -41,6 +45,8 @@ public class CndCndAnnotator implements Annotator {
 //                            Module currentModule = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(element.getContainingFile().getVirtualFile());
 //                            VirtualFile[] sourceRoots = ModuleRootManager.getInstance(currentModule).getSourceRoots();
 
+                            //TODO: check for namespace existence
+                            
                             String jahiaWorkFolderPath = CndUtil.getJahiaWorkFolderPath(element);
 
                             if (jahiaWorkFolderPath != null) {
@@ -79,7 +85,7 @@ public class CndCndAnnotator implements Annotator {
             }
 
             //Property type
-            if (CndTypes.PROPERTY_TYPE.equals(element.getNode().getElementType())) {
+            else if (CndTypes.PROPERTY_TYPE.equals(element.getNode().getElementType())) {
                 try {
                     PropertyTypeEnum.fromValue(element.getText());
                 } catch (IllegalArgumentException e) {
@@ -88,7 +94,7 @@ public class CndCndAnnotator implements Annotator {
             }
 
             //Property mask
-            if (CndTypes.PROPERTY_MASK.equals(element.getNode().getElementType())) {
+            else if (CndTypes.PROPERTY_MASK.equals(element.getNode().getElementType())) {
                 try {
                     PropertyTypeMaskEnum.fromValue(element.getText());
                 } catch (IllegalArgumentException e) {
@@ -97,7 +103,7 @@ public class CndCndAnnotator implements Annotator {
             }
 
             //Property attribute
-            if (CndTypes.PROPERTY_ATTRIBUTE.equals(element.getNode().getElementType())) {
+            else if (CndTypes.PROPERTY_ATTRIBUTE.equals(element.getNode().getElementType())) {
                 try {
                     PropertyAttributeEnum.fromValue(element.getText());
                 } catch (IllegalArgumentException e) {
@@ -108,11 +114,42 @@ public class CndCndAnnotator implements Annotator {
             }
 
             //Item type
-            if (CndTypes.ITEMTYPE_TYPE.equals(element.getNode().getElementType())) {
+            else if (CndTypes.ITEMTYPE_TYPE.equals(element.getNode().getElementType())) {
                 try {
                     ItemTypeEnum.fromValue(element.getText());
                 } catch (IllegalArgumentException e) {
                     holder.createErrorAnnotation(element.getTextRange(), "Invalid item type");
+                }
+            }
+            
+            //Check for invalid namespaces and nodetypes
+            else if (CndTypes.SUPER_TYPE.equals(element.getNode().getElementType())
+                || CndTypes.EXTENSION.equals(element.getNode().getElementType())
+                || CndTypes.SUB_NODE_TYPE.equals(element.getNode().getElementType())
+                || CndTypes.SUB_NODE_DEFAULT_TYPE.equals(element.getNode().getElementType())) {
+
+                PsiElement namespaceElt = element.getFirstChild();
+                if (namespaceElt != null) {
+                    CndNamespace cndNamespace = CndUtil.findNamespace(element.getProject(), namespaceElt.getText());
+                    if (cndNamespace == null) {
+                        holder.createErrorAnnotation(namespaceElt.getTextRange(), "Unresolved CND namespace");
+                    } else {
+                        PsiElement colonElt = namespaceElt.getNextSibling();
+                        if (colonElt == null) {
+                            holder.createErrorAnnotation(element.getTextRange(), "Invalid CND node type (mising colon)");
+                        } else {
+                            PsiElement nodeTypeElt = colonElt.getNextSibling();
+                            if (nodeTypeElt == null || StringUtils.isBlank(nodeTypeElt.getText())) {
+                                holder.createErrorAnnotation(element.getTextRange(), "Invalid CND node type (missing node type name)"); 
+                            } else if (!"jnt".equals(namespaceElt.getText()) && !"jmix".equals(namespaceElt.getText()) && !"mix".equals(namespaceElt.getText())) {
+                                //TODO: change or remove this condition after embedding Jahia default and modules cnd files  
+                                CndNodeType cndNodeType = CndUtil.findNodeType(element.getProject(), namespaceElt.getText(), nodeTypeElt.getText());
+                                if (cndNodeType == null) {
+                                    holder.createErrorAnnotation(nodeTypeElt.getTextRange(), "Unresolved CND node type");
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
