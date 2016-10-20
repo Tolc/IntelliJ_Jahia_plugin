@@ -28,7 +28,7 @@ public class CndCndAnnotator implements Annotator {
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         if (element.getNode() != null) {
             //Node type declaration
-            if (CndTypes.NODE_TYPE_NAME.equals(element.getNode().getElementType())) {
+            if (CndTypes.NODE_TYPE_IDENTIFIER.equals(element.getNode().getElementType())) {
                 String nodeTypeName = element.getText();
 
                 PsiElement nextSibling = element.getNextSibling();
@@ -45,39 +45,39 @@ public class CndCndAnnotator implements Annotator {
 //                            Module currentModule = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(element.getContainingFile().getVirtualFile());
 //                            VirtualFile[] sourceRoots = ModuleRootManager.getInstance(currentModule).getSourceRoots();
 
-                            //TODO: check for namespace existence
-                            
-                            String jahiaWorkFolderPath = CndUtil.getJahiaWorkFolderPath(element);
+                            CndNamespace cndNamespace = CndUtil.findNamespace(element.getProject(), namespace);
+                            if (cndNamespace == null) {
+                                holder.createErrorAnnotation(namespaceEl.getTextRange(), "Unresolved CND namespace");
+                            } else {
+                                String jahiaWorkFolderPath = CndUtil.getJahiaWorkFolderPath(element);
+                                if (jahiaWorkFolderPath != null) {
+                                    //                            VirtualFile nodeTypeFolder = null;
+                                    //                            for (VirtualFile sourceRoot : sourceRoots) {
+                                    //                                nodeTypeFolder = sourceRoot.findFileByRelativePath("main/webapp/" + namespace + "_" + nodeTypeName);
+                                    //                                if (nodeTypeFolder != null) {
+                                    //                                    break;
+                                    //                                }
+                                    //                            }
 
-                            if (jahiaWorkFolderPath != null) {
-                                //                            VirtualFile nodeTypeFolder = null;
-                                //                            for (VirtualFile sourceRoot : sourceRoots) {
-                                //                                nodeTypeFolder = sourceRoot.findFileByRelativePath("main/webapp/" + namespace + "_" + nodeTypeName);
-                                //                                if (nodeTypeFolder != null) {
-                                //                                    break;
-                                //                                }
-                                //                            }
+                                    String nodeTypeFolderPath = CndUtil.getNodeTypeFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName);
+                                    File nodeTypeFolder = new File(nodeTypeFolderPath);
+                                    if (!nodeTypeFolder.exists() || !nodeTypeFolder.isDirectory()) {
+                                        Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + " does not have any associated folder");
+                                        annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
+                                        annotation.registerFix(new CreateNodeTypeFilesQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
+                                    } else {
+                                        Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Create a new view for " + namespace + ":" + nodeTypeName);
+                                        annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
+                                        annotation.registerFix(new CreateNodeTypeViewQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
+                                    }
 
-                                String nodeTypeFolderPath = CndUtil.getNodeTypeFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName);
-                                File nodeTypeFolder = new File(nodeTypeFolderPath);
-                                if (!nodeTypeFolder.exists() || !nodeTypeFolder.isDirectory()) {
-                                    Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + " does not have any associated folder");
-                                    annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
-                                    annotation.registerFix(new CreateNodeTypeFilesQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
-                                } else {
-                                    Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Create a new view for " + namespace + ":" + nodeTypeName);
-                                    annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
-                                    annotation.registerFix(new CreateNodeTypeViewQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
+                                    //Translation
+                                    if (CndTranslationUtil.getNodeTypeTranslation(element.getProject(), namespace, nodeTypeName) == null) {
+                                        Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + "does not have any translation");
+                                        annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
+                                        annotation.registerFix(new CreateNodeTypeTranslationsQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
+                                    }
                                 }
-
-
-                                //Translation
-                                if (CndTranslationUtil.getNodeTypeTranslation(element.getProject(), namespace, nodeTypeName) == null) {
-                                    Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + "does not have any translation");
-                                    annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
-                                    annotation.registerFix(new CreateNodeTypeTranslationsQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
-                                }
-
                             }
                         }
                     }
