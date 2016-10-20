@@ -131,7 +131,7 @@ public class CndCndAnnotator implements Annotator {
                 PsiElement namespaceElt = element.getFirstChild();
                 if (namespaceElt != null) {
                     CndNamespace cndNamespace = CndUtil.findNamespace(element.getProject(), namespaceElt.getText());
-                    if (cndNamespace == null) {
+                    if (cndNamespace == null && !"nt".equals(namespaceElt.getText()) && !"jnt".equals(namespaceElt.getText()) && !"jmix".equals(namespaceElt.getText()) && !"mix".equals(namespaceElt.getText())) {
                         holder.createErrorAnnotation(namespaceElt.getTextRange(), "Unresolved CND namespace");
                     } else {
                         PsiElement colonElt = namespaceElt.getNextSibling();
@@ -141,7 +141,7 @@ public class CndCndAnnotator implements Annotator {
                             PsiElement nodeTypeElt = colonElt.getNextSibling();
                             if (nodeTypeElt == null || StringUtils.isBlank(nodeTypeElt.getText())) {
                                 holder.createErrorAnnotation(element.getTextRange(), "Invalid CND node type (missing node type name)"); 
-                            } else if (!"jnt".equals(namespaceElt.getText()) && !"jmix".equals(namespaceElt.getText()) && !"mix".equals(namespaceElt.getText())) {
+                            } else if (!"nt".equals(namespaceElt.getText()) && !"jnt".equals(namespaceElt.getText()) && !"jmix".equals(namespaceElt.getText()) && !"mix".equals(namespaceElt.getText())) {
                                 //TODO: change or remove this condition after embedding Jahia default and modules cnd files  
                                 CndNodeType cndNodeType = CndUtil.findNodeType(element.getProject(), namespaceElt.getText(), nodeTypeElt.getText());
                                 if (cndNodeType == null) {
