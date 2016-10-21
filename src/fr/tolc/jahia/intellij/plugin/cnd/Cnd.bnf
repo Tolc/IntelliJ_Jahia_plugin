@@ -33,7 +33,7 @@ namespaceIdentifier ::= NAMESPACE_NAME
 nodeType ::= LEFT_BRACKET NAMESPACE_NAME COLON nodeTypeIdentifier RIGHT_BRACKET [superTypes] [options] [COMMENT] [CRLF extensions] [COMMENT] [CRLF itemType] [COMMENT] [CRLF extensions] (CRLF+ COMMENT | CRLF+ property | CRLF+ subNode)* [CRLF]
 { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndNodeTypeElementImpl"
   implements="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement" 
-  methods=[getNodeTypeName setNodeTypeName getNodeTypeNamespace getPresentation getProperty] }
+  methods=[getNodeTypeName setNodeTypeName getNodeTypeNamespace getPresentation getProperty getOptions isMixin] }
 nodeTypeIdentifier ::= NODE_TYPE_NAME
 { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.impl.CndNodeTypeIdentifierElementImpl"
   implements="fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndNodeTypeIdentifierElement" 
@@ -45,7 +45,8 @@ superType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
   implements="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSuperTypeElement"
   methods=[getReferences] }
 
-options ::= ([CRLF] OPTION)+
+private options ::= ([CRLF] nodeOption)+
+nodeOption ::= OPTION
 
 extensions ::= EXTENDS EQUAL extension (COMMA extension)*
 extension ::= NAMESPACE_NAME COLON NODE_TYPE_NAME

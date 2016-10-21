@@ -11,6 +11,8 @@ import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndNodeTypeElementImpl;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 import com.intellij.navigation.ItemPresentation;
+import java.util.Set;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
 
 public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeType {
 
@@ -41,14 +43,14 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
 
   @Override
   @NotNull
-  public CndNodeTypeIdentifier getNodeTypeIdentifier() {
-    return findNotNullChildByClass(CndNodeTypeIdentifier.class);
+  public List<CndNodeOption> getNodeOptionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CndNodeOption.class);
   }
 
   @Override
-  @Nullable
-  public CndOptions getOptions() {
-    return findChildByClass(CndOptions.class);
+  @NotNull
+  public CndNodeTypeIdentifier getNodeTypeIdentifier() {
+    return findNotNullChildByClass(CndNodeTypeIdentifier.class);
   }
 
   @Override
@@ -87,6 +89,14 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
 
   public CndProperty getProperty(String propertyName) {
     return CndPsiImplUtil.getProperty(this, propertyName);
+  }
+
+  public Set<OptionEnum> getOptions() {
+    return CndPsiImplUtil.getOptions(this);
+  }
+
+  public boolean isMixin() {
+    return CndPsiImplUtil.isMixin(this);
   }
 
 }

@@ -38,14 +38,14 @@ public class CndParser implements PsiParser, LightPsiParser {
     else if (t == NAMESPACE_IDENTIFIER) {
       r = namespaceIdentifier(b, 0);
     }
+    else if (t == NODE_OPTION) {
+      r = nodeOption(b, 0);
+    }
     else if (t == NODE_TYPE) {
       r = nodeType(b, 0);
     }
     else if (t == NODE_TYPE_IDENTIFIER) {
       r = nodeTypeIdentifier(b, 0);
-    }
-    else if (t == OPTIONS) {
-      r = options(b, 0);
     }
     else if (t == PROPERTY) {
       r = property(b, 0);
@@ -257,6 +257,18 @@ public class CndParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, NAMESPACE_NAME);
     exit_section_(b, m, NAMESPACE_IDENTIFIER, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // OPTION
+  public static boolean nodeOption(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeOption")) return false;
+    if (!nextTokenIs(b, OPTION)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, OPTION);
+    exit_section_(b, m, NODE_OPTION, r);
     return r;
   }
 
@@ -498,12 +510,12 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ([CRLF] OPTION)+
-  public static boolean options(PsiBuilder b, int l) {
+  // ([CRLF] nodeOption)+
+  static boolean options(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "options")) return false;
-    if (!nextTokenIs(b, "<options>", CRLF, OPTION)) return false;
+    if (!nextTokenIs(b, "", CRLF, OPTION)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, OPTIONS, "<options>");
+    Marker m = enter_section_(b);
     r = options_0(b, l + 1);
     int c = current_position_(b);
     while (r) {
@@ -511,17 +523,17 @@ public class CndParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "options", c)) break;
       c = current_position_(b);
     }
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, m, null, r);
     return r;
   }
 
-  // [CRLF] OPTION
+  // [CRLF] nodeOption
   private static boolean options_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "options_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = options_0_0(b, l + 1);
-    r = r && consumeToken(b, OPTION);
+    r = r && nodeOption(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

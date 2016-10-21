@@ -6,6 +6,8 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement;
 import com.intellij.navigation.ItemPresentation;
+import java.util.Set;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
 
 public interface CndNodeType extends CndNodeTypeElement {
 
@@ -16,10 +18,10 @@ public interface CndNodeType extends CndNodeTypeElement {
   CndItemType getItemType();
 
   @NotNull
-  CndNodeTypeIdentifier getNodeTypeIdentifier();
+  List<CndNodeOption> getNodeOptionList();
 
-  @Nullable
-  CndOptions getOptions();
+  @NotNull
+  CndNodeTypeIdentifier getNodeTypeIdentifier();
 
   @NotNull
   List<CndProperty> getPropertyList();
@@ -39,5 +41,9 @@ public interface CndNodeType extends CndNodeTypeElement {
   ItemPresentation getPresentation();
 
   CndProperty getProperty(String propertyName);
+
+  Set<OptionEnum> getOptions();
+
+  boolean isMixin();
 
 }
