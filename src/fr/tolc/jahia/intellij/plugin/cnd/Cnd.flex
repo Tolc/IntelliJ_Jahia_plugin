@@ -29,7 +29,7 @@ COMMENT_BLOCK="/*"~"*/"
 //~ = upto
 
 CHARS=[:jletter:][:jletterdigit:]*
-OPTIONS="mixin"|"abstract"|"orderable"|"noquery"
+//OPTIONS="mixin"|"abstract"|"orderable"|"noquery"
 //PROPERTY_ATTRIBUTES="mandatory"|"protected"|"primary"|"i18n"|"internationalized"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="("'")?("no"|"tokenized"|"untokenized")("'")?|"analyzer='keyword'"|"autocreated"|("boost"|"scoreboost")"="[:digit:]+("."[:digit:]+){0,1}|"onconflict="("sum"|"latest"|"oldest"|"min"|"max"|"ignore")|"facetable"|"hierarchical"|"noqueryorder"|"itemtype = "("content"|"metadata"|"layout"|"options"|"codeEditor")|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"queryops '" (("<"|"<="|"<>"|"="|">"|">="|"like")(","){0,1})+ "'"
 //NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"multiple"|"protected"|"sns"
 
@@ -96,16 +96,21 @@ OPTIONS="mixin"|"abstract"|"orderable"|"noquery"
 <OPTIONS> {
 	[:jletter:]+								{ return CndTypes.OPTION; }
 }
+
+
+//Options, Extends or Itemtype at the start of a line
 <YYINITIAL> {
-	{OPTIONS}									{ yybegin(OPTIONS); yypushback(yylength()); }
+	[:jletter:]+								{ 
+													if ("extends".equalsIgnoreCase(yytext().toString())) { yybegin(EXTENDS); return CndTypes.EXTENDS; } 
+												  	else if ("itemtype".equalsIgnoreCase(yytext().toString())) { yybegin(ITEMTYPE); return CndTypes.ITEMTYPE; } 
+    											  	else { yybegin(OPTIONS); return CndTypes.OPTION; } 
+												}
 }
 
 
 
-
-
 //Extends
-<YYINITIAL> "extends"                           	{ yybegin(EXTENDS); return CndTypes.EXTENDS; }
+//<YYINITIAL> "extends"                           	{ yybegin(EXTENDS); return CndTypes.EXTENDS; }
 <EXTENDS> "="										{ yybegin(EXTEND_NAMESPACE); return CndTypes.EQUAL; }
 <EXTEND_NAMESPACE> {CHARS}							{ yybegin(EXTEND); return CndTypes.NAMESPACE_NAME; }
 <EXTEND> {
@@ -115,7 +120,7 @@ OPTIONS="mixin"|"abstract"|"orderable"|"noquery"
 }
 
 //Item type
-<YYINITIAL> "itemtype"                          				{ yybegin(ITEMTYPE); return CndTypes.ITEMTYPE; }
+//<YYINITIAL> "itemtype"                          				{ yybegin(ITEMTYPE); return CndTypes.ITEMTYPE; }
 <ITEMTYPE> {
 	"="                           								{ return CndTypes.EQUAL; }
 //	"default"|"options"|"layout"|"metadata"|"content"|"classification"|"permissions"|"listOrdering"|"contributeMode"|"propertiesView"           { return CndTypes.ITEMTYPE_TYPE; }

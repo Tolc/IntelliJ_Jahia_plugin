@@ -1,15 +1,27 @@
 package fr.tolc.jahia.intellij.plugin.cnd;
 
-import com.intellij.codeInsight.completion.*;
+import java.util.List;
+
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionProvider;
+import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.util.ProcessingContext;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.*;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.ItemTypeEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyAttributeEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskOptionEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.SubNodeAttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class CndCompletionContributor extends CompletionContributor {
     public CndCompletionContributor() {
@@ -60,6 +72,16 @@ public class CndCompletionContributor extends CompletionContributor {
                                                @NotNull CompletionResultSet resultSet) {
                         for (OptionEnum option : OptionEnum.values()) {
                             resultSet.addElement(LookupElementBuilder.create(option));
+                        }
+                        
+                        //Workaround for 'extends' and 'itemtype' completions
+                        PsiElement prevElement = parameters.getPosition().getPrevSibling();
+                        while (prevElement != null && prevElement instanceof PsiWhiteSpace) {
+                            prevElement = prevElement.getPrevSibling();
+                        }
+                        if (prevElement != null && prevElement.getNode().getElementType().equals(CndTypes.CRLF)) {
+                            resultSet.addElement(LookupElementBuilder.create("extends = "));
+                            resultSet.addElement(LookupElementBuilder.create("itemtype = "));
                         }
                     }
                 }
