@@ -67,6 +67,7 @@
     <!--<annotator language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJspAnnotator"/>-->
     <annotator language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndPropertiesAnnotator"/>
     <annotator language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndCndAnnotator"/>
+    <codeInsight.lineMarkerProvider language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndCndLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndJavaLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="XML" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndXmlLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndXmlLineMarkerProvider"/>

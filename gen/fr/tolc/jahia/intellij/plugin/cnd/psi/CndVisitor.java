@@ -37,16 +37,16 @@ public class CndVisitor extends PsiElementVisitor {
     visitNamespaceIdentifierElement(o);
   }
 
+  public void visitNodeOption(@NotNull CndNodeOption o) {
+    visitPsiElement(o);
+  }
+
   public void visitNodeType(@NotNull CndNodeType o) {
     visitNodeTypeElement(o);
   }
 
   public void visitNodeTypeIdentifier(@NotNull CndNodeTypeIdentifier o) {
     visitNodeTypeIdentifierElement(o);
-  }
-
-  public void visitOptions(@NotNull CndOptions o) {
-    visitPsiElement(o);
   }
 
   public void visitProperty(@NotNull CndProperty o) {

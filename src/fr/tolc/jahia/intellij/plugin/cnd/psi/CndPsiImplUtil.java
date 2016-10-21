@@ -1,6 +1,8 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.*;
 
@@ -10,9 +12,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
-import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import org.jetbrains.annotations.Nullable;
 
 public class CndPsiImplUtil {
@@ -132,6 +135,22 @@ public class CndPsiImplUtil {
             }
         }
         return null;
+    }
+
+    public static Set<OptionEnum> getOptions(CndNodeType element) {
+        Set<OptionEnum> result = new HashSet<OptionEnum>();
+        for (CndNodeOption cndOption : element.getNodeOptionList()) {
+            try {
+                result.add(OptionEnum.fromValue(cndOption.getText()));
+            } catch (IllegalArgumentException e) {
+                //Nothing to do
+            }
+        }
+        return result;
+    }
+
+    public static boolean isMixin(CndNodeType element) {
+        return element.getOptions().contains(OptionEnum.MIXIN);
     }
 
     public static ItemPresentation getPresentation(final CndNodeType element) {

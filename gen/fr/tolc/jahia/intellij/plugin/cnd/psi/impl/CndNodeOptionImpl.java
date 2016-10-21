@@ -11,14 +11,14 @@ import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
-public class CndOptionsImpl extends ASTWrapperPsiElement implements CndOptions {
+public class CndNodeOptionImpl extends ASTWrapperPsiElement implements CndNodeOption {
 
-  public CndOptionsImpl(ASTNode node) {
+  public CndNodeOptionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull CndVisitor visitor) {
-    visitor.visitOptions(this);
+    visitor.visitNodeOption(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
