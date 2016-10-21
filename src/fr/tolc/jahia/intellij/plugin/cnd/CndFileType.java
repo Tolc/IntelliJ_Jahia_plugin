@@ -1,6 +1,7 @@
 package fr.tolc.jahia.intellij.plugin.cnd;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
