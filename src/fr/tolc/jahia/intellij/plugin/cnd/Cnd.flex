@@ -35,7 +35,7 @@ OPTIONS="mixin"|"abstract"|"orderable"|"noquery"
 
 //See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
 
-%state NAMESPACE, NODETYPE_NAMESPACE, NODETYPE, SUPER_TYPES_NAMESPACE, SUPER_TYPES, SUPER_TYPES_NAME, OPTIONS
+%state NAMESPACE, NODETYPE_NAMESPACE, NODETYPE, NODETYPE_DONE, SUPER_TYPE_NAMESPACE, SUPER_TYPE_NAME, AFTER_SUPER_TYPE_NAME, OPTIONS
 %state EXTENDS, EXTEND_NAMESPACE, EXTEND, ITEMTYPE
 %state PROPERTY, PROPERTY_TYPE, PROPERTY_MASK_OPTION_NAME, PROPERTY_MASK, PROPERTY_MASK_OPTION, PROPERTY_DEFAULT, PROPERTY_DEFAULT_VALUE, PROPERTY_ATTRIBUTES, PROPERTY_CONSTRAINT, PROPERTY_CONSTRAINT_NEWLINE
 %state NODE, NODE_NAMESPACE, NODE_NODETYPE, NODE_DEFAULT, NODE_DEFAULT_VALUE_NAMESPACE, NODE_DEFAULT_VALUE, NODE_ATTRIBUTES
@@ -63,35 +63,41 @@ OPTIONS="mixin"|"abstract"|"orderable"|"noquery"
 <YYINITIAL> "["									{ yybegin(NODETYPE_NAMESPACE); return CndTypes.LEFT_BRACKET; }
 <NODETYPE_NAMESPACE> {CHARS}					{ yybegin(NODETYPE); return CndTypes.NAMESPACE_NAME; }
 <NODETYPE> {
-	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
+//	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
 	":"                                         { return CndTypes.COLON; }
 	{CHARS}                       				{ return CndTypes.NODE_TYPE_NAME; }
-	"]"							                { return CndTypes.RIGHT_BRACKET; }
-	">"							                { yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.RIGHT_ONLY_ANGLE_BRACKET; }
+	"]"							                {  yybegin(NODETYPE_DONE); return CndTypes.RIGHT_BRACKET; }
+//	">"							                { yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.RIGHT_ONLY_ANGLE_BRACKET; }
+}
+<NODETYPE_DONE> {
+	[:jletter:]+								{ yybegin(OPTIONS); return CndTypes.OPTION; }
+	">"											{ yybegin(SUPER_TYPE_NAMESPACE); return CndTypes.RIGHT_ONLY_ANGLE_BRACKET; }
 }
 
+
 //Node type super types "> jnt:content, smix:lmcuComponent"
-<SUPER_TYPES_NAMESPACE> {
-	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
-	{CHARS}										{ yybegin(SUPER_TYPES); return CndTypes.NAMESPACE_NAME; }
+<SUPER_TYPE_NAMESPACE> {
+//	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
+	{CHARS}										{ return CndTypes.NAMESPACE_NAME; }
+	":"											{ yybegin(SUPER_TYPE_NAME); return CndTypes.COLON; }
 }
-<SUPER_TYPES> {
-	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
-	":"											{ yybegin(SUPER_TYPES_NAME); return CndTypes.COLON; }
-//	{CHARS}									    { return CndTypes.NODE_TYPE_NAME; }
-	","											{ yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.COMMA; }
-}
-<SUPER_TYPES_NAME> {
-    {CHARS}									    { yybegin(SUPER_TYPES); return CndTypes.NODE_TYPE_NAME; }
+<SUPER_TYPE_NAME> {
+//	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
+//	":"											{ yybegin(SUPER_TYPES_NAME); return CndTypes.COLON; }
+	{CHARS}									    { yybegin(AFTER_SUPER_TYPE_NAME); return CndTypes.NODE_TYPE_NAME; }
     {CRLF}									    { yybegin(YYINITIAL); yypushback(yylength()); return CndTypes.NODE_TYPE_NAME; }     //For completion purposes
+}
+<AFTER_SUPER_TYPE_NAME> {
+	","											{ yybegin(SUPER_TYPE_NAMESPACE); return CndTypes.COMMA; }
+    [:jletter:]+								{ yybegin(OPTIONS); return CndTypes.OPTION; }
 }
 
 //Node type options "mixin", "orderable", "abstract", ... at the end of line or on a new line
 <OPTIONS> {
-	{OPTIONS}									{ return CndTypes.OPTION; }
+	[:jletter:]+								{ return CndTypes.OPTION; }
 }
 <YYINITIAL> {
-	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
+	{OPTIONS}									{ yybegin(OPTIONS); yypushback(yylength()); }
 }
 
 
