@@ -29,7 +29,7 @@ public class SimpleFoldingBuilder extends FoldingBuilderEx {
         for (final PsiLiteralExpression literalExpression : literalExpressions) {
             String value = literalExpression.getValue() instanceof String ? (String)literalExpression.getValue() : null;
 
-            if (value != null && value.startsWith("simple:")) {
+            if (value != null && value.startsWith("simple=")) {
                 Project project = literalExpression.getProject();
                 String key = value.substring(7);
                 final List<SimpleProperty> properties = SimpleUtil.findProperties(project, key);

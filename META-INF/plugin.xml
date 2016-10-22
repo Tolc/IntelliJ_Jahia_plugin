@@ -76,7 +76,7 @@
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.CndReferenceContributor"/>
     <lang.findUsagesProvider language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFindUsagesProvider"/>
     <!--<lang.refactoringSupport language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndRefactoringSupportProvider"/>-->
-    <!--<lang.foldingBuilder language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFoldingBuilder"/>-->
+    <lang.foldingBuilder language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFoldingBuilder"/>
     <!--<gotoSymbolContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.CndChooseByNameContributor"/>-->
     <!--<lang.psiStructureViewFactory language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndStructureViewFactory"/>-->
     <!--<lang.formatter language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFormattingModelBuilder"/>-->
