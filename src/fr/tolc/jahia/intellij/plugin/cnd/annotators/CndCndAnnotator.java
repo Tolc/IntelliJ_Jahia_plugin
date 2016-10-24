@@ -1,6 +1,5 @@
 package fr.tolc.jahia.intellij.plugin.cnd.annotators;
 
-import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,8 +18,8 @@ import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.SubNodeAttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
-import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeFilesQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeTranslationsQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeViewQuickFix;
 import org.apache.commons.lang.StringUtils;
@@ -38,7 +37,7 @@ public class CndCndAnnotator implements Annotator {
                 String nodeTypeName = element.getText();
 
                 PsiElement nextSibling = element.getNextSibling();
-                if (nextSibling != null && CndTypes.RIGHT_BRACKET.equals(nextSibling.getNode().getElementType())) { //Make sure this is a node type declaration, and not use
+                if (nextSibling != null && CndTypes.RIGHT_BRACKET.equals(nextSibling.getNode().getElementType())) {
 
                     PsiElement colonEl = element.getPrevSibling();
                     if (colonEl != null && CndTypes.COLON.equals(colonEl.getNode().getElementType())) {
@@ -47,7 +46,6 @@ public class CndCndAnnotator implements Annotator {
                         if (namespaceEl != null && CndTypes.NAMESPACE_NAME.equals(namespaceEl.getNode().getElementType())) {
                             String namespace = namespaceEl.getText();
 
-//                            Project project = element.getProject();
 //                            Module currentModule = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(element.getContainingFile().getVirtualFile());
 //                            VirtualFile[] sourceRoots = ModuleRootManager.getInstance(currentModule).getSourceRoots();
 
@@ -57,31 +55,15 @@ public class CndCndAnnotator implements Annotator {
                             } else {
                                 String jahiaWorkFolderPath = CndUtil.getJahiaWorkFolderPath(element);
                                 if (jahiaWorkFolderPath != null) {
-                                    //                            VirtualFile nodeTypeFolder = null;
-                                    //                            for (VirtualFile sourceRoot : sourceRoots) {
-                                    //                                nodeTypeFolder = sourceRoot.findFileByRelativePath("main/webapp/" + namespace + "_" + nodeTypeName);
-                                    //                                if (nodeTypeFolder != null) {
-                                    //                                    break;
-                                    //                                }
-                                    //                            }
-
-                                    String nodeTypeFolderPath = CndUtil.getNodeTypeFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName);
-                                    File nodeTypeFolder = new File(nodeTypeFolderPath);
-                                    if (!nodeTypeFolder.exists() || !nodeTypeFolder.isDirectory()) {
-                                        Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + " does not have any associated folder");
-                                        annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
-                                        annotation.registerFix(new CreateNodeTypeFilesQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
-                                    } else {
-                                        Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Create a new view for " + namespace + ":" + nodeTypeName);
-                                        annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
-                                        annotation.registerFix(new CreateNodeTypeViewQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
-                                    }
+                                    Annotation newViewAnnotation = holder.createInfoAnnotation(element.getTextRange(), "Create a new view for " + namespace + ":" + nodeTypeName);
+                                    newViewAnnotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
+                                    newViewAnnotation.registerFix(new CreateNodeTypeViewQuickFix(jahiaWorkFolderPath, ((CndNodeTypeIdentifier)element).getNodeType()));
 
                                     //Translation
                                     if (CndTranslationUtil.getNodeTypeTranslation(element.getProject(), namespace, nodeTypeName) == null) {
-                                        Annotation annotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + "does not have any translation");
-                                        annotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
-                                        annotation.registerFix(new CreateNodeTypeTranslationsQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
+                                        Annotation translationAnnotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + "does not have any translation");
+                                        translationAnnotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
+                                        translationAnnotation.registerFix(new CreateNodeTypeTranslationsQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
                                     }
                                 }
                             }

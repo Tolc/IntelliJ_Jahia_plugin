@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndSubNodeElementImpl;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
-public class CndSubNodeImpl extends ASTWrapperPsiElement implements CndSubNode {
+public class CndSubNodeImpl extends CndSubNodeElementImpl implements CndSubNode {
 
   public CndSubNodeImpl(ASTNode node) {
     super(node);
@@ -42,6 +42,10 @@ public class CndSubNodeImpl extends ASTWrapperPsiElement implements CndSubNode {
   @NotNull
   public List<CndSubNodeType> getSubNodeTypeList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CndSubNodeType.class);
+  }
+
+  public String getSubNodeName() {
+    return CndPsiImplUtil.getSubNodeName(this);
   }
 
 }

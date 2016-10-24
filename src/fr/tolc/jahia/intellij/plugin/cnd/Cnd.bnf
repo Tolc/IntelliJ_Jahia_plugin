@@ -79,6 +79,9 @@ propertyConstraint ::= LEFT_ONLY_ANGLE_BRACKET PROPERTY_CONSTRAINT_VALUE
 
 
 subNode ::= PLUS NODE_NAME LEFT_PARENTHESIS subNodeTypes RIGHT_PARENTHESIS [subNodeDefault] [subNodeAttributes]
+{ mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndSubNodeElementImpl"
+  implements="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeElement"
+  methods=[getSubNodeName] }
 private subNodeTypes ::= subNodeType (COMMA subNodeType)*
 subNodeType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
 { mixin="fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndSubNodeTypeElementImpl"

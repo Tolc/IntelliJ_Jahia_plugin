@@ -11,6 +11,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndNodeTypeIdentifierElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndPropertyElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndPropertyIdentifierElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeDefaultTypeElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeTypeElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSuperTypeElement;
@@ -70,7 +71,7 @@ public class CndVisitor extends PsiElementVisitor {
   }
 
   public void visitSubNode(@NotNull CndSubNode o) {
-    visitPsiElement(o);
+    visitSubNodeElement(o);
   }
 
   public void visitSubNodeAttributes(@NotNull CndSubNodeAttributes o) {
@@ -122,6 +123,10 @@ public class CndVisitor extends PsiElementVisitor {
   }
 
   public void visitSubNodeDefaultTypeElement(@NotNull CndSubNodeDefaultTypeElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSubNodeElement(@NotNull CndSubNodeElement o) {
     visitPsiElement(o);
   }
 

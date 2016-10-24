@@ -1,24 +1,26 @@
 package fr.tolc.jahia.intellij.plugin.cnd.enums;
 
 public enum PropertyTypeEnum {
-    STRING("string"),
-    LONG("long"),
-    DOUBLE("double"),
-    DECIMAL("decimal"),
-    PATH("path"),
-    URI("uri"),
-    BOOLEAN("boolean"),
-    DATE("date"),
-    BINARY("binary"),
-    WEAKREFERENCE("weakreference"),
-    NAME("name"),
-    REFERENCE("reference"),
-    UNDEFINED("undefined");
+    STRING("string", "string"),
+    LONG("long", "long"),
+    DOUBLE("double", "double"),
+    DECIMAL("decimal", "decimal"),
+    PATH("path", "string"),
+    URI("uri", "string"),
+    BOOLEAN("boolean", "boolean"),
+    DATE("date", "date"),
+    BINARY("binary", "binary"),
+    WEAKREFERENCE("weakreference", "node"),
+    NAME("name", "string"),
+    REFERENCE("reference", "node"),
+    UNDEFINED("undefined", "");
 
     private String value;
+    private String accessor;
 
-    PropertyTypeEnum(String value) {
+    PropertyTypeEnum(String value, String accessor) {
         this.value = value;
+        this.accessor = accessor;
     }
 
     public static PropertyTypeEnum fromValue(String value) throws IllegalArgumentException {
@@ -32,5 +34,9 @@ public enum PropertyTypeEnum {
 
     public String toString() {
         return this.value;
+    }
+
+    public String getAccessor() {
+        return accessor;
     }
 }

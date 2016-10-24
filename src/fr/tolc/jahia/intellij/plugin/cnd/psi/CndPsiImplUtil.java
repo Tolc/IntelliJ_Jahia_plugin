@@ -327,8 +327,17 @@ public class CndPsiImplUtil {
     public static ItemPresentation getPresentation(final CndPropertyIdentifier element) {
         return element.getProperty().getPresentation();
     }
-    
 
+
+    //SubNode
+    public static String getSubNodeName(CndSubNode element) {
+        ASTNode nameNode = element.getNode().findChildByType(CndTypes.NODE_NAME);
+        if (nameNode != null) {
+            return nameNode.getText();
+        }
+        return null;
+    }
+    
 
     //SuperType
     public static PsiReference[] getReferences(CndSuperType element) {
