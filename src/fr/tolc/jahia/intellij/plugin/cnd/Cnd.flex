@@ -51,7 +51,8 @@ CHARS=[:jletter:][:jletterdigit:]*
 	{CHARS}											{ return CndTypes.NAMESPACE_NAME; }
     "="												{ return CndTypes.EQUAL; }
     "'"												{ return CndTypes.SINGLE_QUOTE; }
-    "http"(s){0,1}":\/\/"[A-Za-z0-9.\/\-_]+			{ return CndTypes.NAMESPACE_URI; }
+//    "http"(s){0,1}":\/\/"[A-Za-z0-9.\/\-_]+			{ return CndTypes.NAMESPACE_URI; }
+    [^\r\n\ \t\f'>=]+								{ return CndTypes.NAMESPACE_URI; }
 	">" 											{ yybegin(YYINITIAL); return CndTypes.RIGHT_ANGLE_BRACKET; }
 }
 

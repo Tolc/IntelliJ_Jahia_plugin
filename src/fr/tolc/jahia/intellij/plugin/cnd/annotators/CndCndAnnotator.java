@@ -1,6 +1,8 @@
 package fr.tolc.jahia.intellij.plugin.cnd.annotators;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -9,7 +11,12 @@ import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
 import fr.tolc.jahia.intellij.plugin.cnd.CndTranslationUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.*;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.ItemTypeEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyAttributeEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.SubNodeAttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
@@ -20,6 +27,8 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class CndCndAnnotator implements Annotator {
+
+    private static final Pattern namespaceUriPattern = Pattern.compile("^http(s)?://[A-Za-z0-9][A-Za-z0-9./-_]+[A-Za-z0-9]$");
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
@@ -78,6 +87,14 @@ public class CndCndAnnotator implements Annotator {
                             }
                         }
                     }
+                }
+            }
+
+            //Namespace URI
+            else if (CndTypes.NAMESPACE_URI.equals(element.getNode().getElementType())) {
+                Matcher matcher = namespaceUriPattern.matcher(element.getText());
+                if (!matcher.matches()) {
+                    holder.createErrorAnnotation(element.getTextRange(), "Not a valid URI");
                 }
             }
 
