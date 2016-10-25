@@ -1,6 +1,12 @@
 package fr.tolc.jahia.intellij.plugin.cnd.codeFormatting;
 
-import com.intellij.formatting.*;
+import com.intellij.formatting.Alignment;
+import com.intellij.formatting.FormattingModel;
+import com.intellij.formatting.FormattingModelBuilder;
+import com.intellij.formatting.FormattingModelProvider;
+import com.intellij.formatting.SpacingBuilder;
+import com.intellij.formatting.Wrap;
+import com.intellij.formatting.WrapType;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -22,13 +28,18 @@ public class CndFormattingModelBuilder implements FormattingModelBuilder {
     }
 
     private static SpacingBuilder createSpaceBuilder(CodeStyleSettings settings) {
-        return new SpacingBuilder(settings);
-//        return new SpacingBuilder(settings, CndLanguage.INSTANCE).
-//                around(CndTypes.EQUAL).spaces(1);
-//                before(CndTypes.NAMESPACE).none().
-//                before(CndTypes.NODE_TYPE).none().
-//                between(CndTypes.NODE_TYPE, CndTypes.NODE_TYPE).blankLines(1).
-//                between(CndTypes.NAMESPACE, TokenSet.create(CndTypes.NODE_TYPE, CndTypes.COMMENT)).blankLines(2);
+        return new SpacingBuilder(settings, CndLanguage.INSTANCE).
+                aroundInside(CndTypes.EQUAL, CndTypes.PROPERTY_TYPE_MASK_OPTION).spaces(0).
+                aroundInside(CndTypes.EQUAL, TokenSet.create(CndTypes.NAMESPACE, CndTypes.EXTENSIONS, CndTypes.ITEM_TYPE, CndTypes.PROPERTY_DEFAULT, CndTypes.SUB_NODE)).spaces(1).
+                aroundInside(TokenSet.create(CndTypes.LEFT_BRACKET, CndTypes.RIGHT_BRACKET), CndTypes.PROPERTY).spaces(0).
+                around(TokenSet.create(CndTypes.COLON, CndTypes.LEFT_ANGLE_BRACKET, CndTypes.RIGHT_ANGLE_BRACKET)).spaces(0).
+                around(TokenSet.create(CndTypes.RIGHT_ONLY_ANGLE_BRACKET, CndTypes.LEFT_ONLY_ANGLE_BRACKET, CndTypes.MINUS, CndTypes.PLUS,
+                                CndTypes.PROPERTY_ATTRIBUTE, CndTypes.NODE_ATTRIBUTE)).spaces(1).
+                after(TokenSet.create(CndTypes.COMMA, CndTypes.RIGHT_PARENTHESIS)).spaces(1).
+                before(CndTypes.LEFT_PARENTHESIS).spaces(1).
+                before(CndTypes.COMMA).spaces(0).
+                between(CndTypes.NODE_TYPE, TokenSet.create(CndTypes.NODE_TYPE, CndTypes.COMMENT)).blankLines(1).
+                between(CndTypes.NAMESPACE, TokenSet.create(CndTypes.NODE_TYPE, CndTypes.COMMENT)).blankLines(2);
     }
 
     @Nullable

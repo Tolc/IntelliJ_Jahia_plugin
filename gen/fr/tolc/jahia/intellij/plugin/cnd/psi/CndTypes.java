@@ -21,6 +21,7 @@ public interface CndTypes {
   IElementType PROPERTY_CONSTRAINT = new CndElementType("PROPERTY_CONSTRAINT");
   IElementType PROPERTY_DEFAULT = new CndElementType("PROPERTY_DEFAULT");
   IElementType PROPERTY_IDENTIFIER = new CndElementType("PROPERTY_IDENTIFIER");
+  IElementType PROPERTY_TYPE_MASK_OPTION = new CndElementType("PROPERTY_TYPE_MASK_OPTION");
   IElementType SUB_NODE = new CndElementType("SUB_NODE");
   IElementType SUB_NODE_ATTRIBUTES = new CndElementType("SUB_NODE_ATTRIBUTES");
   IElementType SUB_NODE_DEFAULT_TYPE = new CndElementType("SUB_NODE_DEFAULT_TYPE");
@@ -103,6 +104,9 @@ public interface CndTypes {
       }
       else if (type == PROPERTY_IDENTIFIER) {
         return new CndPropertyIdentifierImpl(node);
+      }
+      else if (type == PROPERTY_TYPE_MASK_OPTION) {
+        return new CndPropertyTypeMaskOptionImpl(node);
       }
       else if (type == SUB_NODE) {
         return new CndSubNodeImpl(node);

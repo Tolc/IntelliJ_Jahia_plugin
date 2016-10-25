@@ -53,6 +53,12 @@ public class CndPropertyImpl extends CndPropertyElementImpl implements CndProper
     return findNotNullChildByClass(CndPropertyIdentifier.class);
   }
 
+  @Override
+  @NotNull
+  public List<CndPropertyTypeMaskOption> getPropertyTypeMaskOptionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, CndPropertyTypeMaskOption.class);
+  }
+
   public String getPropertyName() {
     return CndPsiImplUtil.getPropertyName(this);
   }

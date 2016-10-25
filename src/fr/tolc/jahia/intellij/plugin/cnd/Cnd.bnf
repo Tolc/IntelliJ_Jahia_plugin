@@ -67,8 +67,8 @@ propertyIdentifier ::= PROPERTY_NAME
   implements="fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndPropertyIdentifierElement"
   methods=[getPropertyName setPropertyName getNameIdentifier getPresentation getName setName getProperty] }
 private propertyType ::= LEFT_PARENTHESIS PROPERTY_TYPE [COMMA PROPERTY_MASK [propertyMaskOptions]] RIGHT_PARENTHESIS
-private propertyMaskOptions ::= LEFT_BRACKET propertyMaskOption (COMMA propertyMaskOption)* RIGHT_BRACKET 
-private propertyMaskOption ::= PROPERTY_MASK_OPTION [EQUAL PROPERTY_MASK_OPTION_VALUE]
+private propertyMaskOptions ::= LEFT_BRACKET propertyTypeMaskOption (COMMA propertyTypeMaskOption)* RIGHT_BRACKET 
+propertyTypeMaskOption ::= PROPERTY_MASK_OPTION [EQUAL PROPERTY_MASK_OPTION_VALUE]
 
 propertyDefault ::= EQUAL PROPERTY_DEFAULT_VALUE
 

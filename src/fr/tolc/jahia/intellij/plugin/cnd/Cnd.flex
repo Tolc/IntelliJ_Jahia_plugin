@@ -166,7 +166,7 @@ CHARS=[:jletter:][:jletterdigit:]*
 	[^\r\n\ =][^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+									{ return CndTypes.PROPERTY_ATTRIBUTE; }
 }
 
-<PROPERTY_CONSTRAINT> [^\r\n]+					{ return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
+<PROPERTY_CONSTRAINT> [^\r\n\ \t\f][^\r\n]+[^\r\n\ \t\f]					{ return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
 <PROPERTY_CONSTRAINT_NEWLINE> "'"[^\r\n]+"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']+"'")*			{ return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
 
 

@@ -70,6 +70,10 @@ public class CndVisitor extends PsiElementVisitor {
     visitPropertyIdentifierElement(o);
   }
 
+  public void visitPropertyTypeMaskOption(@NotNull CndPropertyTypeMaskOption o) {
+    visitPsiElement(o);
+  }
+
   public void visitSubNode(@NotNull CndSubNode o) {
     visitSubNodeElement(o);
   }

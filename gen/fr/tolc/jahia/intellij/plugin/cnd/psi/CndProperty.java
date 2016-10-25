@@ -23,6 +23,9 @@ public interface CndProperty extends CndPropertyElement {
   @NotNull
   CndPropertyIdentifier getPropertyIdentifier();
 
+  @NotNull
+  List<CndPropertyTypeMaskOption> getPropertyTypeMaskOptionList();
+
   String getPropertyName();
 
   PsiElement setPropertyName(String newName);
