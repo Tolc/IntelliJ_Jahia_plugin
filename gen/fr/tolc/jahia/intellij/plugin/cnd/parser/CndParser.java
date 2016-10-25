@@ -62,6 +62,9 @@ public class CndParser implements PsiParser, LightPsiParser {
     else if (t == PROPERTY_IDENTIFIER) {
       r = propertyIdentifier(b, 0);
     }
+    else if (t == PROPERTY_TYPE_MASK_OPTION) {
+      r = propertyTypeMaskOption(b, 0);
+    }
     else if (t == SUB_NODE) {
       r = subNode(b, 0);
     }
@@ -645,41 +648,21 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PROPERTY_MASK_OPTION [EQUAL PROPERTY_MASK_OPTION_VALUE]
-  static boolean propertyMaskOption(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "propertyMaskOption")) return false;
-    if (!nextTokenIs(b, PROPERTY_MASK_OPTION)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, PROPERTY_MASK_OPTION);
-    r = r && propertyMaskOption_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // [EQUAL PROPERTY_MASK_OPTION_VALUE]
-  private static boolean propertyMaskOption_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "propertyMaskOption_1")) return false;
-    parseTokens(b, 0, EQUAL, PROPERTY_MASK_OPTION_VALUE);
-    return true;
-  }
-
-  /* ********************************************************** */
-  // LEFT_BRACKET propertyMaskOption (COMMA propertyMaskOption)* RIGHT_BRACKET
+  // LEFT_BRACKET propertyTypeMaskOption (COMMA propertyTypeMaskOption)* RIGHT_BRACKET
   static boolean propertyMaskOptions(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyMaskOptions")) return false;
     if (!nextTokenIs(b, LEFT_BRACKET)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LEFT_BRACKET);
-    r = r && propertyMaskOption(b, l + 1);
+    r = r && propertyTypeMaskOption(b, l + 1);
     r = r && propertyMaskOptions_2(b, l + 1);
     r = r && consumeToken(b, RIGHT_BRACKET);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (COMMA propertyMaskOption)*
+  // (COMMA propertyTypeMaskOption)*
   private static boolean propertyMaskOptions_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyMaskOptions_2")) return false;
     int c = current_position_(b);
@@ -691,13 +674,13 @@ public class CndParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // COMMA propertyMaskOption
+  // COMMA propertyTypeMaskOption
   private static boolean propertyMaskOptions_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyMaskOptions_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && propertyMaskOption(b, l + 1);
+    r = r && propertyTypeMaskOption(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -738,6 +721,26 @@ public class CndParser implements PsiParser, LightPsiParser {
   private static boolean propertyType_2_0_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyType_2_0_2")) return false;
     propertyMaskOptions(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // PROPERTY_MASK_OPTION [EQUAL PROPERTY_MASK_OPTION_VALUE]
+  public static boolean propertyTypeMaskOption(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyTypeMaskOption")) return false;
+    if (!nextTokenIs(b, PROPERTY_MASK_OPTION)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PROPERTY_MASK_OPTION);
+    r = r && propertyTypeMaskOption_1(b, l + 1);
+    exit_section_(b, m, PROPERTY_TYPE_MASK_OPTION, r);
+    return r;
+  }
+
+  // [EQUAL PROPERTY_MASK_OPTION_VALUE]
+  private static boolean propertyTypeMaskOption_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "propertyTypeMaskOption_1")) return false;
+    parseTokens(b, 0, EQUAL, PROPERTY_MASK_OPTION_VALUE);
     return true;
   }
 
