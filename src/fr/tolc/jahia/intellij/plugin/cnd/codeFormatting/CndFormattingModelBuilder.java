@@ -38,6 +38,8 @@ public class CndFormattingModelBuilder implements FormattingModelBuilder {
                 after(TokenSet.create(CndTypes.COMMA, CndTypes.RIGHT_PARENTHESIS)).spaces(1).
                 before(CndTypes.LEFT_PARENTHESIS).spaces(1).
                 before(CndTypes.COMMA).spaces(0).
+                after(CndTypes.LEFT_PARENTHESIS).spaces(0).
+                before(CndTypes.RIGHT_PARENTHESIS).spaces(0).
                 between(CndTypes.NODE_TYPE, TokenSet.create(CndTypes.NODE_TYPE, CndTypes.COMMENT)).blankLines(1).
                 between(CndTypes.NAMESPACE, TokenSet.create(CndTypes.NODE_TYPE, CndTypes.COMMENT)).blankLines(2);
     }
