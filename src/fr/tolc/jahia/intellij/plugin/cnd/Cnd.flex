@@ -29,13 +29,8 @@ COMMENT_BLOCK="/*"~"*/"
 //~ = upto
 
 CHARS=[:jletter:][:jletterdigit:]*
-//OPTIONS="mixin"|"abstract"|"orderable"|"noquery"
-//PROPERTY_ATTRIBUTES="mandatory"|"protected"|"primary"|"i18n"|"internationalized"|"sortable"|"hidden"|"multiple"|"nofulltext"|"indexed="("'")?("no"|"tokenized"|"untokenized")("'")?|"analyzer='keyword'"|"autocreated"|("boost"|"scoreboost")"="[:digit:]+("."[:digit:]+){0,1}|"onconflict="("sum"|"latest"|"oldest"|"min"|"max"|"ignore")|"facetable"|"hierarchical"|"noqueryorder"|"itemtype = "("content"|"metadata"|"layout"|"options"|"codeEditor")|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"queryops '" (("<"|"<="|"<>"|"="|">"|">="|"like")(","){0,1})+ "'"
-//NODE_ATTRIBUTES="mandatory"|"autocreated"|("copy"|"version"|"initialize"|"compute"|"ignore"|"abort")|"multiple"|"protected"|"sns"
 
-//See https://www.jahia.com/fr/communaute/etendre/techwiki/content-editing-uis/input-masks
-
-%state NAMESPACE, NODETYPE_NAMESPACE, NODETYPE, NODETYPE_DONE, SUPER_TYPE_NAMESPACE, SUPER_TYPE_NAME, AFTER_SUPER_TYPE_NAME, OPTIONS
+%state NAMESPACE, NAMESPACE_URI, NODETYPE_NAMESPACE, NODETYPE, NODETYPE_DONE, SUPER_TYPE_NAMESPACE, SUPER_TYPE_NAME, AFTER_SUPER_TYPE_NAME, OPTIONS
 %state EXTENDS, EXTEND_NAMESPACE, EXTEND, ITEMTYPE
 %state PROPERTY, PROPERTY_TYPE, PROPERTY_MASK_OPTION_NAME, PROPERTY_MASK, PROPERTY_MASK_OPTION, PROPERTY_DEFAULT, PROPERTY_DEFAULT_VALUE, PROPERTY_ATTRIBUTES, PROPERTY_CONSTRAINT, PROPERTY_CONSTRAINT_NEWLINE
 %state NODE, NODE_NAMESPACE, NODE_NODETYPE, NODE_DEFAULT, NODE_DEFAULT_VALUE_NAMESPACE, NODE_DEFAULT_VALUE, NODE_ATTRIBUTES
@@ -50,9 +45,11 @@ CHARS=[:jletter:][:jletterdigit:]*
 <NAMESPACE> {
 	{CHARS}											{ return CndTypes.NAMESPACE_NAME; }
     "="												{ return CndTypes.EQUAL; }
-    "'"												{ return CndTypes.SINGLE_QUOTE; }
-//    "http"(s){0,1}":\/\/"[A-Za-z0-9.\/\-_]+			{ return CndTypes.NAMESPACE_URI; }
-    [^\r\n\ \t\f'>=]+								{ return CndTypes.NAMESPACE_URI; }
+    "'"												{ yybegin(NAMESPACE_URI); return CndTypes.SINGLE_QUOTE; }
+}
+<NAMESPACE_URI>	{
+	[^'>]+											{ return CndTypes.NAMESPACE_URI; }
+	"'"												{ return CndTypes.SINGLE_QUOTE; }
 	">" 											{ yybegin(YYINITIAL); return CndTypes.RIGHT_ANGLE_BRACKET; }
 }
 
@@ -64,11 +61,9 @@ CHARS=[:jletter:][:jletterdigit:]*
 <YYINITIAL> "["									{ yybegin(NODETYPE_NAMESPACE); return CndTypes.LEFT_BRACKET; }
 <NODETYPE_NAMESPACE> {CHARS}					{ yybegin(NODETYPE); return CndTypes.NAMESPACE_NAME; }
 <NODETYPE> {
-//	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
 	":"                                         { return CndTypes.COLON; }
 	{CHARS}                       				{ return CndTypes.NODE_TYPE_NAME; }
 	"]"							                {  yybegin(NODETYPE_DONE); return CndTypes.RIGHT_BRACKET; }
-//	">"							                { yybegin(SUPER_TYPES_NAMESPACE); return CndTypes.RIGHT_ONLY_ANGLE_BRACKET; }
 }
 <NODETYPE_DONE> {
 	[:jletter:]+								{ yybegin(OPTIONS); return CndTypes.OPTION; }
@@ -78,13 +73,10 @@ CHARS=[:jletter:][:jletterdigit:]*
 
 //Node type super types "> jnt:content, smix:lmcuComponent"
 <SUPER_TYPE_NAMESPACE> {
-//	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
 	{CHARS}										{ return CndTypes.NAMESPACE_NAME; }
 	":"											{ yybegin(SUPER_TYPE_NAME); return CndTypes.COLON; }
 }
 <SUPER_TYPE_NAME> {
-//	{OPTIONS}									{ yybegin(OPTIONS); return CndTypes.OPTION; }
-//	":"											{ yybegin(SUPER_TYPES_NAME); return CndTypes.COLON; }
 	{CHARS}									    { yybegin(AFTER_SUPER_TYPE_NAME); return CndTypes.NODE_TYPE_NAME; }
     {CRLF}									    { yybegin(YYINITIAL); yypushback(yylength()); return CndTypes.NODE_TYPE_NAME; }     //For completion purposes
 }
@@ -139,19 +131,16 @@ CHARS=[:jletter:][:jletterdigit:]*
 	"("											{ yybegin(PROPERTY_TYPE); return CndTypes.LEFT_PARENTHESIS; }
 }
 <PROPERTY_TYPE> {
-//	"string"|"long"|"double"|"decimal"|"path"|"uri"|"boolean"|"date"|"binary"|"weakreference"|"name"|"reference"|"UNDEFINED"		{ return CndTypes.PROPERTY_TYPE; }
 	[:jletter:]+								{ return CndTypes.PROPERTY_TYPE; }
 	","											{ yybegin(PROPERTY_MASK); return CndTypes.COMMA; }
 	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
 }
 
 <PROPERTY_MASK> {
-//	"text"|"richtext"|"textarea"|"choicelist"|"datetimepicker"|"datepicker"|"picker"|"color"|"category"|"checkbox"|"fileupload"|"tag"|"file"		{ return CndTypes.PROPERTY_MASKS; }
 	[:jletter:]+								{ return CndTypes.PROPERTY_MASK; }
 	"["											{ yybegin(PROPERTY_MASK_OPTION_NAME); return CndTypes.LEFT_BRACKET; }
 	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
 }
-//<PROPERTY_MASK_OPTION_NAME> "resourceBundle"|"country"|"templates"|"templatesNode"|"users"|"nodetypes"|"subnodetypes"|"nodes"|"menus"|"script"|"flag"|"sortableFieldnames"|"moduleImage"|"linkerProps"|"workflow"|"workflowTypes"|"sort"|"componenttypes"|"autoSelectParent"|"type"|"image"|"dependentProperties"|"mime"|"renderModes"|"permissions"|"autocomplete"|"separator"|"folder"|"root"		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
 <PROPERTY_MASK_OPTION_NAME> [:jletter:]+		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
 <PROPERTY_MASK_OPTION> {
 	"="											{ return CndTypes.EQUAL; }
@@ -162,7 +151,6 @@ CHARS=[:jletter:][:jletterdigit:]*
 }
 
 <PROPERTY_DEFAULT> {
-//	{PROPERTY_ATTRIBUTES}						{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
 	"="											{ yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
 	{CRLF}+{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT_NEWLINE); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
 	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
@@ -173,7 +161,6 @@ CHARS=[:jletter:][:jletterdigit:]*
 }
 
 <PROPERTY_ATTRIBUTES> {
-//	{PROPERTY_ATTRIBUTES}						{ return CndTypes.PROPERTY_ATTRIBUTE; }
 	{CRLF}+{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT_NEWLINE); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
 	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
 	[^\r\n\ =][^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+									{ return CndTypes.PROPERTY_ATTRIBUTE; }
@@ -203,7 +190,6 @@ CHARS=[:jletter:][:jletterdigit:]*
 
 <NODE_DEFAULT> {
 	"="												{ yybegin(NODE_DEFAULT_VALUE_NAMESPACE); return CndTypes.EQUAL; }
-//	{NODE_ATTRIBUTES}								{ yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_ATTRIBUTE; }
 	[^\r\n\ =]+     								{ yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_ATTRIBUTE; }
 }
 <NODE_DEFAULT_VALUE_NAMESPACE> {CHARS}				{ yybegin(NODE_DEFAULT_VALUE); return CndTypes.NAMESPACE_NAME; }
@@ -212,7 +198,6 @@ CHARS=[:jletter:][:jletterdigit:]*
 	{CHARS}                    						{ yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_TYPE_NAME; }
 }
 
-//<NODE_ATTRIBUTES> {NODE_ATTRIBUTES}					{ return CndTypes.NODE_ATTRIBUTE; }
 <NODE_ATTRIBUTES> [^\r\n\ =]+       				{ return CndTypes.NODE_ATTRIBUTE; }
 
 
