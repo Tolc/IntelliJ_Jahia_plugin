@@ -27,6 +27,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNode;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -78,9 +79,9 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
                     String viewLanguage = createNodeTypeViewDialog.getViewLanguage();
 
                     if (StringUtils.isNotBlank(viewType) && StringUtils.isNotBlank(viewLanguage)) {
-                        String finalDirectory = CndUtil.getNodeTypeViewsFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName, viewType);
-                        String fileName = CndUtil.getNodeTypeViewFileName(nodeTypeName, viewName, viewLanguage, isHiddenView);
-                        String propertiesFileName = CndUtil.getNodeTypeViewFileName(nodeTypeName, viewName, "properties", isHiddenView);
+                        String finalDirectory = CndProjectFilesUtil.getNodeTypeViewsFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName, viewType);
+                        String fileName = CndProjectFilesUtil.getNodeTypeViewFileName(nodeTypeName, viewName, viewLanguage, isHiddenView);
+                        String propertiesFileName = CndProjectFilesUtil.getNodeTypeViewFileName(nodeTypeName, viewName, "properties", isHiddenView);
 
                         createNodeTypeView(project, finalDirectory, fileName, propertiesFileName);
                     }

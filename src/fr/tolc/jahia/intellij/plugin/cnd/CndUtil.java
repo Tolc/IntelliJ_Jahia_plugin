@@ -9,9 +9,6 @@ import java.util.regex.Pattern;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -22,7 +19,6 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndFile;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
-import org.apache.commons.lang.StringUtils;
 
 public class CndUtil {
     private CndUtil() {}
@@ -179,55 +175,4 @@ public class CndUtil {
         }
         return null;
     }
-    
-    private static final String JAHIA_6_WEBAPP = "webapp";
-    private static final String JAHIA_7_RESOURCES = "resources";
-    
-    public static String getJahiaWorkFolderPath(PsiElement element) {
-        PsiFile cndFile = element.getContainingFile();
-        PsiDirectory metaInf = cndFile.getParent();
-        if (metaInf != null) {
-            String metaInfNameFolderName = metaInf.getName();
-            if (JAHIA_6_WEBAPP.equals(metaInfNameFolderName) || JAHIA_7_RESOURCES.equals(metaInfNameFolderName)) {
-                return metaInf.getVirtualFile().getPath();
-            }
-            
-            PsiDirectory webappOrResources = metaInf.getParent();
-            if (webappOrResources != null) {
-                String folderName = webappOrResources.getName();
-                if (JAHIA_6_WEBAPP.equals(folderName) || JAHIA_7_RESOURCES.equals(folderName)) {
-                    return webappOrResources.getVirtualFile().getPath();
-                }
-            }
-        }
-        return null;
-    }
-    
-    public static String getNodeTypeFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName) {
-        return jahiaWorkFolderPath + "/" + namespace + "_" + nodeTypeName;
-    }
-    public static String getNodeTypeFolderPath(PsiElement element, String namespace, String nodeTypeName) {
-        return getNodeTypeFolderPath(getJahiaWorkFolderPath(element), namespace, nodeTypeName);
-    }
-
-    public static String getNodeTypeDefaultViewsFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName) {
-        return getNodeTypeViewsFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName, "html");
-    }
-
-    public static String getNodeTypeViewsFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName, String viewType) {
-        return getNodeTypeFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName) + "/" + viewType;
-    }
-
-    public static String getNodeTypeViewFileName(String nodeTypeName, String viewName, String viewLanguage, boolean isHiddenView) {
-        String fileName = nodeTypeName + ".";
-        if (isHiddenView) {
-            fileName += "hidden.";
-        }
-        if (StringUtils.isNotBlank(viewName) && !"default".equals(viewName)) {
-            fileName += viewName + ".";
-        }
-        fileName += viewLanguage;
-        return fileName;
-    }
-
 }

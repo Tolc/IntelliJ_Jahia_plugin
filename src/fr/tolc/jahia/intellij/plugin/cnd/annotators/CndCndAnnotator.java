@@ -22,6 +22,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeTranslationsQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeViewQuickFix;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,7 +54,7 @@ public class CndCndAnnotator implements Annotator {
                             if (cndNamespace == null) {
                                 holder.createErrorAnnotation(namespaceEl.getTextRange(), "Unresolved CND namespace");
                             } else {
-                                String jahiaWorkFolderPath = CndUtil.getJahiaWorkFolderPath(element);
+                                String jahiaWorkFolderPath = CndProjectFilesUtil.getJahiaWorkFolderPath(element);
                                 if (jahiaWorkFolderPath != null) {
                                     Annotation newViewAnnotation = holder.createInfoAnnotation(element.getTextRange(), "Create a new view for " + namespace + ":" + nodeTypeName);
                                     newViewAnnotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
