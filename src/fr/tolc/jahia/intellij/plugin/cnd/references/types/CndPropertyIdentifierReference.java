@@ -13,7 +13,7 @@ import com.intellij.psi.PsiPolyVariantReference;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveResult;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
-import fr.tolc.jahia.intellij.plugin.cnd.CndUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
 import org.apache.commons.lang.StringUtils;

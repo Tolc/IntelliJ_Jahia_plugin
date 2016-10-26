@@ -21,6 +21,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskOptionEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.SubNodeAttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class CndCompletionContributor extends CompletionContributor {

@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd;
+package fr.tolc.jahia.intellij.plugin.cnd.utils;
 
 import java.util.Collection;
 
