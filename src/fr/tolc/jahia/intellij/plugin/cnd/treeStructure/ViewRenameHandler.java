@@ -47,9 +47,8 @@ public class ViewRenameHandler implements RenameHandler {
     if (views == null || views.length != 1) {
       return;
     }
-    PsiClass boundClass = views [0].getClassToBind();
-    RefactoringActionHandlerFactory.getInstance().createRenameHandler().invoke(project, new PsiElement[] { boundClass },
-                                                                               dataContext);
+//    PsiClass boundClass = views [0].getClassToBind();
+//    RefactoringActionHandlerFactory.getInstance().createRenameHandler().invoke(project, new PsiElement[] { boundClass }, dataContext);
   }
 
   public void invoke(@NotNull Project project, @NotNull PsiElement[] elements, DataContext dataContext) {

@@ -1,109 +1,108 @@
 package fr.tolc.jahia.intellij.plugin.cnd.treeStructure;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.Navigatable;
-import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.uiDesigner.binding.FormClassIndex;
+import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Collection;
+import java.util.HashSet;
 
 public class View implements Navigatable {
-  public static final DataKey<View[]> DATA_KEY = DataKey.create("view.array");
-  
-  private final Collection<PsiFile> myViewFiles;
-  private final PsiClass myClassToBind;
+    public static final DataKey<View[]> DATA_KEY = DataKey.create("view.array");
 
-  public View(PsiClass classToBind) {
-    myClassToBind = classToBind;
-    myViewFiles = ViewClassIndex.findViewsBoundToClass(classToBind.getProject(), classToBind);
-  }
+    private final Collection<PsiFile> viewFiles;
+    private final ViewModel viewModel;
 
-  public View(PsiClass classToBind, Collection<PsiFile> viewFiles) {
-    myClassToBind = classToBind;
-    myViewFiles = new HashSet<>(viewFiles);
-  }
+//    public View(ViewModel viewModel) {
+//        this.viewModel = viewModel;
+//        viewFiles = CndProjectFilesUtil.findViewFiles(file, viewModel);
+//    }
 
-  @Override
-  public boolean equals(Object object) {
-    if (object instanceof View){
-      View view = (View)object;
-      return myViewFiles.equals(view.myViewFiles) && myClassToBind.equals(view.myClassToBind);
-    } else {
-      return false;
+    public View(ViewModel viewModel, Collection<PsiFile> viewFiles) {
+        this.viewModel = viewModel;
+        this.viewFiles = new HashSet<>(viewFiles);
     }
-  }
 
-  @Override
-  public int hashCode() {
-    return myViewFiles.hashCode() ^ myClassToBind.hashCode();
-  }
-
-  public String getName() {
-    return myClassToBind.getName();
-  }
-
-  public PsiClass getClassToBind() {
-    return myClassToBind;
-  }
-
-  public PsiFile[] getViewFiles() {
-    return PsiUtilCore.toPsiFileArray(myViewFiles);
-  }
-
-  public void navigate(boolean requestFocus) {
-    for (PsiFile psiFile : myViewFiles) {
-      if (psiFile != null && psiFile.canNavigate()) {
-        psiFile.navigate(requestFocus);
-      }
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof View) {
+            View view = (View) object;
+            return viewFiles.equals(view.viewFiles) && viewModel.equals(view.viewModel);
+        } else {
+            return false;
+        }
     }
-  }
 
-  public boolean canNavigateToSource() {
-    for (PsiFile psiFile : myViewFiles) {
-      if (psiFile != null && psiFile.canNavigateToSource()) {
-        return true;
-      }
+    @Override
+    public int hashCode() {
+        return viewFiles.hashCode() ^ viewModel.hashCode();
     }
-    return false;
-  }
 
-  public boolean canNavigate() {
-    for (PsiFile psiFile : myViewFiles) {
-      if (psiFile != null && psiFile.canNavigate()) {
-        return true;
-      }
+    public String getName() {
+        String name = viewModel.getNodeType().getNodeTypeName();
+        if (StringUtils.isNotBlank(viewModel.getName())) {
+            name += "." + viewModel.getName();
+        }
+        return name;
     }
-    return false;
-  }
 
-  public boolean isValid() {
-    if (myViewFiles.isEmpty()) {
-      return false;
+    public ViewModel getViewModel() {
+        return viewModel;
     }
-    for (PsiFile psiFile : myViewFiles) {
-      if (!psiFile.isValid()) {
+
+    public PsiFile[] getViewFiles() {
+        return PsiUtilCore.toPsiFileArray(viewFiles);
+    }
+
+    public void navigate(boolean requestFocus) {
+        for (PsiFile psiFile : viewFiles) {
+            if (psiFile != null && psiFile.canNavigate()) {
+                psiFile.navigate(requestFocus);
+            }
+        }
+    }
+
+    public boolean canNavigateToSource() {
+        for (PsiFile psiFile : viewFiles) {
+            if (psiFile != null && psiFile.canNavigateToSource()) {
+                return true;
+            }
+        }
         return false;
-      }
     }
-    return myClassToBind.isValid();
-  }
 
-  public boolean containsFile(final VirtualFile vFile) {
-    final PsiFile classFile = myClassToBind.getContainingFile();
-    final VirtualFile classVFile = (classFile == null )? null : classFile.getVirtualFile();
-    if (classVFile != null && classVFile.equals(vFile)) {
-      return true;
+    public boolean canNavigate() {
+        for (PsiFile psiFile : viewFiles) {
+            if (psiFile != null && psiFile.canNavigate()) {
+                return true;
+            }
+        }
+        return false;
     }
-    for (PsiFile psiFile : myViewFiles) {
-      final VirtualFile virtualFile = psiFile.getVirtualFile();
-      if (virtualFile != null && virtualFile.equals(vFile)) {
-        return true;
-      }
+
+    public boolean isValid() {
+        if (viewFiles.isEmpty()) {
+            return false;
+        }
+        for (PsiFile psiFile : viewFiles) {
+            if (!psiFile.isValid()) {
+                return false;
+            }
+        }
+        return viewModel.getName() != null;
     }
-    return false;
-  }
+
+    public boolean containsFile(final VirtualFile vFile) {
+        for (PsiFile psiFile : viewFiles) {
+            final VirtualFile virtualFile = psiFile.getVirtualFile();
+            if (virtualFile != null && virtualFile.equals(vFile)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

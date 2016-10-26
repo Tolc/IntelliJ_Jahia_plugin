@@ -5,6 +5,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -12,6 +13,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -94,10 +96,15 @@ public class CndProjectFilesUtil {
                     if (viewsFiles != null) {
                         for (File viewFile : viewsFiles) {
                             String name = viewFile.getName();
-                            String[] split = name.split(".");
+                            String[] split = name.split("\\.");
                             if (split.length >= 2) {
                                 String viewLanguage = split[split.length - 1];
-                                String viewName = name.substring(name.indexOf('.') + 1, name.lastIndexOf('.'));
+                                String viewName;
+                                if (split.length == 2) {
+                                    viewName = "";
+                                } else {
+                                    viewName = name.substring(name.indexOf('.') + 1, name.lastIndexOf('.'));
+                                }
                                 ViewModel viewModel = new ViewModel(namespace, nodeTypeName, viewName, viewType, viewLanguage);
                                 res.add(viewModel);
                             }
@@ -110,7 +117,9 @@ public class CndProjectFilesUtil {
     }
     
     @NotNull
-    public static List<PsiFile> findViewFiles(PsiElement element, String namespace, String nodeTypeName, String viewType, String viewName) {
+    public static List<PsiFile> findViewFiles(Project project, String namespace, String nodeTypeName, String viewType, String viewName) {
+        CndNodeType element = CndUtil.findNodeType(project, namespace, nodeTypeName);
+
         List<PsiFile> res = new ArrayList<PsiFile>();
         String viewTypeFolderPath = getNodeTypeViewTypeFolderPath(element, namespace, nodeTypeName, viewType);
         File viewTypeFolder = new File(viewTypeFolderPath);
@@ -119,7 +128,11 @@ public class CndProjectFilesUtil {
             File[] viewFiles = viewTypeFolder.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
-                    return name.startsWith(nodeTypeName + "." + viewName + ".");
+                    if (StringUtils.isNotBlank(viewName)) {
+                        return name.startsWith(nodeTypeName + "." + viewName + ".");
+                    } else {
+                        return name.startsWith(nodeTypeName) && name.split("\\.").length == 2;
+                    }
                 }
             });
             if (viewFiles != null) {
@@ -131,5 +144,51 @@ public class CndProjectFilesUtil {
             }
         }
         return res;
+    }
+
+    @NotNull
+    public static List<PsiFile> findViewFiles(Project project, ViewModel viewModel) {
+        return findViewFiles(project, viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType(), viewModel.getName());
+    }
+
+    public static ViewModel getViewModelFromPotentialViewFile(Project project, VirtualFile virtualFile) {
+        if (!virtualFile.isDirectory()) {
+            String name = virtualFile.getName();
+            String[] split = name.split("\\.");
+
+            if (split.length >= 2) {
+                String nodeTypeName = split[0];
+                String viewLanguage = split[split.length - 1];
+                String viewName;
+                if (split.length == 2) {
+                    viewName = "";
+                } else {
+                   viewName = name.substring(name.indexOf('.') + 1, name.lastIndexOf('.'));
+                }
+
+                VirtualFile viewTypeFolder = virtualFile.getParent();
+                if (viewTypeFolder != null && viewTypeFolder.isDirectory()) {
+                    String viewType = viewTypeFolder.getName();
+                    VirtualFile nodeTypeFolder = viewTypeFolder.getParent();
+
+                    if (nodeTypeFolder != null && nodeTypeFolder.isDirectory()) {
+                        String nodeTypeFolderName = nodeTypeFolder.getName();
+                        String[] nodeTypeSplit = nodeTypeFolderName.split("_");
+
+                        if (nodeTypeSplit.length == 2) {
+                            if (nodeTypeSplit[1].equals(nodeTypeName)) {
+                                String namespace = nodeTypeSplit[0];
+
+                                CndNodeType nodeType = CndUtil.findNodeType(project, namespace, nodeTypeName);
+                                if (nodeType != null) {
+                                    return new ViewModel(namespace, nodeTypeName, viewName, viewType, viewLanguage);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

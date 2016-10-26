@@ -24,111 +24,112 @@ import com.intellij.psi.PsiFile;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import org.jetbrains.annotations.NotNull;
 
-public class ViewNode extends ProjectViewNode<View>{
-  private final Collection<BasePsiNode<? extends PsiElement>> myChildren;
+public class ViewNode extends ProjectViewNode<View> {
+    private final Collection<BasePsiNode<? extends PsiElement>> myChildren;
 
-  public ViewNode(Project project, Object value, ViewSettings viewSettings) {
-    this(project, (View)value, viewSettings, getChildren(project, (View) value, viewSettings));
-  }
+    public ViewNode(Project project, Object value, ViewSettings viewSettings) {
+        this(project, (View) value, viewSettings, getChildren(project, (View) value, viewSettings));
+    }
 
-  public ViewNode(Project project, View value, ViewSettings viewSettings, Collection<BasePsiNode<? extends PsiElement>> children) {
-    super(project, value, viewSettings);
-    myChildren = children;
-  }
+    public ViewNode(Project project, View value, ViewSettings viewSettings, Collection<BasePsiNode<? extends PsiElement>> children) {
+        super(project, value, viewSettings);
+        myChildren = children;
+    }
 
-  @NotNull
-  public Collection<BasePsiNode<? extends PsiElement>> getChildren() {
-    return myChildren;
-  }
+    @NotNull
+    public Collection<BasePsiNode<? extends PsiElement>> getChildren() {
+        return myChildren;
+    }
 
-  public String getTestPresentation() {
-    return "View:" + getValue().getName();
-  }
+    public String getTestPresentation() {
+        return "View:" + getValue().getName();
+    }
 
-  public boolean contains(@NotNull VirtualFile file) {
-    for (final AbstractTreeNode aMyChildren : myChildren) {
-      ProjectViewNode treeNode = (ProjectViewNode)aMyChildren;
-      if (treeNode.contains(file)) {
+    public boolean contains(@NotNull VirtualFile file) {
+        for (final AbstractTreeNode aMyChildren : myChildren) {
+            ProjectViewNode treeNode = (ProjectViewNode) aMyChildren;
+            if (treeNode.contains(file)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void update(PresentationData presentation) {
+        if (getValue() == null || !getValue().isValid()) {
+            setValue(null);
+        } else {
+            presentation.setPresentableText(getValue().getName());
+            presentation.setIcon(CndIcons.FILE_OLD);
+        }
+    }
+
+    @Override
+    protected boolean shouldPostprocess() {
         return true;
-      }
     }
-    return false;
-  }
 
-  public void update(PresentationData presentation) {
-    if (getValue() == null || !getValue().isValid()) {
-      setValue(null);
-    } else {
-      presentation.setPresentableText(getValue().getName());
-      presentation.setIcon(CndIcons.FILE_OLD);
+    @Override
+    public boolean someChildContainsFile(VirtualFile file) {
+        return contains(file);
     }
-  }
 
-  @Override
-  protected boolean shouldPostprocess() {
-    return true;
-  }
-
-  @Override
-  public boolean someChildContainsFile(VirtualFile file) {
-    return contains(file);
-  }
-
-  public void navigate(final boolean requestFocus) {
-    getValue().navigate(requestFocus);
-  }
-
-  public boolean canNavigate() {
-    final View value = getValue();
-    return value != null && value.canNavigate();
-  }
-
-  public boolean canNavigateToSource() {
-    final View value = getValue();
-    return value != null && value.canNavigateToSource();
-  }
-
-  public String getToolTip() {
-    return IdeBundle.message("tooltip.ui.designer.view");
-  }
-
-  @Override
-  public FileStatus getFileStatus() {
-    for(BasePsiNode<? extends PsiElement> child: myChildren) {
-      final PsiElement value = child.getValue();
-      if (value == null || !value.isValid()) {
-        continue;
-      }
-      final FileStatus fileStatus = NavigationItemFileStatus.get(child);
-      if (fileStatus != FileStatus.NOT_CHANGED) {
-        return fileStatus;
-      }
+    public void navigate(final boolean requestFocus) {
+        getValue().navigate(requestFocus);
     }
-    return FileStatus.NOT_CHANGED;
-  }
 
-  @Override
-  public boolean canHaveChildrenMatching(final Condition<PsiFile> condition) {
-    for(BasePsiNode<? extends PsiElement> child: myChildren) {
-      if (condition.value(child.getValue().getContainingFile())) {
-        return true;
-      }
+    public boolean canNavigate() {
+        final View value = getValue();
+        return value != null && value.canNavigate();
     }
-    return false;
-  }
 
-  public static AbstractTreeNode constructViewNode(final PsiClass classToBind, final Project project, final ViewSettings settings) {
-    final View view = new View(classToBind);
-    final Collection<BasePsiNode<? extends PsiElement>> children = getChildren(project, view, settings);
-    return new ViewNode(project, view, settings, children);
-  }
-
-  private static Collection<BasePsiNode<? extends PsiElement>> getChildren(final Project project, final View view, final ViewSettings settings) {
-    final Set<BasePsiNode<? extends PsiElement>> children = new LinkedHashSet<>();
-    children.add(new ClassTreeNode(project, view.getClassToBind(), settings));
-    for (PsiFile viewBoundToClass : view.getViewFiles()) {
-      children.add(new PsiFileNode(project, viewBoundToClass, settings));
+    public boolean canNavigateToSource() {
+        final View value = getValue();
+        return value != null && value.canNavigateToSource();
     }
-    return children;
-  }
+
+    public String getToolTip() {
+//        return IdeBundle.message("tooltip.ui.designer.view");
+        return "ViewNode Tooltip";
+    }
+
+    @Override
+    public FileStatus getFileStatus() {
+        for (BasePsiNode<? extends PsiElement> child : myChildren) {
+            final PsiElement value = child.getValue();
+            if (value == null || !value.isValid()) {
+                continue;
+            }
+            final FileStatus fileStatus = NavigationItemFileStatus.get(child);
+            if (fileStatus != FileStatus.NOT_CHANGED) {
+                return fileStatus;
+            }
+        }
+        return FileStatus.NOT_CHANGED;
+    }
+
+    @Override
+    public boolean canHaveChildrenMatching(final Condition<PsiFile> condition) {
+        for (BasePsiNode<? extends PsiElement> child : myChildren) {
+            if (condition.value(child.getValue().getContainingFile())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+//    public static AbstractTreeNode constructViewNode(final PsiClass classToBind, final Project project, final ViewSettings settings) {
+//        final View view = new View(classToBind);
+//        final Collection<BasePsiNode<? extends PsiElement>> children = getChildren(project, view, settings);
+//        return new ViewNode(project, view, settings, children);
+//    }
+
+    private static Collection<BasePsiNode<? extends PsiElement>> getChildren(final Project project, final View view, final ViewSettings settings) {
+        final Set<BasePsiNode<? extends PsiElement>> children = new LinkedHashSet<>();
+//        children.add(new ClassTreeNode(project, view.getClassToBind(), settings));
+        for (PsiFile viewFile : view.getViewFiles()) {
+            children.add(new PsiFileNode(project, viewFile, settings));
+        }
+        return children;
+    }
 }
