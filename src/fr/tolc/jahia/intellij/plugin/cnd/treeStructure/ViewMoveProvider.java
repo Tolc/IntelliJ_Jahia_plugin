@@ -1,5 +1,7 @@
 package fr.tolc.jahia.intellij.plugin.cnd.treeStructure;
 
+import java.util.Set;
+
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
@@ -8,13 +10,11 @@ import com.intellij.refactoring.move.MoveHandlerDelegate;
 import com.intellij.refactoring.move.moveFilesOrDirectories.MoveFilesOrDirectoriesHandler;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Set;
-
 /**
  * @author yole
  */
 public class ViewMoveProvider extends MoveHandlerDelegate {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.uiDesigner.projectView.ViewMoveProvider");
+  private static final Logger LOG = Logger.getInstance(ViewMoveProvider.class);
 
   @Override
   public boolean canMove(DataContext dataContext) {

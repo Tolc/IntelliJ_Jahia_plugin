@@ -1,5 +1,12 @@
 package fr.tolc.jahia.intellij.plugin.cnd.treeStructure;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.TreeStructureProvider;
 import com.intellij.ide.projectView.ViewSettings;
@@ -14,8 +21,6 @@ import com.intellij.psi.PsiFile;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
 
 public class ViewMergerTreeStructureProvider implements TreeStructureProvider {
     private final Project project;
@@ -61,6 +66,33 @@ public class ViewMergerTreeStructureProvider implements TreeStructureProvider {
                 }
             }
         }
+        
+        //TODO: have default at the top of the view. Below sort is sorting right but it does not sort in projectView
+//        if (!alreadyDoneViews.isEmpty()) {
+//            Collection<AbstractTreeNode> sortedResult = new TreeSet<AbstractTreeNode>(new Comparator<AbstractTreeNode>() {
+//                @Override
+//                public int compare(AbstractTreeNode o1, AbstractTreeNode o2) {
+//                    if (o1 instanceof ViewNode && o2 instanceof ViewNode) {
+//                        View view1 = ((ViewNode) o1).getValue();
+//                        View view2 = ((ViewNode) o2).getValue();
+//                        if ("default".equals(view1.getName())) {
+//                            return -1;
+//                        }
+//                        if ("default".equals(view2.getName())) {
+//                            return 1;
+//                        }
+//                        return view1.getName().compareTo(view2.getName());
+//                    } else if (o1 instanceof ViewNode) {
+//                        return -1;
+//                    } else if (o2 instanceof ViewNode) {
+//                        return 1;
+//                    }
+//                    return 0;
+//                }
+//            });
+//            sortedResult.addAll(result);
+//            result = sortedResult;
+//        }
 
         return result;
     }

@@ -25,10 +25,8 @@ package fr.tolc.jahia.intellij.plugin.cnd.treeStructure;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.refactoring.RefactoringActionHandlerFactory;
 import com.intellij.refactoring.rename.RenameHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +46,7 @@ public class ViewRenameHandler implements RenameHandler {
       return;
     }
 //    PsiClass boundClass = views [0].getClassToBind();
-//    RefactoringActionHandlerFactory.getInstance().createRenameHandler().invoke(project, new PsiElement[] { boundClass }, dataContext);
+//    RefactoringActionHandlerFactory.getInstance().createRenameHandler().invoke(project, views[0].getViewFiles(), dataContext);
   }
 
   public void invoke(@NotNull Project project, @NotNull PsiElement[] elements, DataContext dataContext) {

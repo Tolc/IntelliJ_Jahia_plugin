@@ -4,28 +4,24 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.intellij.ide.IdeBundle;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.projectView.impl.nodes.BasePsiNode;
-import com.intellij.ide.projectView.impl.nodes.ClassTreeNode;
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.navigation.NavigationItemFileStatus;
-import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vcs.FileStatus;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import org.jetbrains.annotations.NotNull;
 
 public class ViewNode extends ProjectViewNode<View> {
-    private final Collection<BasePsiNode<? extends PsiElement>> myChildren;
+    private final Collection<BasePsiNode<? extends PsiElement>> children;
 
     public ViewNode(Project project, Object value, ViewSettings viewSettings) {
         this(project, (View) value, viewSettings, getChildren(project, (View) value, viewSettings));
@@ -33,12 +29,13 @@ public class ViewNode extends ProjectViewNode<View> {
 
     public ViewNode(Project project, View value, ViewSettings viewSettings, Collection<BasePsiNode<? extends PsiElement>> children) {
         super(project, value, viewSettings);
-        myChildren = children;
+        this.children = children;
+        this.myName = value.getName();
     }
 
     @NotNull
     public Collection<BasePsiNode<? extends PsiElement>> getChildren() {
-        return myChildren;
+        return children;
     }
 
     public String getTestPresentation() {
@@ -46,7 +43,7 @@ public class ViewNode extends ProjectViewNode<View> {
     }
 
     public boolean contains(@NotNull VirtualFile file) {
-        for (final AbstractTreeNode aMyChildren : myChildren) {
+        for (final AbstractTreeNode aMyChildren : children) {
             ProjectViewNode treeNode = (ProjectViewNode) aMyChildren;
             if (treeNode.contains(file)) {
                 return true;
@@ -95,7 +92,7 @@ public class ViewNode extends ProjectViewNode<View> {
 
     @Override
     public FileStatus getFileStatus() {
-        for (BasePsiNode<? extends PsiElement> child : myChildren) {
+        for (BasePsiNode<? extends PsiElement> child : children) {
             final PsiElement value = child.getValue();
             if (value == null || !value.isValid()) {
                 continue;
@@ -110,7 +107,7 @@ public class ViewNode extends ProjectViewNode<View> {
 
     @Override
     public boolean canHaveChildrenMatching(final Condition<PsiFile> condition) {
-        for (BasePsiNode<? extends PsiElement> child : myChildren) {
+        for (BasePsiNode<? extends PsiElement> child : children) {
             if (condition.value(child.getValue().getContainingFile())) {
                 return true;
             }

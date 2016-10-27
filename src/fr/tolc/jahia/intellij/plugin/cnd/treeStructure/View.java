@@ -1,5 +1,8 @@
 package fr.tolc.jahia.intellij.plugin.cnd.treeStructure;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.Navigatable;
@@ -7,9 +10,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiUtilCore;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import org.apache.commons.lang.StringUtils;
-
-import java.util.Collection;
-import java.util.HashSet;
 
 public class View implements Navigatable {
     public static final DataKey<View[]> DATA_KEY = DataKey.create("view.array");
@@ -43,9 +43,9 @@ public class View implements Navigatable {
     }
 
     public String getName() {
-        String name = viewModel.getNodeType().getNodeTypeName();
+        String name ="default";
         if (StringUtils.isNotBlank(viewModel.getName())) {
-            name += "." + viewModel.getName();
+            name = viewModel.getName();
         }
         return name;
     }
@@ -104,5 +104,10 @@ public class View implements Navigatable {
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return viewModel.getNodeType().getNamespace() + ":" + viewModel.getNodeType().getNodeTypeName() + "/" + viewModel.getType() + "." + viewModel.getName() + "." + viewModel.getLanguage();
     }
 }
