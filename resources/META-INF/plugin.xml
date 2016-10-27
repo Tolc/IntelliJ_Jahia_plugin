@@ -1,12 +1,14 @@
 <idea-plugin version="2">
   <id>fr.tolc.jahia.intellij.plugin</id>
-  <name>Jahia</name>
+  <name>CND Language / Jahia Framework</name>
   <version>1.0</version>
   <vendor email="thomas.coquel117@gmail.com" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
 
   <description><![CDATA[
       Jahia plugin for IntelliJ.
-      Definitions.cnd completion and so on
+      Compatible with Jahia 6.6.x and 7.x projects.
+
+      definitions.cnd completion and so on
   ]]></description>
   
   <change-notes><![CDATA[
