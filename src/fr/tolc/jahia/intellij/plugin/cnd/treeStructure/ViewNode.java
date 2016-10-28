@@ -57,7 +57,7 @@ public class ViewNode extends ProjectViewNode<View> {
             setValue(null);
         } else {
             presentation.setPresentableText(getValue().getName());
-            presentation.setIcon(CndIcons.FILE_OLD);
+            presentation.setIcon(CndIcons.VIEW);
         }
     }
 
