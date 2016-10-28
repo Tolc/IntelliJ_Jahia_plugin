@@ -1,5 +1,6 @@
 package fr.tolc.jahia.intellij.plugin.cnd;
 
+import com.intellij.lang.HelpID;
 import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
@@ -34,7 +35,7 @@ public class CndFindUsagesProvider implements FindUsagesProvider {
     @Nullable
     @Override
     public String getHelpId(@NotNull PsiElement psiElement) {
-        return null;
+        return HelpID.FIND_OTHER_USAGES;
     }
 
     @NotNull
