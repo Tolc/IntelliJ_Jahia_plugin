@@ -55,7 +55,7 @@ public class CndPsiImplUtil {
             @Nullable
             @Override
             public Icon getIcon(boolean unused) {
-                return CndIcons.FILE;
+                return CndIcons.NAMESPACE;
             }
         };
     }
@@ -171,7 +171,7 @@ public class CndPsiImplUtil {
             @Nullable
             @Override
             public Icon getIcon(boolean unused) {
-                return CndIcons.FILE;
+                return CndIcons.NODE_TYPE;
             }
         };
     }
@@ -277,7 +277,7 @@ public class CndPsiImplUtil {
             @Nullable
             @Override
             public Icon getIcon(boolean unused) {
-                return CndIcons.FILE;
+                return CndIcons.PROPERTY;
             }
         };
     }

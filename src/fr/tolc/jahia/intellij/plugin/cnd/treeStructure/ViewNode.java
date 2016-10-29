@@ -20,6 +20,8 @@ import com.intellij.psi.PsiFile;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.Icon;
+
 public class ViewNode extends ProjectViewNode<View> {
     private final Collection<BasePsiNode<? extends PsiElement>> children;
 
@@ -57,7 +59,14 @@ public class ViewNode extends ProjectViewNode<View> {
             setValue(null);
         } else {
             presentation.setPresentableText(getValue().getName());
-            presentation.setIcon(CndIcons.VIEW);
+
+            Icon icon;
+            if (getValue().getViewModel().isHidden()) {
+                icon = CndIcons.VIEW_BIG_HIDDEN;
+            } else {
+                icon = CndIcons.VIEW_BIG;
+            }
+            presentation.setIcon(icon);
         }
     }
 

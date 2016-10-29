@@ -15,6 +15,8 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.Icon;
+
 public class CndPropertiesLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
@@ -43,14 +45,21 @@ public class CndPropertiesLineMarkerProvider extends RelatedItemLineMarkerProvid
                         CndProperty cndProperty = nodeType.getProperty(propertyName);
                         if (cndProperty != null) {
                             NavigationGutterIconBuilder<PsiElement> builder =
-                                    NavigationGutterIconBuilder.create(CndIcons.FILE).
+                                    NavigationGutterIconBuilder.create(CndIcons.PROPERTY).
                                             setTarget(cndProperty).
                                             setTooltipText("Navigate to node type property");
                             result.add(builder.createLineMarkerInfo(element));
                         }
                     } else {
+                        Icon icon;
+                        if (nodeType.isMixin()) {
+                            icon = CndIcons.MIXIN;
+                        } else {
+                            icon = CndIcons.NODE_TYPE;
+                        }
+
                         NavigationGutterIconBuilder<PsiElement> builder =
-                                NavigationGutterIconBuilder.create(CndIcons.FILE).
+                                NavigationGutterIconBuilder.create(icon).
                                         setTarget(nodeType).
                                         setTooltipText("Navigate to node type");
                         result.add(builder.createLineMarkerInfo(element));

@@ -19,6 +19,8 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.Icon;
+
 public class CndNodeTypeIdentifierReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
     private String namespace;
     private String nodeType;
@@ -44,7 +46,13 @@ public class CndNodeTypeIdentifierReference extends PsiReferenceBase<PsiElement>
         List<LookupElement> variants = new ArrayList<LookupElement>();
         for (final CndNodeType cndNodeType : nodeTypes) {
             if (StringUtils.isNotBlank(cndNodeType.getNodeTypeName())) {
-                variants.add(LookupElementBuilder.create(cndNodeType.getNodeTypeIdentifier()).withIcon(CndIcons.FILE).withTypeText(cndNodeType.getContainingFile().getName()));
+                Icon icon;
+                if (cndNodeType.isMixin()) {
+                    icon = CndIcons.MIXIN;
+                } else {
+                    icon = CndIcons.NODE_TYPE;
+                }
+                variants.add(LookupElementBuilder.create(cndNodeType.getNodeTypeIdentifier()).withIcon(icon).withTypeText(cndNodeType.getContainingFile().getName()));
             }
         }
         return variants.toArray();

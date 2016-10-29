@@ -12,6 +12,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.Icon;
 import java.util.Collection;
 
 public class CndJavaLineMarkerProvider extends RelatedItemLineMarkerProvider {
@@ -30,8 +31,14 @@ public class CndJavaLineMarkerProvider extends RelatedItemLineMarkerProvider {
                 Project project = element.getProject();
                 CndNodeType nodeType = CndUtil.findNodeType(project, namespace, nodeTypeName);
                 if (nodeType != null) {
+                    Icon icon;
+                    if (nodeType.isMixin()) {
+                        icon = CndIcons.MIXIN;
+                    } else {
+                        icon = CndIcons.NODE_TYPE;
+                    }
                     NavigationGutterIconBuilder<PsiElement> builder =
-                            NavigationGutterIconBuilder.create(CndIcons.FILE).
+                            NavigationGutterIconBuilder.create(icon).
                                     setTarget(nodeType).
                                     setTooltipText("Navigate to node type definition");
                     result.add(builder.createLineMarkerInfo(element));

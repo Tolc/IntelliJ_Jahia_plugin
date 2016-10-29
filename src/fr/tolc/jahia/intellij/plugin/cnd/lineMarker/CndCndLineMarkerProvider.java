@@ -7,6 +7,7 @@ import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +15,14 @@ public class CndCndLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
+        if (element instanceof CndNamespace) {
+            CndNamespace cndNamespace = (CndNamespace) element;
+
+            NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(CndIcons.NAMESPACE)
+                    .setTarget(null)
+                    .setTooltipText("Namespace " + cndNamespace.getNamespaceName());
+            result.add(builder.createLineMarkerInfo(element));
+        }
         if (element instanceof CndNodeType) {
             CndNodeType cndNodeType = (CndNodeType) element;
 
