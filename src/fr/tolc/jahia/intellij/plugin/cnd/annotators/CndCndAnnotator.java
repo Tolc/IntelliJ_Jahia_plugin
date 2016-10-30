@@ -62,7 +62,7 @@ public class CndCndAnnotator implements Annotator {
 
                                     //Translation
                                     if (CndTranslationUtil.getNodeTypeTranslation(element.getProject(), namespace, nodeTypeName) == null) {
-                                        Annotation translationAnnotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + "does not have any translation");
+                                        Annotation translationAnnotation = holder.createInfoAnnotation(element.getTextRange(), "Node type " + namespace + ":" + nodeTypeName + " does not have any translation");
                                         translationAnnotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
                                         translationAnnotation.registerFix(new CreateNodeTypeTranslationsQuickFix(jahiaWorkFolderPath, namespace, nodeTypeName));
                                     }
@@ -77,7 +77,7 @@ public class CndCndAnnotator implements Annotator {
             else if (CndTypes.NAMESPACE_URI.equals(element.getNode().getElementType())) {
                 Matcher matcher = namespaceUriPattern.matcher(element.getText());
                 if (!matcher.matches()) {
-                    holder.createErrorAnnotation(element.getTextRange(), "Not a valid URI");
+                    holder.createWarningAnnotation(element.getTextRange(), "Not a valid URI");
                 }
             }
 
