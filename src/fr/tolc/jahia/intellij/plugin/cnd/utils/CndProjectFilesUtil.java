@@ -2,7 +2,12 @@ package fr.tolc.jahia.intellij.plugin.cnd.utils;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.intellij.openapi.project.Project;
@@ -11,17 +16,35 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.search.FileTypeIndex;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.util.indexing.FileBasedIndex;
+import fr.tolc.jahia.intellij.plugin.cnd.CndFileType;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CndProjectFilesUtil {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CndProjectFilesUtil.class);
     private static final String JAHIA_6_WEBAPP = "webapp";
     private static final String JAHIA_7_RESOURCES = "resources";
+
+    private static CndProjectFilesUtil instance;
     
-    private CndProjectFilesUtil() {}
+    private CndProjectFilesUtil() {
+    }
+
+    private static CndProjectFilesUtil getInstance() {
+        if (instance == null) {
+            instance = new CndProjectFilesUtil();
+        }
+        return instance;
+    }
     
     public static String getJahiaWorkFolderPath(PsiElement element) {
         PsiFile cndFile = element.getContainingFile();
@@ -190,5 +213,19 @@ public class CndProjectFilesUtil {
             }
         }
         return null;
+    }
+
+    public static Collection<VirtualFile> getProjectCndFiles(Project project) {
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
+
+        Path filePath = Paths.get(getInstance().getClass().getClassLoader().getResource("jahia/02-jahia-nodetypes-7.1.2.0.cnd").getFile().substring(1));
+        try {
+            PsiFile fileFromText = PsiFileFactory.getInstance(project).createFileFromText("02-jahia-nodetypes-7.1.2.0.cnd", CndFileType.INSTANCE, new String(Files.readAllBytes(filePath)));
+            virtualFiles.add(fileFromText.getVirtualFile());
+        } catch (IOException e) {
+            LOGGER.warn("Error while getting Jahia CND files from resources", e);
+        }
+
+        return virtualFiles;
     }
 }
