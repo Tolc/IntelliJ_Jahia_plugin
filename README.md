@@ -94,7 +94,7 @@ So basically, IntelliJ Ultimate needed.
 
 --
 
-##### DISCLAIMER: This plugin is neither official nor endorsed by [Jahia][1] in any way. I am just a guy who loves this CMS and wanted to make it easier to work with it for everybody (or at least everybody using IntelliJ).
+##### This plugin is neither official nor endorsed by [Jahia][1] in any way. I am just a guy who loves this CMS and wanted to make it easier to work with it for everybody (or at least everybody using IntelliJ).
 
  [1]: https://www.jahia.com/
  [2]: https://www.jahia.com/files/live/sites/jahiacom/files/logo-jahia-2016.png
