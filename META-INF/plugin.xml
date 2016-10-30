@@ -5,14 +5,107 @@
   <vendor email="thomas.coquel117@gmail.com" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
 
   <description><![CDATA[
-      Jahia plugin for IntelliJ.
-      Compatible with Jahia 6.6.x and 7.x projects.
+<html>
+<img src="https://www.jahia.com/files/live/sites/jahiacom/files/logo-jahia-2016.png" alt="Jahia logo" style="width:100%;">
+<h2>
+    CND Language / <a href="https://www.jahia.com/">Jahia</a> Framework
+</h2>
 
-      definitions.cnd completion and so on
+<p>definitions.cnd files syntax highlighting, code completion, and other amazing stuff.</p>
+
+<hr>
+
+<p>Compatible with Jahia versions <strong>6.6.x</strong> &amp; <strong>7.x</strong></p>
+
+<p>See the <a href="https://github.com/Tolc/IntelliJ_Jahia_plugin">plugin Github project</a> for detailed features list.</p>
+
+<h3>Features</h3>
+<hr>
+
+<br>
+<b>CND Language</b>
+
+<br>
+<ul>
+    <li>Syntax highlighting</li>
+    <li>Syntax checking and error highlighting</li>
+    <li>Code completion</li>
+    <li>Code formatting</li>
+    <li>Find usages</li>
+    <li>Go to declaration</li>
+    <li>Refactoring</li>
+    <li>File icon <img
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/cnd.png"
+            alt="CND file icon" style="max-width:100%;"></li>
+    <li>Line markers <img
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/namespace.png"
+            alt="namespace" style="max-width:100%;"> <img
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeType.png"
+            alt="nodetype" style="max-width:100%;"> <img
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/mixin.png"
+            alt="mixin" style="max-width:100%;"> <img
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/property.png"
+            alt="property" style="max-width:100%;"></li>
+    <li>Code folding</li>
+    <li>Brace matching</li>
+    <li>Commenter</li>
+</ul>
+
+<br>
+<br>
+<b>Jahia Framework</b>
+<br>
+<br>
+Compatible with Jahia versions <strong>6.6.x</strong> &amp; <strong>7.x</strong>
+<br>
+<br>
+CND files features:
+<ul>
+    <li>Helpers/Quickfixes (alt+enter on nodetype name)
+        <ul>
+            <li>Create nodetype and nodetype properties translations</li>
+            <li>Create new view</li>
+        </ul>
+    </li>
+    <li>View files grouping <img
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/viewBig.png"
+            alt="view folder" style="max-width:100%;">
+    </li>
+</ul>
+<br>
+Other files/languages features:
+<ul>
+    <li>JSP / Java / XML
+        <ul>
+            <li>Nodetypes usages highlighting &amp; line markers</li>
+            <li>Nodetypes completion</li>
+            <li>Go to nodetype declaration</li>
+            <li>Unknown nodetype error highlighting</li>
+            <li>Create nodetype quickfix</li>
+        </ul>
+    </li>
+    <li>Properties (resource bundles)
+        <ul>
+            <li>Translations keys syntax highlighting &amp; line markers for namespaces, nodetypes and properties</li>
+            <li>Translations keys nodetypes and properties completion</li>
+            <li>Go to namespace, nodetype or property declaration from translations keys (ctrl-click/cmd-click)</li>
+            <li>Error message if adding translations for a choicelist on a non-choicelist property</li>
+            <li><strong>Note:</strong> at the moment the translations keys for the nodetypes and properties are still
+                marked as 'unused'
+            </li>
+        </ul>
+    </li>
+</ul>
+</html>
   ]]></description>
 
   <change-notes><![CDATA[
-  
+      <!--<html>-->
+        <!--<dl>-->
+            <!--<dt>1.0</dt>-->
+            <!--<dd>lol</dd>-->
+        <!--</dl>-->
+      <!--</html>-->
   ]]></change-notes>
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->

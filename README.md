@@ -56,16 +56,19 @@ So basically, IntelliJ Ultimate needed.
         * Create nodetype quickfix (alt+enter on nodetype name) - if known namespace but unknown nodetype
      * Java
         * Nodetypes usages highlighting & line markers ![nodetype](src/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeType.png)/![mixin](src/fr/tolc/jahia/intellij/plugin/cnd/icons/mixin.png)
+        * Nodetypes completion
         * Go to nodetype declaration (ctrl-click/cmd-click)
         * Unknown nodetype error highlighting
         * Create nodetype quickfix (alt+enter on nodetype name) - if known namespace but unknown nodetype
      * XML
         * Nodetypes usages highlighting & line markers ![nodetype](src/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeType.png)/![mixin](src/fr/tolc/jahia/intellij/plugin/cnd/icons/mixin.png)
+        * Nodetypes completion
         * Go to nodetype declaration (ctrl-click/cmd-click)
         * Unknown nodetype error highlighting
         * Create nodetype quickfix (alt+enter on nodetype name) - if known namespace but unknown nodetype
      * Properties (resource bundles)
         * Translations keys syntax highlighting & line markers for namespaces ![namespace](src/fr/tolc/jahia/intellij/plugin/cnd/icons/namespace.png), nodetypes ![nodetype](src/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeType.png)/![mixin](src/fr/tolc/jahia/intellij/plugin/cnd/icons/mixin.png) and properties ![property](src/fr/tolc/jahia/intellij/plugin/cnd/icons/property.png)
+        * Translations keys nodetypes and properties completion
         * Go to namespace, nodetype or property declaration from translations keys (ctrl-click/cmd-click)
         * Error message if adding translations for a choicelist on a non-choicelist property
         * **Note:** at the moment the translations keys for the nodetypes and properties are still marked as 'unused'
