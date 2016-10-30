@@ -3,6 +3,19 @@
 definitions.cnd files syntax highlighting, code completion, and other amazing stuff.
 
 
+##Requirements
+
+Tested under IntelliJ IDEA from 14.1.4 to 2016.2.5 (the most recent one). Can't see why it wouldn't work with older versions though.
+
+
+IntelliJ plugins dependencies: 
+
+ * jsp
+ * properties
+ 
+So basically, IntelliJ Ultimate needed. 
+ 
+
 ## Features
 
 
@@ -18,6 +31,7 @@ definitions.cnd files syntax highlighting, code completion, and other amazing st
     * Rename (shift+f6) - for namespaces, nodetypes and nodetypes properties declarations (**not renaming namespaces and nodetypes usages in .properties files for the moment though**)
  * File icon ![CND file icon](src/fr/tolc/jahia/intellij/plugin/cnd/icons/cnd.png) 
  * Line markers for namespaces ![namespace](src/fr/tolc/jahia/intellij/plugin/cnd/icons/namespace.png) and nodetypes ![nodetype](src/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeType.png) / mixins ![mixin](src/fr/tolc/jahia/intellij/plugin/cnd/icons/mixin.png)
+ * Code folding - for namespaces and nodetypes
  * Brace matching - closing brackets and parenthesis are automatically inserted when authorized by the syntax
  * Commenter (ctrl+/) - to comment lines of code
 
@@ -26,7 +40,7 @@ definitions.cnd files syntax highlighting, code completion, and other amazing st
 ### Jahia Framework
 ![Jahia][2]
 
-##### Compatible with Jahia versions **6.6.x** & **7.x**
+#### Compatible with Jahia versions **6.6.x** & **7.x**
 
  * CND files features:
      * Helpers/Quickfixes (alt+enter on nodetype name)
@@ -56,7 +70,6 @@ definitions.cnd files syntax highlighting, code completion, and other amazing st
         * Error message if adding translations for a choicelist on a non-choicelist property
         * **Note:** at the moment the translations keys for the nodetypes and properties are still marked as 'unused'
 
-    <!--* Replace explicit string library calls like `string.len("foo")` with `("foo"):len()`-->
 
 
 ## Roadmap
@@ -74,9 +87,11 @@ definitions.cnd files syntax highlighting, code completion, and other amazing st
  * Make helpers/quickfixes accessible through Actions in menus
  * Groovy support
 
-##### Don't hesitate to request features / suggest enhancements by opening an Issue.
+#### Don't hesitate to request features / suggest enhancements by opening an Issue.
 
 --
+
+##### DISCLAIMER: This plugin is neither official nor endorsed by [Jahia][1] in any way. I am just a guy who loves this CMS and wanted to make it easier to work with it for everybody (or at least everybody using IntelliJ).
 
  [1]: https://www.jahia.com/
  [2]: https://www.jahia.com/files/live/sites/jahiacom/files/logo-jahia-2016.png
