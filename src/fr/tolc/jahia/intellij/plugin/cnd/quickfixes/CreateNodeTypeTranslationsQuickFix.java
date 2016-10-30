@@ -66,20 +66,19 @@ public class CreateNodeTypeTranslationsQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, PropertiesFileType.INSTANCE, GlobalSearchScope.allScope(project));
-                if (virtualFiles.size() == 1) {
-                    VirtualFile virtualFile = virtualFiles.iterator().next();
-                    PropertiesFile propertiesFile = (PropertiesFile) PsiManager.getInstance(project).findFile(virtualFile);
-                    createNodeTypeTranslations(project, propertiesFile);
-                } else {
+//                Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, PropertiesFileType.INSTANCE, GlobalSearchScope.allScope(project));
+//                if (virtualFiles.size() == 1) {
+//                    VirtualFile virtualFile = virtualFiles.iterator().next();
+//                    PropertiesFile propertiesFile = (PropertiesFile) PsiManager.getInstance(project).findFile(virtualFile);
+//                    createNodeTypeTranslations(project, propertiesFile);
+//                } else {
                     final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFileDescriptor(PropertiesFileType.INSTANCE);
                     descriptor.setRoots(project.getBaseDir());
-                    final VirtualFile file = FileChooser.chooseFile(descriptor, project, null);
-                    if (file != null) {
+                    final VirtualFile[] files = FileChooser.chooseFiles(descriptor, project, null);
+                    for (VirtualFile file: files) {
                         PropertiesFile propertiesFile = (PropertiesFile) PsiManager.getInstance(project).findFile(file);
                         createNodeTypeTranslations(project, propertiesFile);
                     }
-                }
             }
         });
     }
