@@ -2,8 +2,6 @@ package fr.tolc.jahia.intellij.plugin.cnd.utils;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -16,7 +14,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -215,17 +212,16 @@ public class CndProjectFilesUtil {
         return null;
     }
 
+    public static File getResourceFile(String resourcePath) {
+        String filePathString = getInstance().getClass().getClassLoader().getResource(resourcePath).getFile();
+        return new File(filePathString);
+    }
+    
+    public static Path getResourceFilePath(String resourcePath) {
+        return Paths.get(getResourceFile(resourcePath).getAbsolutePath());
+    }
+    
     public static Collection<VirtualFile> getProjectCndFiles(Project project) {
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
-
-        Path filePath = Paths.get(getInstance().getClass().getClassLoader().getResource("jahia/02-jahia-nodetypes-7.1.2.0.cnd").getFile().substring(1));
-        try {
-            PsiFile fileFromText = PsiFileFactory.getInstance(project).createFileFromText("02-jahia-nodetypes-7.1.2.0.cnd", CndFileType.INSTANCE, new String(Files.readAllBytes(filePath)));
-            virtualFiles.add(fileFromText.getVirtualFile());
-        } catch (IOException e) {
-            LOGGER.warn("Error while getting Jahia CND files from resources", e);
-        }
-
-        return virtualFiles;
+        return FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
     }
 }
