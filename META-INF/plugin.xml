@@ -125,6 +125,9 @@ Other files/languages features:
 
   <project-components>
     <!-- Add your project components here -->
+    <component>
+      <implementation-class>fr.tolc.jahia.intellij.plugin.cnd.CndProjectComponent</implementation-class>
+    </component>
   </project-components>
 
   <actions>
