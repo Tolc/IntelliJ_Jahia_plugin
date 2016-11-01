@@ -4,6 +4,9 @@
  */
 package fr.tolc.jahia.intellij.plugin.cnd;
 
+import java.io.File;
+import java.util.Collection;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.module.Module;
@@ -22,9 +25,6 @@ import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.util.Collection;
 
 public class CndProjectComponent implements ProjectComponent {
     
@@ -82,11 +82,10 @@ public class CndProjectComponent implements ProjectComponent {
                                         if (moduleLibraryTable.getLibraryByName(JAHIA_PLUGIN_LIBRARY_NAME) == null) {
                                             Library library = moduleLibraryTable.createLibrary(JAHIA_PLUGIN_LIBRARY_NAME);
 
-                                            String libraryFolderPath = this.getClass().getClassLoader().getResource(JAHIA_RESOURCES_FOLDER + "/" + JAHIA_CND_JAR_NAME).getFile();
-                                            File libraryFolder = new File(libraryFolderPath);
+                                            File libraryJar = new File(jahiaResourcesFolder.getAbsolutePath() + "/" + JAHIA_CND_JAR_NAME);
 
                                             Library.ModifiableModel modifiableModel = library.getModifiableModel();
-                                            modifiableModel.addRoot("jar://" + libraryFolder.getAbsolutePath() + "!/", OrderRootType.CLASSES);
+                                            modifiableModel.addRoot("jar://" + libraryJar.getAbsolutePath() + "!/", OrderRootType.CLASSES);
                                             modifiableModel.commit();
                                             moduleLibraryTable.commit();
                                             rootModel.commit();
