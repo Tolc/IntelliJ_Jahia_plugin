@@ -1,5 +1,7 @@
 # CND Language / [Jahia][1] Framework support for [IntelliJ IDEA][3]
 
+[![release](https://img.shields.io/github/release/Tolc/IntelliJ_Jahia_Plugin.svg?style=flat-square)](https://github.com/Tolc/IntelliJ_Jahia_plugin/releases)
+
 definitions.cnd files syntax highlighting, code completion, and other amazing stuff.
 
 
