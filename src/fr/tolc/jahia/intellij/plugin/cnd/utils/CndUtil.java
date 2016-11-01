@@ -10,11 +10,8 @@ import java.util.regex.Pattern;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.FileTypeIndex;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.indexing.FileBasedIndex;
-import fr.tolc.jahia.intellij.plugin.cnd.CndFileType;
+import com.intellij.util.ArrayUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndFile;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
@@ -175,5 +172,12 @@ public class CndUtil {
             }
         }
         return null;
+    }
+    
+    
+    private static final String[] JAHIA_NAMESPACES = {"mix", "nt", "jmix", "jnt"};
+    
+    public static boolean isJahiaNamespace(String namespace) {
+        return ArrayUtil.contains(namespace, JAHIA_NAMESPACES);
     }
 }
