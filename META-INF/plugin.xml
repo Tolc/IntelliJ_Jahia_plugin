@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>fr.tolc.jahia.intellij.plugin</id>
   <name>CND Language / Jahia Framework</name>
-  <version>1.0</version>
+  <version>1.1</version>
   <vendor email="contact@thomas-coquel.fr" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
 
   <description><![CDATA[
@@ -71,6 +71,7 @@ CND files features:
             src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/viewBig.png"
             alt="view folder" style="max-width:100%;">
     </li>
+    <li>Completion and other features on Jahia nodetypes (embedded Jahia base and main modules .cnd files)</li>
 </ul>
 <br>
 Other files/languages features:
@@ -100,12 +101,13 @@ Other files/languages features:
   ]]></description>
 
   <change-notes><![CDATA[
-      <!--<html>-->
-        <!--<dl>-->
-            <!--<dt>1.0</dt>-->
-            <!--<dd>lol</dd>-->
-        <!--</dl>-->
-      <!--</html>-->
+      <html>
+          <dl>
+              <dt>1.1</dt>
+              <dd>(<strong>feature</strong>) Completion and other features on Jahia nodetypes (embedded jahia base and main module .cnd files)</dd>
+              <dd>Fixed platform dependent (Windows/Linux/Mac) issue with files and folders paths</dd>
+          </dl>
+      </html>
   ]]></change-notes>
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
