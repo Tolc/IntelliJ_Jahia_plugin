@@ -169,5 +169,11 @@ Other files/languages features:
     <treeStructureProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewMergerTreeStructureProvider"/>
     <refactoring.moveHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewMoveProvider"/>
     <renameHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewRenameHandler"/>
+
+
+  </extensions>
+  
+  <extensions defaultExtensionNs="com.intellij.properties">
+    <implicitPropertyUsageProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.properties.CndImplicitPropertyUsageProvider"/>
   </extensions>
 </idea-plugin>
