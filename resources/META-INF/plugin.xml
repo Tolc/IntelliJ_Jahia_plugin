@@ -168,6 +168,9 @@ Other files/languages features:
     <treeStructureProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewMergerTreeStructureProvider"/>
     <refactoring.moveHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewMoveProvider"/>
     <renameHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewRenameHandler"/>
+
+    <!-- CND Extended Properties -->
+    <lang.substitutor language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.languageSubstitutor.PropertiesToCndExtendedProperties"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij.properties">
