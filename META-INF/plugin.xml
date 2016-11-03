@@ -171,7 +171,8 @@ Other files/languages features:
     <renameHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewRenameHandler"/>
 
     <!-- CND Extended Properties -->
-    <lang.substitutor language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.languageSubstitutor.PropertiesToCndExtendedProperties"/>
+    <lang.substitutor language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.PropertiesToCndExtendedProperties"/>
+    <lang.fileViewProviderFactory language="CndExtendedProperties" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.CndExtendedPropertiesFileViewProviderFactory"/>
   </extensions>
   
   <extensions defaultExtensionNs="com.intellij.properties">
