@@ -172,6 +172,7 @@ Other files/languages features:
     <!-- CND Extended Properties -->
     <lang.substitutor language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.PropertiesToCndExtendedProperties"/>
     <lang.fileViewProviderFactory language="CndExtendedProperties" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.CndExtendedPropertiesFileViewProviderFactory"/>
+	<lang.findUsagesProvider language="CndExtendedProperties" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.CndExtendedPropertiesFindUsagesProvider"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij.properties">

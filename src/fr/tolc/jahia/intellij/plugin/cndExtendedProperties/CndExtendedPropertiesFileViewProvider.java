@@ -1,22 +1,20 @@
-/**
- * Copyright (c) 2016 by Bank Lombard Odier & Co Ltd, Geneva, Switzerland. This software is subject
- * to copyright protection under the laws of Switzerland and other countries. ALL RIGHTS RESERVED.
- */
 package fr.tolc.jahia.intellij.plugin.cndExtendedProperties;
+
+import java.util.Arrays;
+import java.util.Set;
 
 import com.intellij.lang.Language;
 import com.intellij.lang.properties.PropertiesLanguage;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.MultiplePsiFilesPerDocumentFileViewProvider;
 import com.intellij.psi.PsiManager;
+import gnu.trove.THashSet;
 import org.jetbrains.annotations.NotNull;
 
 public class CndExtendedPropertiesFileViewProvider extends MultiplePsiFilesPerDocumentFileViewProvider {
-    private final Language baseLanguage;
     
-    public CndExtendedPropertiesFileViewProvider(PsiManager manager, VirtualFile file, boolean eventSystemEnabled, Language language) {
+    public CndExtendedPropertiesFileViewProvider(PsiManager manager, VirtualFile file, boolean eventSystemEnabled) {
         super(manager, file, eventSystemEnabled);
-        baseLanguage = language;
     }
 
     @NotNull
@@ -27,6 +25,12 @@ public class CndExtendedPropertiesFileViewProvider extends MultiplePsiFilesPerDo
 
     @Override
     protected MultiplePsiFilesPerDocumentFileViewProvider cloneInner(VirtualFile fileCopy) {
-        return new CndExtendedPropertiesFileViewProvider(getManager(), fileCopy, false, baseLanguage);
+        return new CndExtendedPropertiesFileViewProvider(getManager(), fileCopy, false);
+    }
+
+    @NotNull
+    @Override
+    public Set<Language> getLanguages() {
+        return new THashSet<>(Arrays.asList(new Language[]{PropertiesLanguage.INSTANCE, CndExtendedPropertiesLanguage.INSTANCE}));
     }
 }

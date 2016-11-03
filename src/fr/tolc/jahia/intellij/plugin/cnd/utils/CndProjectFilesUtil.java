@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -312,5 +314,17 @@ public class CndProjectFilesUtil {
         }
         
         return null;
+    }
+    
+    public static Collection<VirtualFile> findFilesInSourcesOnly(Project project, FileType fileType) {
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, fileType, GlobalSearchScope.allScope(project));
+        Collection<VirtualFile> res = new ArrayList<VirtualFile>();
+        
+        for (VirtualFile virtualFile : virtualFiles) {
+            if (FileIndexFacade.getInstance(project).getModuleForFile(virtualFile) != null) {
+               res.add(virtualFile);
+            }
+        }
+        return res;
     }
 }

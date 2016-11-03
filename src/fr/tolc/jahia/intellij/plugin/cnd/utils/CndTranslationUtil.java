@@ -4,27 +4,37 @@ import java.util.Collection;
 
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.PropertiesFileType;
+import com.intellij.lang.properties.PropertiesLanguage;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.FileTypeIndex;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CndTranslationUtil {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(CndTranslationUtil.class);
 
     public static String getNodeTypeTranslation(Project project, String namespace, String nodeTypeName) {
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, PropertiesFileType.INSTANCE, GlobalSearchScope.allScope(project));
+        Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.findFilesInSourcesOnly(project, PropertiesFileType.INSTANCE);
 
+        String key = convertNodeTypeIdentifierToPropertyName(namespace, nodeTypeName);
+        PsiManager psiManager = PsiManager.getInstance(project);
         for (VirtualFile virtualFile : virtualFiles) {
-            PropertiesFile propertiesFile = (PropertiesFile) PsiManager.getInstance(project).findFile(virtualFile);
-            if (propertiesFile != null) {
-                IProperty property = propertiesFile.findPropertyByKey(convertNodeTypeIdentifierToPropertyName(namespace, nodeTypeName));
-                if (property != null) {
-                    return property.getValue();
+            try {
+                PropertiesFile propertiesFile = (PropertiesFile) psiManager.findViewProvider(virtualFile).getPsi(PropertiesLanguage.INSTANCE);
+                if (propertiesFile != null) {
+                    IProperty property = propertiesFile.findPropertyByKey(key);
+                    if (property != null) {
+                        return property.getValue();
+                    }
                 }
+            } catch (Exception e) {
+                //TODO: LOL
+                LOGGER.warn("Virtual file error: " + virtualFile.getName());
+                LOGGER.warn("Virtual file languages: " + psiManager.findViewProvider(virtualFile).getLanguages());
             }
         }
         return null;
