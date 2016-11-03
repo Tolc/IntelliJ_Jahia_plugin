@@ -1,5 +1,9 @@
 package fr.tolc.jahia.intellij.plugin.cnd.lineMarker;
 
+import java.util.Collection;
+
+import javax.swing.*;
+
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
@@ -7,13 +11,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
-import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.Icon;
-import java.util.Collection;
 
 public class CndJavaLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
@@ -22,7 +23,12 @@ public class CndJavaLineMarkerProvider extends RelatedItemLineMarkerProvider {
         if (element instanceof PsiLiteralExpression) {
             PsiLiteralExpression literalExpression = (PsiLiteralExpression) element;
             String value = literalExpression.getValue() instanceof String ? (String) literalExpression.getValue() : null;
-            NodeTypeModel nodeTypeModel = CndUtil.getNodeTypeModel(value);
+            NodeTypeModel nodeTypeModel = null;
+            try {
+                nodeTypeModel = new NodeTypeModel(value);
+            } catch (IllegalArgumentException e) {
+                //Nothing to do
+            }
 
             if (nodeTypeModel != null) {
                 String namespace = nodeTypeModel.getNamespace();
