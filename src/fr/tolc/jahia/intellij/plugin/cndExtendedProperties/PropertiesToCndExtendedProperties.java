@@ -26,6 +26,6 @@ public class PropertiesToCndExtendedProperties extends LanguageSubstitutor {
                 }
             }
         }
-        return PropertiesLanguage.INSTANCE;
+        return null;
     }
 }

@@ -33,8 +33,7 @@ public class CndTranslationUtil {
                 }
             } catch (Exception e) {
                 //TODO: LOL
-                LOGGER.warn("Virtual file error: " + virtualFile.getName());
-                LOGGER.warn("Virtual file languages: " + psiManager.findViewProvider(virtualFile).getLanguages());
+                LOGGER.warn("Virtual file error: " + virtualFile.getName() + " -- " + psiManager.findViewProvider(virtualFile).getLanguages());
             }
         }
         return null;
