@@ -3,7 +3,6 @@ package fr.tolc.jahia.intellij.plugin.cndExtendedProperties;
 import java.io.File;
 
 import com.intellij.lang.Language;
-import com.intellij.lang.properties.PropertiesLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.vfs.VirtualFile;

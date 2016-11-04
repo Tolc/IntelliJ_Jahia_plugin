@@ -169,10 +169,13 @@ Other files/languages features:
     <refactoring.moveHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewMoveProvider"/>
     <renameHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewRenameHandler"/>
 
+    
     <!-- CND Extended Properties -->
     <lang.substitutor language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.PropertiesToCndExtendedProperties"/>
     <lang.fileViewProviderFactory language="CndExtendedProperties" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.CndExtendedPropertiesFileViewProviderFactory"/>
-	<lang.findUsagesProvider language="CndExtendedProperties" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.CndExtendedPropertiesFindUsagesProvider"/>
+    
+	<lang.findUsagesProvider language="CndExtendedProperties" order="first" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.CndExtendedPropertiesFindUsagesProvider"/>
+	<!--<lang.findUsagesProvider language="Properties" order="first" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.CndExtendedPropertiesFindUsagesProvider"/>-->
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij.properties">
