@@ -172,11 +172,13 @@ Other files/languages features:
 
     
     <!-- CND Extended Properties -->
-    <lang.substitutor language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.PropertiesToCndExtendedProperties"/>
-    <lang.fileViewProviderFactory language="CndExtendedProperties" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.CndExtendedPropertiesFileViewProviderFactory"/>
+    <!--<lang.substitutor language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.PropertiesToCndExtendedProperties"/>-->
+    <!--<lang.fileViewProviderFactory language="CndExtendedProperties" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.CndExtendedPropertiesFileViewProviderFactory"/>-->
 
-    <lang.findUsagesProvider language="CndExtendedProperties" order="first" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.CndExtendedPropertiesFindUsagesProvider"/>
+    <!--<lang.findUsagesProvider language="CndExtendedProperties" order="first" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.CndExtendedPropertiesFindUsagesProvider"/>-->
     <!--<lang.findUsagesProvider language="Properties" order="first" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.CndExtendedPropertiesFindUsagesProvider"/>-->
+    <lang.findUsagesProvider language="Properties" order="first" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFindUsagesProvider"/>
+    <!--<idIndexer filetype="Properties" order="first" implementationClass="fr.tolc.jahia.intellij.plugin.cndExtendedProperties.indexer.PropertiesIdIndexerCustom"/>-->
   </extensions>
   
   <extensions defaultExtensionNs="com.intellij.properties">
