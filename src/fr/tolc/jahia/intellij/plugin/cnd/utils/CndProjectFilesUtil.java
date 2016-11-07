@@ -1,24 +1,5 @@
 package fr.tolc.jahia.intellij.plugin.cnd.utils;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.FileTypeIndex;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.indexing.FileBasedIndex;
-import fr.tolc.jahia.intellij.plugin.cnd.CndFileType;
-import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -32,6 +13,28 @@ import java.util.Collection;
 import java.util.List;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
+
+import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.FileIndexFacade;
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.search.FileTypeIndex;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.util.indexing.FileBasedIndex;
+import fr.tolc.jahia.intellij.plugin.cnd.CndFileType;
+import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
+import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CndProjectFilesUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(CndProjectFilesUtil.class);
@@ -279,5 +282,49 @@ public class CndProjectFilesUtil {
 
     public static String getRelativePath(File parent, File child) {
         return child.getAbsolutePath().substring(parent.getAbsolutePath().length() + 1);
+    }
+    
+    public static CndNodeType getNodeTypeFromFolder(Project project, File folder) {
+        if (folder.isDirectory()) {
+            NodeTypeModel model = null;
+            try {
+                model = new NodeTypeModel(folder.getName(), true);
+            } catch (IllegalArgumentException e) {
+                //Nothing to do
+            }
+            
+            if (model != null) {
+                return CndUtil.findNodeType(project, model);
+            }
+        }
+        return null;
+    }
+    
+    public static File getNodeTypeFolderFromViewFile(Project project, VirtualFile virtualFile) {
+        VirtualFile viewTypeFolder = virtualFile.getParent();
+        if (viewTypeFolder != null && viewTypeFolder.isDirectory()) {
+            VirtualFile nodetypeFolder = viewTypeFolder.getParent();
+            if (nodetypeFolder != null && nodetypeFolder.isDirectory()) {
+                File nodetypeFolderReal = new File(nodetypeFolder.getPath());
+                CndNodeType relativeNodetype = getNodeTypeFromFolder(project, nodetypeFolderReal);
+                if (relativeNodetype != null) {
+                    return nodetypeFolderReal;
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    public static Collection<VirtualFile> findFilesInSourcesOnly(Project project, FileType fileType) {
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, fileType, GlobalSearchScope.allScope(project));
+        Collection<VirtualFile> res = new ArrayList<VirtualFile>();
+        
+        for (VirtualFile virtualFile : virtualFiles) {
+            if (FileIndexFacade.getInstance(project).getModuleForFile(virtualFile) != null) {
+               res.add(virtualFile);
+            }
+        }
+        return res;
     }
 }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -72,6 +70,10 @@ public class CndUtil {
         return result;
     }
 
+    public static CndNodeType findNodeType(Project project, NodeTypeModel nodeTypeModel) {
+        return findNodeType(project, nodeTypeModel.getNamespace(), nodeTypeModel.getNodeTypeName());
+    }
+    
     public static CndNodeType findNodeType(Project project, String namespace, String nodeTypeName) {
         List<CndNodeType> nodeTypes = findNodeTypes(project, namespace, nodeTypeName);
         if (!nodeTypes.isEmpty()) {
@@ -150,31 +152,13 @@ public class CndUtil {
 
     public static CndNamespace findNamespace(Project project, String namespace) {
         List<CndNamespace> namespaces = findNamespaces(project, namespace);
-        if (namespaces.size() > 0) {
+        if (!namespaces.isEmpty()) {
             return namespaces.get(0);
         }
         return null;
     }
 
 
-    private static final Pattern nodeTypeRegex = Pattern.compile("^[A-Za-z]+" + ":" + "[A-Za-z0-9]+$");
-
-    public static NodeTypeModel getNodeTypeModel(String value) {
-        if (value != null) {
-            if (value.contains(":")) {
-                Matcher matcher = nodeTypeRegex.matcher(value);
-                if (matcher.matches()) {
-                    String[] splitValue = value.split(":");
-                    String namespace = splitValue[0];
-                    String nodeTypeName = splitValue[1];
-                    return new NodeTypeModel(value, namespace, nodeTypeName);
-                }
-            }
-        }
-        return null;
-    }
-    
-    
     private static final String[] JAHIA_NAMESPACES = {"mix", "nt", "jmix", "jnt"};
     
     public static boolean isJahiaNamespace(String namespace) {
