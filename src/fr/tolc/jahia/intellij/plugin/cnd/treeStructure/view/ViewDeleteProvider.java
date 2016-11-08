@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd.treeStructure;
+package fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view;
 
 import com.intellij.ide.DeleteProvider;
 import com.intellij.ide.util.DeleteHandler;

@@ -165,8 +165,9 @@ Other files/languages features:
     <!--<todoIndexer filetype="Cnd file" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndTodoIndexer"/>-->
     <quoteHandler fileType="Cnd" className="fr.tolc.jahia.intellij.plugin.cnd.CndQuoteHandler"/>
     <lang.braceMatcher language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndBraceMatcher"/>
-    <treeStructureProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewMergerTreeStructureProvider"/>
-    <refactoring.moveHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewMoveProvider"/>
-    <renameHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewRenameHandler"/>
+    <treeStructureProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view.ViewMergerTreeStructureProvider"/>
+    <refactoring.moveHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view.ViewMoveProvider"/>
+    <renameHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view.ViewRenameHandler"/>
+    <treeStructureProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.nodetype.NodeTypeFoldersTreeStructureProvider"/>
   </extensions>
 </idea-plugin>
