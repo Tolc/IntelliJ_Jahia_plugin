@@ -16,6 +16,7 @@
 <hr>
 
 <p>Compatible with Jahia versions <strong>6.6.x</strong> &amp; <strong>7.x</strong></p>
+<p>Java <strong>8</strong> needed</p>
 
 <p>See the <a href="https://github.com/Tolc/IntelliJ_Jahia_plugin">plugin Github project</a> for detailed features list.</p>
 
@@ -91,9 +92,6 @@ Other files/languages features:
             <li>Translations keys nodetypes and properties completion</li>
             <li>Go to namespace, nodetype or property declaration from translations keys (ctrl-click/cmd-click)</li>
             <li>Error message if adding translations for a choicelist on a non-choicelist property</li>
-            <li><strong>Note:</strong> at the moment the translations keys for the nodetypes and properties are still
-                marked as 'unused'
-            </li>
         </ul>
     </li>
 </ul>
@@ -105,6 +103,7 @@ Other files/languages features:
           <dl>
               <dt>1.1</dt>
               <dd>(<strong>feature</strong>) Completion and other features on Jahia nodetypes (embedded jahia base and main module .cnd files)</dd>
+              <dd>(<strong>feature</strong>) Nodetypes translations properties are no longer flagged as unused in .properties files</dd>
               <dd>Fixed platform dependent (Windows/Linux/Mac) issue with files and folders paths</dd>
               <dd>Fixed issue with property type mask option containing '.' not being recognized (for instance 'ckeditor.customConfig')</dd>
               <dd>Fixed issue with namespace URIs containing '-' being flagged as non-valid URI</dd>
@@ -171,5 +170,9 @@ Other files/languages features:
     <treeStructureProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewMergerTreeStructureProvider"/>
     <refactoring.moveHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewMoveProvider"/>
     <renameHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewRenameHandler"/>
+  </extensions>
+
+  <extensions defaultExtensionNs="com.intellij.properties">
+    <implicitPropertyUsageProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.properties.CndImplicitPropertyUsageProvider"/>
   </extensions>
 </idea-plugin>

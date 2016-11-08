@@ -9,7 +9,7 @@ definitions.cnd files syntax highlighting, code completion, and other amazing st
 
 Tested under IntelliJ IDEA from 14.1.4 to 2016.2.5 (the most recent one). Can't see why it wouldn't work with older versions though.
 
-IntelliJ plugins dependencies: **jsp**, **properties**
+IntelliJ plugins dependencies: **jsp**, **properties**. Java **8** needed.
  
 Jahia project versions **6.6.x** or **7.x**
 
@@ -72,7 +72,6 @@ Jahia project versions **6.6.x** or **7.x**
         * Translations keys nodetypes and properties completion
         * Go to namespace, nodetype or property declaration from translations keys (ctrl-click/cmd-click)
         * Error message if adding translations for a choicelist on a non-choicelist property
-        * **Note:** at the moment the translations keys for the nodetypes and properties are still marked as 'unused'
 
 
 
@@ -84,8 +83,8 @@ Jahia project versions **6.6.x** or **7.x**
     * Properties and property type completion in `${currentNode.properties.propertyName}`, `${currentNode.properties['propertyName']}` and `jcr:property`
     * Views completion in `template:include` and `template:module`
  * Improved Properties support:
-    * Resource bundles .properties extension to be able to find namespaces and nodetypes usages in it, and also removed the 'unused' annotations
-    * View cache .properties custom language
+    * Resource bundles .properties extension, to be able to find namespaces and nodetypes usages in it
+    * View cache .properties custom language     
  * Plugin settings
  * Make helpers/quickfixes accessible through Actions in menus
  * Groovy support
