@@ -29,7 +29,8 @@ public enum PropertyTypeMaskOptionEnum {
     AUTOCOMPLETE("autocomplete"),
     SEPARATOR("separator"),
     FOLDER("folder"),
-    ROOT("root");
+    ROOT("root"),
+    CKEDITOR_CUSTOMCONFIG("ckeditor.customConfig");
     
     private String value;
 

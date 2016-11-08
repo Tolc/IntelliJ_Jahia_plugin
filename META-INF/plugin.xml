@@ -106,6 +106,7 @@ Other files/languages features:
               <dt>1.1</dt>
               <dd>(<strong>feature</strong>) Completion and other features on Jahia nodetypes (embedded jahia base and main module .cnd files)</dd>
               <dd>Fixed platform dependent (Windows/Linux/Mac) issue with files and folders paths</dd>
+              <dd>Fixed issue with property type mask option containing '.' not being recognized (for instance 'ckeditor.customConfig')</dd>
           </dl>
       </html>
   ]]></change-notes>
