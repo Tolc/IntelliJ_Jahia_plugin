@@ -1,8 +1,8 @@
 <idea-plugin version="2">
   <id>fr.tolc.jahia.intellij.plugin</id>
   <name>CND Language / Jahia Framework</name>
-  <version>1.0</version>
-  <vendor email="thomas.coquel117@gmail.com" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
+  <version>1.1</version>
+  <vendor email="contact@thomas-coquel.fr" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
 
   <description><![CDATA[
 <html>
@@ -16,6 +16,7 @@
 <hr>
 
 <p>Compatible with Jahia versions <strong>6.6.x</strong> &amp; <strong>7.x</strong></p>
+<p>Java <strong>8</strong> needed</p>
 
 <p>See the <a href="https://github.com/Tolc/IntelliJ_Jahia_plugin">plugin Github project</a> for detailed features list.</p>
 
@@ -71,6 +72,7 @@ CND files features:
             src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/viewBig.png"
             alt="view folder" style="max-width:100%;">
     </li>
+    <li>Completion and other features on Jahia nodetypes (embedded Jahia base and main modules .cnd files)</li>
 </ul>
 <br>
 Other files/languages features:
@@ -90,9 +92,6 @@ Other files/languages features:
             <li>Translations keys nodetypes and properties completion</li>
             <li>Go to namespace, nodetype or property declaration from translations keys (ctrl-click/cmd-click)</li>
             <li>Error message if adding translations for a choicelist on a non-choicelist property</li>
-            <li><strong>Note:</strong> at the moment the translations keys for the nodetypes and properties are still
-                marked as 'unused'
-            </li>
         </ul>
     </li>
 </ul>
@@ -100,12 +99,16 @@ Other files/languages features:
   ]]></description>
 
   <change-notes><![CDATA[
-      <!--<html>-->
-        <!--<dl>-->
-            <!--<dt>1.0</dt>-->
-            <!--<dd>lol</dd>-->
-        <!--</dl>-->
-      <!--</html>-->
+      <html>
+          <dl>
+              <dt>1.1</dt>
+              <dd>(<strong>feature</strong>) Completion and other features on Jahia nodetypes (embedded jahia base and main module .cnd files)</dd>
+              <dd>(<strong>feature</strong>) Nodetypes translations properties are no longer flagged as unused in .properties files</dd>
+              <dd>Fixed platform dependent (Windows/Linux/Mac) issue with files and folders paths</dd>
+              <dd>Fixed issue with property type mask option containing '.' not being recognized (for instance 'ckeditor.customConfig')</dd>
+              <dd>Fixed issue with namespace URIs containing '-' being flagged as non-valid URI</dd>
+          </dl>
+      </html>
   ]]></change-notes>
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
@@ -125,6 +128,9 @@ Other files/languages features:
 
   <project-components>
     <!-- Add your project components here -->
+    <component>
+      <implementation-class>fr.tolc.jahia.intellij.plugin.cnd.CndProjectComponent</implementation-class>
+    </component>
   </project-components>
 
   <actions>
@@ -164,5 +170,9 @@ Other files/languages features:
     <treeStructureProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewMergerTreeStructureProvider"/>
     <refactoring.moveHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewMoveProvider"/>
     <renameHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.ViewRenameHandler"/>
+  </extensions>
+
+  <extensions defaultExtensionNs="com.intellij.properties">
+    <implicitPropertyUsageProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.properties.CndImplicitPropertyUsageProvider"/>
   </extensions>
 </idea-plugin>

@@ -25,6 +25,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndElementFactory;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndFile;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,7 +62,7 @@ public class CreateNodeTypeQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
+                Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
                 if (virtualFiles.size() == 1) {
                     createNodeType(project, virtualFiles.iterator().next());
                 } else {

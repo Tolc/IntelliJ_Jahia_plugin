@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
@@ -21,13 +20,13 @@ import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.IncorrectOperationException;
-import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNode;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -105,9 +104,9 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
             if (!viewFile.exists()) {
                 Path defaultViewPath;
                 if (viewFileName.endsWith(".jsp")) {
-                    defaultViewPath = Paths.get(getClass().getClassLoader().getResource("default/view.jsp").getFile().substring(1));   //Because of starting "/" /E:/...
+                    defaultViewPath = CndProjectFilesUtil.getResourceFilePath("default/view.jsp");
                 } else {
-                    defaultViewPath = Paths.get(getClass().getClassLoader().getResource("default/view.default").getFile().substring(1));   //Because of starting "/" /E:/...
+                    defaultViewPath = CndProjectFilesUtil.getResourceFilePath("default/view.default");
                 }
                 Files.copy(defaultViewPath, viewFile.toPath());
                 
@@ -117,7 +116,7 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
             }
 
             if (!properties.exists()) {
-                Path defaultPropertiesPath = Paths.get(getClass().getClassLoader().getResource("default/view.properties").getFile().substring(1));  //Because of starting "/" /E:/...
+                Path defaultPropertiesPath = CndProjectFilesUtil.getResourceFilePath("default/view.properties");
                 Files.copy(defaultPropertiesPath, properties.toPath());
             }
         } catch (IOException e) {

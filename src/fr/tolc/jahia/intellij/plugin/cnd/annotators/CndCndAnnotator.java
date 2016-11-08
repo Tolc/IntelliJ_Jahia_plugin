@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CndCndAnnotator implements Annotator {
 
-    private static final Pattern namespaceUriPattern = Pattern.compile("^http(s)?://[A-Za-z0-9][A-Za-z0-9./-_]+[A-Za-z0-9]$");
+    private static final Pattern namespaceUriPattern = Pattern.compile("^http(s)?://[A-Za-z0-9][A-Za-z0-9./\\-_]+[A-Za-z0-9]$");
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
@@ -146,7 +146,7 @@ public class CndCndAnnotator implements Annotator {
                 PsiElement namespaceElt = element.getFirstChild();
                 if (namespaceElt != null) {
                     CndNamespace cndNamespace = CndUtil.findNamespace(element.getProject(), namespaceElt.getText());
-                    if (cndNamespace == null && !"nt".equals(namespaceElt.getText()) && !"jnt".equals(namespaceElt.getText()) && !"jmix".equals(namespaceElt.getText()) && !"mix".equals(namespaceElt.getText())) {
+                    if (cndNamespace == null) {
                         holder.createErrorAnnotation(namespaceElt.getTextRange(), "Unresolved CND namespace");
                     } else {
                         PsiElement colonElt = namespaceElt.getNextSibling();
@@ -156,8 +156,7 @@ public class CndCndAnnotator implements Annotator {
                             PsiElement nodeTypeElt = colonElt.getNextSibling();
                             if (nodeTypeElt == null || StringUtils.isBlank(nodeTypeElt.getText())) {
                                 holder.createErrorAnnotation(element.getTextRange(), "Invalid CND node type (missing node type name)"); 
-                            } else if (!"nt".equals(namespaceElt.getText()) && !"jnt".equals(namespaceElt.getText()) && !"jmix".equals(namespaceElt.getText()) && !"mix".equals(namespaceElt.getText())) {
-                                //TODO: change or remove this condition after embedding Jahia default and modules cnd files  
+                            } else {
                                 CndNodeType cndNodeType = CndUtil.findNodeType(element.getProject(), namespaceElt.getText(), nodeTypeElt.getText());
                                 if (cndNodeType == null) {
                                     holder.createErrorAnnotation(nodeTypeElt.getTextRange(), "Unresolved CND node type");
