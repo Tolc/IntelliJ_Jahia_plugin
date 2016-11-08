@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CndCndAnnotator implements Annotator {
 
-    private static final Pattern namespaceUriPattern = Pattern.compile("^http(s)?://[A-Za-z0-9][A-Za-z0-9./-_]+[A-Za-z0-9]$");
+    private static final Pattern namespaceUriPattern = Pattern.compile("^http(s)?://[A-Za-z0-9][A-Za-z0-9./\\-_]+[A-Za-z0-9]$");
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
