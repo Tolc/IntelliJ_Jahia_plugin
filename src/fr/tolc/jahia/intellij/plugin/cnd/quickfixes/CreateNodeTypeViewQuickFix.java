@@ -27,6 +27,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNode;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndPluginUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -104,9 +105,9 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
             if (!viewFile.exists()) {
                 Path defaultViewPath;
                 if (viewFileName.endsWith(".jsp")) {
-                    defaultViewPath = CndProjectFilesUtil.getResourceFilePath("default/view.jsp");
+                    defaultViewPath = CndPluginUtil.getPluginFilePath("default/view.jsp");
                 } else {
-                    defaultViewPath = CndProjectFilesUtil.getResourceFilePath("default/view.default");
+                    defaultViewPath = CndPluginUtil.getPluginFilePath("default/view.default");
                 }
                 Files.copy(defaultViewPath, viewFile.toPath());
                 
@@ -116,7 +117,7 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
             }
 
             if (!properties.exists()) {
-                Path defaultPropertiesPath = CndProjectFilesUtil.getResourceFilePath("default/view.properties");
+                Path defaultPropertiesPath = CndPluginUtil.getPluginFilePath("default/view.properties");
                 Files.copy(defaultPropertiesPath, properties.toPath());
             }
         } catch (IOException e) {
