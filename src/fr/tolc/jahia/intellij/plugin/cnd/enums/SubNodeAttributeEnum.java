@@ -11,7 +11,8 @@ public enum SubNodeAttributeEnum {
     ABORT("abort"),
     MULTIPLE("multiple"),
     PROTECTED("protected"),
-    SNS("sns");
+    SNS("sns"),
+    PRIMARY("primary");
 
     private String value;
 

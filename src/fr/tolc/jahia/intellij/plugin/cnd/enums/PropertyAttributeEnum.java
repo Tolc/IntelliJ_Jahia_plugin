@@ -7,6 +7,7 @@ public enum PropertyAttributeEnum {
     PROTECTED("protected"), 
     PRIMARY("primary"),
     I18N("i18n"), 
+    I15D("i15d"),
     INTERNATIONALIZED("internationalized"),
     SORTABLE("sortable"), 
     HIDDEN("hidden"), 
