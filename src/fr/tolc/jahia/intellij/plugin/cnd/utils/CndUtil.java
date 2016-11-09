@@ -175,7 +175,7 @@ public class CndUtil {
     }
     
     
-    private static final String[] JAHIA_NAMESPACES = {"mix", "nt", "jmix", "jnt"};
+    private static final String[] JAHIA_NAMESPACES = {"mix", "nt", "jmix", "jnt", "j", "jcr"};
     
     public static boolean isJahiaNamespace(String namespace) {
         return ArrayUtil.contains(namespace, JAHIA_NAMESPACES);
