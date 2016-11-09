@@ -1,7 +1,12 @@
 package fr.tolc.jahia.intellij.plugin.cnd.utils;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -18,20 +23,6 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.jar.JarOutputStream;
-import java.util.zip.ZipEntry;
 
 public class CndProjectFilesUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(CndProjectFilesUtil.class);
@@ -219,65 +210,7 @@ public class CndProjectFilesUtil {
         return null;
     }
 
-    public static File getResourceFile(String resourcePath) {
-        URL filePathURL = getInstance().getClass().getClassLoader().getResource(resourcePath);
-        if (filePathURL != null) {
-            String filePathString = filePathURL.getFile();
-            return new File(filePathString);
-        }
-        return null;
-    }
-    
-    public static Path getResourceFilePath(String resourcePath) {
-        File resourceFile = getResourceFile(resourcePath);
-        if (resourceFile != null) {
-            return Paths.get(resourceFile.getAbsolutePath());
-        }
-        return null;
-    }
-    
     public static Collection<VirtualFile> getProjectCndFiles(Project project) {
         return FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
-    }
-
-    public static void fileToJar(File rootFile, String jarPath, String extensions) throws IOException {
-        FileOutputStream fout = new FileOutputStream(jarPath);
-        JarOutputStream jarOut = new JarOutputStream(fout);
-        addFileToJarRecursive(jarOut, rootFile, rootFile, extensions);
-        jarOut.close();
-        fout.close();
-    }
-
-    private static void addFileToJarRecursive(JarOutputStream jarOut, File file, File rootFile, String extensions) throws IOException {
-        if (file.isDirectory()) {
-            if (!FileUtil.filesEqual(file, rootFile)) {
-                jarOut.putNextEntry(new ZipEntry(getRelativePath(rootFile, file) + "/"));
-            }
-            File[] children = file.listFiles();
-            if (children != null) {
-                for (File child : children) {
-                    addFileToJarRecursive(jarOut, child, rootFile, extensions);
-                }
-            }
-        } else {
-            String entryName;
-            if (FileUtil.filesEqual(file, rootFile)) {
-                entryName = file.getName();
-            } else {
-                entryName = getRelativePath(rootFile, file);
-            }
-
-            String[] split = entryName.split("\\.");
-            if (extensions.contains(split[split.length - 1])) {
-                jarOut.putNextEntry(new ZipEntry(entryName));
-                jarOut.write(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
-                jarOut.closeEntry();
-            }
-        }
-    }
-
-
-    public static String getRelativePath(File parent, File child) {
-        return child.getAbsolutePath().substring(parent.getAbsolutePath().length() + 1);
     }
 }
