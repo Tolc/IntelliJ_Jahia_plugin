@@ -13,6 +13,7 @@ public enum PropertyAttributeEnum {
     HIDDEN("hidden"), 
     MULTIPLE("multiple", "multiple", "multiple|mul|\\*"), 
     NOFULLTEXT("nofulltext"),
+    FULLTEXTSEARCHABLE("fulltextsearchable", "fulltextsearchable=no", "fulltextsearchable\\s*=\\s*no"),
     ANALYZER("analyzer", "analyzer='keyword'", "analyzer\\s*=\\s*(')?keyword(')?"), 
     AUTOCREATED("autocreated", "autocreated", "autocreated|aut|a"), 
     FACETABLE("facetable"), 
