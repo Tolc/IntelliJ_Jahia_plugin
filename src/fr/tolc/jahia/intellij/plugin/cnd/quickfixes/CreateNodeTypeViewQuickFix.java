@@ -69,7 +69,7 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                CreateNodeTypeViewDialog createNodeTypeViewDialog = new CreateNodeTypeViewDialog(project);
+                CreateNodeTypeViewDialog createNodeTypeViewDialog = new CreateNodeTypeViewDialog(project, namespace + ":" + nodeTypeName);
                 createNodeTypeViewDialog.setVisible(true);
 
                 if (createNodeTypeViewDialog.isOkClicked()) {

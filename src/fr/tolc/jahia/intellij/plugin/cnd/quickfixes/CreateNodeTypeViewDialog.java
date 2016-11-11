@@ -22,7 +22,7 @@ public class CreateNodeTypeViewDialog extends JDialog {
 
     private boolean okClicked = false;
 
-    public CreateNodeTypeViewDialog(Project project) {
+    public CreateNodeTypeViewDialog(Project project, String nodeType) {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -54,7 +54,7 @@ public class CreateNodeTypeViewDialog extends JDialog {
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        setTitle("Create new view");
+        setTitle("Create new view for " + nodeType);
         pack();
         setSize(275, 275);
         setLocationRelativeTo(WindowManager.getInstance().getFrame(project));
