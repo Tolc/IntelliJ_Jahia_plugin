@@ -169,7 +169,9 @@ public class CndCompletionContributor extends CompletionContributor {
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
                         for (SubNodeAttributeEnum attribute : SubNodeAttributeEnum.values()) {
-                            resultSet.addElement(LookupElementBuilder.create(attribute));
+                            for (String completion : attribute.getCompletions()) {
+                                resultSet.addElement(LookupElementBuilder.create(completion));
+                            }
                         }
                     }
                 }

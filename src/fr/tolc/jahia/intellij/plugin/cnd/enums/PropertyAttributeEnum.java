@@ -3,18 +3,18 @@ package fr.tolc.jahia.intellij.plugin.cnd.enums;
 import java.util.regex.Pattern;
 
 public enum PropertyAttributeEnum {
-    MANDATORY("mandatory"),
-    PROTECTED("protected"), 
-    PRIMARY("primary"),
+    MANDATORY("mandatory", "madatory", "mandatory|man|m"),
+    PROTECTED("protected", "protected",  "protected|pro|p"), 
+    PRIMARY("primary", "primary", "primary|pri|!"),
     I18N("i18n"), 
     I15D("i15d"),
     INTERNATIONALIZED("internationalized"),
     SORTABLE("sortable"), 
     HIDDEN("hidden"), 
-    MULTIPLE("multiple"), 
+    MULTIPLE("multiple", "multiple", "multiple|mul|\\*"), 
     NOFULLTEXT("nofulltext"),
     ANALYZER("analyzer", "analyzer='keyword'", "analyzer\\s*=\\s*(')?keyword(')?"), 
-    AUTOCREATED("autocreated"), 
+    AUTOCREATED("autocreated", "autocreated", "autocreated|aut|a"), 
     FACETABLE("facetable"), 
     HIERARCHICAL("hierarchical"), 
     NOQUERYORDER("noqueryorder"),
