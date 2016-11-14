@@ -8,14 +8,11 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
-import fr.tolc.jahia.intellij.plugin.cnd.utils.CndTranslationUtil;
-import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.ItemTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyAttributeEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.AttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.SubNodeAttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeIdentifier;
@@ -23,6 +20,8 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeTranslationsQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeViewQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndTranslationUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -111,7 +110,7 @@ public class CndCndAnnotator implements Annotator {
             //Property attribute
             else if (CndTypes.PROPERTY_ATTRIBUTE.equals(element.getNode().getElementType())) {
                 try {
-                    PropertyAttributeEnum.fromValue(element.getText());
+                    AttributeEnum.fromValue(element.getText());
                 } catch (IllegalArgumentException e) {
                     holder.createErrorAnnotation(element.getTextRange(), "Invalid property attribute");
 //                    Annotation annotation = holder.createErrorAnnotation(element.getTextRange(), "Invalid property attribute");
@@ -131,7 +130,7 @@ public class CndCndAnnotator implements Annotator {
             //Sub node attribute
             else if (CndTypes.NODE_ATTRIBUTE.equals(element.getNode().getElementType())) {
                 try {
-                    SubNodeAttributeEnum.fromValue(element.getText());
+                    AttributeEnum.fromValueForSubNode(element.getText());
                 } catch (IllegalArgumentException e) {
                     holder.createErrorAnnotation(element.getTextRange(), "Invalid sub node attribute");
                 }

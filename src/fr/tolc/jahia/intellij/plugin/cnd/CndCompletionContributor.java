@@ -14,11 +14,10 @@ import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.util.ProcessingContext;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.ItemTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyAttributeEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.AttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskOptionEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.SubNodeAttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
@@ -137,7 +136,7 @@ public class CndCompletionContributor extends CompletionContributor {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
-                        for (PropertyAttributeEnum attribute : PropertyAttributeEnum.values()) {
+                        for (AttributeEnum attribute : AttributeEnum.values()) {
                             for (String completion : attribute.getCompletions()) {
                                 resultSet.addElement(LookupElementBuilder.create(completion));
                             }
@@ -168,7 +167,7 @@ public class CndCompletionContributor extends CompletionContributor {
                     public void addCompletions(@NotNull CompletionParameters parameters,
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
-                        for (SubNodeAttributeEnum attribute : SubNodeAttributeEnum.values()) {
+                        for (AttributeEnum attribute : AttributeEnum.subNodeAttributesValues()) {
                             for (String completion : attribute.getCompletions()) {
                                 resultSet.addElement(LookupElementBuilder.create(completion));
                             }
