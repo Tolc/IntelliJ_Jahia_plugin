@@ -102,6 +102,7 @@ Other files/languages features:
       <html>
           <dl>
               <dt>1.2</dt>
+              <dd>(<strong>feature</strong>) Jahia JSP variables completion (currentNode, moduleMap, etc... without having to use elvariables)</dd>
               <dd>Line breaks within properties and subnodes now accepted</dd>
           </dl>
           <dl>
@@ -182,5 +183,9 @@ Other files/languages features:
 
   <extensions defaultExtensionNs="com.intellij.properties">
     <implicitPropertyUsageProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.properties.CndImplicitPropertyUsageProvider"/>
+  </extensions>
+
+  <extensions defaultExtensionNs="com.intellij.javaee.jsp">
+    <elImplicitVariablesProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.javaee.jsp.CndJspElVariablesProvider"/>
   </extensions>
 </idea-plugin>
