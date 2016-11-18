@@ -25,9 +25,8 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNode;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
-import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndPluginUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -192,7 +191,7 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
         return propertyName;
     }
     private String convertNodeTypeToVariableName(CndSubNodeType subNodeType) {
-        NodeTypeModel model = CndUtil.getNodeTypeModel(subNodeType.getText());
+        NodeTypeModel model = new NodeTypeModel(subNodeType.getText());
         if (model.getNodeTypeName().endsWith("y")) {
             return model.getNodeTypeName().substring(0, model.getNodeTypeName().length() - 1) + "ies";
         }

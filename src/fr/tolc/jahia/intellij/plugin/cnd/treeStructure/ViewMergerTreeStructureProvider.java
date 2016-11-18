@@ -16,6 +16,7 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
@@ -31,10 +32,15 @@ public class ViewMergerTreeStructureProvider implements TreeStructureProvider {
 
     @NotNull
     public Collection<AbstractTreeNode> modify(@NotNull AbstractTreeNode parent, @NotNull Collection<AbstractTreeNode> children, ViewSettings settings) {
-        if (parent.getValue() instanceof View) {
+        if (children.isEmpty() 
+            || !(parent.getValue() instanceof PsiDirectory)
+            || parent.getValue() instanceof View) {
             return children;
         }
 
+        if (!CndProjectFilesUtil.isNodeTypeFolderChildFolder(((PsiDirectory)parent.getValue()).getVirtualFile())) {
+            return children;
+        }
 
         Collection<AbstractTreeNode> result = new LinkedHashSet<AbstractTreeNode>(children);
         ProjectViewNode[] copy = children.toArray(new ProjectViewNode[children.size()]);

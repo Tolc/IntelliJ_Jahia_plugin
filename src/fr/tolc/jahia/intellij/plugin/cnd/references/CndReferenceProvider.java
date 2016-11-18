@@ -8,7 +8,6 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.ProcessingContext;
-import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.model.PropertiesFileCndKeyModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
@@ -57,7 +56,12 @@ public class CndReferenceProvider extends PsiReferenceProvider {
             String nodetypeText = getNodeTypeText(element);
 
             if (nodetypeText != null) {
-                NodeTypeModel nodeTypeModel = CndUtil.getNodeTypeModel(nodetypeText);
+                NodeTypeModel nodeTypeModel = null;
+                try {
+                    nodeTypeModel = new NodeTypeModel(nodetypeText);
+                } catch (IllegalArgumentException e) {
+                    //Nothing to do
+                }
 
                 if (nodeTypeModel != null) {
                     int offset = getOffset(element);

@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -17,6 +19,7 @@ import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import fr.tolc.jahia.intellij.plugin.cnd.CndFileType;
+import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import org.apache.commons.lang.StringUtils;
@@ -29,18 +32,12 @@ public class CndProjectFilesUtil {
     private static final String JAHIA_6_WEBAPP = "webapp";
     private static final String JAHIA_7_RESOURCES = "resources";
 
-    private static CndProjectFilesUtil instance;
-    
     private CndProjectFilesUtil() {
     }
 
-    private static CndProjectFilesUtil getInstance() {
-        if (instance == null) {
-            instance = new CndProjectFilesUtil();
-        }
-        return instance;
-    }
-    
+    /**
+     * @param element must be part of a CND file to get the valid Jahia work folder
+     */
     public static String getJahiaWorkFolderPath(PsiElement element) {
         PsiFile cndFile = element.getContainingFile();
         PsiDirectory metaInf = cndFile.getParent();
@@ -212,5 +209,40 @@ public class CndProjectFilesUtil {
 
     public static Collection<VirtualFile> getProjectCndFiles(Project project) {
         return FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
+    }
+
+    public static Collection<VirtualFile> findFilesInSourcesOnly(Project project, FileType fileType) {
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, fileType, GlobalSearchScope.allScope(project));
+        Collection<VirtualFile> res = new ArrayList<VirtualFile>();
+        
+        for (VirtualFile virtualFile : virtualFiles) {
+            if (FileIndexFacade.getInstance(project).getModuleForFile(virtualFile) != null) {
+               res.add(virtualFile);
+            }
+        }
+        return res;
+    }
+    
+    public static boolean isNodeTypeFolderChildFolder(VirtualFile viewFolderChildFolder) {
+        VirtualFile nodeTypeFolder = viewFolderChildFolder.getParent();
+        if (nodeTypeFolder != null) {
+            NodeTypeModel nodeTypeModel = null;
+            try {
+                nodeTypeModel = new NodeTypeModel(nodeTypeFolder.getName(), true);
+            } catch (IllegalArgumentException e) {
+                //Nothing to do
+            }
+            
+            if (nodeTypeModel != null) {
+                VirtualFile webappOrResources = nodeTypeFolder.getParent();
+                if (webappOrResources != null) {
+                    String folderName = webappOrResources.getName();
+                    if (JAHIA_6_WEBAPP.equals(folderName) || JAHIA_7_RESOURCES.equals(folderName)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
