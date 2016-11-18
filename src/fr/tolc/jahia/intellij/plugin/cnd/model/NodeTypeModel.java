@@ -3,6 +3,8 @@ package fr.tolc.jahia.intellij.plugin.cnd.model;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 public class NodeTypeModel {
     private static final String NAMESPACE_PART = "[A-Za-z][A-Za-z0-9]*";
     private static final String NODETYPE_PART = "[A-Za-z][A-Za-z0-9]*";
@@ -21,15 +23,17 @@ public class NodeTypeModel {
         this.sourceString = sourceString;
 
         String[] split = null;
-        if (isFolder) {
-            Matcher matcher = nodeTypeFolderRegex.matcher(sourceString);
-            if (matcher.matches()) {
-                split = sourceString.split("_");
-            }
-        } else {
-            Matcher matcher = nodeTypeRegex.matcher(sourceString);
-            if (matcher.matches()) {
-                split = sourceString.split(":");
+        if (StringUtils.isNotBlank(sourceString)) {
+            if (isFolder) {
+                Matcher matcher = nodeTypeFolderRegex.matcher(sourceString);
+                if (matcher.matches()) {
+                    split = sourceString.split("_");
+                }
+            } else {
+                Matcher matcher = nodeTypeRegex.matcher(sourceString);
+                if (matcher.matches()) {
+                    split = sourceString.split(":");
+                }
             }
         }
 
