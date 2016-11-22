@@ -5,14 +5,14 @@ import java.util.HashSet;
 
 import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiUtilCore;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import org.apache.commons.lang.StringUtils;
 
-public class View implements Navigatable {
-    public static final DataKey<View[]> DATA_KEY = DataKey.create("view.array");
+//public class View implements Navigatable {
+public class View {
+    public static final DataKey<View[]> DATA_KEY = DataKey.create("cnd.view.array");
 
     private final Collection<PsiFile> viewFiles;
     private final ViewModel viewModel;
@@ -58,31 +58,31 @@ public class View implements Navigatable {
         return PsiUtilCore.toPsiFileArray(viewFiles);
     }
 
-    public void navigate(boolean requestFocus) {
-        for (PsiFile psiFile : viewFiles) {
-            if (psiFile != null && psiFile.canNavigate()) {
-                psiFile.navigate(requestFocus);
-            }
-        }
-    }
-
-    public boolean canNavigateToSource() {
-        for (PsiFile psiFile : viewFiles) {
-            if (psiFile != null && psiFile.canNavigateToSource()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean canNavigate() {
-        for (PsiFile psiFile : viewFiles) {
-            if (psiFile != null && psiFile.canNavigate()) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    public void navigate(boolean requestFocus) {
+//        for (PsiFile psiFile : viewFiles) {
+//            if (psiFile != null && psiFile.canNavigate()) {
+//                psiFile.navigate(requestFocus);
+//            }
+//        }
+//    }
+//
+//    public boolean canNavigateToSource() {
+//        for (PsiFile psiFile : viewFiles) {
+//            if (psiFile != null && psiFile.canNavigateToSource()) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    public boolean canNavigate() {
+//        for (PsiFile psiFile : viewFiles) {
+//            if (psiFile != null && psiFile.canNavigate()) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public boolean isValid() {
         if (viewFiles.isEmpty()) {

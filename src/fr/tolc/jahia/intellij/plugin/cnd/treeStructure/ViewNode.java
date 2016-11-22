@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.swing.*;
+
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.ViewSettings;
@@ -19,8 +21,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.Icon;
 
 public class ViewNode extends ProjectViewNode<View> {
     private final Collection<BasePsiNode<? extends PsiElement>> children;
@@ -80,19 +80,27 @@ public class ViewNode extends ProjectViewNode<View> {
         return contains(file);
     }
 
-    public void navigate(final boolean requestFocus) {
-        getValue().navigate(requestFocus);
-    }
+//    public void navigate(final boolean requestFocus) {
+//        getValue().navigate(requestFocus);
+//    }
 
-    public boolean canNavigate() {
-        final View value = getValue();
-        return value != null && value.canNavigate();
+    public VirtualFile getVirtualFile() {
+        final PsiFile[] array = getValue().getViewFiles();
+        if (array != null && array.length > 0) {
+            return array[0].getVirtualFile();
+        }
+        return null;
     }
-
-    public boolean canNavigateToSource() {
-        final View value = getValue();
-        return value != null && value.canNavigateToSource();
-    }
+    
+//    public boolean canNavigate() {
+//        final View value = getValue();
+//        return value != null && value.canNavigate();
+//    }
+//
+//    public boolean canNavigateToSource() {
+//        final View value = getValue();
+//        return value != null && value.canNavigateToSource();
+//    }
 
     public String getToolTip() {
 //        return IdeBundle.message("tooltip.ui.designer.view");
