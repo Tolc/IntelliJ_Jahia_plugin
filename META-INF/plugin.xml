@@ -179,7 +179,7 @@ Other files/languages features:
     <treeStructureProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view.ViewMergerTreeStructureProvider"/>
     <refactoring.moveHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view.ViewMoveProvider"/>
     <renameHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view.ViewRenameHandler"/>
-    <treeStructureProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.nodetype.NodeTypeFoldersTreeStructureProvider"/>
+    <iconProvider order="first" implementation="fr.tolc.jahia.intellij.plugin.cnd.icons.CndNodeTypeFoldersIconProvider"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij.properties">
