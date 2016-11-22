@@ -2,7 +2,7 @@ package fr.tolc.jahia.intellij.plugin.cnd.lineMarker;
 
 import java.util.Collection;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
