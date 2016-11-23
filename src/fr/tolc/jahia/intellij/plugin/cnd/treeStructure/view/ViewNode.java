@@ -1,8 +1,10 @@
-package fr.tolc.jahia.intellij.plugin.cnd.treeStructure;
+package fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import javax.swing.*;
 
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
@@ -19,8 +21,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.Icon;
 
 public class ViewNode extends ProjectViewNode<View> {
     private final Collection<BasePsiNode<? extends PsiElement>> children;

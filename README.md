@@ -45,6 +45,7 @@ Jahia project versions **6.6.x** or **7.x**
      * Helpers/Quickfixes (alt+enter on nodetype name)
         * Create nodetype and nodetype properties translations - only appears if no translation is found
         * Create new view - opens a popup that lets you choose the new view parameters, creates view and cache properties files, and also creates the folders if they don't already exist. **If the view is a JSP, the new view also contains code to access all the node properties and sub nodes.**
+     * Nodetype folders icon in Project View (![view folder](src/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeTypeFolder.png) or ![hidden view folder](src/fr/tolc/jahia/intellij/plugin/cnd/icons/mixinFolder.png) if mixin)
      * View files grouping (creates a virtual folder ![view folder](src/fr/tolc/jahia/intellij/plugin/cnd/icons/viewBig.png) - or ![hidden view folder](src/fr/tolc/jahia/intellij/plugin/cnd/icons/viewBigHidden.png) if hidden view - in the Project View)
      * Completion and other features on Jahia nodetypes (embedded Jahia base and main modules .cnd files) - a local library called 'jahia-plugin-base-cnd-files' is automatically added to the module dependencies if the module contains at least one cnd file (in case you have deleted this dependency, no panic, it comes back after re-opening the project)
 
