@@ -20,7 +20,7 @@
  * Date: 26.10.2006
  * Time: 16:44:00
  */
-package fr.tolc.jahia.intellij.plugin.cnd.treeStructure;
+package fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
