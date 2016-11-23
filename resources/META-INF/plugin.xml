@@ -68,6 +68,10 @@ CND files features:
             <li>Create new view</li>
         </ul>
     </li>
+    <li>Nodetype folders icon in Project View <img
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeTypeFolder.png"
+            alt="view folder" style="max-width:100%;">
+    </li>
     <li>View files grouping <img
             src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/viewBig.png"
             alt="view folder" style="max-width:100%;">
@@ -103,6 +107,7 @@ Other files/languages features:
           <dl>
               <dt>1.2</dt>
               <dd>(<strong>feature</strong>) Jahia JSP variables completion (currentNode, moduleMap, etc... without having to use elvariables)</dd>
+              <dd>(<strong>feature</strong>) Nodetype folders icon in Project View</dd>
               <dd>Line breaks within properties and subnodes now accepted</dd>
           </dl>
           <dl>
