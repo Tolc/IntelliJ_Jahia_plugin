@@ -13,4 +13,7 @@ public class CndIcons {
     public static final Icon MIXIN = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/mixin.png");
     public static final Icon NODE_TYPE = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeType.png");
     public static final Icon PROPERTY = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/property.png");
+
+    public static final Icon MIXIN_FOLDER = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/mixinFolder.png");
+    public static final Icon NODE_TYPE_FOLDER = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeTypeFolder.png");
 }
