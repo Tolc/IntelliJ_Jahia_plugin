@@ -1,149 +1,129 @@
 package fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.swing.*;
 
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.ViewSettings;
-import com.intellij.ide.projectView.impl.nodes.BasePsiNode;
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.navigation.NavigationItemFileStatus;
+import com.intellij.ide.util.treeView.ValidateableNode;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vcs.FileStatus;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class ViewNode extends ProjectViewNode<View> {
-    private final Collection<BasePsiNode<? extends PsiElement>> children;
+public class ViewNode extends ProjectViewNode<View> implements ValidateableNode, Comparable {
 
-    public ViewNode(Project project, Object value, ViewSettings viewSettings) {
-        this(project, (View) value, viewSettings, getChildren(project, (View) value, viewSettings));
-    }
-
-    public ViewNode(Project project, View value, ViewSettings viewSettings, Collection<BasePsiNode<? extends PsiElement>> children) {
+    public ViewNode(Project project, View value, ViewSettings viewSettings) {
         super(project, value, viewSettings);
-        this.children = children;
         this.myName = value.getName();
     }
 
     @NotNull
-    public Collection<BasePsiNode<? extends PsiElement>> getChildren() {
+    public Collection<AbstractTreeNode> getChildren() {
+        List<PsiFile> viewFiles = this.getValue().getViewFiles();
+        ArrayList<AbstractTreeNode> children = new ArrayList<AbstractTreeNode>();
+
+        for (PsiFile viewFile : viewFiles) {
+            PsiFileNode node = new PsiFileNode(this.myProject, viewFile.getContainingFile(), this.getSettings());
+            children.add(node);
+        }
+
         return children;
     }
 
+    @Override
     public String getTestPresentation() {
         return "View:" + getValue().getName();
     }
 
     public boolean contains(@NotNull VirtualFile file) {
-        for (final AbstractTreeNode aMyChildren : children) {
-            ProjectViewNode treeNode = (ProjectViewNode) aMyChildren;
-            if (treeNode.contains(file)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void update(PresentationData presentation) {
-        if (getValue() == null || !getValue().isValid()) {
-            setValue(null);
+        if(!file.isValid()) {
+            return false;
         } else {
-            presentation.setPresentableText(getValue().getName());
-
-            Icon icon;
-            if (getValue().getViewModel().isHidden()) {
-                icon = CndIcons.VIEW_BIG_HIDDEN;
-            } else {
-                icon = CndIcons.VIEW_BIG;
-            }
-            presentation.setIcon(icon);
+            PsiFile psiFile = PsiManager.getInstance(this.getProject()).findFile(file);
+            return psiFile != null && this.getValue().getViewFiles().contains(psiFile);
         }
     }
 
     @Override
-    protected boolean shouldPostprocess() {
+    public VirtualFile getVirtualFile() {
+        List<PsiFile> list = this.getValue().getViewFiles();
+        return !list.isEmpty()? list.get(0).getVirtualFile() : null;
+    }
+    
+    public void update(PresentationData presentation) {
+        presentation.setPresentableText(this.getValue().getName());
+
+        Icon icon;
+        if (this.getValue().getViewModel().isHidden()) {
+            icon = CndIcons.VIEW_BIG_HIDDEN;
+        } else {
+            icon = CndIcons.VIEW_BIG;
+        }
+        presentation.setIcon(icon);
+    }
+
+    @Override
+    public boolean canNavigateToSource() {
         return true;
     }
 
     @Override
-    public boolean someChildContainsFile(VirtualFile file) {
-        return contains(file);
+    public boolean canNavigate() {
+        return true;
     }
 
-//    public void navigate(final boolean requestFocus) {
-//        getValue().navigate(requestFocus);
-//    }
+    @Override
+    public void navigate(boolean requestFocus) {
+        OpenFileDescriptor descriptor = new OpenFileDescriptor(this.getProject(), this.getVirtualFile());
+        FileEditorManager.getInstance(this.getProject()).openTextEditor(descriptor, requestFocus);
+    }
 
-    public VirtualFile getVirtualFile() {
-        final PsiFile[] array = getValue().getViewFiles();
-        if (array != null && array.length > 0) {
-            return array[0].getVirtualFile();
+    @Override
+    public boolean isSortByFirstChild() {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public Comparable getSortKey() {
+        return this;
+    }
+    @Override
+    public int compareTo(@NotNull Object o) {
+        if (o instanceof ViewNode) {
+            View view1 = this.getValue();
+            View view2 = ((ViewNode) o).getValue();
+            if ("default".equals(view1.getName())) {
+                return -1;
+            }
+            if ("default".equals(view2.getName())) {
+                return 1;
+            }
+            return view1.getName().compareTo(view2.getName());
         }
-        return null;
+        return -1;
     }
-    
-//    public boolean canNavigate() {
-//        final View value = getValue();
-//        return value != null && value.canNavigate();
-//    }
-//
-//    public boolean canNavigateToSource() {
-//        final View value = getValue();
-//        return value != null && value.canNavigateToSource();
-//    }
 
+    @Override
+    public boolean isValid() {
+        return this.getValue().getViewFiles().get(0).getContainingFile().isValid();
+    }
+
+    @Override
     public String getToolTip() {
 //        return IdeBundle.message("tooltip.ui.designer.view");
         return "ViewNode Tooltip";
-    }
-
-    @Override
-    public FileStatus getFileStatus() {
-        for (BasePsiNode<? extends PsiElement> child : children) {
-            final PsiElement value = child.getValue();
-            if (value == null || !value.isValid()) {
-                continue;
-            }
-            final FileStatus fileStatus = NavigationItemFileStatus.get(child);
-            if (fileStatus != FileStatus.NOT_CHANGED) {
-                return fileStatus;
-            }
-        }
-        return FileStatus.NOT_CHANGED;
-    }
-
-    @Override
-    public boolean canHaveChildrenMatching(final Condition<PsiFile> condition) {
-        for (BasePsiNode<? extends PsiElement> child : children) {
-            if (condition.value(child.getValue().getContainingFile())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-//    public static AbstractTreeNode constructViewNode(final PsiClass classToBind, final Project project, final ViewSettings settings) {
-//        final View view = new View(classToBind);
-//        final Collection<BasePsiNode<? extends PsiElement>> children = getChildren(project, view, settings);
-//        return new ViewNode(project, view, settings, children);
-//    }
-
-    private static Collection<BasePsiNode<? extends PsiElement>> getChildren(final Project project, final View view, final ViewSettings settings) {
-        final Set<BasePsiNode<? extends PsiElement>> children = new LinkedHashSet<>();
-//        children.add(new ClassTreeNode(project, view.getClassToBind(), settings));
-        for (PsiFile viewFile : view.getViewFiles()) {
-            children.add(new PsiFileNode(project, viewFile, settings));
-        }
-        return children;
     }
 }
