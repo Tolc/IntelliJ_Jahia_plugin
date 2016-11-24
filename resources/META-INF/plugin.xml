@@ -106,6 +106,7 @@ Other files/languages features:
       <html>
           <dl>
               <dt>1.2</dt>
+              <dd>(<strong>IMPORTANT FIX</strong>) Fixed weird huge CPU/Memory consumption when calculating 'virtual' folders for views after editing a file with its view folder opened in Project view</dd>
               <dd>(<strong>feature</strong>) Jahia JSP variables completion (currentNode, moduleMap, etc... without having to use elvariables)</dd>
               <dd>(<strong>feature</strong>) Nodetype folders icon in Project View</dd>
               <dd>Line breaks within properties and subnodes now accepted</dd>
@@ -181,7 +182,6 @@ Other files/languages features:
     <quoteHandler fileType="Cnd" className="fr.tolc.jahia.intellij.plugin.cnd.CndQuoteHandler"/>
     <lang.braceMatcher language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndBraceMatcher"/>
     <treeStructureProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view.ViewMergerTreeStructureProvider"/>
-    <!--<treeStructureProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.properties.FilesGrouper"/>-->
     <refactoring.moveHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view.ViewMoveProvider"/>
     <renameHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view.ViewRenameHandler"/>
     <iconProvider order="first" implementation="fr.tolc.jahia.intellij.plugin.cnd.icons.CndNodeTypeFoldersIconProvider"/>
