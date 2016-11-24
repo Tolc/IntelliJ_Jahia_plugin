@@ -15,7 +15,6 @@ import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode.ExtensionSortKey;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.ide.util.treeView.ValidateableNode;
-import com.intellij.lang.properties.PropertiesBundle;
 import com.intellij.lang.properties.PropertiesImplUtil;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.openapi.fileTypes.StdFileTypes;
@@ -64,7 +63,11 @@ public class FilesGroupNode extends ProjectViewNode<FilesGroup> implements Valid
 
     public void update(PresentationData presentation) {
         presentation.setIcon(CndIcons.VIEW_BIG);
-        presentation.setPresentableText(PropertiesBundle.message("project.view.resource.bundle.tree.node.text", new Object[]{((FilesGroup)this.getValue()).getBaseName()}) + "lolilol");
+        if (this.getValue().getViewModel() != null) {
+            presentation.setPresentableText(this.getValue().getViewModel().getName());
+        } else {
+            presentation.setPresentableText(this.getValue().getDefaultFile().getName());
+        }
     }
 
     public boolean canNavigateToSource() {
@@ -92,14 +95,14 @@ public class FilesGroupNode extends ProjectViewNode<FilesGroup> implements Valid
 //        if(!super.validate()) {
 //            return false;
 //        } else {
-//            ResourceBundle newBundle = ((PropertiesGroup)this.getValue()).getDefaultPropertiesFile().getResourceBundle();
+//            ResourceBundle newBundle = ((PropertiesGroup)this.getValue()).getDefaultFile().getResourceBundle();
 //            PropertiesGroup currentBundle = (PropertiesGroup)this.getValue();
 //            return !Comparing.equal(newBundle, currentBundle)?false:!(currentBundle instanceof ResourceBundleImpl) || ((ResourceBundleImpl)currentBundle).isValid();
 //        }
 //    }
 
     public boolean isValid() {
-        return ((FilesGroup)this.getValue()).getDefaultPropertiesFile().getContainingFile().isValid();
+        return ((FilesGroup)this.getValue()).getDefaultFile().getContainingFile().isValid();
     }
 
 

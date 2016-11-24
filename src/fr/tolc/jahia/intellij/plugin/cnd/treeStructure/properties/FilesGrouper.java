@@ -6,51 +6,99 @@ package fr.tolc.jahia.intellij.plugin.cnd.treeStructure.properties;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import com.intellij.ide.projectView.TreeStructureProvider;
 import com.intellij.ide.projectView.ViewSettings;
+import com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode;
+import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.lang.properties.projectView.ResourceBundleDeleteProvider;
 import com.intellij.lang.properties.projectView.ResourceBundleGrouper;
-import com.intellij.lang.properties.projectView.ResourceBundleNode;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.jsp.JspFile;
+import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FilesGrouper implements TreeStructureProvider, DumbAware {
     private static final Logger LOG = Logger.getInstance(ResourceBundleGrouper.class);
-    private final Project myProject;
+    private final Project project;
 
-    public FilesGrouper(Project myProject) {
-        this.myProject = myProject;
+    public FilesGrouper(Project project) {
+        this.project = project;
     }
 
     @NotNull
     @Override
     public Collection<AbstractTreeNode> modify(@NotNull AbstractTreeNode parent, @NotNull Collection<AbstractTreeNode> children, ViewSettings settings) {
-        return (parent instanceof FilesGroupNode || parent instanceof ResourceBundleNode) ?children:(Collection) ApplicationManager.getApplication().runReadAction(new Computable() {
+        if (children.isEmpty()
+                || !(parent instanceof PsiDirectoryNode)
+                || parent instanceof FilesGroupNode) {
+            return children;
+        }
+        
+        return ApplicationManager.getApplication().runReadAction(new Computable<Collection<AbstractTreeNode>>() {
             public Collection<AbstractTreeNode> compute() {
-
-                ArrayList result = new ArrayList();
+                if (!CndProjectFilesUtil.isNodeTypeFolderChildFolder(((PsiDirectory) parent.getValue()).getVirtualFile())) {
+                    return children;
+                }
+                
+                ArrayList<AbstractTreeNode> result = new ArrayList<AbstractTreeNode>();
+                Map<ViewModel, List<PsiFile>> viewsMap = new HashMap<ViewModel, List<PsiFile>>();
 
                 for (AbstractTreeNode child : children) {
-                    if (child.getValue() instanceof JspFile) {
-                        result.add(new FilesGroupNode(FilesGrouper.this.myProject, new FilesGroup((PsiFile) child.getValue()), settings));
+                    if (child instanceof PsiFileNode) {
+
+                        ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(FilesGrouper.this.project, ((PsiFileNode) child).getVirtualFile());
+                        if (viewModel != null) {
+
+                            //trying to get view from map
+                            ViewModel correspondingViewModel = null;
+                            for (Map.Entry<ViewModel, List<PsiFile>> view : viewsMap.entrySet()) {
+                                if (view.getKey().isSameView(viewModel)) {
+                                    correspondingViewModel = view.getKey();
+                                    break;
+                                }
+                            }
+
+                            if (correspondingViewModel != null) {
+                                //Add file to existing view file in map if already existing
+                                viewsMap.get(correspondingViewModel).add(((PsiFileNode) child).getValue());
+                            } else {
+                                //Add view to the map if not already existing and nodetype exists
+                                CndNodeType nodeType = CndUtil.findNodeType(FilesGrouper.this.project, viewModel.getNodeType());
+                                if (nodeType != null) {
+                                    ArrayList<PsiFile> viewFiles = new ArrayList<PsiFile>();
+                                    viewFiles.add(((PsiFileNode) child).getValue());
+                                    viewsMap.put(viewModel, viewFiles);
+                                } else {
+                                    result.add(child);
+                                }
+                            }
+                        }
                     } else {
                         result.add(child);
                     }
                 }
-                
-                return result;
 
+                for (Map.Entry<ViewModel, List<PsiFile>> view : viewsMap.entrySet()) {
+                    result.add(new FilesGroupNode(FilesGrouper.this.project, new FilesGroup(view.getKey(), view.getValue()), settings));
+                }
+
+                return result;
             }
         });
     }

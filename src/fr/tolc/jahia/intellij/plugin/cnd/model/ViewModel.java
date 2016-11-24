@@ -61,4 +61,8 @@ public class ViewModel {
     public boolean isDefault() {
         return StringUtils.isBlank(this.name) || "default.".equals(this.name);
     }
+    
+    public boolean isSameView(ViewModel viewModel) {
+        return this.nodeType.equals(viewModel.nodeType) && this.name.equals(viewModel.name) && this.type.equals(viewModel.type);
+    }
 }

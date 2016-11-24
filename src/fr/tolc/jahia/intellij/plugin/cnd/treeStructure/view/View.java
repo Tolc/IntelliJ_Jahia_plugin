@@ -2,7 +2,6 @@ package fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import com.intellij.openapi.actionSystem.DataKey;
@@ -21,9 +20,6 @@ public class View {
     public View(@NotNull ViewModel viewModel, @NotNull Collection<PsiFile> viewFiles) {
         this.viewModel = viewModel;
         this.viewFiles = new ArrayList<>(viewFiles);
-        Collections.sort(this.viewFiles, (f1, f2) -> {
-            return f1.getName().compareTo(f2.getName());
-        });
     }
 
     @NotNull
@@ -45,6 +41,11 @@ public class View {
         return viewFiles;
     }
 
+    @NotNull
+    public PsiFile getDefaultFile() {
+        return this.viewFiles.get(0);
+    }
+    
     public boolean containsFile(final VirtualFile vFile) {
         for (PsiFile psiFile : viewFiles) {
             final VirtualFile virtualFile = psiFile.getVirtualFile();
@@ -57,9 +58,11 @@ public class View {
 
     @Override
     public boolean equals(Object object) {
-        if (object instanceof View) {
+        if(this == object) {
+            return true;
+        } else if (object instanceof View) {
             View view = (View) object;
-            return viewFiles.equals(view.viewFiles) && viewModel.equals(view.viewModel);
+            return getDefaultFile().equals(view.getDefaultFile());
         } else {
             return false;
         }
@@ -67,7 +70,7 @@ public class View {
 
     @Override
     public int hashCode() {
-        return viewFiles.hashCode() ^ viewModel.hashCode();
+        return getDefaultFile().hashCode();
     }
     
     @Override
