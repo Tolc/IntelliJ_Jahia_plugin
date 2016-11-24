@@ -72,6 +72,6 @@ public class View {
     
     @Override
     public String toString() {
-        return viewModel.getNodeType().getNamespace() + ":" + viewModel.getNodeType().getNodeTypeName() + "/" + viewModel.getType() + "." + viewModel.getName() + "." + viewModel.getLanguage();
+        return viewModel.getNodeType().getNamespace() + ":" + viewModel.getNodeType().getNodeTypeName() + "/" + viewModel.getType() + "/" + this.getName() + "." + viewModel.getLanguage();
     }
 }

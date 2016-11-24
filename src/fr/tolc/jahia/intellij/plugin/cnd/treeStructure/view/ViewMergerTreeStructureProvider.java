@@ -15,6 +15,7 @@ import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -25,7 +26,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class ViewMergerTreeStructureProvider implements TreeStructureProvider {
+public class ViewMergerTreeStructureProvider implements TreeStructureProvider, DumbAware {
     private final Project project;
 
     public ViewMergerTreeStructureProvider(Project project) {
