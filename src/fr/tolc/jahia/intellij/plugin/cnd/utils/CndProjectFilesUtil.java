@@ -194,10 +194,7 @@ public class CndProjectFilesUtil {
                             if (nodeTypeSplit[1].equals(nodeTypeName)) {
                                 String namespace = nodeTypeSplit[0];
 
-                                CndNodeType nodeType = CndUtil.findNodeType(project, namespace, nodeTypeName);
-                                if (nodeType != null) {
-                                    return new ViewModel(namespace, nodeTypeName, viewName, viewType, viewLanguage);
-                                }
+                                return new ViewModel(namespace, nodeTypeName, viewName, viewType, viewLanguage);
                             }
                         }
                     }

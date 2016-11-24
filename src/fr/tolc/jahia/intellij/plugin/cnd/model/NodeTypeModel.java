@@ -79,4 +79,12 @@ public class NodeTypeModel {
     public void setSourceString(String sourceString) {
         this.sourceString = sourceString;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof NodeTypeModel) {
+            return namespace.equals(((NodeTypeModel) obj).namespace) && nodeTypeName.equals(((NodeTypeModel) obj).nodeTypeName);
+        }
+        return super.equals(obj);
+    }
 }

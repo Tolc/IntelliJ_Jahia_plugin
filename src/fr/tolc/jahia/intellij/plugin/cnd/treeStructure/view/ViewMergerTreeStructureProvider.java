@@ -13,8 +13,11 @@ import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.projectView.impl.nodes.BasePsiNode;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileTypes.StdFileTypes;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -23,7 +26,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class ViewMergerTreeStructureProvider implements TreeStructureProvider {
+public class ViewMergerTreeStructureProvider implements TreeStructureProvider, DumbAware {
     private final Project project;
 
     public ViewMergerTreeStructureProvider(Project project) {
@@ -38,69 +41,75 @@ public class ViewMergerTreeStructureProvider implements TreeStructureProvider {
             return children;
         }
 
-        if (!CndProjectFilesUtil.isNodeTypeFolderChildFolder(((PsiDirectory)parent.getValue()).getVirtualFile())) {
-            return children;
-        }
 
-        Collection<AbstractTreeNode> result = new LinkedHashSet<AbstractTreeNode>(children);
-        ProjectViewNode[] copy = children.toArray(new ProjectViewNode[children.size()]);
-        List<String> alreadyDoneViews = new ArrayList<String>();
+        return ApplicationManager.getApplication().runReadAction(new Computable<Collection<AbstractTreeNode>>() {
+            @Override
+            public Collection<AbstractTreeNode> compute() {
+                if (!CndProjectFilesUtil.isNodeTypeFolderChildFolder(((PsiDirectory) parent.getValue()).getVirtualFile())) {
+                    return children;
+                }
 
-        for (ProjectViewNode element : copy) {
-            if (element.getValue() instanceof PsiFile) {
-                PsiFile file = (PsiFile) element.getValue();
-                if (file.getFileType() != StdFileTypes.PROPERTIES) {
-                    VirtualFile virtualFile = file.getVirtualFile();
+                Collection<AbstractTreeNode> result = new LinkedHashSet<AbstractTreeNode>(children);
+                ProjectViewNode[] copy = children.toArray(new ProjectViewNode[children.size()]);
+                List<String> alreadyDoneViews = new ArrayList<String>();
 
-                    ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(file.getProject(), virtualFile);
-                    if (viewModel != null && !alreadyDoneViews.contains(viewModel.getName())) {
-                        List<PsiFile> views = CndProjectFilesUtil.findViewFiles(file.getProject(), viewModel);
+                for (ProjectViewNode element : copy) {
+                    if (element.getValue() instanceof PsiFile) {
+                        PsiFile file = (PsiFile) element.getValue();
+                        if (file.getFileType() != StdFileTypes.PROPERTIES) {
+                            VirtualFile virtualFile = file.getVirtualFile();
 
-                        Collection<BasePsiNode<? extends PsiElement>> viewNodes = findViewsIn(children, views);
-                        if (!viewNodes.isEmpty()) {
-                            Collection<PsiFile> viewFiles = convertToFiles(viewNodes);
-                            Collection<BasePsiNode<? extends PsiElement>> subNodes = new ArrayList<>();
-                            subNodes.add((BasePsiNode<? extends PsiElement>) element);
-                            subNodes.addAll(viewNodes);
-                            result.add(new ViewNode(project, new View(viewModel, viewFiles), settings, subNodes));
-                            result.remove(element);
-                            result.removeAll(viewNodes);
+                            ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(file.getProject(), virtualFile);
+                            if (viewModel != null && !alreadyDoneViews.contains(viewModel.getName())) {
+                                List<PsiFile> views = CndProjectFilesUtil.findViewFiles(file.getProject(), viewModel);
 
-                            alreadyDoneViews.add(viewModel.getName());
+                                Collection<BasePsiNode<? extends PsiElement>> viewNodes = findViewsIn(children, views);
+                                if (!viewNodes.isEmpty()) {
+                                    Collection<PsiFile> viewFiles = convertToFiles(viewNodes);
+//                                    Collection<BasePsiNode<? extends PsiElement>> subNodes = new ArrayList<>();
+//                                    subNodes.add((BasePsiNode<? extends PsiElement>) element);
+//                                    subNodes.addAll(viewNodes);
+                                    result.add(new ViewNode(project, new View(viewModel, viewFiles), settings));
+//                                    result.remove(element);
+                                    result.removeAll(viewNodes);
+
+                                    alreadyDoneViews.add(viewModel.getName());
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
-        
-        //TODO: have default at the top of the view. Below sort is sorting right but it does not sort in projectView
-//        if (!alreadyDoneViews.isEmpty()) {
-//            Collection<AbstractTreeNode> sortedResult = new TreeSet<AbstractTreeNode>(new Comparator<AbstractTreeNode>() {
-//                @Override
-//                public int compare(AbstractTreeNode o1, AbstractTreeNode o2) {
-//                    if (o1 instanceof ViewNode && o2 instanceof ViewNode) {
-//                        View view1 = ((ViewNode) o1).getValue();
-//                        View view2 = ((ViewNode) o2).getValue();
-//                        if ("default".equals(view1.getName())) {
-//                            return -1;
-//                        }
-//                        if ("default".equals(view2.getName())) {
-//                            return 1;
-//                        }
-//                        return view1.getName().compareTo(view2.getName());
-//                    } else if (o1 instanceof ViewNode) {
-//                        return -1;
-//                    } else if (o2 instanceof ViewNode) {
-//                        return 1;
-//                    }
-//                    return 0;
-//                }
-//            });
-//            sortedResult.addAll(result);
-//            result = sortedResult;
-//        }
 
-        return result;
+                //TODO: have default at the top of the view. Below sort is sorting right but it does not sort in projectView
+                //        if (!alreadyDoneViews.isEmpty()) {
+                //            Collection<AbstractTreeNode> sortedResult = new TreeSet<AbstractTreeNode>(new Comparator<AbstractTreeNode>() {
+                //                @Override
+                //                public int compare(AbstractTreeNode o1, AbstractTreeNode o2) {
+                //                    if (o1 instanceof ViewNode && o2 instanceof ViewNode) {
+                //                        View view1 = ((ViewNode) o1).getValue();
+                //                        View view2 = ((ViewNode) o2).getValue();
+                //                        if ("default".equals(view1.getName())) {
+                //                            return -1;
+                //                        }
+                //                        if ("default".equals(view2.getName())) {
+                //                            return 1;
+                //                        }
+                //                        return view1.getName().compareTo(view2.getName());
+                //                    } else if (o1 instanceof ViewNode) {
+                //                        return -1;
+                //                    } else if (o2 instanceof ViewNode) {
+                //                        return 1;
+                //                    }
+                //                    return 0;
+                //                }
+                //            });
+                //            sortedResult.addAll(result);
+                //            result = sortedResult;
+                //        }
+
+                return result;
+            }
+        });
     }
 
     public Object getData(Collection<AbstractTreeNode> selected, String dataId) {
