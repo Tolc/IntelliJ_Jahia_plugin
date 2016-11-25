@@ -20,7 +20,12 @@ public class CndXmlAnnotator implements Annotator {
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         if (element instanceof XmlAttributeValue) {
             String value = ((XmlAttributeValue) element).getValue();
-            NodeTypeModel nodeTypeModel = CndUtil.getNodeTypeModel(value);
+            NodeTypeModel nodeTypeModel = null;
+            try {
+                nodeTypeModel = new NodeTypeModel(value);
+            } catch (IllegalArgumentException e) {
+                //Nothing to do
+            }
 
             if (nodeTypeModel != null) {
                 String namespace = nodeTypeModel.getNamespace();
@@ -46,8 +51,8 @@ public class CndXmlAnnotator implements Annotator {
                     } else {
                         holder.createErrorAnnotation(nodeTypeNameRange, "Unresolved CND node type").registerFix(new CreateNodeTypeQuickFix(namespace, nodeTypeName));
                     }
-                } else {
-                    holder.createErrorAnnotation(namespaceRange, "Unresolved CND namespace");
+//                } else {
+//                    holder.createErrorAnnotation(namespaceRange, "Unresolved CND namespace");
                 }
             }
         }

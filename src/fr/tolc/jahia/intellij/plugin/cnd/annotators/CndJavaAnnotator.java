@@ -21,7 +21,12 @@ public class CndJavaAnnotator implements Annotator {
         if (element instanceof PsiLiteralExpression) {
             PsiLiteralExpression literalExpression = (PsiLiteralExpression) element;
             String value = literalExpression.getValue() instanceof String ? (String) literalExpression.getValue() : null;
-            NodeTypeModel nodeTypeModel = CndUtil.getNodeTypeModel(value);
+            NodeTypeModel nodeTypeModel = null;
+            try {
+                nodeTypeModel = new NodeTypeModel(value);
+            } catch (IllegalArgumentException e) {
+                //Nothing to do
+            }
 
             if (nodeTypeModel != null) {
                 String namespace = nodeTypeModel.getNamespace();
@@ -47,8 +52,8 @@ public class CndJavaAnnotator implements Annotator {
                     } else {
                         holder.createErrorAnnotation(nodeTypeNameRange, "Unresolved CND node type").registerFix(new CreateNodeTypeQuickFix(namespace, nodeTypeName));
                     }
-                } else {
-                    holder.createErrorAnnotation(namespaceRange, "Unresolved CND namespace");
+//                } else {
+//                    holder.createErrorAnnotation(namespaceRange, "Unresolved CND namespace");
                 }
             }
         }

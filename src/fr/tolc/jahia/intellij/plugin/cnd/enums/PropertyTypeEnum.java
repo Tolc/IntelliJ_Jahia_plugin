@@ -13,7 +13,8 @@ public enum PropertyTypeEnum {
     WEAKREFERENCE("weakreference", "node"),
     NAME("name", "string"),
     REFERENCE("reference", "node"),
-    UNDEFINED("undefined", "");
+    UNDEFINED("undefined", ""),
+    UNDEFINED_STAR("*", "");
 
     private String value;
     private String accessor;
@@ -38,5 +39,9 @@ public enum PropertyTypeEnum {
 
     public String getAccessor() {
         return accessor;
+    }
+    
+    public boolean isUndefined() {
+        return UNDEFINED.equals(this) || UNDEFINED_STAR.equals(this);
     }
 }

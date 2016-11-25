@@ -13,8 +13,9 @@ public enum PropertyTypeMaskEnum {
     CHECKBOX("checkbox"),
     FILEUPLOAD("fileupload"),
     TAG("tag"),
-    FILE("file");
-    
+    FILE("file"),
+    PORTLETDEFINITION("portletdefinition");
+
     private String value;
 
     PropertyTypeMaskEnum(String value) {

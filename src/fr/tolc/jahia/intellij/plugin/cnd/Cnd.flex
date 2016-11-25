@@ -29,6 +29,7 @@ COMMENT_BLOCK="/*"~"*/"
 //~ = upto
 
 CHARS=[:jletter:][:jletterdigit:]*
+ATTRIBUTE=[:jletter:]([^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+)?
 
 %state NAMESPACE, NAMESPACE_URI, NODETYPE_NAMESPACE, NODETYPE, NODETYPE_DONE, SUPER_TYPE_NAMESPACE, SUPER_TYPE_NAME, AFTER_SUPER_TYPE_NAME, OPTIONS
 %state EXTENDS, EXTEND_NAMESPACE, EXTEND, ITEMTYPE
@@ -116,7 +117,6 @@ CHARS=[:jletter:][:jletterdigit:]*
 //<YYINITIAL> "itemtype"                          				{ yybegin(ITEMTYPE); return CndTypes.ITEMTYPE; }
 <ITEMTYPE> {
 	"="                           								{ return CndTypes.EQUAL; }
-//	"default"|"options"|"layout"|"metadata"|"content"|"classification"|"permissions"|"listOrdering"|"contributeMode"|"propertiesView"           { return CndTypes.ITEMTYPE_TYPE; }
 	[^\r\n\ =]+                                                { return CndTypes.ITEMTYPE_TYPE; }
 }
 
@@ -151,10 +151,11 @@ CHARS=[:jletter:][:jletterdigit:]*
 }
 
 <PROPERTY_DEFAULT> {
-	"="											{ yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
+	{CRLF}*{WHITE_SPACE}*"="					{ yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
 	{CRLF}+{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT_NEWLINE); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
 	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
-	[^\r\n\ =][^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
+	{ATTRIBUTE}									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
+	{CRLF}+{WHITE_SPACE}*{ATTRIBUTE}			{ yypushback(yytext().toString().replaceAll("\\r", "").replaceAll("\\n", "").trim().length()); yybegin(PROPERTY_ATTRIBUTES); return TokenType.WHITE_SPACE; }
 }
 <PROPERTY_DEFAULT_VALUE> {
 	[^\r\n\ ]+ | "'"[^\r\n]+"'"					{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
@@ -163,7 +164,8 @@ CHARS=[:jletter:][:jletterdigit:]*
 <PROPERTY_ATTRIBUTES> {
 	{CRLF}+{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT_NEWLINE); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
 	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
-	[^\r\n\ =][^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+									{ return CndTypes.PROPERTY_ATTRIBUTE; }
+	{ATTRIBUTE}									{ return CndTypes.PROPERTY_ATTRIBUTE; }
+	{CRLF}+{WHITE_SPACE}*{ATTRIBUTE}			{ yypushback(yytext().toString().replaceAll("\\r", "").replaceAll("\\n", "").trim().length()); return TokenType.WHITE_SPACE; }
 }
 
 <PROPERTY_CONSTRAINT> [^\r\n\ \t\f][^\r\n]+[^\r\n\ \t\f]					{ return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
@@ -189,8 +191,9 @@ CHARS=[:jletter:][:jletterdigit:]*
 }
 
 <NODE_DEFAULT> {
-	"="												{ yybegin(NODE_DEFAULT_VALUE_NAMESPACE); return CndTypes.EQUAL; }
-	[^\r\n\ =]+     								{ yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_ATTRIBUTE; }
+	{CRLF}*{WHITE_SPACE}*"="						{ yybegin(NODE_DEFAULT_VALUE_NAMESPACE); return CndTypes.EQUAL; }
+	{ATTRIBUTE}     								{ yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_ATTRIBUTE; }
+	{CRLF}+{WHITE_SPACE}*{ATTRIBUTE}				{ yypushback(yytext().toString().replaceAll("\\r", "").replaceAll("\\n", "").trim().length()); yybegin(NODE_ATTRIBUTES); return TokenType.WHITE_SPACE; }
 }
 <NODE_DEFAULT_VALUE_NAMESPACE> {CHARS}				{ yybegin(NODE_DEFAULT_VALUE); return CndTypes.NAMESPACE_NAME; }
 <NODE_DEFAULT_VALUE> {
@@ -198,7 +201,10 @@ CHARS=[:jletter:][:jletterdigit:]*
 	{CHARS}                    						{ yybegin(NODE_ATTRIBUTES); return CndTypes.NODE_TYPE_NAME; }
 }
 
-<NODE_ATTRIBUTES> [^\r\n\ =]+       				{ return CndTypes.NODE_ATTRIBUTE; }
+<NODE_ATTRIBUTES> {
+	{ATTRIBUTE}  									{ return CndTypes.NODE_ATTRIBUTE; }
+	{CRLF}+{WHITE_SPACE}*{ATTRIBUTE}				{ yypushback(yytext().toString().replaceAll("\\r", "").replaceAll("\\n", "").trim().length()); return TokenType.WHITE_SPACE; }	
+}
 
 
 
