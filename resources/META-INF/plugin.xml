@@ -110,6 +110,7 @@ Other files/languages features:
               <dd>(<strong>feature</strong>) Jahia JSP variables completion (currentNode, moduleMap, etc... without having to use elvariables)</dd>
               <dd>(<strong>feature</strong>) Nodetype folders icon in Project View</dd>
               <dd>Line breaks within properties and subnodes now accepted</dd>
+              <dd>Removed abusive 'Unresolved CND namespace' annotations on strings containing ':' in Java and XML</dd>
           </dl>
           <dl>
               <dt>1.1.1</dt>

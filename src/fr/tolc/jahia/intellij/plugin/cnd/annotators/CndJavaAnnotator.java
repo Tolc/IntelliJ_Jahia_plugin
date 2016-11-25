@@ -52,8 +52,8 @@ public class CndJavaAnnotator implements Annotator {
                     } else {
                         holder.createErrorAnnotation(nodeTypeNameRange, "Unresolved CND node type").registerFix(new CreateNodeTypeQuickFix(namespace, nodeTypeName));
                     }
-                } else {
-                    holder.createErrorAnnotation(namespaceRange, "Unresolved CND namespace");
+//                } else {
+//                    holder.createErrorAnnotation(namespaceRange, "Unresolved CND namespace");
                 }
             }
         }
