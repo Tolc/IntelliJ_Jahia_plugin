@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>fr.tolc.jahia.intellij.plugin</id>
   <name>CND Language / Jahia Framework</name>
-  <version>1.2</version>
+  <version>1.2.1</version>
   <vendor email="contact@thomas-coquel.fr" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
 
   <description><![CDATA[
@@ -104,6 +104,9 @@ Other files/languages features:
 
   <change-notes><![CDATA[
       <html>
+          <dl>
+              <dt>1.2.1</dt>
+          </dl>
           <dl>
               <dt>1.2</dt>
               <dd>(<strong>IMPORTANT FIX</strong>) Fixed weird huge CPU/Memory consumption when calculating 'virtual' folders for views after editing a file with its view folder opened in Project view</dd>
