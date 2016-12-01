@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
 public enum AttributeEnum {
-    MANDATORY("mandatory", "madatory", "mandatory|man|m", true),
+    MANDATORY("mandatory", "mandatory", "mandatory|man|m", true),
     PROTECTED("protected", "protected",  "protected|pro|p", true), 
     PRIMARY("primary", "primary", "primary|pri|!", true),
     I18N("i18n"), 
