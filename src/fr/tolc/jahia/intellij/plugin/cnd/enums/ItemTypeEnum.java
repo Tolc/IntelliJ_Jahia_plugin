@@ -1,5 +1,7 @@
 package fr.tolc.jahia.intellij.plugin.cnd.enums;
 
+import java.util.Arrays;
+
 public enum ItemTypeEnum {
     DEFAULT("default"),
     OPTIONS("options"),
@@ -18,15 +20,14 @@ public enum ItemTypeEnum {
         this.value = value;
     }
 
-    public static ItemTypeEnum fromValue(String value) throws IllegalArgumentException {
-        for (ItemTypeEnum type : ItemTypeEnum.values()) {
-            if (type.value.equalsIgnoreCase(value)) {
-                return type;
-            }
-        }
-        throw new IllegalArgumentException("Unknown item type [" + value + "]");
+    public static ItemTypeEnum fromValue(String value) {
+        return Arrays.stream(ItemTypeEnum.values())
+                .filter(type -> type.value.equalsIgnoreCase(value))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unknown item type [" + value + "]"));
     }
 
+    @Override
     public String toString() {
         return this.value;
     }
