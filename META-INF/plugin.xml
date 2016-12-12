@@ -107,7 +107,7 @@ Other files/languages features:
           <dl>
               <dt>1.2.1</dt>
               <dd>Fixed completion for IntelliJ 14 (#20)</dd>
-              <dd>Fixed abusive erros in Java, XML and properties files (#21)</dd>
+              <dd>Fixed abusive errors in Java, XML and properties files (#21)</dd>
               <dd>Fixed exception happening sometimes when searching for Jahia work folder (#22)</dd>
           </dl>
           <dl>
