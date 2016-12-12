@@ -194,10 +194,10 @@ Other files/languages features:
     <renameHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view.ViewRenameHandler"/>
 	<iconProvider order="first" implementation="fr.tolc.jahia.intellij.plugin.cnd.icons.CndNodeTypeFoldersIconProvider"/>
 
-  	<!--<localInspection language="JAVA" shortName="JavaUnknownCndNodeType" bundle="fr.tolc.jahia.intellij.plugin.cnd.CndBundle"-->
-		  			 <!--key="cnd.inspections.java.unknown-nodetype" groupKey="cnd.inspections.group.name"-->
-				     <!--level="WARNING" enabledByDefault="true"-->
-				     <!--implementationClass="fr.tolc.jahia.intellij.plugin.cnd.inspections.UnknownJavaCndNodeTypeInspection"/>-->
+  	<localInspection language="JAVA" shortName="JavaUnknownCndNodeType" bundle="fr.tolc.jahia.intellij.plugin.cnd.CndBundle"
+		  			 key="cnd.inspections.java.unknown-nodetype" groupKey="cnd.inspections.group.name"
+				     level="WARNING" enabledByDefault="true"
+				     implementationClass="fr.tolc.jahia.intellij.plugin.cnd.inspections.UnknownJavaCndNodeTypeInspection"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij.properties">
