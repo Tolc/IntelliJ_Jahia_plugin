@@ -39,19 +39,23 @@ public class CndProjectFilesUtil {
      * @param element must be part of a CND file to get the valid Jahia work folder
      */
     public static String getJahiaWorkFolderPath(PsiElement element) {
-        PsiFile cndFile = element.getContainingFile();
-        PsiDirectory metaInf = cndFile.getParent();
-        if (metaInf != null) {
-            String metaInfNameFolderName = metaInf.getName();
-            if (JAHIA_6_WEBAPP.equals(metaInfNameFolderName) || JAHIA_7_RESOURCES.equals(metaInfNameFolderName)) {
-                return metaInf.getVirtualFile().getPath();
-            }
-            
-            PsiDirectory webappOrResources = metaInf.getParent();
-            if (webappOrResources != null) {
-                String folderName = webappOrResources.getName();
-                if (JAHIA_6_WEBAPP.equals(folderName) || JAHIA_7_RESOURCES.equals(folderName)) {
-                    return webappOrResources.getVirtualFile().getPath();
+        if (element != null) {
+            PsiFile cndFile = element.getContainingFile();
+            if (cndFile != null) {
+                PsiDirectory metaInf = cndFile.getParent();
+                if (metaInf != null) {
+                    String metaInfNameFolderName = metaInf.getName();
+                    if (JAHIA_6_WEBAPP.equals(metaInfNameFolderName) || JAHIA_7_RESOURCES.equals(metaInfNameFolderName)) {
+                        return metaInf.getVirtualFile().getPath();
+                    }
+    
+                    PsiDirectory webappOrResources = metaInf.getParent();
+                    if (webappOrResources != null) {
+                        String folderName = webappOrResources.getName();
+                        if (JAHIA_6_WEBAPP.equals(folderName) || JAHIA_7_RESOURCES.equals(folderName)) {
+                            return webappOrResources.getVirtualFile().getPath();
+                        }
+                    }
                 }
             }
         }

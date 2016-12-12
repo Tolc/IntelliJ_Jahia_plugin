@@ -91,10 +91,10 @@ public class CndPropertiesAnnotator implements Annotator {
                                             Annotation listAnnotation = holder.createInfoAnnotation(listRange, null);
                                             listAnnotation.setTextAttributes(CndSyntaxHighlighter.STRING);
                                         } else {
-                                            holder.createErrorAnnotation(listRange, "Property should be declared as a \"STRING, CHOICELIST\"");
+                                            holder.createWarningAnnotation(listRange, "Property should be declared as a \"STRING, CHOICELIST\"");
                                         }
                                     } else {
-                                        holder.createErrorAnnotation(listRange, "Property type should be declared as a \"STRING\"");
+                                        holder.createWarningAnnotation(listRange, "Property type should be declared as a \"STRING\"");
                                     }
                                 } else if (cndKeyModel.isPropertyTooltip()) {
                                     TextRange tooltipRange = new TextRange(offset + namespace.length() + 1 + nodeTypeName.length() + 1 + propertyName.length() + 1,
@@ -103,11 +103,11 @@ public class CndPropertiesAnnotator implements Annotator {
                                     tooltipAnnotation.setTextAttributes(CndSyntaxHighlighter.ATTRIBUTE);
                                 }
                             } else {
-                                holder.createErrorAnnotation(propertyRange, "Unresolved property for node type " + namespace + ":" + nodeTypeName);
+                                holder.createWarningAnnotation(propertyRange, "Unresolved property for node type " + namespace + ":" + nodeTypeName);
                             }
                         }
                     } else {
-                        holder.createErrorAnnotation(nodeTypeNameRange, "Unresolved CND node type").registerFix(new CreateNodeTypeQuickFix(namespace, nodeTypeName));
+                        holder.createWarningAnnotation(nodeTypeNameRange, "Unresolved CND node type").registerFix(new CreateNodeTypeQuickFix(namespace, nodeTypeName));
                     }
 //                } else {
 //                    holder.createErrorAnnotation(namespaceRange, "Unresolved CND namespace");

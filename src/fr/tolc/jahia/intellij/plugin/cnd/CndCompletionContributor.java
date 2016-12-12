@@ -71,7 +71,7 @@ public class CndCompletionContributor extends CompletionContributor {
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
                         for (OptionEnum option : OptionEnum.values()) {
-                            resultSet.addElement(LookupElementBuilder.create(option));
+                            resultSet.addElement(LookupElementBuilder.create(option.toString()));
                         }
                         
                         //Workaround for 'extends' and 'itemtype' completions
@@ -95,7 +95,7 @@ public class CndCompletionContributor extends CompletionContributor {
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
                         for (PropertyTypeEnum type : PropertyTypeEnum.values()) {
-                            resultSet.addElement(LookupElementBuilder.create(type));
+                            resultSet.addElement(LookupElementBuilder.create(type.toString()));
                         }
                     }
                 }
@@ -109,7 +109,7 @@ public class CndCompletionContributor extends CompletionContributor {
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
                         for (PropertyTypeMaskEnum mask : PropertyTypeMaskEnum.values()) {
-                            resultSet.addElement(LookupElementBuilder.create(mask));
+                            resultSet.addElement(LookupElementBuilder.create(mask.toString()));
                         }
                     }
                 }
@@ -123,7 +123,7 @@ public class CndCompletionContributor extends CompletionContributor {
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
                         for (PropertyTypeMaskOptionEnum option : PropertyTypeMaskOptionEnum.values()) {
-                            resultSet.addElement(LookupElementBuilder.create(option));
+                            resultSet.addElement(LookupElementBuilder.create(option.toString()));
                         }
                     }
                 }
@@ -185,7 +185,7 @@ public class CndCompletionContributor extends CompletionContributor {
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
                         for (ItemTypeEnum itemType : ItemTypeEnum.values()) {
-                            resultSet.addElement(LookupElementBuilder.create(itemType));
+                            resultSet.addElement(LookupElementBuilder.create(itemType.toString()));
                         }
                     }
                 }

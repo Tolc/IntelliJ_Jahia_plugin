@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>fr.tolc.jahia.intellij.plugin</id>
   <name>CND Language / Jahia Framework</name>
-  <version>1.2</version>
+  <version>1.2.1</version>
   <vendor email="contact@thomas-coquel.fr" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
 
   <description><![CDATA[
@@ -105,12 +105,18 @@ Other files/languages features:
   <change-notes><![CDATA[
       <html>
           <dl>
+              <dt>1.2.1</dt>
+              <dd>Fixed completion for IntelliJ 14 (#20)</dd>
+              <dd>Fixed abusive erros in Java, XML and properties files (#21)</dd>
+              <dd>Fixed exception happening sometimes when searching for Jahia work folder (#22)</dd>
+          </dl>
+          <dl>
               <dt>1.2</dt>
               <dd>(<strong>IMPORTANT FIX</strong>) Fixed weird huge CPU/Memory consumption when calculating 'virtual' folders for views after editing a file with its view folder opened in Project view</dd>
               <dd>(<strong>feature</strong>) Jahia JSP variables completion (currentNode, moduleMap, etc... without having to use elvariables)</dd>
               <dd>(<strong>feature</strong>) Nodetype folders icon in Project View</dd>
               <dd>Line breaks within properties and subnodes now accepted</dd>
-              <dd>Removed abusive 'Unresolved CND namespace' annotations on strings containing ':' in Java and XML</dd>
+              <dd>Removed abusive 'Unresolved CND namespace' annotations on strings containing ':' in Java and XML (#19)</dd>
           </dl>
           <dl>
               <dt>1.1.1</dt>
@@ -187,6 +193,11 @@ Other files/languages features:
     <refactoring.moveHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view.ViewMoveProvider"/>
     <renameHandler implementation="fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view.ViewRenameHandler"/>
 	<iconProvider order="first" implementation="fr.tolc.jahia.intellij.plugin.cnd.icons.CndNodeTypeFoldersIconProvider"/>
+
+  	<!--<localInspection language="JAVA" shortName="JavaUnknownCndNodeType" bundle="fr.tolc.jahia.intellij.plugin.cnd.CndBundle"-->
+		  			 <!--key="cnd.inspections.java.unknown-nodetype" groupKey="cnd.inspections.group.name"-->
+				     <!--level="WARNING" enabledByDefault="true"-->
+				     <!--implementationClass="fr.tolc.jahia.intellij.plugin.cnd.inspections.UnknownJavaCndNodeTypeInspection"/>-->
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij.properties">
