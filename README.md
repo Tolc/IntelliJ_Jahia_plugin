@@ -7,11 +7,11 @@ definitions.cnd files syntax highlighting, code completion, and other amazing st
 
 ##Requirements
 
-Tested under IntelliJ IDEA from 14.1.4 to 2016.2.5 (the most recent one). Can't see why it wouldn't work with older versions though.
+Tested under IntelliJ IDEA from 14.1.4 to 2016.3.1 (can't see why it wouldn't work with older versions though).
 
 IntelliJ plugins dependencies: **jsp**, **properties**. Java **8** needed.
  
-Jahia project versions **6.6.x** or **7.x**
+Jahia project versions: **6.6.x** or **7.x**
 
 
 
