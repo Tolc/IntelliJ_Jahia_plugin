@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>fr.tolc.jahia.intellij.plugin</id>
   <name>CND Language / Jahia Framework</name>
-  <version>1.2.1</version>
+  <version>1.2.2</version>
   <vendor email="contact@thomas-coquel.fr" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
 
   <description><![CDATA[
@@ -104,6 +104,10 @@ Other files/languages features:
   
   <change-notes><![CDATA[
       <html>
+          <dl>
+              <dt>1.2.2</dt>
+              <dd>Fixed grammar issue with property attributes recognized as part of default value when default value and choicelist constraint or one of the attributes both contain simple quote</dd>
+          </dl>
           <dl>
               <dt>1.2.1</dt>
               <dd>Fixed completion for IntelliJ 14 (#20)</dd>
