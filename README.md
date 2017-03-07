@@ -7,7 +7,7 @@ definitions.cnd files syntax highlighting, code completion, and other amazing st
 
 ##Requirements
 
-Tested under IntelliJ IDEA from 14.1.4 to 2016.3.1 (can't see why it wouldn't work with older versions though).
+Tested under IntelliJ IDEA from 14.1.4 to 2016.3.3 (can't see why it wouldn't work with older versions though).
 
 IntelliJ plugins dependencies: **jsp**, **properties**. Java **8** needed.
  
@@ -94,7 +94,7 @@ Jahia project versions: **6.6.x** or **7.x**
 
 --
 
-##### This plugin is neither official nor endorsed by [Jahia][1] in any way. I am just a guy who loves this CMS and wanted to make it easier to work with it for everybody (or at least everybody using IntelliJ).
+##### This plugin is neither official nor endorsed by [Jahia][1] in any way. I am just a guy who loves this CMS and wanted to make working with it easier for everyone (or at least everyone using IntelliJ, duh).
 
  [1]: https://www.jahia.com/
  [2]: https://www.jahia.com/files/live/sites/jahiacom/files/logo-jahia-2016.png

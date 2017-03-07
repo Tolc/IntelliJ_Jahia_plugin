@@ -116,4 +116,9 @@ public enum AttributeEnum {
     public String toString() {
         return this.value;
     }
+    
+    public static boolean textContainsAttribute(String source, AttributeEnum attribute) {
+        Pattern pattern = Pattern.compile(attribute.validationRegex, Pattern.CASE_INSENSITIVE);
+        return pattern.matcher(source).find();
+    }
 }

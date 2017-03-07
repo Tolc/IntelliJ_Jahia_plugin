@@ -106,6 +106,7 @@ Other files/languages features:
       <html>
           <dl>
               <dt>1.2.2</dt>
+              <dd>(<strong>feature</strong>) 'Create new view' helper now generates <i>c:forEach<i/> loops for 'multiple' properties and '+ *' subnodes</dd>
               <dd>Fixed grammar issue with property attributes recognized as part of default value when default value and choicelist constraint or one of the attributes both contain simple quote</dd>
           </dl>
           <dl>
