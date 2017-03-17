@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>fr.tolc.jahia.intellij.plugin</id>
   <name>CND Language / Jahia Framework</name>
-  <version>1.2.1</version>
+  <version>1.2.2</version>
   <vendor email="contact@thomas-coquel.fr" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
 
   <description><![CDATA[
@@ -105,9 +105,16 @@ Other files/languages features:
   <change-notes><![CDATA[
       <html>
           <dl>
+              <dt>1.2.2</dt>
+              <dd>(<strong>feature</strong>) <template:include/> 'view' attribute completion and reference (both are affected by 'templateType' attribute if provided)</dd>
+              <dd>(<strong>feature</strong>) 'Create new view' helper now generates <i>c:forEach<i/> loops for 'multiple' properties and '+ *' subnodes</dd>
+              <dd>Jahia base .cnd files jar library path is now force-refreshed on project opening</dd>
+              <dd>Fixed grammar issue with property attributes recognized as part of default value when default value and choicelist constraint or one of the attributes both contain simple quote</dd>
+          </dl>
+          <dl>
               <dt>1.2.1</dt>
               <dd>Fixed completion for IntelliJ 14 (#20)</dd>
-              <dd>Fixed abusive erros in Java, XML and properties files (#21)</dd>
+              <dd>Fixed abusive errors in Java, XML and properties files (#21)</dd>
               <dd>Fixed exception happening sometimes when searching for Jahia work folder (#22)</dd>
           </dl>
           <dl>
@@ -197,6 +204,10 @@ Other files/languages features:
                      <!--key="cnd.inspections.java.unknown-nodetype" groupKey="cnd.inspections.group.name"-->
                      <!--level="WARNING" enabledByDefault="true"-->
                      <!--implementationClass="fr.tolc.jahia.intellij.plugin.cnd.inspections.UnknownJavaCndNodeTypeInspection"/>-->
+
+    <completion.contributor language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.completion.JspCompletionContributor"/>
+    <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceContributor"/>
+
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij.properties">

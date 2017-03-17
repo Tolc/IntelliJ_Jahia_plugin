@@ -6,6 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndPropertyElement;
 import com.intellij.navigation.ItemPresentation;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.AttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
 
@@ -35,5 +36,9 @@ public interface CndProperty extends CndPropertyElement {
   PropertyTypeMaskEnum getTypeMask();
 
   ItemPresentation getPresentation();
+
+  boolean hasAttribute(AttributeEnum attribute);
+
+  boolean isMultiple();
 
 }

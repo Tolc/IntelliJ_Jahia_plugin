@@ -12,6 +12,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.AttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
@@ -282,9 +283,22 @@ public class CndPsiImplUtil {
         };
     }
 
-    
-    
-    //Property Identifier
+    public static boolean hasAttribute(final CndProperty element, final AttributeEnum attribute) {
+        CndPropertyAttributes propertyAttributes = element.getPropertyAttributes();
+        if (propertyAttributes != null) {
+            return AttributeEnum.textContainsAttribute(propertyAttributes.getText(), attribute);
+        }
+        return false;
+    }
+
+    public static boolean isMultiple(final CndProperty element) {
+        return hasAttribute(element, AttributeEnum.MULTIPLE);
+    }
+
+
+
+
+        //Property Identifier
     public static String getPropertyName(CndPropertyIdentifier element) {
         ASTNode nameNode = element.getNode().findChildByType(CndTypes.PROPERTY_NAME);
         if (nameNode != null) {

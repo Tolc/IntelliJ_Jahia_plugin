@@ -59,7 +59,7 @@ public class ViewMergerTreeStructureProvider implements TreeStructureProvider, D
                         if (file.getFileType() != StdFileTypes.PROPERTIES) {
                             VirtualFile virtualFile = file.getVirtualFile();
 
-                            ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(file.getProject(), virtualFile);
+                            ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(virtualFile);
                             if (viewModel != null && !alreadyDoneViews.contains(viewModel.getName())) {
                                 List<PsiFile> views = CndProjectFilesUtil.findViewFiles(file.getProject(), viewModel);
 

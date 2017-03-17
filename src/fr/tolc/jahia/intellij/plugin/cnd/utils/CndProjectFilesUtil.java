@@ -11,7 +11,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
@@ -31,42 +30,37 @@ public class CndProjectFilesUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(CndProjectFilesUtil.class);
     private static final String JAHIA_6_WEBAPP = "webapp";
     private static final String JAHIA_7_RESOURCES = "resources";
+    private static final String JEE_MAIN = "main";
+    private static final String JAHIA_6_PATH = JEE_MAIN + "/" + JAHIA_6_WEBAPP;
+    private static final String JAHIA_7_PATH = JEE_MAIN + "/" + JAHIA_7_RESOURCES;
 
+    private static String jahiaWorkFolderPath;
+    
     private CndProjectFilesUtil() {
     }
 
-    /**
-     * @param element must be part of a CND file to get the valid Jahia work folder
-     */
-    public static String getJahiaWorkFolderPath(PsiElement element) {
-        if (element != null) {
-            PsiFile cndFile = element.getContainingFile();
-            if (cndFile != null) {
-                PsiDirectory metaInf = cndFile.getParent();
-                if (metaInf != null) {
-                    String metaInfNameFolderName = metaInf.getName();
-                    if (JAHIA_6_WEBAPP.equals(metaInfNameFolderName) || JAHIA_7_RESOURCES.equals(metaInfNameFolderName)) {
-                        return metaInf.getVirtualFile().getPath();
-                    }
-    
-                    PsiDirectory webappOrResources = metaInf.getParent();
-                    if (webappOrResources != null) {
-                        String folderName = webappOrResources.getName();
-                        if (JAHIA_6_WEBAPP.equals(folderName) || JAHIA_7_RESOURCES.equals(folderName)) {
-                            return webappOrResources.getVirtualFile().getPath();
-                        }
+    public static String getJahiaWorkFolderPath(Project project) {
+        if (jahiaWorkFolderPath == null) {
+            if (project != null) {
+                Collection<VirtualFile> projectCndFiles = getProjectCndFiles(project);
+                for (VirtualFile cndFile : projectCndFiles) {
+                    String path = cndFile.getPath();
+                    if (path.contains(JAHIA_6_PATH)) {
+                        jahiaWorkFolderPath = path.substring(0, path.lastIndexOf(JAHIA_6_PATH) + JAHIA_6_PATH.length());
+                    } else if (path.contains(JAHIA_7_PATH)) {
+                        jahiaWorkFolderPath = path.substring(0, path.lastIndexOf(JAHIA_7_PATH) + JAHIA_7_PATH.length());
                     }
                 }
             }
         }
-        return null;
+        return jahiaWorkFolderPath;
     }
     
     public static String getNodeTypeFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName) {
         return jahiaWorkFolderPath + "/" + namespace + "_" + nodeTypeName;
     }
     public static String getNodeTypeFolderPath(PsiElement element, String namespace, String nodeTypeName) {
-        return getNodeTypeFolderPath(getJahiaWorkFolderPath(element), namespace, nodeTypeName);
+        return getNodeTypeFolderPath(getJahiaWorkFolderPath(element.getProject()), namespace, nodeTypeName);
     }
 
     public static String getNodeTypeDefaultViewsFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName) {
@@ -93,6 +87,20 @@ public class CndProjectFilesUtil {
         return fileName;
     }
 
+    @NotNull
+    public static List<ViewModel> getNodeTypeViews(PsiElement element, String namespace, String nodeTypeName, String templateType) {
+        List<ViewModel> res = new ArrayList<ViewModel>();
+
+        List<ViewModel> nodeTypeViews = getNodeTypeViews(element, namespace, nodeTypeName);
+        for (ViewModel nodeTypeView : nodeTypeViews) {
+            if (templateType.equals(nodeTypeView.getType())) {
+                res.add(nodeTypeView);
+            }
+        }
+        
+        return res;
+    }
+    
     @NotNull
     public static List<ViewModel> getNodeTypeViews(PsiElement element, String namespace, String nodeTypeName) {
         List<ViewModel> res = new ArrayList<ViewModel>();
@@ -140,25 +148,27 @@ public class CndProjectFilesUtil {
         CndNodeType element = CndUtil.findNodeType(project, namespace, nodeTypeName);
 
         List<PsiFile> res = new ArrayList<PsiFile>();
-        String viewTypeFolderPath = getNodeTypeViewTypeFolderPath(element, namespace, nodeTypeName, viewType);
-        File viewTypeFolder = new File(viewTypeFolderPath);
+        if (element != null) {
+            String viewTypeFolderPath = getNodeTypeViewTypeFolderPath(element, namespace, nodeTypeName, viewType);
+            File viewTypeFolder = new File(viewTypeFolderPath);
 
-        if (viewTypeFolder.exists() && viewTypeFolder.isDirectory()) {
-            File[] viewFiles = viewTypeFolder.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    if (StringUtils.isNotBlank(viewName)) {
-                        return name.startsWith(nodeTypeName + "." + viewName + ".");
-                    } else {
-                        return name.startsWith(nodeTypeName) && name.split("\\.").length == 2;
+            if (viewTypeFolder.exists() && viewTypeFolder.isDirectory()) {
+                File[] viewFiles = viewTypeFolder.listFiles(new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String name) {
+                        if (StringUtils.isNotBlank(viewName)) {
+                            return (name.startsWith(nodeTypeName + "." + viewName + ".")) || (ViewModel.DEFAULT.equals(viewName) && name.startsWith(nodeTypeName) && name.split("\\.").length == 2);
+                        } else {
+                            return name.startsWith(nodeTypeName) && name.split("\\.").length == 2;
+                        }
                     }
-                }
-            });
-            if (viewFiles != null) {
-                for (File viewFile : viewFiles) {
-                    VirtualFile virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(viewFile);
-                    PsiFile psiFile = PsiManager.getInstance(element.getProject()).findFile(virtualFile);
-                    res.add(psiFile);
+                });
+                if (viewFiles != null) {
+                    for (File viewFile : viewFiles) {
+                        VirtualFile virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(viewFile);
+                        PsiFile psiFile = PsiManager.getInstance(element.getProject()).findFile(virtualFile);
+                        res.add(psiFile);
+                    }
                 }
             }
         }
@@ -170,7 +180,7 @@ public class CndProjectFilesUtil {
         return findViewFiles(project, viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType(), viewModel.getName());
     }
 
-    public static ViewModel getViewModelFromPotentialViewFile(Project project, VirtualFile virtualFile) {
+    public static ViewModel getViewModelFromPotentialViewFile(VirtualFile virtualFile) {
         if (!virtualFile.isDirectory()) {
             String name = virtualFile.getName();
             String[] split = name.split("\\.");

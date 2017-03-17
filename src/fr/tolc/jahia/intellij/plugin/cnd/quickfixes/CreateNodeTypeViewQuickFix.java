@@ -141,11 +141,16 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
     
     
     private static final String PROPERTY_TEMPLATE = "<c:set var=\"##varName##\" value=\"${currentNode.properties['##name##'].##accessor##}\"/>\r\n";
+    private static final String PROPERTY_MULTIPLE_TEMPLATE = "<c:set var=\"##varName##\" value=\"${currentNode.properties['##name##']}\"/>\r\n";
     private static final String SUBNODES_TEMPLATE = "<c:set var=\"##varName##\" value=\"${jcr:getNodes(currentNode, '##nodeType##')}\"/>\r\n";
     private static final String SUBNODE_TEMPLATE  = "<jcr:node var=\"##varName##\" path=\"${currentNode.path}/##name##\"/>\r\n";
+    
+    private static final String PROPERTY_LOOP_TEMPLATE  = "<c:forEach items=\"${##varName##}\" var=\"item\">\r\n\t${item}\r\n</c:forEach>\r\n";
+    private static final String SUBNODE_LOOP_TEMPLATE  = "<c:forEach items=\"${##varName##}\" var=\"node\">\r\n\t<template:module node=\"${node}\"/>\r\n</c:forEach>\r\n";
 
     private void appendAvailableResources(File viewFile) throws IOException {
         StringBuilder toAppend = new StringBuilder();
+        StringBuilder toAppendLoops = new StringBuilder();
         
         //Properties
         List<CndProperty> properties = cndNodeType.getPropertyList();
@@ -153,10 +158,16 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
             toAppend.append("\r\n");
             
             for (CndProperty property : properties) {
-                String accessor = property.getType().getAccessor();
-                if (StringUtils.isNotBlank(accessor) && !"*".equals(property.getPropertyName())) {
+                if (property.isMultiple()) {
                     String varName = convertToVariableName(property.getPropertyName());
-                    toAppend.append(PROPERTY_TEMPLATE.replace("##varName##", varName).replace("##name##", property.getPropertyName()).replace("##accessor##", accessor));
+                    toAppend.append(PROPERTY_MULTIPLE_TEMPLATE.replace("##varName##", varName).replace("##name##", property.getPropertyName()));
+                    toAppendLoops.append(PROPERTY_LOOP_TEMPLATE.replace("##varName##", varName));
+                } else {
+                    String accessor = property.getType().getAccessor();
+                    if (StringUtils.isNotBlank(accessor) && !"*".equals(property.getPropertyName())) {
+                        String varName = convertToVariableName(property.getPropertyName());
+                        toAppend.append(PROPERTY_TEMPLATE.replace("##varName##", varName).replace("##name##", property.getPropertyName()).replace("##accessor##", accessor));
+                    }
                 }
             }
         }
@@ -172,12 +183,21 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
                     if ("*".equals(subNodeName)) {
                         String varName = convertNodeTypeToVariableName(subNodeType);
                         toAppend.append(SUBNODES_TEMPLATE.replace("##varName##", varName).replace("##nodeType##", subNodeType.getText()));
+                        toAppendLoops.append(SUBNODE_LOOP_TEMPLATE.replace("##varName##", varName));
                     } else {
                         String varName = convertToVariableName(subNodeName);
                         toAppend.append(SUBNODE_TEMPLATE.replace("##varName##", varName).replace("##name##", subNodeName));
                     }
                 }
             }
+        }
+        
+        
+        //Loops
+        if (toAppendLoops.length() > 0) {
+            toAppend.append("\r\n");
+            toAppend.append("\r\n");
+            toAppend.append(toAppendLoops);
         }
         
         toAppend.append("\r\n");
