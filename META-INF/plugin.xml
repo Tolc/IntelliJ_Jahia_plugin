@@ -106,6 +106,9 @@ Other files/languages features:
       <html>
           <dl>
               <dt>1.2.2</dt>
+              <dd>(<strong>feature</strong>) <template:include/> 'view' attribute completion and reference (both are affected by 'templateType' attribute if provided)</dd>
+              <dd>(<strong>feature</strong>) 'Create new view' helper now generates <i>c:forEach<i/> loops for 'multiple' properties and '+ *' subnodes</dd>
+              <dd>Jahia base .cnd files jar library path is now force-refreshed on project opening</dd>
               <dd>Fixed grammar issue with property attributes recognized as part of default value when default value and choicelist constraint or one of the attributes both contain simple quote</dd>
           </dl>
           <dl>
@@ -202,6 +205,10 @@ Other files/languages features:
 		  			 <!--key="cnd.inspections.java.unknown-nodetype" groupKey="cnd.inspections.group.name"-->
 				     <!--level="WARNING" enabledByDefault="true"-->
 				     <!--implementationClass="fr.tolc.jahia.intellij.plugin.cnd.inspections.UnknownJavaCndNodeTypeInspection"/>-->
+
+    <completion.contributor language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.completion.JspCompletionContributor"/>
+    <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceContributor"/>
+
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij.properties">
