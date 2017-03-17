@@ -31,7 +31,7 @@ Jahia project versions: **6.6.x** or **7.x**
  * File icon ![CND file icon](src/fr/tolc/jahia/intellij/plugin/cnd/icons/cnd.png) 
  * Line markers for namespaces ![namespace](src/fr/tolc/jahia/intellij/plugin/cnd/icons/namespace.png) and nodetypes ![nodetype](src/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeType.png) / mixins ![mixin](src/fr/tolc/jahia/intellij/plugin/cnd/icons/mixin.png)
  * Code folding - for namespaces and nodetypes
- * Brace matching - closing brackets and parenthesis are automatically inserted when authorized by the syntax
+ * Brace matching - closing brackets and parenthesis are automatically inserted where authorized by the syntax
  * Commenter (ctrl+/) - to comment lines of code
 
 
@@ -82,7 +82,7 @@ Jahia project versions: **6.6.x** or **7.x**
 
  * Improved JSP support:
     * Properties and property type completion in `${currentNode.properties.propertyName}`, `${currentNode.properties['propertyName']}` and `jcr:property`
-    * Views completion in `template:include` and `template:module`
+    * Views completion in `template:module`
  * Improved Properties support:
     * Resource bundles .properties extension, to be able to find namespaces and nodetypes usages in it
     * View cache .properties custom language     
