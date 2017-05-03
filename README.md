@@ -5,7 +5,7 @@
 definitions.cnd files syntax highlighting, code completion, and other amazing stuff.
 
 
-##Requirements
+## Requirements
 
 Tested under IntelliJ IDEA from 14.1.4 to 2016.3.3 (can't see why it wouldn't work with older versions though).
 
