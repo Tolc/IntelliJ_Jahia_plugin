@@ -157,7 +157,7 @@ public class CndProjectFilesUtil {
                     @Override
                     public boolean accept(File dir, String name) {
                         if (StringUtils.isNotBlank(viewName)) {
-                            return (name.startsWith(nodeTypeName + "." + viewName + ".")) || (ViewModel.DEFAULT.equals(viewName) && name.startsWith(nodeTypeName) && name.split("\\.").length == 2);
+                            return (name.startsWith(nodeTypeName + "." + viewName + ".") && (name.lastIndexOf('.') == (nodeTypeName.length() + viewName.length() + 1))) || (ViewModel.DEFAULT.equals(viewName) && name.startsWith(nodeTypeName) && name.split("\\.").length == 2);
                         } else {
                             return name.startsWith(nodeTypeName) && name.split("\\.").length == 2;
                         }
