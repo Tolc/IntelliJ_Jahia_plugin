@@ -11,6 +11,7 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.ProcessingContext;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import fr.tolc.jahia.intellij.plugin.cnd.references.types.ViewIncludeReference;
+import fr.tolc.jahia.intellij.plugin.cnd.references.types.ViewModuleReference;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -47,8 +48,10 @@ public class ViewReferenceProvider extends PsiReferenceProvider {
                         };
                     } else if (TAG_MODULE.equals(localName)) {
                         LOGGER.debug("template:module view found");
-
-                        //TODO: ViewModuleReference
+                        return new PsiReference[] {
+                                //Text ranges here are relative!!
+                                new ViewModuleReference(element, new TextRange(1, value.length() + 1), viewModel),
+                        };
                     }
                 }
             }

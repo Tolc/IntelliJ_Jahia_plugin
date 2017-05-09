@@ -18,4 +18,5 @@ public class CndIcons {
     public static final Icon NODE_TYPE_FOLDER = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeTypeFolder.png");
     
     public static final Icon TEMPLATE_INCLUDE = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/templateInclude.png");
+    public static final Icon TEMPLATE_MODULE = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/templateModule.png");
 }

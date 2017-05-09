@@ -21,7 +21,7 @@ public class ViewJspLineMarkerProvider extends RelatedItemLineMarkerProvider {
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
         if (element instanceof XmlAttributeValue) {
-            String value = ((XmlAttributeValue) element).getValue();
+//            String value = ((XmlAttributeValue) element).getValue();
 
             VirtualFile virtualFile = element.getContainingFile().getVirtualFile();
             if (virtualFile != null) {  //Not a file just in memory
@@ -35,12 +35,25 @@ public class ViewJspLineMarkerProvider extends RelatedItemLineMarkerProvider {
                         
                         List<PsiFile> viewFiles = CndProjectFilesUtil.findViewFiles(element.getProject(), viewModel);
                         if (!viewFiles.isEmpty()) {
-                            //TODO: better icon depending on hidden or not
-                            builder.setTarget(viewFiles.get(0)).setTooltipText("Navigate to view file");
+                            //TODO: maybe better icon depending on hidden or not?
+                            builder.setTargets(viewFiles).setTooltipText("Navigate to view file");
                         } else {
                             builder.setTarget(element.getContainingFile()).setTooltipText("Unknown view");
                         }
                         
+                        result.add(builder.createLineMarkerInfo(element));
+                        
+                    } else if (ViewReferenceProvider.TAG_MODULE.equals(localName)) {
+                        NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(CndIcons.TEMPLATE_MODULE);
+
+                        List<PsiFile> viewFiles = CndProjectFilesUtil.findViewFiles(element.getProject(), viewModel.getType(), viewModel.getName());
+                        if (!viewFiles.isEmpty()) {
+                            //TODO: maybe better icon depending on hidden or not?
+                            builder.setTargets(viewFiles).setTooltipText("Navigate to node view file");
+                        } else {
+                            builder.setTarget(element.getContainingFile()).setTooltipText("Unknown view");
+                        }
+
                         result.add(builder.createLineMarkerInfo(element));
                     }
                 }

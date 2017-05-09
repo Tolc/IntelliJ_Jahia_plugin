@@ -18,7 +18,7 @@ public class ViewModel {
         this.language = language;
     }
 
-    public ViewModel( String namespace, String nodeTypeName, String name, String type, String language) {
+    public ViewModel(String namespace, String nodeTypeName, String name, String type, String language) {
         this.nodeType = new NodeTypeModel(namespace, nodeTypeName);
         this.name = name;
         this.type = type;

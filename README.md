@@ -56,7 +56,8 @@ Jahia project versions: **6.6.x** or **7.x**
         * Go to nodetype declaration (ctrl-click/cmd-click)
         * Unknown nodetype error highlighting
         * Create nodetype quickfix (alt+enter on nodetype name) - if known namespace but unknown nodetype
-        * \<template:include/> 'view' attribute completion and reference ![template include](src/fr/tolc/jahia/intellij/plugin/cnd/icons/templateInclude.png) (both are affected by 'templateType' attribute if provided)
+        * `<template:module/>` line marker, 'view' attribute completion and reference ![template module](src/fr/tolc/jahia/intellij/plugin/cnd/icons/templateModule.png) (both are affected by 'templateType' attribute if provided)
+        * `<template:include/>` line marker, 'view' attribute completion and reference ![template include](src/fr/tolc/jahia/intellij/plugin/cnd/icons/templateInclude.png) (both are affected by 'templateType' attribute if provided)
      * Java
         * Nodetypes usages highlighting & line markers ![nodetype](src/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeType.png)/![mixin](src/fr/tolc/jahia/intellij/plugin/cnd/icons/mixin.png)
         * Nodetypes completion

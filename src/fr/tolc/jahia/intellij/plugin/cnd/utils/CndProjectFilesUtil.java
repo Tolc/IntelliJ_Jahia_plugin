@@ -75,6 +75,10 @@ public class CndProjectFilesUtil {
         return getNodeTypeFolderPath(element, namespace, nodeTypeName) + "/" + viewType;
     }
 
+    public static String getNodeTypeViewTypeFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName, String viewType) {
+        return getNodeTypeFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName) + "/" + viewType;
+    }
+
     public static String getNodeTypeViewFileName(String nodeTypeName, String viewName, String viewLanguage, boolean isHiddenView) {
         String fileName = nodeTypeName + ".";
         if (isHiddenView && !viewName.contains("hidden.") && !viewName.contains(".hidden")) {
@@ -100,26 +104,44 @@ public class CndProjectFilesUtil {
         
         return res;
     }
+
+    @NotNull
+    public static List<ViewModel> getNodeTypeViews(Project project, String templateType) {
+        List<ViewModel> res = new ArrayList<ViewModel>();
+
+        List<ViewModel> nodeTypeViews = getProjectNodeTypeViews(project);
+        for (ViewModel nodeTypeView : nodeTypeViews) {
+            if (templateType.equals(nodeTypeView.getType())) {
+                res.add(nodeTypeView);
+            }
+        }
+
+        return res;
+    }
     
     @NotNull
     public static List<ViewModel> getNodeTypeViews(PsiElement element, String namespace, String nodeTypeName) {
+        return getNodeTypeViews(getNodeTypeFolderPath(element, namespace, nodeTypeName), namespace, nodeTypeName);
+    }
+
+    @NotNull
+    public static List<ViewModel> getNodeTypeViews(String nodeTypeFolderPath, String namespace, String nodeTypeName) {
         List<ViewModel> res = new ArrayList<ViewModel>();
-        String nodeTypeFolderPath = getNodeTypeFolderPath(element, namespace, nodeTypeName);
         File nodeTypeFolder = new File(nodeTypeFolderPath);
-        
+
         if (nodeTypeFolder.exists() && nodeTypeFolder.isDirectory()) {
             File[] viewTypesFolders = nodeTypeFolder.listFiles();
             for (File viewTypeFolder : viewTypesFolders) {
                 if (viewTypeFolder.isDirectory()) {
                     String viewType = viewTypeFolder.getName();
-                    
+
                     File[] viewsFiles = viewTypeFolder.listFiles(new FilenameFilter() {
                         @Override
                         public boolean accept(File dir, String name) {
                             return !name.endsWith(".properties") && name.startsWith(nodeTypeName + ".");
                         }
                     });
-                    
+
                     if (viewsFiles != null) {
                         for (File viewFile : viewsFiles) {
                             String name = viewFile.getName();
@@ -139,6 +161,19 @@ public class CndProjectFilesUtil {
                     }
                 }
             }
+        }
+        return res;
+    }
+    
+    @NotNull
+    public static List<ViewModel> getProjectNodeTypeViews(Project project) {
+        List<ViewModel> res = new ArrayList<ViewModel>();
+        List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project);
+        for (CndNodeType nodeType : nodeTypes) {
+            String namespace = nodeType.getNodeTypeNamespace();
+            String nodeTypeName = nodeType.getNodeTypeName();
+            String nodeTypeFolderPath = getNodeTypeFolderPath(getJahiaWorkFolderPath(project), namespace, nodeTypeName);
+            res.addAll(getNodeTypeViews(nodeTypeFolderPath, namespace, nodeTypeName));
         }
         return res;
     }
@@ -170,6 +205,18 @@ public class CndProjectFilesUtil {
                         res.add(psiFile);
                     }
                 }
+            }
+        }
+        return res;
+    }
+
+    @NotNull
+    public static List<PsiFile> findViewFiles(Project project, String viewType, String viewName) {
+        List<PsiFile> res = new ArrayList<PsiFile>();
+        List<ViewModel> projectNodeTypeViews = getProjectNodeTypeViews(project);
+        for (ViewModel nodeTypeView : projectNodeTypeViews) {
+            if (viewType.equals(nodeTypeView.getType()) && viewName.equals(nodeTypeView.getName())) {
+                res.addAll(findViewFiles(project, nodeTypeView.getNodeType().getNamespace(), nodeTypeView.getNodeType().getNodeTypeName(), viewType, viewName));
             }
         }
         return res;

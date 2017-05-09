@@ -1,5 +1,8 @@
 package fr.tolc.jahia.intellij.plugin.cnd.completion;
 
+import static fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceProvider.TAG_INCLUDE;
+import static fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceProvider.TAG_MODULE;
+
 import java.util.List;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
@@ -33,13 +36,23 @@ public class JspCompletionContributor extends CompletionContributor {
                         if (element != null) {
                             PsiElement elementParent = element.getParent();
                             if (elementParent instanceof XmlAttributeValue) {
-                                ViewModel viewModel = ViewReferenceProvider.getViewModelFromJspTagAttributeValue((XmlAttributeValue) elementParent, parameters.getOriginalFile().getVirtualFile());
+                                ViewModel viewModel = ViewReferenceProvider.getViewModelFromJspTagAttributeValue((XmlAttributeValue) elementParent, 
+                                        parameters.getOriginalFile().getVirtualFile());
 
                                 if (viewModel != null) {
-                                    List<ViewModel> nodeTypeViews = CndProjectFilesUtil.getNodeTypeViews(element, viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType());
+                                    List<ViewModel> nodeTypeViews = null;
+                                    String localName = viewModel.getTagName();
+                                    if (TAG_INCLUDE.equals(localName)) {
+                                        nodeTypeViews = CndProjectFilesUtil.getNodeTypeViews(element, viewModel.getNodeType().getNamespace(), 
+                                                viewModel.getNodeType().getNodeTypeName(), viewModel.getType());
+                                    } else if (TAG_MODULE.equals(localName)) {
+                                        nodeTypeViews = CndProjectFilesUtil.getNodeTypeViews(element.getProject(), viewModel.getType());
+                                    }
 
-                                    for (ViewModel nodeTypeView : nodeTypeViews) {
-                                        resultSet.addElement(LookupElementBuilder.create(nodeTypeView.getFormattedName()));
+                                    if (nodeTypeViews != null) {
+                                        for (ViewModel nodeTypeView : nodeTypeViews) {
+                                            resultSet.addElement(LookupElementBuilder.create(nodeTypeView.getFormattedName()));
+                                        }
                                     }
                                 }
                             }
