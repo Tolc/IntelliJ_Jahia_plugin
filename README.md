@@ -84,7 +84,6 @@ Jahia project versions: **6.6.x** or **7.x**
 
  * Improved JSP support:
     * Properties and property type completion in `${currentNode.properties.propertyName}`, `${currentNode.properties['propertyName']}` and `jcr:property`
-    * Views completion in `template:module`
  * Improved Properties support:
     * Resource bundles .properties extension, to be able to find namespaces and nodetypes usages in it
     * View cache .properties custom language     
