@@ -5,7 +5,7 @@
 definitions.cnd files syntax highlighting, code completion, and other amazing stuff.
 
 
-##Requirements
+## Requirements
 
 Tested under IntelliJ IDEA from 14.1.4 to 2016.3.3 (can't see why it wouldn't work with older versions though).
 
@@ -56,6 +56,8 @@ Jahia project versions: **6.6.x** or **7.x**
         * Go to nodetype declaration (ctrl-click/cmd-click)
         * Unknown nodetype error highlighting
         * Create nodetype quickfix (alt+enter on nodetype name) - if known namespace but unknown nodetype
+        * `<template:module/>` line marker, 'view' attribute completion and reference ![template module](src/fr/tolc/jahia/intellij/plugin/cnd/icons/templateModule.png) (both are affected by 'templateType' attribute if provided)
+        * `<template:include/>` line marker, 'view' attribute completion and reference ![template include](src/fr/tolc/jahia/intellij/plugin/cnd/icons/templateInclude.png) (both are affected by 'templateType' attribute if provided)
      * Java
         * Nodetypes usages highlighting & line markers ![nodetype](src/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeType.png)/![mixin](src/fr/tolc/jahia/intellij/plugin/cnd/icons/mixin.png)
         * Nodetypes completion
@@ -82,7 +84,6 @@ Jahia project versions: **6.6.x** or **7.x**
 
  * Improved JSP support:
     * Properties and property type completion in `${currentNode.properties.propertyName}`, `${currentNode.properties['propertyName']}` and `jcr:property`
-    * Views completion in `template:module`
  * Improved Properties support:
     * Resource bundles .properties extension, to be able to find namespaces and nodetypes usages in it
     * View cache .properties custom language     

@@ -1,11 +1,13 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
 
+import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
@@ -17,6 +19,8 @@ import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CndPsiImplUtil {
@@ -40,7 +44,7 @@ public class CndPsiImplUtil {
 
     public static ItemPresentation getPresentation(final CndNamespace element) {
         return new ItemPresentation() {
-            @Nullable
+            @NotNull
             @Override
             public String getPresentableText() {
                 return element.getNamespaceName() + " = '" + element.getNamespaceURI() + "'";
@@ -128,6 +132,7 @@ public class CndPsiImplUtil {
         return null;
     }
 
+    @Nullable
     public static CndProperty getProperty(CndNodeType element, String propertyName) {
         List<CndProperty> properties = element.getPropertyList();
         for (CndProperty property : properties) {
@@ -138,6 +143,7 @@ public class CndPsiImplUtil {
         return null;
     }
 
+    @NotNull
     public static Set<OptionEnum> getOptions(CndNodeType element) {
         Set<OptionEnum> result = new HashSet<OptionEnum>();
         for (CndNodeOption cndOption : element.getNodeOptionList()) {
@@ -154,9 +160,34 @@ public class CndPsiImplUtil {
         return element.getOptions().contains(OptionEnum.MIXIN);
     }
 
+    @NotNull
+    public static Set<CndNodeType> getParentsNodeTypes(CndNodeType element) {
+        Set<CndNodeType> result = new LinkedHashSet<CndNodeType>();
+        if (element.getSuperTypes() != null) {
+            List<CndSuperType> superTypes = Lists.reverse(element.getSuperTypes().getSuperTypeList());  //Reverse list because Jahia super types priority is from right to left
+            for (CndSuperType superType : superTypes) {
+                CndNodeType nodeType = CndUtil.findNodeType(element.getProject(), superType.getNodeTypeNamespace(), superType.getNodeTypeName());
+                if (nodeType != null) {
+                    result.add(nodeType);
+                }
+            }
+        }
+        return result;
+    }
+
+    @NotNull
+    public static Set<CndNodeType> getAncestorsNodeTypes(CndNodeType element) {
+        Set<CndNodeType> result = new LinkedHashSet<CndNodeType>();
+        for (CndNodeType parentNodeType : element.getParentsNodeTypes()) {
+            result.add(parentNodeType);
+            result.addAll(getAncestorsNodeTypes(parentNodeType));
+        }
+        return result;
+    }
+
     public static ItemPresentation getPresentation(final CndNodeType element) {
         return new ItemPresentation() {
-            @Nullable
+            @NotNull
             @Override
             public String getPresentableText() {
                 return element.getNodeTypeNamespace() + ":" + element.getNodeTypeName();
@@ -262,7 +293,7 @@ public class CndPsiImplUtil {
 
     public static ItemPresentation getPresentation(final CndProperty element) {
         return new ItemPresentation() {
-            @Nullable
+            @NotNull
             @Override
             public String getPresentableText() {
                 return element.getPropertyName() + " (" + element.getType() + ")";
@@ -357,6 +388,23 @@ public class CndPsiImplUtil {
     public static PsiReference[] getReferences(CndSuperType element) {
         return ReferenceProvidersRegistry.getReferencesFromProviders(element);
     }
+
+    public static String getNodeTypeName(CndSuperType element) {
+        ASTNode nodeTypeName = element.getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
+        if (nodeTypeName != null) {
+            return nodeTypeName.getText();
+        }
+        return null;
+    }
+    
+    public static String getNodeTypeNamespace(CndSuperType element) {
+        ASTNode namespaceName = element.getNode().findChildByType(CndTypes.NAMESPACE_NAME);
+        if (namespaceName != null) {
+            return namespaceName.getText();
+        }
+        return null;
+    }
+    
 
     //Extension
     public static PsiReference[] getReferences(CndExtension element) {

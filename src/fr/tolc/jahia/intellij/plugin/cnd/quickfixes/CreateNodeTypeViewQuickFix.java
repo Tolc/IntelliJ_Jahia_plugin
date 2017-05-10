@@ -145,7 +145,7 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
     private static final String SUBNODES_TEMPLATE = "<c:set var=\"##varName##\" value=\"${jcr:getNodes(currentNode, '##nodeType##')}\"/>\r\n";
     private static final String SUBNODE_TEMPLATE  = "<jcr:node var=\"##varName##\" path=\"${currentNode.path}/##name##\"/>\r\n";
     
-    private static final String PROPERTY_LOOP_TEMPLATE  = "<c:forEach items=\"${##varName##}\" var=\"item\">\r\n\t${item}\r\n</c:forEach>\r\n";
+    private static final String PROPERTY_LOOP_TEMPLATE  = "<c:forEach items=\"${##varName##}\" var=\"item\">\r\n\t${item.##accessor##}\r\n</c:forEach>\r\n";
     private static final String SUBNODE_LOOP_TEMPLATE  = "<c:forEach items=\"${##varName##}\" var=\"node\">\r\n\t<template:module node=\"${node}\"/>\r\n</c:forEach>\r\n";
 
     private void appendAvailableResources(File viewFile) throws IOException {
@@ -158,12 +158,12 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
             toAppend.append("\r\n");
             
             for (CndProperty property : properties) {
+                String accessor = property.getType().getAccessor();
                 if (property.isMultiple()) {
                     String varName = convertToVariableName(property.getPropertyName());
                     toAppend.append(PROPERTY_MULTIPLE_TEMPLATE.replace("##varName##", varName).replace("##name##", property.getPropertyName()));
-                    toAppendLoops.append(PROPERTY_LOOP_TEMPLATE.replace("##varName##", varName));
+                    toAppendLoops.append(PROPERTY_LOOP_TEMPLATE.replace("##varName##", varName).replace("##accessor##", accessor));
                 } else {
-                    String accessor = property.getType().getAccessor();
                     if (StringUtils.isNotBlank(accessor) && !"*".equals(property.getPropertyName())) {
                         String varName = convertToVariableName(property.getPropertyName());
                         toAppend.append(PROPERTY_TEMPLATE.replace("##varName##", varName).replace("##name##", property.getPropertyName()).replace("##accessor##", accessor));

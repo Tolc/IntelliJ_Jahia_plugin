@@ -14,8 +14,8 @@ import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlElementType;
 import com.intellij.util.ProcessingContext;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
-import fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceProvider;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.JspUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class JspCompletionContributor extends CompletionContributor {
@@ -33,13 +33,23 @@ public class JspCompletionContributor extends CompletionContributor {
                         if (element != null) {
                             PsiElement elementParent = element.getParent();
                             if (elementParent instanceof XmlAttributeValue) {
-                                ViewModel viewModel = ViewReferenceProvider.getViewModelFromJspTagAttributeValue((XmlAttributeValue) elementParent, parameters.getOriginalFile().getVirtualFile());
+                                ViewModel viewModel = JspUtil.getViewModelFromJspTagAttributeValue((XmlAttributeValue) elementParent, 
+                                        parameters.getOriginalFile().getVirtualFile());
 
                                 if (viewModel != null) {
-                                    List<ViewModel> nodeTypeViews = CndProjectFilesUtil.getNodeTypeViews(element, viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType());
+                                    List<ViewModel> nodeTypeViews = null;
+                                    String localName = viewModel.getTagName();
+                                    if (JspUtil.TAG_INCLUDE.equals(localName)) {
+                                        nodeTypeViews = CndProjectFilesUtil.getNodeTypeAndAncestorsViews(element.getProject(), viewModel.getNodeType().getNamespace(), 
+                                                viewModel.getNodeType().getNodeTypeName(), viewModel.getType());
+                                    } else if (JspUtil.TAG_MODULE.equals(localName)) {
+                                        nodeTypeViews = CndProjectFilesUtil.getProjectNodeTypeViews(element.getProject(), viewModel.getType());
+                                    }
 
-                                    for (ViewModel nodeTypeView : nodeTypeViews) {
-                                        resultSet.addElement(LookupElementBuilder.create(nodeTypeView.getFormattedName()));
+                                    if (nodeTypeViews != null) {
+                                        for (ViewModel nodeTypeView : nodeTypeViews) {
+                                            resultSet.addElement(LookupElementBuilder.create(nodeTypeView.getFormattedName()));
+                                        }
                                     }
                                 }
                             }

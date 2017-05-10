@@ -19,10 +19,10 @@ import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ViewIncludeReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
+public class ViewModuleReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
     private ViewModel viewModel;
 
-    public ViewIncludeReference(@NotNull PsiElement element, TextRange textRange, ViewModel viewModel) {
+    public ViewModuleReference(@NotNull PsiElement element, TextRange textRange, ViewModel viewModel) {
         super(element, textRange);
         this.viewModel = viewModel;
     }
@@ -38,8 +38,7 @@ public class ViewIncludeReference extends PsiReferenceBase<PsiElement> implement
     @Override
     public Object[] getVariants() {
         Project project = myElement.getProject();
-        List<ViewModel> nodeTypeViews = CndProjectFilesUtil.getNodeTypeAndAncestorsViews(myElement.getProject(), 
-                viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType());
+        List<ViewModel> nodeTypeViews = CndProjectFilesUtil.getProjectNodeTypeViews(project);
         List<LookupElement> variants = new ArrayList<LookupElement>();
         for (ViewModel nodeTypeView : nodeTypeViews) {
             List<PsiFile> viewFiles = CndProjectFilesUtil.findViewFiles(project, nodeTypeView);
@@ -57,8 +56,7 @@ public class ViewIncludeReference extends PsiReferenceBase<PsiElement> implement
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         Project project = myElement.getProject();
-        List<PsiFile> viewFiles = CndProjectFilesUtil.findViewFilesIncludingAncestors(project,
-                viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType(), viewModel.getName());
+        List<PsiFile> viewFiles = CndProjectFilesUtil.findViewFiles(project, viewModel.getType(), viewModel.getName());
         List<ResolveResult> results = new ArrayList<ResolveResult>();
         for (PsiFile viewFile : viewFiles) {
             results.add(new PsiElementResolveResult(viewFile));

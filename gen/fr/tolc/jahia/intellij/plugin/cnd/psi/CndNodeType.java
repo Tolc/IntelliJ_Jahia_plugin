@@ -40,10 +40,18 @@ public interface CndNodeType extends CndNodeTypeElement {
 
   ItemPresentation getPresentation();
 
+  @Nullable
   CndProperty getProperty(String propertyName);
 
+  @NotNull
   Set<OptionEnum> getOptions();
 
   boolean isMixin();
+
+  @NotNull
+  Set<CndNodeType> getParentsNodeTypes();
+
+  @NotNull
+  Set<CndNodeType> getAncestorsNodeTypes();
 
 }
