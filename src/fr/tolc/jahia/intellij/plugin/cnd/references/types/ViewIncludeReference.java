@@ -38,7 +38,8 @@ public class ViewIncludeReference extends PsiReferenceBase<PsiElement> implement
     @Override
     public Object[] getVariants() {
         Project project = myElement.getProject();
-        List<ViewModel> nodeTypeViews = CndProjectFilesUtil.getNodeTypeViews(myElement, viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName());
+        List<ViewModel> nodeTypeViews = CndProjectFilesUtil.getNodeTypeAndAncestorsViews(myElement.getProject(), 
+                viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType());
         List<LookupElement> variants = new ArrayList<LookupElement>();
         for (ViewModel nodeTypeView : nodeTypeViews) {
             List<PsiFile> viewFiles = CndProjectFilesUtil.findViewFiles(project, nodeTypeView);
@@ -56,7 +57,8 @@ public class ViewIncludeReference extends PsiReferenceBase<PsiElement> implement
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         Project project = myElement.getProject();
-        List<PsiFile> viewFiles = CndProjectFilesUtil.findViewFiles(project, viewModel);
+        List<PsiFile> viewFiles = CndProjectFilesUtil.findViewFilesIncludingAncestors(project,
+                viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType(), viewModel.getName());
         List<ResolveResult> results = new ArrayList<ResolveResult>();
         for (PsiFile viewFile : viewFiles) {
             results.add(new PsiElementResolveResult(viewFile));

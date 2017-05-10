@@ -11,4 +11,8 @@ public interface CndSuperType extends CndSuperTypeElement {
 
   PsiReference[] getReferences();
 
+  String getNodeTypeName();
+
+  String getNodeTypeNamespace();
+
 }

@@ -33,7 +33,8 @@ public class ViewJspLineMarkerProvider extends RelatedItemLineMarkerProvider {
                     if (ViewReferenceProvider.TAG_INCLUDE.equals(localName)) {
                         NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(CndIcons.TEMPLATE_INCLUDE);
                         
-                        List<PsiFile> viewFiles = CndProjectFilesUtil.findViewFiles(element.getProject(), viewModel);
+                        List<PsiFile> viewFiles = CndProjectFilesUtil.findViewFilesIncludingAncestors(element.getProject(), 
+                                viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType(), viewModel.getName());
                         if (!viewFiles.isEmpty()) {
                             //TODO: maybe better icon depending on hidden or not?
                             builder.setTargets(viewFiles).setTooltipText("Navigate to view file");

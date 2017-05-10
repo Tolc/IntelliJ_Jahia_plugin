@@ -31,4 +31,12 @@ public class CndSuperTypeImpl extends CndSuperTypeElementImpl implements CndSupe
     return CndPsiImplUtil.getReferences(this);
   }
 
+  public String getNodeTypeName() {
+    return CndPsiImplUtil.getNodeTypeName(this);
+  }
+
+  public String getNodeTypeNamespace() {
+    return CndPsiImplUtil.getNodeTypeNamespace(this);
+  }
+
 }

@@ -106,19 +106,18 @@ public class CndProjectFilesUtil {
     }
 
     @NotNull
-    public static List<ViewModel> getNodeTypeViews(Project project, String templateType) {
+    public static List<ViewModel> getNodeTypeViews(Project project, String namespace, String nodeTypeName, String templateType) {
         List<ViewModel> res = new ArrayList<ViewModel>();
-
-        List<ViewModel> nodeTypeViews = getProjectNodeTypeViews(project);
+        String nodeTypeFolderPath = getNodeTypeFolderPath(getJahiaWorkFolderPath(project), namespace, nodeTypeName);
+        List<ViewModel> nodeTypeViews = getNodeTypeViews(nodeTypeFolderPath, namespace, nodeTypeName);
         for (ViewModel nodeTypeView : nodeTypeViews) {
             if (templateType.equals(nodeTypeView.getType())) {
                 res.add(nodeTypeView);
             }
         }
-
         return res;
     }
-    
+
     @NotNull
     public static List<ViewModel> getNodeTypeViews(PsiElement element, String namespace, String nodeTypeName) {
         return getNodeTypeViews(getNodeTypeFolderPath(element, namespace, nodeTypeName), namespace, nodeTypeName);
@@ -164,6 +163,22 @@ public class CndProjectFilesUtil {
         }
         return res;
     }
+
+    @NotNull
+    public static List<ViewModel> getNodeTypeAndAncestorsViews(Project project, String namespace, String nodeTypeName, String templateType) {
+        CndNodeType nodeType = CndUtil.findNodeType(project, namespace, nodeTypeName);
+        return getNodeTypeAndAncestorsViews(nodeType, templateType);
+    }
+
+    @NotNull
+    public static List<ViewModel> getNodeTypeAndAncestorsViews(CndNodeType nodeType, String templateType) {
+        List<ViewModel> res = new ArrayList<ViewModel>();
+        res.addAll(getNodeTypeViews(nodeType.getProject(), nodeType.getNodeTypeNamespace(), nodeType.getNodeTypeName(), templateType));
+        for (CndNodeType parentNodeType : nodeType.getParentsNodeTypes()) {
+            res.addAll(getNodeTypeAndAncestorsViews(parentNodeType, templateType));
+        }
+        return res;
+    }
     
     @NotNull
     public static List<ViewModel> getProjectNodeTypeViews(Project project) {
@@ -177,13 +192,33 @@ public class CndProjectFilesUtil {
         }
         return res;
     }
+
+    @NotNull
+    public static List<ViewModel> getProjectNodeTypeViews(Project project, String templateType) {
+        List<ViewModel> res = new ArrayList<ViewModel>();
+
+        List<ViewModel> nodeTypeViews = getProjectNodeTypeViews(project);
+        for (ViewModel nodeTypeView : nodeTypeViews) {
+            if (templateType.equals(nodeTypeView.getType())) {
+                res.add(nodeTypeView);
+            }
+        }
+
+        return res;
+    }
     
     @NotNull
     public static List<PsiFile> findViewFiles(Project project, String namespace, String nodeTypeName, String viewType, String viewName) {
         CndNodeType element = CndUtil.findNodeType(project, namespace, nodeTypeName);
+        return findViewFiles(element, viewType, viewName);
+    }
 
+    @NotNull
+    public static List<PsiFile> findViewFiles(CndNodeType element, String viewType, String viewName) {
         List<PsiFile> res = new ArrayList<PsiFile>();
         if (element != null) {
+            String namespace = element.getNodeTypeNamespace();
+            String nodeTypeName = element.getNodeTypeName();
             String viewTypeFolderPath = getNodeTypeViewTypeFolderPath(element, namespace, nodeTypeName, viewType);
             File viewTypeFolder = new File(viewTypeFolderPath);
 
@@ -201,8 +236,12 @@ public class CndProjectFilesUtil {
                 if (viewFiles != null) {
                     for (File viewFile : viewFiles) {
                         VirtualFile virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(viewFile);
-                        PsiFile psiFile = PsiManager.getInstance(element.getProject()).findFile(virtualFile);
-                        res.add(psiFile);
+                        if (virtualFile != null) {
+                            PsiFile psiFile = PsiManager.getInstance(element.getProject()).findFile(virtualFile);
+                            if (psiFile != null) {
+                                res.add(psiFile);
+                            }
+                        }
                     }
                 }
             }
@@ -225,6 +264,29 @@ public class CndProjectFilesUtil {
     @NotNull
     public static List<PsiFile> findViewFiles(Project project, ViewModel viewModel) {
         return findViewFiles(project, viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType(), viewModel.getName());
+    }
+
+    @NotNull
+    public static List<PsiFile> findViewFilesIncludingAncestors(Project project, String namespace, String nodeTypeName, String viewType, String viewName) {
+        return findViewFilesIncludingAncestors(CndUtil.findNodeType(project, namespace, nodeTypeName), viewType, viewName);
+    }
+
+    @NotNull
+    public static List<PsiFile> findViewFilesIncludingAncestors(CndNodeType nodeType, String viewType, String viewName) {
+        List<PsiFile> viewFiles = findViewFiles(nodeType, viewType, viewName);
+        if (!viewFiles.isEmpty()) {
+            return viewFiles;
+        }
+        if (nodeType != null) {
+            for (CndNodeType parentType : nodeType.getParentsNodeTypes()) {
+                List<PsiFile> parentViewFiles = findViewFilesIncludingAncestors(parentType, viewType, viewName);
+                if (!parentViewFiles.isEmpty()) {
+                    return parentViewFiles;
+                }
+            }
+
+        }
+        return viewFiles;
     }
 
     public static ViewModel getViewModelFromPotentialViewFile(VirtualFile virtualFile) {
