@@ -15,7 +15,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.RootNode;
 
 public class JahiaTreeStructure extends SimpleTreeStructure {
     private final SimpleTreeBuilder myTreeBuilder;
-    private final RootNode myRoot = new RootNode();
+    private final RootNode myRoot;
 
     public JahiaTreeStructure(Project project, SimpleTree tree) {
         tree.setRootVisible(false);
@@ -25,6 +25,7 @@ public class JahiaTreeStructure extends SimpleTreeStructure {
         Disposer.register(project, myTreeBuilder);
 
         myTreeBuilder.initRoot();
+        myRoot = new RootNode(project);
         myTreeBuilder.expand(myRoot, null);
     }
 

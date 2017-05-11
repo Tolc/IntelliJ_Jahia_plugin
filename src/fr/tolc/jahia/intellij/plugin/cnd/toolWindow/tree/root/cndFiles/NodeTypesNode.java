@@ -7,6 +7,7 @@ package fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.root.cndFiles;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.CndSimpleNode;
 import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.root.cndFiles.nodeTypes.NodeTypeNode;
 
@@ -15,8 +16,7 @@ public class NodeTypesNode extends CndSimpleNode {
     
     public NodeTypesNode(CndSimpleNode parent) {
         super(parent);
-        //TODO: icon
-//        setIcon(MavenIcons.PhasesClosed);
+        setIcon(CndIcons.NODE_TYPE);
     }
     
     @Override
