@@ -23,7 +23,7 @@ public class NodeTypesNode extends CndSimpleNode {
     public NodeTypesNode(CndSimpleNode parent, boolean isMixin) {
         super(parent);
         this.isMixin = isMixin;
-        setIcon(isMixin? CndIcons.MIXIN : CndIcons.NODE_TYPE);
+        setIcon(isMixin? CndIcons.MIXIN_FOLDER : CndIcons.NODE_TYPE_FOLDER);
 
         CndFileNode cndFileNode = (CndFileNode) parent;
         CndNodeType[] nodeTypes = cndFileNode.getCndFile().findChildrenByClass(CndNodeType.class);
