@@ -7,22 +7,22 @@ package fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.root;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.CndSimpleNode;
 
-public class ActionsNode extends CndSimpleNode {
-//    private List<ActionNode> myActionNodes = new ArrayList<>();
+public class FiltersNode extends CndSimpleNode {
+//    private List<FilterNode> myFilterNodes = new ArrayList<>();
     
-    public ActionsNode(CndSimpleNode parent) {
+    public FiltersNode(CndSimpleNode parent) {
         super(parent);
-        setIcon(CndIcons.JAHIA_ACTION); 
+        setIcon(CndIcons.JAHIA_FILTER); 
     }
 
 //    @Override
 //    protected List<? extends CndSimpleNode> doGetChildren() {
-//        return myActionNodes;
+//        return myFilterNodes;
 //    }
 
     @Override
     public String getName() {
 //        return message("view.node.profiles");
-        return "Jahia Actions";
+        return "Jahia Filters";
     }
 }

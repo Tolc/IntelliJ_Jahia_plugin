@@ -33,7 +33,7 @@ public class CndFileNode extends CndSimpleNode {
 
     @Override
     protected List<? extends CndSimpleNode> doGetChildren() {
-        return ContainerUtil.concat(Collections.singletonList(myNodeTypesNode), Collections.singletonList(myMixinsNode));
+        return ContainerUtil.concat(Collections.singletonList(myMixinsNode), Collections.singletonList(myNodeTypesNode));
     }
 
     public CndFile getCndFile() {

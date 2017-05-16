@@ -17,15 +17,18 @@ import fr.tolc.jahia.intellij.plugin.cnd.CndFileType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndFile;
 import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.root.ActionsNode;
 import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.root.CndFileNode;
+import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.root.FiltersNode;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 
 public class RootNode extends CndSimpleNode {
     private final List<CndFileNode> myCndFileNodes = new ArrayList<>();
     private final ActionsNode myActionsNode;
+    private final FiltersNode myFiltersNode;
 
     public RootNode(Project project) {
         super(null);
         myActionsNode = new ActionsNode(this);
+        myFiltersNode = new FiltersNode(this);
 
         Collection<VirtualFile> projectCndFiles = CndProjectFilesUtil.findFilesInSourcesOnly(project, CndFileType.INSTANCE);
         for (VirtualFile projectCndFile : projectCndFiles) {
@@ -34,7 +37,7 @@ public class RootNode extends CndSimpleNode {
     }
 
     protected List<? extends CndSimpleNode> doGetChildren() {
-        return ContainerUtil.concat(Collections.singletonList(myActionsNode), myCndFileNodes);
+        return ContainerUtil.concat(myCndFileNodes, Collections.singletonList(myActionsNode), Collections.singletonList(myFiltersNode));
     }
 
     protected void add(CndFileNode cndFileNode) {

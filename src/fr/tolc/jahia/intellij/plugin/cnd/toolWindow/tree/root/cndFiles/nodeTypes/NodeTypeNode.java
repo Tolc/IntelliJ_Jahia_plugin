@@ -25,7 +25,6 @@ public class NodeTypeNode extends CndSimpleNode {
         for (CndProperty cndProperty : cndNodeType.getPropertyList()) {
             add(new PropertyNode(cndProperty));
         }
-
     }
 
     @Override
