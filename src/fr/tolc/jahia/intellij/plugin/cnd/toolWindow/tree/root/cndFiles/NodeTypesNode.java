@@ -5,6 +5,8 @@
 package fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.root.cndFiles;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
@@ -27,6 +29,12 @@ public class NodeTypesNode extends CndSimpleNode {
 
         CndFileNode cndFileNode = (CndFileNode) parent;
         CndNodeType[] nodeTypes = cndFileNode.getCndFile().findChildrenByClass(CndNodeType.class);
+        (Arrays.asList(nodeTypes)).sort(new Comparator<CndNodeType>() {
+            @Override
+            public int compare(CndNodeType o1, CndNodeType o2) {
+                return o1.getPresentation().getPresentableText().compareTo(o2.getPresentation().getPresentableText());
+            }
+        });
         for (CndNodeType nodeType : nodeTypes) {
             if ((isMixin && nodeType.isMixin()) || (!isMixin && !nodeType.isMixin())) {
                 add(new NodeTypeNode(nodeType));

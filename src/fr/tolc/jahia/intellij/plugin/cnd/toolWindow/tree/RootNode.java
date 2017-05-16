@@ -7,6 +7,7 @@ package fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.intellij.openapi.project.Project;
@@ -31,6 +32,12 @@ public class RootNode extends CndSimpleNode {
         myFiltersNode = new FiltersNode(this);
 
         Collection<VirtualFile> projectCndFiles = CndProjectFilesUtil.findFilesInSourcesOnly(project, CndFileType.INSTANCE);
+        ((List<VirtualFile>) projectCndFiles).sort(new Comparator<VirtualFile>() {
+            @Override
+            public int compare(VirtualFile o1, VirtualFile o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
         for (VirtualFile projectCndFile : projectCndFiles) {
             add(new CndFileNode((CndFile) PsiManager.getInstance(project).findFile(projectCndFile)));
         }
