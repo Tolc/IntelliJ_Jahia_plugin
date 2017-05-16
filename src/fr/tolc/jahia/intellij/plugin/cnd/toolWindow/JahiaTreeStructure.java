@@ -24,9 +24,9 @@ public class JahiaTreeStructure extends SimpleTreeStructure {
         myTreeBuilder = new SimpleTreeBuilder(tree, (DefaultTreeModel)tree.getModel(), this, null);
         Disposer.register(project, myTreeBuilder);
 
-        myTreeBuilder.initRoot();
         myRoot = new RootNode(project);
         myTreeBuilder.expand(myRoot, null);
+        myTreeBuilder.initRoot();
     }
 
     @Override

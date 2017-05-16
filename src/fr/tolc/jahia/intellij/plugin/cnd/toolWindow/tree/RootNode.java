@@ -31,7 +31,6 @@ public class RootNode extends CndSimpleNode {
         for (VirtualFile projectCndFile : projectCndFiles) {
             add(new CndFileNode((CndFile) PsiManager.getInstance(project).findFile(projectCndFile)));
         }
-
     }
 
     protected List<? extends CndSimpleNode> doGetChildren() {

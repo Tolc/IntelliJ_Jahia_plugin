@@ -10,8 +10,9 @@ import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.CndSimpleNode;
 public class NodeTypeNode extends CndSimpleNode {
     private CndNodeType cndNodeType;
     
-    public NodeTypeNode(CndSimpleNode parent) {
-        super(parent);
+    public NodeTypeNode(CndNodeType cndNodeType) {
+        super(null);
+        this.cndNodeType = cndNodeType;
     }
 
     @Override

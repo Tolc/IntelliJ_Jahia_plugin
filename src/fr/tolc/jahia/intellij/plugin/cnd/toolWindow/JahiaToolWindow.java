@@ -4,9 +4,6 @@
  */
 package fr.tolc.jahia.intellij.plugin.cnd.toolWindow;
 
-import java.awt.*;
-
-import javax.swing.*;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.intellij.openapi.project.Project;
@@ -43,30 +40,30 @@ public class JahiaToolWindow implements ToolWindowFactory {
             //                    ProjectBundle.message("maven.navigator.nothing.to.display", MavenUtil.formatHtmlImage(ADD_ICON_URL),
             //                            MavenUtil.formatHtmlImage(SYNC_ICON_URL)));
 
-            private final JLabel myLabel = new JLabel("There are no CND definitions files to display.");
-
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                //                if (myProjectsManager.hasProjects()) return;
-
-                myLabel.setFont(getFont());
-                myLabel.setBackground(getBackground());
-                myLabel.setForeground(getForeground());
-                Rectangle bounds = getBounds();
-                Dimension size = myLabel.getPreferredSize();
-                myLabel.setBounds(0, 0, size.width, size.height);
-
-                int x = (bounds.width - size.width) / 2;
-                Graphics g2 = g.create(bounds.x + x, bounds.y + 20, bounds.width, bounds.height);
-                try {
-                    myLabel.paint(g2);
-                }
-                finally {
-                    g2.dispose();
-                }
-            }
-            
+//            private final JLabel myLabel = new JLabel("There are no CND definitions files to display.");
+//
+//            @Override
+//            protected void paintComponent(Graphics g) {
+//                super.paintComponent(g);
+//                //                if (myProjectsManager.hasProjects()) return;
+//
+//                myLabel.setFont(getFont());
+//                myLabel.setBackground(getBackground());
+//                myLabel.setForeground(getForeground());
+//                Rectangle bounds = getBounds();
+//                Dimension size = myLabel.getPreferredSize();
+//                myLabel.setBounds(0, 0, size.width, size.height);
+//
+//                int x = (bounds.width - size.width) / 2;
+//                Graphics g2 = g.create(bounds.x + x, bounds.y + 20, bounds.width, bounds.height);
+//                try {
+//                    myLabel.paint(g2);
+//                }
+//                finally {
+//                    g2.dispose();
+//                }
+//            }
+//            
             
         };
         myTree.getEmptyText().clear();
