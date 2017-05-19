@@ -106,7 +106,7 @@ Other files/languages features:
       <html>
           <dl>
               <dt>1.3.2</dt>
-              <dd></dd>
+              <dd>(<strong>feature</strong>) Jahia Tool Window</dd>
           </dl>
 		  <dl>
               <dt>1.3.1</dt>
@@ -223,6 +223,8 @@ Other files/languages features:
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceContributor"/>
     <codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.ViewJspLineMarkerProvider"/>
 
+	<!-- Tool Window -->
+	<toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/old/cnd.png" anchor="right" factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindow"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij.properties">

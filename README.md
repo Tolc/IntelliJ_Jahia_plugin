@@ -75,6 +75,8 @@ Jahia project versions: **6.6.x** or **7.x**
         * Translations keys nodetypes and properties completion
         * Go to namespace, nodetype or property declaration from translations keys (ctrl-click/cmd-click)
         * Error message if adding translations for a choicelist on a non-choicelist property
+ * IntelliJ
+	 * Jahia Tool Window
 
 
 
