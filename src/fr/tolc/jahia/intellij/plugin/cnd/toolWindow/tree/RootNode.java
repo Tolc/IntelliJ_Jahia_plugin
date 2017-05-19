@@ -6,14 +6,12 @@ package fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.util.containers.ContainerUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.CndFileType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndFile;
 import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.root.ActionsNode;
@@ -44,7 +42,9 @@ public class RootNode extends CndSimpleNode {
     }
 
     protected List<? extends CndSimpleNode> doGetChildren() {
-        return ContainerUtil.concat(myCndFileNodes, Collections.singletonList(myActionsNode), Collections.singletonList(myFiltersNode));
+        //TODO: Jahia Actions and Filters classes
+//        return ContainerUtil.concat(myCndFileNodes, Collections.singletonList(myActionsNode), Collections.singletonList(myFiltersNode));
+        return myCndFileNodes;
     }
 
     protected void add(CndFileNode cndFileNode) {
