@@ -1,11 +1,8 @@
-/*
- * Copyright (c) 2017 by Bank Lombard Odier & Co Ltd, Geneva, Switzerland. This software is subject
- * to copyright protection under the laws of Switzerland and other countries. ALL RIGHTS RESERVED.
- */
 package fr.tolc.jahia.intellij.plugin.cnd.toolWindow;
 
 import javax.swing.tree.TreeSelectionModel;
 
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -27,11 +24,16 @@ public class JahiaToolWindow implements ToolWindowFactory {
         myToolWindow = toolWindow;
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
 
-        initTree();
-        initStructure(project);
+        DumbService.getInstance(project).smartInvokeLater(new Runnable() {
+            @Override
+            public void run() {
+                initTree();
+                initStructure(project);
 
-        Content treeContent = contentFactory.createContent(ScrollPaneFactory.createScrollPane(myTree), "", false);
-        myToolWindow.getContentManager().addContent(treeContent);
+                Content treeContent = contentFactory.createContent(ScrollPaneFactory.createScrollPane(myTree), "", false);
+                myToolWindow.getContentManager().addContent(treeContent);
+            }
+        });
     }
 
     private void initTree() {

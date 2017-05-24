@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2017 by Bank Lombard Odier & Co Ltd, Geneva, Switzerland. This software is subject
- * to copyright protection under the laws of Switzerland and other countries. ALL RIGHTS RESERVED.
- */
 package fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.root.cndFiles.nodeTypes;
 
 import java.util.ArrayList;

@@ -1,17 +1,15 @@
-/*
- * Copyright (c) 2017 by Bank Lombard Odier & Co Ltd, Geneva, Switzerland. This software is subject
- * to copyright protection under the laws of Switzerland and other countries. ALL RIGHTS RESERVED.
- */
 package fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.util.containers.ContainerUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.CndFileType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndFile;
 import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.root.ActionsNode;
@@ -26,7 +24,7 @@ public class RootNode extends CndSimpleNode {
 
     public RootNode(Project project) {
         super(null);
-        myActionsNode = new ActionsNode(this);
+        myActionsNode = new ActionsNode(this, project);
         myFiltersNode = new FiltersNode(this);
 
         Collection<VirtualFile> projectCndFiles = CndProjectFilesUtil.findFilesInSourcesOnly(project, CndFileType.INSTANCE);
@@ -43,8 +41,8 @@ public class RootNode extends CndSimpleNode {
 
     protected List<? extends CndSimpleNode> doGetChildren() {
         //TODO: Jahia Actions and Filters classes
-//        return ContainerUtil.concat(myCndFileNodes, Collections.singletonList(myActionsNode), Collections.singletonList(myFiltersNode));
-        return myCndFileNodes;
+        return ContainerUtil.concat(myCndFileNodes, Collections.singletonList(myActionsNode), Collections.singletonList(myFiltersNode));
+//        return myCndFileNodes;
     }
 
     protected void add(CndFileNode cndFileNode) {
