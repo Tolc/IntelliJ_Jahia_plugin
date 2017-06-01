@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.root.actions;
+package fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.root.filters;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,11 +12,11 @@ import com.intellij.psi.search.searches.ClassInheritorsSearch;
 import com.intellij.util.Query;
 import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.CndSimpleNode;
 
-public class ActionNode extends CndSimpleNode {
+public class FilterNode extends CndSimpleNode {
     private final PsiClass psiClass;
-    private List<ActionNode> mySubActionNodes = new ArrayList<>();
+    private List<FilterNode> mySubFilterNodes = new ArrayList<>();
     
-    public ActionNode(PsiClass psiClass) {
+    public FilterNode(PsiClass psiClass) {
         super(null);
         setIcon(AllIcons.FileTypes.Java);
         this.psiClass = psiClass;
@@ -31,7 +31,7 @@ public class ActionNode extends CndSimpleNode {
         });
         for (PsiClass actionClass : actionClassesList) {
             if (this.psiClass.equals(actionClass.getSuperClass())) {
-                add(new ActionNode(actionClass));
+                add(new FilterNode(actionClass));
             }
         }
     }
@@ -47,18 +47,18 @@ public class ActionNode extends CndSimpleNode {
 
     @Override
     protected List<? extends CndSimpleNode> doGetChildren() {
-        return mySubActionNodes;
+        return mySubFilterNodes;
     }
 
-    protected void add(ActionNode actionNode) {
+    protected void add(FilterNode actionNode) {
         actionNode.setParent(this);
-        mySubActionNodes.add(actionNode);
+        mySubFilterNodes.add(actionNode);
         //        childrenChanged();
     }
 
-    public void remove(ActionNode actionNode) {
+    public void remove(FilterNode actionNode) {
         actionNode.setParent(null);
-        mySubActionNodes.remove(actionNode);
+        mySubFilterNodes.remove(actionNode);
         //        childrenChanged();
     }
 }

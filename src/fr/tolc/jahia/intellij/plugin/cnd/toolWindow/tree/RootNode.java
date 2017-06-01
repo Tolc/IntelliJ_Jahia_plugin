@@ -25,7 +25,7 @@ public class RootNode extends CndSimpleNode {
     public RootNode(Project project) {
         super(null);
         myActionsNode = new ActionsNode(this, project);
-        myFiltersNode = new FiltersNode(this);
+        myFiltersNode = new FiltersNode(this, project);
 
         Collection<VirtualFile> projectCndFiles = CndProjectFilesUtil.findFilesInSourcesOnly(project, CndFileType.INSTANCE);
         ((List<VirtualFile>) projectCndFiles).sort(new Comparator<VirtualFile>() {
@@ -40,9 +40,7 @@ public class RootNode extends CndSimpleNode {
     }
 
     protected List<? extends CndSimpleNode> doGetChildren() {
-        //TODO: Jahia Actions and Filters classes
         return ContainerUtil.concat(myCndFileNodes, Collections.singletonList(myActionsNode), Collections.singletonList(myFiltersNode));
-//        return myCndFileNodes;
     }
 
     protected void add(CndFileNode cndFileNode) {
