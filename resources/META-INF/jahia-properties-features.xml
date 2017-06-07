@@ -1,0 +1,11 @@
+<idea-plugin>
+	<extensions defaultExtensionNs="com.intellij">
+		<!-- CND -->
+		<annotator language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndPropertiesAnnotator"/>
+		<codeInsight.lineMarkerProvider language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndPropertiesLineMarkerProvider"/>
+	</extensions>
+
+	<extensions defaultExtensionNs="com.intellij.properties">
+		<implicitPropertyUsageProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.properties.CndImplicitPropertyUsageProvider"/>
+	</extensions>
+</idea-plugin>

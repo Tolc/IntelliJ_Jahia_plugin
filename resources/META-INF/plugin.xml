@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
   <id>fr.tolc.jahia.intellij.plugin</id>
   <name>CND Language / Jahia Framework</name>
   <version>1.3.2</version>
@@ -106,7 +106,7 @@ Other files/languages features:
       <html>
           <dl>
               <dt>1.3.2</dt>
-              <dd>(<strong>feature</strong>) Jahia Tool Window (showing mixins/nodetypes, Jahia actions, and Jahia filters trees)</dd>
+              <dd>JSP features are now optional, allowing the plugin to work under IntelliJ Community Edition (#34)</dd>
           </dl>
       	  <dl>
               <dt>1.3.1</dt>
@@ -160,14 +160,15 @@ Other files/languages features:
   <!-- uncomment to enable plugin in all products
   <depends>com.intellij.modules.lang</depends>
   -->
-  <depends>com.intellij.properties</depends>
-  <depends>com.intellij.jsp</depends>
+  <depends optional="true" config-file="jahia-properties-features.xml">com.intellij.properties</depends>
+  <depends optional="true" config-file="jahia-jsp-features.xml">com.intellij.jsp</depends>
 
   <application-components>
     <!-- Add your application components here -->
   </application-components>
 
   <project-components>
+    <!-- Add your project components here -->
     <component>
       <implementation-class>fr.tolc.jahia.intellij.plugin.cnd.CndProjectComponent</implementation-class>
     </component>
@@ -185,14 +186,10 @@ Other files/languages features:
     <!--<colorSettingsPage implementation="fr.tolc.jahia.intellij.plugin.cnd.CndColorSettingsPage"/>-->
     <annotator language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJavaAnnotator"/>
     <annotator language="XML" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndXmlAnnotator"/>
-    <!--<annotator language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJspAnnotator"/>-->
-    <annotator language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndPropertiesAnnotator"/>
     <annotator language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndCndAnnotator"/>
     <codeInsight.lineMarkerProvider language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndCndLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndJavaLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="XML" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndXmlLineMarkerProvider"/>
-    <codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndXmlLineMarkerProvider"/>
-    <codeInsight.lineMarkerProvider language="Properties" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndPropertiesLineMarkerProvider"/>
     <completion.contributor language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndCompletionContributor"/>
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.CndReferenceContributor"/>
     <lang.findUsagesProvider language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFindUsagesProvider"/>
@@ -218,19 +215,10 @@ Other files/languages features:
                      <!--implementationClass="fr.tolc.jahia.intellij.plugin.cnd.inspections.UnknownJavaCndNodeTypeInspection"/>-->
 
     <!-- Views -->
-    <completion.contributor language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.completion.JspCompletionContributor"/>
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceContributor"/>
-    <codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.ViewJspLineMarkerProvider"/>
 
     <!-- Tool Window -->
-    <toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/old/cnd.png" anchor="right" factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindow"/>
+    <!--<toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/old/cnd.png" anchor="right" factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindow"/>-->
   </extensions>
 
-  <extensions defaultExtensionNs="com.intellij.properties">
-    <implicitPropertyUsageProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.properties.CndImplicitPropertyUsageProvider"/>
-  </extensions>
-
-  <extensions defaultExtensionNs="com.intellij.javaee.jsp">
-    <elImplicitVariablesProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.javaee.jsp.CndJspElVariablesProvider"/>
-  </extensions>
 </idea-plugin>

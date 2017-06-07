@@ -1,0 +1,15 @@
+<idea-plugin>
+	<extensions defaultExtensionNs="com.intellij">
+		<!-- CND -->
+		<!--<annotator language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJspAnnotator"/>-->
+		<codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndXmlLineMarkerProvider"/>
+
+		<!-- Views -->
+		<completion.contributor language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.completion.JspCompletionContributor"/>
+		<codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.ViewJspLineMarkerProvider"/>
+	</extensions>
+
+	<extensions defaultExtensionNs="com.intellij.javaee.jsp">
+		<elImplicitVariablesProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.javaee.jsp.CndJspElVariablesProvider"/>
+	</extensions>
+</idea-plugin>
