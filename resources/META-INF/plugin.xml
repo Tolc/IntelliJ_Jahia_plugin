@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>fr.tolc.jahia.intellij.plugin</id>
   <name>CND Language / Jahia Framework</name>
-  <version>1.3.2</version>
+  <version>1.3.3</version>
   <vendor email="contact@thomas-coquel.fr" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
 
   <description><![CDATA[
@@ -104,6 +104,10 @@ Other files/languages features:
   
   <change-notes><![CDATA[
       <html>
+          <dl>
+              <dt>1.3.3</dt>
+              <dd>(<strong>feature</strong>) Jahia Tool Window (showing mixins/nodetypes, Jahia actions, and Jahia filters trees)</dd>
+          </dl>
           <dl>
               <dt>1.3.2</dt>
               <dd>JSP features are now optional, allowing the plugin to work under IntelliJ Community Edition (#34)</dd>
@@ -218,7 +222,7 @@ Other files/languages features:
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceContributor"/>
 
     <!-- Tool Window -->
-    <!--<toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/old/cnd.png" anchor="right" factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindow"/>-->
+    <toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/old/cnd.png" anchor="right" factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindow"/>
   </extensions>
 
 </idea-plugin>
