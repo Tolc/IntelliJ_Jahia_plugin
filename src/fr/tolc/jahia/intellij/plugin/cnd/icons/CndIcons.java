@@ -19,4 +19,7 @@ public class CndIcons {
     
     public static final Icon TEMPLATE_INCLUDE = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/templateInclude.png");
     public static final Icon TEMPLATE_MODULE = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/templateModule.png");
+
+    public static final Icon JAHIA_ACTION = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/jahiaAction.png");
+    public static final Icon JAHIA_FILTER = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/jahiaFilter.png");
 }
