@@ -53,7 +53,7 @@ public class CndCndAnnotator implements Annotator {
                             if (cndNamespace == null) {
                                 holder.createErrorAnnotation(namespaceEl.getTextRange(), "Unresolved CND namespace");
                             } else {
-                                String jahiaWorkFolderPath = CndProjectFilesUtil.getJahiaWorkFolderPath(element.getProject());
+                                String jahiaWorkFolderPath = CndProjectFilesUtil.getJahiaWorkFolderPath(element);
                                 if (jahiaWorkFolderPath != null) {
                                     Annotation newViewAnnotation = holder.createInfoAnnotation(element.getTextRange(), "Create a new view for " + namespace + ":" + nodeTypeName);
                                     newViewAnnotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);

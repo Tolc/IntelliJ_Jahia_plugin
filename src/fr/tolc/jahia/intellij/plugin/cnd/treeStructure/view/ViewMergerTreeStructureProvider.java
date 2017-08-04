@@ -61,7 +61,7 @@ public class ViewMergerTreeStructureProvider implements TreeStructureProvider, D
 
                             ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(virtualFile);
                             if (viewModel != null && !alreadyDoneViews.contains(viewModel.getName())) {
-                                List<PsiFile> views = CndProjectFilesUtil.findViewFiles(file.getProject(), viewModel);
+                                List<PsiFile> views = CndProjectFilesUtil.findViewFiles(CndProjectFilesUtil.getModuleForFile(file.getProject(), virtualFile), viewModel);
 
                                 Collection<BasePsiNode<? extends PsiElement>> viewNodes = findViewsIn(children, views);
                                 if (!viewNodes.isEmpty()) {

@@ -19,6 +19,9 @@ import java.util.zip.ZipEntry;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.extensions.PluginId;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -183,5 +186,9 @@ public class CndPluginUtil {
             }
         });
         toDelete.delete();
+    }
+    
+    public static Module[] getProjectModules(Project project) {
+        return ModuleManager.getInstance(project).getModules();
     }
 }

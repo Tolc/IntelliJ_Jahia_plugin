@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -22,7 +25,9 @@ import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,51 +39,81 @@ public class CndProjectFilesUtil {
     private static final String JAHIA_6_PATH = JEE_MAIN + "/" + JAHIA_6_WEBAPP;
     private static final String JAHIA_7_PATH = JEE_MAIN + "/" + JAHIA_7_RESOURCES;
 
-    private static String jahiaWorkFolderPath;
+    private static final Map<Module, String> JAHIA_WORK_FOLDERS_PATH_MAP = new HashMap<>();
     
     private CndProjectFilesUtil() {
     }
 
-    public static String getJahiaWorkFolderPath(Project project) {
-        if (jahiaWorkFolderPath == null) {
-            if (project != null) {
-                Collection<VirtualFile> projectCndFiles = getProjectCndFiles(project);
+    @Nullable
+    public static String getJahiaWorkFolderPath(Module module) {
+        if (!JAHIA_WORK_FOLDERS_PATH_MAP.containsKey(module)) {
+            if (module != null) {
+                Collection<VirtualFile> projectCndFiles = getModuleCndFiles(module);
                 for (VirtualFile cndFile : projectCndFiles) {
                     String path = cndFile.getPath();
+                    String jahiaWorkFolderPath = null;
                     if (path.contains(JAHIA_6_PATH)) {
                         jahiaWorkFolderPath = path.substring(0, path.lastIndexOf(JAHIA_6_PATH) + JAHIA_6_PATH.length());
                     } else if (path.contains(JAHIA_7_PATH)) {
                         jahiaWorkFolderPath = path.substring(0, path.lastIndexOf(JAHIA_7_PATH) + JAHIA_7_PATH.length());
                     }
+
+                    if (StringUtils.isNotBlank(jahiaWorkFolderPath)) {
+                        JAHIA_WORK_FOLDERS_PATH_MAP.put(module, jahiaWorkFolderPath);
+                    }
                 }
             }
         }
-        return jahiaWorkFolderPath;
+        return JAHIA_WORK_FOLDERS_PATH_MAP.get(module);
+    }
+
+    @Nullable
+    public static String getJahiaWorkFolderPath(PsiElement element) {
+        return getJahiaWorkFolderPath(getModuleForFile(element.getProject(), element.getContainingFile().getVirtualFile()));
     }
     
+    @NotNull
+    @Contract(pure = true)
     public static String getNodeTypeFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName) {
         return jahiaWorkFolderPath + "/" + namespace + "_" + nodeTypeName;
     }
+    @NotNull
     public static String getNodeTypeFolderPath(PsiElement element, String namespace, String nodeTypeName) {
-        return getNodeTypeFolderPath(getJahiaWorkFolderPath(element.getProject()), namespace, nodeTypeName);
+        return getNodeTypeFolderPath(getJahiaWorkFolderPath(element), namespace, nodeTypeName);
+    }
+    @NotNull
+    public static String getNodeTypeFolderPath(Module module, String namespace, String nodeTypeName) {
+        return getNodeTypeFolderPath(getJahiaWorkFolderPath(module), namespace, nodeTypeName);
     }
 
+    @NotNull
+    @Contract(pure = true)
     public static String getNodeTypeDefaultViewsFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName) {
         return getNodeTypeViewsFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName, "html");
     }
 
+    @NotNull
+    @Contract(pure = true)
     public static String getNodeTypeViewsFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName, String viewType) {
         return getNodeTypeFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName) + "/" + viewType;
     }
     
+    @NotNull
     public static String getNodeTypeViewTypeFolderPath(PsiElement element, String namespace, String nodeTypeName, String viewType) {
         return getNodeTypeFolderPath(element, namespace, nodeTypeName) + "/" + viewType;
     }
+    @NotNull
+    public static String getNodeTypeViewTypeFolderPath(Module module, String namespace, String nodeTypeName, String viewType) {
+        return getNodeTypeFolderPath(module, namespace, nodeTypeName) + "/" + viewType;
+    }
 
+    @NotNull
+    @Contract(pure = true)
     public static String getNodeTypeViewTypeFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName, String viewType) {
         return getNodeTypeFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName) + "/" + viewType;
     }
 
+    @NotNull
     public static String getNodeTypeViewFileName(String nodeTypeName, String viewName, String viewLanguage, boolean isHiddenView) {
         String fileName = nodeTypeName + ".";
         if (isHiddenView && !viewName.contains("hidden.") && !viewName.contains(".hidden")) {
@@ -108,12 +143,14 @@ public class CndProjectFilesUtil {
     @NotNull
     public static List<ViewModel> getNodeTypeViews(Project project, String namespace, String nodeTypeName, String templateType) {
         List<ViewModel> res = new ArrayList<ViewModel>();
-        String nodeTypeFolderPath = getNodeTypeFolderPath(getJahiaWorkFolderPath(project), namespace, nodeTypeName);
-        List<ViewModel> nodeTypeViews = getNodeTypeViews(nodeTypeFolderPath, namespace, nodeTypeName);
-        for (ViewModel nodeTypeView : nodeTypeViews) {
-            if (templateType.equals(nodeTypeView.getType())) {
-                res.add(nodeTypeView);
-            }
+        for (Module module : CndPluginUtil.getProjectModules(project)) {
+            String nodeTypeFolderPath = getNodeTypeFolderPath(getJahiaWorkFolderPath(module), namespace, nodeTypeName);
+            List<ViewModel> nodeTypeViews = getNodeTypeViews(nodeTypeFolderPath, namespace, nodeTypeName);
+            for (ViewModel nodeTypeView : nodeTypeViews) {
+                if (templateType.equals(nodeTypeView.getType())) {
+                    res.add(nodeTypeView);
+                }
+            }    
         }
         return res;
     }
@@ -185,10 +222,12 @@ public class CndProjectFilesUtil {
         List<ViewModel> res = new ArrayList<ViewModel>();
         List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project);
         for (CndNodeType nodeType : nodeTypes) {
-            String namespace = nodeType.getNodeTypeNamespace();
-            String nodeTypeName = nodeType.getNodeTypeName();
-            String nodeTypeFolderPath = getNodeTypeFolderPath(getJahiaWorkFolderPath(project), namespace, nodeTypeName);
-            res.addAll(getNodeTypeViews(nodeTypeFolderPath, namespace, nodeTypeName));
+            for (Module module : CndPluginUtil.getProjectModules(project)) {
+                String namespace = nodeType.getNodeTypeNamespace();
+                String nodeTypeName = nodeType.getNodeTypeName();
+                String nodeTypeFolderPath = getNodeTypeFolderPath(getJahiaWorkFolderPath(module), namespace, nodeTypeName);
+                res.addAll(getNodeTypeViews(nodeTypeFolderPath, namespace, nodeTypeName));
+            }
         }
         return res;
     }
@@ -208,18 +247,27 @@ public class CndProjectFilesUtil {
     }
     
     @NotNull
-    public static List<PsiFile> findViewFiles(Project project, String namespace, String nodeTypeName, String viewType, String viewName) {
-        CndNodeType element = CndUtil.findNodeType(project, namespace, nodeTypeName);
-        return findViewFiles(element, viewType, viewName);
+    public static List<PsiFile> findViewFiles(Module module, String namespace, String nodeTypeName, String viewType, String viewName) {
+        CndNodeType element = CndUtil.findNodeType(module.getProject(), namespace, nodeTypeName);
+        return findViewFiles(module, element, viewType, viewName);
     }
 
     @NotNull
-    public static List<PsiFile> findViewFiles(CndNodeType element, String viewType, String viewName) {
+    public static List<PsiFile> findViewFiles(Project project, String namespace, String nodeTypeName, String viewType, String viewName) {
+        List<PsiFile> res = new ArrayList<PsiFile>();
+        for (Module module : CndPluginUtil.getProjectModules(project)) {
+            res.addAll(findViewFiles(module, namespace, nodeTypeName, viewType, viewName));
+        }
+        return res;
+    }
+
+    @NotNull
+    public static List<PsiFile> findViewFiles(Module module, CndNodeType element, String viewType, String viewName) {
         List<PsiFile> res = new ArrayList<PsiFile>();
         if (element != null) {
             String namespace = element.getNodeTypeNamespace();
             String nodeTypeName = element.getNodeTypeName();
-            String viewTypeFolderPath = getNodeTypeViewTypeFolderPath(element, namespace, nodeTypeName, viewType);
+            String viewTypeFolderPath = getNodeTypeViewTypeFolderPath(module, namespace, nodeTypeName, viewType);
             File viewTypeFolder = new File(viewTypeFolderPath);
 
             if (viewTypeFolder.exists() && viewTypeFolder.isDirectory()) {
@@ -250,6 +298,15 @@ public class CndProjectFilesUtil {
     }
 
     @NotNull
+    public static List<PsiFile> findViewFiles(CndNodeType element, String viewType, String viewName) {
+        List<PsiFile> res = new ArrayList<PsiFile>();
+        for (Module module : CndPluginUtil.getProjectModules(element.getProject())) {
+            res.addAll(findViewFiles(module, element, viewType, viewName));
+        }
+        return res;
+    }
+    
+    @NotNull
     public static List<PsiFile> findViewFiles(Project project, String viewType, String viewName) {
         List<PsiFile> res = new ArrayList<PsiFile>();
         List<ViewModel> projectNodeTypeViews = getProjectNodeTypeViews(project);
@@ -262,8 +319,17 @@ public class CndProjectFilesUtil {
     }
 
     @NotNull
+    public static List<PsiFile> findViewFiles(Module module, ViewModel viewModel) {
+        return findViewFiles(module, viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType(), viewModel.getName());
+    }
+
+    @NotNull
     public static List<PsiFile> findViewFiles(Project project, ViewModel viewModel) {
-        return findViewFiles(project, viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType(), viewModel.getName());
+        List<PsiFile> res = new ArrayList<PsiFile>();
+        for (Module module : CndPluginUtil.getProjectModules(project)) {
+            res.addAll(findViewFiles(module, viewModel));
+        }
+        return res;
     }
 
     @NotNull
@@ -289,6 +355,7 @@ public class CndProjectFilesUtil {
         return viewFiles;
     }
 
+    @Nullable
     public static ViewModel getViewModelFromPotentialViewFile(VirtualFile virtualFile) {
         if (!virtualFile.isDirectory()) {
             String name = virtualFile.getName();
@@ -327,14 +394,34 @@ public class CndProjectFilesUtil {
         return null;
     }
 
+    @NotNull
     public static Collection<VirtualFile> getProjectCndFiles(Project project) {
         return FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
     }
 
+    @NotNull
+    public static Collection<VirtualFile> getModuleCndFiles(Module module) {
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(module.getProject()));
+
+        Collection<VirtualFile> res = new ArrayList<VirtualFile>();
+        for (VirtualFile virtualFile : virtualFiles) {
+            if (module.equals(getModuleForFile(module.getProject(), virtualFile))) {
+                res.add(virtualFile);
+            }
+        }
+        return res;
+    }
+
+    @Nullable
+    public static Module getModuleForFile(Project project, VirtualFile virtualFile) {
+        return FileIndexFacade.getInstance(project).getModuleForFile(virtualFile);
+    }
+
+    @NotNull
     public static Collection<VirtualFile> findFilesInSourcesOnly(Project project, FileType fileType) {
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, fileType, GlobalSearchScope.allScope(project));
-        Collection<VirtualFile> res = new ArrayList<VirtualFile>();
         
+        Collection<VirtualFile> res = new ArrayList<VirtualFile>();
         for (VirtualFile virtualFile : virtualFiles) {
             if (FileIndexFacade.getInstance(project).getModuleForFile(virtualFile) != null) {
                res.add(virtualFile);
