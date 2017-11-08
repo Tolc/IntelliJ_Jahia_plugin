@@ -1,13 +1,14 @@
 package fr.tolc.jahia.intellij.plugin.cnd.model;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang.StringUtils;
 
 public class NodeTypeModel {
     private static final String NAMESPACE_PART = "[A-Za-z][A-Za-z0-9]*";
     private static final String NODETYPE_PART = "[A-Za-z][A-Za-z0-9]*";
+    public static final Pattern nodeTypeGlobalRegex = Pattern.compile(NAMESPACE_PART + ":" + NODETYPE_PART);
     private static final Pattern nodeTypeRegex = Pattern.compile("^" + NAMESPACE_PART + ":" + NODETYPE_PART + "$");
     private static final Pattern nodeTypeFolderRegex = Pattern.compile("^" + NAMESPACE_PART + "_" + NODETYPE_PART + "$");
 
@@ -86,5 +87,10 @@ public class NodeTypeModel {
             return namespace.equals(((NodeTypeModel) obj).namespace) && nodeTypeName.equals(((NodeTypeModel) obj).nodeTypeName);
         }
         return super.equals(obj);
+    }
+
+    @Override
+    public String toString() {
+        return this.getNamespace() + ":" + this.getNodeTypeName();
     }
 }

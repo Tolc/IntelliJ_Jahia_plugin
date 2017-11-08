@@ -9,50 +9,60 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlAttributeValue;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
-import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
-import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeQuickFix;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.regex.Matcher;
+
+import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
+
 public class CndXmlAnnotator implements Annotator {
+
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         if (element instanceof XmlAttributeValue) {
             String value = ((XmlAttributeValue) element).getValue();
-            NodeTypeModel nodeTypeModel = null;
-            try {
-                nodeTypeModel = new NodeTypeModel(value);
-            } catch (IllegalArgumentException e) {
-                //Nothing to do
-            }
 
-            if (nodeTypeModel != null) {
-                String namespace = nodeTypeModel.getNamespace();
-                String nodeTypeName = nodeTypeModel.getNodeTypeName();
+            Matcher matcher = nodeTypeGlobalRegex.matcher(value);
+            while (matcher.find()) {
+                String group = matcher.group();
 
-                Project project = element.getProject();
-                int offset = element.getTextRange().getStartOffset() + 1;   //because of starting "
-                TextRange namespaceRange = new TextRange(offset, offset + namespace.length());
-                TextRange colonRange = new TextRange(offset + namespace.length(), offset + namespace.length() + 1);
-                TextRange nodeTypeNameRange = new TextRange(offset + namespace.length() + 1, element.getTextRange().getEndOffset() - 1); //because of ending "
+                NodeTypeModel nodeTypeModel = null;
+                try {
+                    nodeTypeModel = new NodeTypeModel(group);
+                } catch (IllegalArgumentException e) {
+                    //Nothing to do
+                }
 
-                //Color ":"
-                Annotation colonAnnotation = holder.createInfoAnnotation(colonRange, null);
-                colonAnnotation.setTextAttributes(DefaultLanguageHighlighterColors.LINE_COMMENT);
+                if (nodeTypeModel != null) {
+                    String namespace = nodeTypeModel.getNamespace();
+                    String nodeTypeName = nodeTypeModel.getNodeTypeName();
 
-                if (CndUtil.findNamespace(project, namespace) != null) {
-                    Annotation namespaceAnnotation = holder.createInfoAnnotation(namespaceRange, null);
-                    namespaceAnnotation.setTextAttributes(CndSyntaxHighlighter.NAMESPACE);
-
+//                    if (CndUtil.findNamespace(project, namespace) != null) {
+                    Project project = element.getProject();
                     if (CndUtil.findNodeType(project, namespace, nodeTypeName) != null) {
+                        int offset = element.getTextRange().getStartOffset() + 1 + matcher.start();   //+1 because of starting "
+                        TextRange namespaceRange = new TextRange(offset, offset + namespace.length());
+                        TextRange colonRange = new TextRange(offset + namespace.length(), offset + namespace.length() + 1);
+                        TextRange nodeTypeNameRange = new TextRange(offset + namespace.length() + 1, offset + group.length()); //because of ending "
+
+                        //Color ":"
+                        Annotation colonAnnotation = holder.createInfoAnnotation(colonRange, null);
+                        colonAnnotation.setTextAttributes(DefaultLanguageHighlighterColors.LINE_COMMENT);
+
+                        Annotation namespaceAnnotation = holder.createInfoAnnotation(namespaceRange, null);
+                        namespaceAnnotation.setTextAttributes(CndSyntaxHighlighter.NAMESPACE);
+
                         Annotation nodeTypeNameAnnotation = holder.createInfoAnnotation(nodeTypeNameRange, null);
                         nodeTypeNameAnnotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
-                    } else {
-                        holder.createWarningAnnotation(nodeTypeNameRange, "Unresolved CND node type").registerFix(new CreateNodeTypeQuickFix(namespace, nodeTypeName));
-                    }
+//                        } else {
+//                            holder.createWarningAnnotation(nodeTypeNameRange, "Unresolved CND node type").registerFix(new CreateNodeTypeQuickFix(namespace, nodeTypeName));
+//                        }
 //                } else {
 //                    holder.createErrorAnnotation(namespaceRange, "Unresolved CND namespace");
+                    }
                 }
             }
         }
