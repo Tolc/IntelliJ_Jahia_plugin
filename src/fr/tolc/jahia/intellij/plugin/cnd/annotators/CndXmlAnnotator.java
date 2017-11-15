@@ -7,7 +7,7 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.xml.XmlAttributeValue;
+import com.intellij.psi.xml.XmlElementType;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
@@ -22,8 +22,8 @@ public class CndXmlAnnotator implements Annotator {
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
-        if (element instanceof XmlAttributeValue) {
-            String value = ((XmlAttributeValue) element).getValue();
+        if (element.getNode() != null && XmlElementType.XML_ATTRIBUTE_VALUE_TOKEN.equals(element.getNode().getElementType())) {
+            String value = element.getText();
 
             Matcher matcher = nodeTypeGlobalRegex.matcher(value);
             while (matcher.find()) {
@@ -43,10 +43,10 @@ public class CndXmlAnnotator implements Annotator {
 //                    if (CndUtil.findNamespace(project, namespace) != null) {
                     Project project = element.getProject();
                     if (CndUtil.findNodeType(project, namespace, nodeTypeName) != null) {
-                        int offset = element.getTextRange().getStartOffset() + 1 + matcher.start();   //+1 because of starting "
+                        int offset = element.getTextRange().getStartOffset() + matcher.start();
                         TextRange namespaceRange = new TextRange(offset, offset + namespace.length());
                         TextRange colonRange = new TextRange(offset + namespace.length(), offset + namespace.length() + 1);
-                        TextRange nodeTypeNameRange = new TextRange(offset + namespace.length() + 1, offset + group.length()); //because of ending "
+                        TextRange nodeTypeNameRange = new TextRange(offset + namespace.length() + 1, offset + group.length());
 
                         //Color ":"
                         Annotation colonAnnotation = holder.createInfoAnnotation(colonRange, null);

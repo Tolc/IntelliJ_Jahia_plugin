@@ -1,7 +1,7 @@
 <idea-plugin>
 	<extensions defaultExtensionNs="com.intellij">
 		<!-- CND -->
-		<!--<annotator language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJspAnnotator"/>-->
+		<annotator language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJspAnnotator"/>
 		<codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndXmlLineMarkerProvider"/>
 
 		<!-- Views -->
