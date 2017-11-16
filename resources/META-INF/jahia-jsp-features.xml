@@ -7,6 +7,8 @@
 		<!-- Views -->
 		<completion.contributor language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.completion.JspCompletionContributor"/>
 		<codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.ViewJspLineMarkerProvider"/>
+
+		<psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.CndJspReferenceContributor"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.javaee.jsp">
