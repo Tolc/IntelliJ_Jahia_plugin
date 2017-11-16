@@ -1,5 +1,9 @@
 package fr.tolc.jahia.intellij.plugin.cnd.annotators;
 
+import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
+
+import java.util.regex.Matcher;
+
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -13,16 +17,17 @@ import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.regex.Matcher;
-
-import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
-
 public class CndXmlAnnotator implements Annotator {
 
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
-        if (element.getNode() != null && XmlElementType.XML_ATTRIBUTE_VALUE_TOKEN.equals(element.getNode().getElementType())) {
+        if (element.getNode() != null 
+                && (
+                        XmlElementType.XML_ATTRIBUTE_VALUE_TOKEN.equals(element.getNode().getElementType()) 
+                        || XmlElementType.XML_TEXT.equals(element.getNode().getElementType())
+                )
+        ) {
             String value = element.getText();
 
             Matcher matcher = nodeTypeGlobalRegex.matcher(value);

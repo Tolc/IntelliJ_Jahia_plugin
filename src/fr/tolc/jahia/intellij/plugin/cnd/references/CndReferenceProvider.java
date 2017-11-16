@@ -1,5 +1,11 @@
 package fr.tolc.jahia.intellij.plugin.cnd.references;
 
+import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+
 import com.intellij.lang.properties.psi.impl.PropertyKeyImpl;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -7,6 +13,7 @@ import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.xml.XmlAttributeValue;
+import com.intellij.psi.xml.XmlToken;
 import com.intellij.util.ProcessingContext;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.model.PropertiesFileCndKeyModel;
@@ -18,12 +25,6 @@ import fr.tolc.jahia.intellij.plugin.cnd.references.types.CndNamespaceIdentifier
 import fr.tolc.jahia.intellij.plugin.cnd.references.types.CndNodeTypeIdentifierReference;
 import fr.tolc.jahia.intellij.plugin.cnd.references.types.CndPropertyIdentifierReference;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-
-import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
 
 public class CndReferenceProvider extends PsiReferenceProvider {
 
@@ -107,8 +108,10 @@ public class CndReferenceProvider extends PsiReferenceProvider {
             return  element.getText();
         } else if (element instanceof CndSubNodeDefaultType) {   //Cnd subnode default type
             return  element.getText();
-        } else if (element instanceof XmlAttributeValue) {    //XML
+        } else if (element instanceof XmlAttributeValue) {    //XML Attribute value
             return ((XmlAttributeValue) element).getValue();
+        } else if (element instanceof XmlToken) {           //XML Text
+            return element.getText();
         }
         return null;
     }
@@ -124,8 +127,10 @@ public class CndReferenceProvider extends PsiReferenceProvider {
             return 0;
         } else if (element instanceof CndSubNodeDefaultType) {   //Cnd subnode default type
             return 0;
-        } else if (element instanceof XmlAttributeValue) {    //XML
+        } else if (element instanceof XmlAttributeValue) {    //XML Attribute value
             return 1;
+        } else if (element instanceof XmlToken) {           //XML Text
+            return 0;
         }
         return 0;
     }
