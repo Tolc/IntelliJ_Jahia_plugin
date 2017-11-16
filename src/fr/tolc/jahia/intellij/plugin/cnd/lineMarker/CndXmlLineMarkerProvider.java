@@ -1,29 +1,31 @@
 package fr.tolc.jahia.intellij.plugin.cnd.lineMarker;
 
+import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
+
+import java.util.Collection;
+import java.util.regex.Matcher;
+
+import javax.swing.*;
+
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlAttributeValue;
+import com.intellij.psi.xml.XmlToken;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.util.Collection;
-import java.util.regex.Matcher;
-
-import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
-
 public class CndXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
-        if (element instanceof XmlAttributeValue) {
-            String value = ((XmlAttributeValue) element).getValue();
+        if (element instanceof XmlAttributeValue || element instanceof XmlToken) {
+            String value = element.getText();
 
             Matcher matcher = nodeTypeGlobalRegex.matcher(value);
             while (matcher.find()) {
