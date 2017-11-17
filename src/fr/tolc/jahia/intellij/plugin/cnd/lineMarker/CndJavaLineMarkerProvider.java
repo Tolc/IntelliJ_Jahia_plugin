@@ -1,6 +1,9 @@
 package fr.tolc.jahia.intellij.plugin.cnd.lineMarker;
 
+import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
+
 import java.util.Collection;
+import java.util.regex.Matcher;
 
 import javax.swing.Icon;
 
@@ -23,31 +26,39 @@ public class CndJavaLineMarkerProvider extends RelatedItemLineMarkerProvider {
         if (element instanceof PsiLiteralExpression) {
             PsiLiteralExpression literalExpression = (PsiLiteralExpression) element;
             String value = literalExpression.getValue() instanceof String ? (String) literalExpression.getValue() : null;
-            NodeTypeModel nodeTypeModel = null;
-            try {
-                nodeTypeModel = new NodeTypeModel(value);
-            } catch (IllegalArgumentException e) {
-                //Nothing to do
-            }
-
-            if (nodeTypeModel != null) {
-                String namespace = nodeTypeModel.getNamespace();
-                String nodeTypeName = nodeTypeModel.getNodeTypeName();
-
-                Project project = element.getProject();
-                CndNodeType nodeType = CndUtil.findNodeType(project, namespace, nodeTypeName);
-                if (nodeType != null) {
-                    Icon icon;
-                    if (nodeType.isMixin()) {
-                        icon = CndIcons.MIXIN;
-                    } else {
-                        icon = CndIcons.NODE_TYPE;
+            
+            if (value != null) {
+                Matcher matcher = nodeTypeGlobalRegex.matcher(value);
+                while (matcher.find()) {
+                    String group = matcher.group();
+                    
+                    NodeTypeModel nodeTypeModel = null;
+                    try {
+                        nodeTypeModel = new NodeTypeModel(group);
+                    } catch (IllegalArgumentException e) {
+                        //Nothing to do
                     }
-                    NavigationGutterIconBuilder<PsiElement> builder =
-                            NavigationGutterIconBuilder.create(icon).
-                                    setTarget(nodeType).
-                                    setTooltipText("Navigate to node type definition");
-                    result.add(builder.createLineMarkerInfo(element));
+
+                    if (nodeTypeModel != null) {
+                        String namespace = nodeTypeModel.getNamespace();
+                        String nodeTypeName = nodeTypeModel.getNodeTypeName();
+
+                        Project project = element.getProject();
+                        CndNodeType nodeType = CndUtil.findNodeType(project, namespace, nodeTypeName);
+                        if (nodeType != null) {
+                            Icon icon;
+                            if (nodeType.isMixin()) {
+                                icon = CndIcons.MIXIN;
+                            } else {
+                                icon = CndIcons.NODE_TYPE;
+                            }
+                            NavigationGutterIconBuilder<PsiElement> builder =
+                                    NavigationGutterIconBuilder.create(icon).
+                                            setTarget(nodeType).
+                                            setTooltipText("Navigate to node type [" + nodeTypeModel.toString() + "] definition");
+                            result.add(builder.createLineMarkerInfo(element));
+                        }
+                    }
                 }
             }
         }

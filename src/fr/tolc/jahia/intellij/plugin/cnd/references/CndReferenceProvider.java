@@ -12,7 +12,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
-import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlToken;
 import com.intellij.util.ProcessingContext;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
@@ -108,8 +107,8 @@ public class CndReferenceProvider extends PsiReferenceProvider {
             return  element.getText();
         } else if (element instanceof CndSubNodeDefaultType) {   //Cnd subnode default type
             return  element.getText();
-        } else if (element instanceof XmlAttributeValue) {    //XML Attribute value
-            return ((XmlAttributeValue) element).getValue();
+//        } else if (element instanceof XmlAttributeValue) {    //XML Attribute value
+//            return ((XmlAttributeValue) element).getValue();
         } else if (element instanceof XmlToken) {           //XML Text
             return element.getText();
         }
@@ -127,8 +126,8 @@ public class CndReferenceProvider extends PsiReferenceProvider {
             return 0;
         } else if (element instanceof CndSubNodeDefaultType) {   //Cnd subnode default type
             return 0;
-        } else if (element instanceof XmlAttributeValue) {    //XML Attribute value
-            return 1;
+//        } else if (element instanceof XmlAttributeValue) {    //XML Attribute value
+//            return 1;
         } else if (element instanceof XmlToken) {           //XML Text
             return 0;
         }
