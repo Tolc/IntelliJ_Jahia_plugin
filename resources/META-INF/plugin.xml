@@ -107,6 +107,7 @@ Other files/languages features:
       	  <dl>
               <dt>1.3.4</dt>
               <dd>(<strong>feature</strong>) Jahia Tool Window (showing mixins/nodetypes, Jahia actions, and Jahia filters trees)</dd>
+              <dd>(<strong>enhancement</strong>) Better nodetypes reference and completion in JSP: nodetypes are now recognized in EL expressions and tag text</dd>
           </dl>
           <dl>
               <dt>1.3.3</dt>
