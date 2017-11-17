@@ -25,7 +25,7 @@ public class CndXmlAnnotator implements Annotator {
         if (element.getNode() != null 
                 && (
                         XmlElementType.XML_ATTRIBUTE_VALUE_TOKEN.equals(element.getNode().getElementType()) 
-                        || XmlElementType.XML_TEXT.equals(element.getNode().getElementType())
+                        || XmlElementType.XML_DATA_CHARACTERS.equals(element.getNode().getElementType())
                 )
         ) {
             String value = element.getText();

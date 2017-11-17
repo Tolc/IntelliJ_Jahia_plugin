@@ -22,7 +22,7 @@ public class CndReferenceContributor extends PsiReferenceContributor {
         registrar.registerReferenceProvider(PlatformPatterns.psiElement(CndTypes.SUB_NODE_TYPE),            cndReferenceProvider);  //Cnd subnode types
         registrar.registerReferenceProvider(PlatformPatterns.psiElement(CndTypes.SUB_NODE_DEFAULT_TYPE),    cndReferenceProvider);  //Cnd subnode default type
 
-        registrar.registerReferenceProvider(PlatformPatterns.psiElement(XmlElementType.XML_ATTRIBUTE_VALUE),      cndReferenceProvider);  //XML Attribute value
+//        registrar.registerReferenceProvider(PlatformPatterns.psiElement(XmlElementType.XML_ATTRIBUTE_VALUE),      cndReferenceProvider);  //XML Attribute value
         registrar.registerReferenceProvider(PlatformPatterns.psiElement(XmlElementType.XML_DATA_CHARACTERS),      cndReferenceProvider);  //XML Text
         
         registrar.registerReferenceProvider(PlatformPatterns.psiElement(PropertiesTokenTypes.KEY_CHARACTERS),    cndReferenceProvider);  //Properties
