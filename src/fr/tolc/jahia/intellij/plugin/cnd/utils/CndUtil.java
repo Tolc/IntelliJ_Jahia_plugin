@@ -3,7 +3,9 @@ package fr.tolc.jahia.intellij.plugin.cnd.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -22,8 +24,8 @@ public class CndUtil {
     private CndUtil() {}
 
     @NotNull
-    public static List<CndProperty> findProperties(Project project, String namespace, String nodeTypeName, String propertyName) {
-        List<CndProperty> result = new ArrayList<CndProperty>();
+    public static Set<CndProperty> findProperties(Project project, String namespace, String nodeTypeName, String propertyName) {
+        Set<CndProperty> result = new LinkedHashSet<CndProperty>();
         Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
         for (VirtualFile virtualFile : virtualFiles) {
             CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
@@ -32,7 +34,7 @@ public class CndUtil {
                 if (nodeTypes != null) {
                     for (CndNodeType nodeType : nodeTypes) {
                         if (namespace.equals(nodeType.getNodeTypeNamespace()) && nodeTypeName.equals(nodeType.getNodeTypeName())) {
-                            List<CndProperty> properties = nodeType.getPropertyList();
+                            Set<CndProperty> properties = nodeType.getProperties();
                             for (CndProperty property : properties) {
                                 if (propertyName.equals(property.getPropertyName())) {
                                     result.add(property);
@@ -48,9 +50,12 @@ public class CndUtil {
 
     @Nullable
     public static CndProperty findProperty(Project project, String namespace, String nodeTypeName, String propertyName) {
-        List<CndProperty> properties = findProperties(project, namespace, nodeTypeName, propertyName);
+        Set<CndProperty> properties = findProperties(project, namespace, nodeTypeName, propertyName);
         if (!properties.isEmpty()) {
-            return properties.get(0);
+            for (CndProperty property : properties) {
+                return property;
+            }
+
         }
         return null;
     }

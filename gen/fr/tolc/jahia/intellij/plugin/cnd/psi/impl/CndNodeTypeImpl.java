@@ -97,6 +97,11 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
     return CndPsiImplUtil.getPresentation(this);
   }
 
+  @NotNull
+  public Set<CndProperty> getProperties() {
+      return CndPsiImplUtil.getProperties(this);
+  }
+
   @Nullable
   public CndProperty getProperty(String propertyName) {
     return CndPsiImplUtil.getProperty(this, propertyName);

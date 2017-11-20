@@ -15,7 +15,12 @@ public class JspUtil {
     public static final String TAG_INCLUDE = "include";
     public static final String TAG_MODULE = "module";
     public static final String TAGLIB_TEMPLATE_NAMESPACE = "http://www.jahia.org/tags/templateLib";
-    
+
+    public static final String TAG_ATTRIBUTE_NODE = "node";
+    public static final String TAG_ATTRIBUTE_NAME = "name";
+    public static final String TAG_NODEPROPERTY = "nodeProperty";
+    public static final String TAGLIB_JCR_NAMESPACE = "http://www.jahia.org/tags/jcr";
+
     private JspUtil() {}
 
     @Nullable

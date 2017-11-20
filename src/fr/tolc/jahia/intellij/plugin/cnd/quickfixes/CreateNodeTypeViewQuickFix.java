@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.Set;
 
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.ide.projectView.ProjectView;
@@ -153,7 +154,7 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
         StringBuilder toAppendLoops = new StringBuilder();
         
         //Properties
-        List<CndProperty> properties = cndNodeType.getPropertyList();
+        Set<CndProperty> properties = cndNodeType.getProperties();
         if (!properties.isEmpty()) {
             toAppend.append("\r\n");
             

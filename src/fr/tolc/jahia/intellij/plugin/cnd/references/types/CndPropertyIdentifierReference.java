@@ -2,6 +2,7 @@ package fr.tolc.jahia.intellij.plugin.cnd.references.types;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -55,7 +56,7 @@ public class CndPropertyIdentifierReference extends PsiReferenceBase<PsiElement>
         CndNodeType cndNodeType = CndUtil.findNodeType(project, namespace, nodeType);
         List<LookupElement> variants = new ArrayList<LookupElement>();
         if (cndNodeType != null) {
-            List<CndProperty> properties = cndNodeType.getPropertyList();
+            Set<CndProperty> properties = cndNodeType.getProperties();
             for (final CndProperty property : properties) {
                 if (StringUtils.isNotBlank(property.getPropertyName())) {
                     if (forPropertiesFile) {
@@ -73,7 +74,7 @@ public class CndPropertyIdentifierReference extends PsiReferenceBase<PsiElement>
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         Project project = myElement.getProject();
-        List<CndProperty> properties = CndUtil.findProperties(project, namespace, nodeType, propertyName);
+        Set<CndProperty> properties = CndUtil.findProperties(project, namespace, nodeType, propertyName);
         List<ResolveResult> results = new ArrayList<ResolveResult>();
         for (CndProperty property : properties) {
             results.add(new PsiElementResolveResult(property.getPropertyIdentifier()));

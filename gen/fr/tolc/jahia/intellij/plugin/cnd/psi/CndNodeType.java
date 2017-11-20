@@ -40,6 +40,9 @@ public interface CndNodeType extends CndNodeTypeElement {
 
   ItemPresentation getPresentation();
 
+  @NotNull
+  Set<CndProperty> getProperties();
+
   @Nullable
   CndProperty getProperty(String propertyName);
 
