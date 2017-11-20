@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd;
+package fr.tolc.jahia.intellij.plugin.cnd.completion;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.util.ProcessingContext;
+import fr.tolc.jahia.intellij.plugin.cnd.CndLanguage;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.ItemTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.AttributeEnum;
