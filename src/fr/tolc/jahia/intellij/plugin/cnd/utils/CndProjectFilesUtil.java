@@ -300,8 +300,10 @@ public class CndProjectFilesUtil {
     @NotNull
     public static List<PsiFile> findViewFiles(CndNodeType element, String viewType, String viewName) {
         List<PsiFile> res = new ArrayList<PsiFile>();
-        for (Module module : CndPluginUtil.getProjectModules(element.getProject())) {
-            res.addAll(findViewFiles(module, element, viewType, viewName));
+        if (element != null) {
+            for (Module module : CndPluginUtil.getProjectModules(element.getProject())) {
+                res.addAll(findViewFiles(module, element, viewType, viewName));
+            }
         }
         return res;
     }
