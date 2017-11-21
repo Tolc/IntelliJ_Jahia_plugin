@@ -30,7 +30,7 @@ public class ViewJspLineMarkerProvider extends RelatedItemLineMarkerProvider {
                     NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(CndIcons.TEMPLATE_INCLUDE);
                     builder.setTarget(element.getContainingFile()).setTooltipText("template:include");
                     result.add(builder.createLineMarkerInfo(element));
-                } else if (JspUtil.isTemplateModule(tag)) {
+                } else if (JspUtil.isTemplateModule(tag) || JspUtil.isTemplateOption(tag)) {
                     NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(CndIcons.TEMPLATE_MODULE);
                     builder.setTarget(element.getContainingFile()).setTooltipText("template:module");
                     result.add(builder.createLineMarkerInfo(element));
@@ -62,7 +62,7 @@ public class ViewJspLineMarkerProvider extends RelatedItemLineMarkerProvider {
                         
                         result.add(builder.createLineMarkerInfo(element));
                         
-                    } else if (JspUtil.TAG_MODULE.equals(localName)) {
+                    } else if (JspUtil.TAG_MODULE.equals(localName) || JspUtil.TAG_OPTION.equals(localName)) {
                         NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(CndIcons.TEMPLATE_MODULE);
 
                         List<PsiFile> viewFiles = CndProjectFilesUtil.findViewFiles(element.getProject(), viewModel.getType(), viewModel.getName());

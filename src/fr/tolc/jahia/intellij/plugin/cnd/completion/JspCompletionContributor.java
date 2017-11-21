@@ -33,8 +33,7 @@ public class JspCompletionContributor extends CompletionContributor {
                         if (element != null) {
                             PsiElement elementParent = element.getParent();
                             if (elementParent instanceof XmlAttributeValue) {
-                                ViewModel viewModel = JspUtil.getViewModelFromJspTagAttributeValue((XmlAttributeValue) elementParent, 
-                                        parameters.getOriginalFile().getVirtualFile());
+                                ViewModel viewModel = JspUtil.getViewModelFromJspTagAttributeValue((XmlAttributeValue) elementParent, parameters.getOriginalFile().getVirtualFile());
 
                                 if (viewModel != null) {
                                     List<ViewModel> nodeTypeViews = null;
@@ -42,7 +41,7 @@ public class JspCompletionContributor extends CompletionContributor {
                                     if (JspUtil.TAG_INCLUDE.equals(localName)) {
                                         nodeTypeViews = CndProjectFilesUtil.getNodeTypeAndAncestorsViews(element.getProject(), viewModel.getNodeType().getNamespace(), 
                                                 viewModel.getNodeType().getNodeTypeName(), viewModel.getType());
-                                    } else if (JspUtil.TAG_MODULE.equals(localName)) {
+                                    } else if (JspUtil.TAG_MODULE.equals(localName) || JspUtil.TAG_OPTION.equals(localName)) {
                                         nodeTypeViews = CndProjectFilesUtil.getProjectNodeTypeViews(element.getProject(), viewModel.getType());
                                     }
 

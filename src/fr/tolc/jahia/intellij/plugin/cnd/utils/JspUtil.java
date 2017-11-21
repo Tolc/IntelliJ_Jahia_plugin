@@ -14,6 +14,7 @@ public class JspUtil {
     public static final String TAG_ATTRIBUTE_TEMPLATETYPE = "templateType";
     public static final String TAG_INCLUDE = "include";
     public static final String TAG_MODULE = "module";
+    public static final String TAG_OPTION = "option";
     public static final String TAGLIB_TEMPLATE_NAMESPACE = "http://www.jahia.org/tags/templateLib";
 
     public static final String TAG_ATTRIBUTE_NODE = "node";
@@ -36,7 +37,7 @@ public class JspUtil {
                     String tagNamespace = ((XmlTag) xmlTag).getNamespace();
                     if (TAGLIB_TEMPLATE_NAMESPACE.equals(tagNamespace)) {
                         String localName = ((XmlTag) xmlTag).getLocalName();
-                        if (TAG_INCLUDE.equals(localName) || TAG_MODULE.equals(localName)) {
+                        if (TAG_INCLUDE.equals(localName) || TAG_MODULE.equals(localName) || TAG_OPTION.equals(localName)) {
                             ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(virtualFile);
                             if (viewModel != null) {
                                 viewModel.setName(value);
@@ -77,5 +78,9 @@ public class JspUtil {
 
     public static boolean isTemplateModule(XmlTag tag) {
         return isTag(tag, TAGLIB_TEMPLATE_NAMESPACE, TAG_MODULE);
+    }
+
+    public static boolean isTemplateOption(XmlTag tag) {
+        return isTag(tag, TAGLIB_TEMPLATE_NAMESPACE, TAG_OPTION);
     }
 }
