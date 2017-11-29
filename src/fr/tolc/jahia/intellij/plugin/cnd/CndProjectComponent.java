@@ -1,5 +1,8 @@
 package fr.tolc.jahia.intellij.plugin.cnd;
 
+import static fr.tolc.jahia.intellij.plugin.cnd.CndApplicationComponent.JAHIA_CND_JAR_NAME;
+import static fr.tolc.jahia.intellij.plugin.cnd.CndApplicationComponent.JAHIA_PLUGIN_SUBFOLDER;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collection;
@@ -27,12 +30,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CndProjectComponent implements ProjectComponent {
-    
     private static final Logger LOGGER = LoggerFactory.getLogger(CndProjectComponent.class);
     
     private static final String JAHIA_PLUGIN_LIBRARY_NAME = "jahia-plugin-base-cnd-files";
-    private static final String JAHIA_PLUGIN_SUBFOLDER = "jahia";
-    private static final String JAHIA_CND_JAR_NAME = "jahia-plugin-cnds.jar";
 
     private Project project;
 
@@ -54,21 +54,10 @@ public class CndProjectComponent implements ProjectComponent {
                 ApplicationManager.getApplication().runWriteAction(new Runnable() {
                     @Override
                     public void run() {
-                        //TODO: move files/jar creation to an ApplicationComponent and let the libraries mods here
+                        //Files/jar creation is in CndApplicationComponent
+                        
                         File jahiaPluginSubFolder = CndPluginUtil.getPluginFile(JAHIA_PLUGIN_SUBFOLDER);
-
                         if (jahiaPluginSubFolder.exists() && jahiaPluginSubFolder.isDirectory()) {
-                            //Re-generate 'fake' jar containing cnd files
-                            File jarFile = CndPluginUtil.getPluginFile(JAHIA_PLUGIN_SUBFOLDER + "/" + JAHIA_CND_JAR_NAME);
-                            if (jarFile != null && jarFile.exists()) {
-                                jarFile.delete();
-                            }
-                            try {
-                                CndPluginUtil.fileToJar(jahiaPluginSubFolder, jahiaPluginSubFolder.getAbsolutePath() + "/" + JAHIA_CND_JAR_NAME, "cnd");
-                            } catch (Exception e) {
-                               LOGGER.warn("Error generating Jahia base cnd files 'fake' jar", e);
-                            }
-
 
                             //Adding it to the modules libraries
                             Set<Module> alreadyDoneModules = new HashSet<>();
@@ -82,6 +71,7 @@ public class CndProjectComponent implements ProjectComponent {
                                         LibraryTable.ModifiableModel moduleLibraryTable = rootModel.getModuleLibraryTable().getModifiableModel();
 
                                         Library library = moduleLibraryTable.getLibraryByName(JAHIA_PLUGIN_LIBRARY_NAME);
+                                        //TODO: add version number to 'fake' jar and remove it only if version changed
                                         if (library != null) {
                                             moduleLibraryTable.removeLibrary(library);
                                         }
@@ -101,6 +91,9 @@ public class CndProjectComponent implements ProjectComponent {
                                     LOGGER.warn("Error while adding Jahia CND files to module(s) libraries", e);
                                 }
                             }
+                            
+                            //Reindex
+                            FileBasedIndex.getInstance().scheduleRebuild(FileTypeIndex.NAME, new Throwable("Reindexing after adding Jahia jar"));
                         } else {
                             LOGGER.error("Error finding Jahia plugin resources folder");
                             throw new PluginException("Error finding Jahia plugin resources folder", new FileNotFoundException("Missing folder " + jahiaPluginSubFolder.getPath()));
