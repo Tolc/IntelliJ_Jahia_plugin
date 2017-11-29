@@ -30,9 +30,13 @@ public class ViewJspLineMarkerProvider extends RelatedItemLineMarkerProvider {
                     NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(CndIcons.TEMPLATE_INCLUDE);
                     builder.setTarget(element.getContainingFile()).setTooltipText("template:include");
                     result.add(builder.createLineMarkerInfo(element));
-                } else if (JspUtil.isTemplateModule(tag) || JspUtil.isTemplateOption(tag)) {
+                } else if (JspUtil.isTemplateModule(tag)) {
                     NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(CndIcons.TEMPLATE_MODULE);
                     builder.setTarget(element.getContainingFile()).setTooltipText("template:module");
+                    result.add(builder.createLineMarkerInfo(element));
+                } else if (JspUtil.isTemplateOption(tag)) {
+                    NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(CndIcons.TEMPLATE_MODULE);
+                    builder.setTarget(element.getContainingFile()).setTooltipText("template:option");
                     result.add(builder.createLineMarkerInfo(element));
                 }
             }
