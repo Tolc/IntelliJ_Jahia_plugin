@@ -36,36 +36,37 @@ public class CndJspReferenceProvider extends PsiReferenceProvider {
             elements.addAll(attributeValueTokens);
 
             for (PsiElement psiElement : elements) {
-                String nodetypeText = psiElement.getText();
+                if (!ELElementTypes.EL_SLICE_EXPRESSION.equals(psiElement.getParent().getNode().getElementType())) {
+                    String nodetypeText = psiElement.getText();
 
+                    if (nodetypeText != null) {
+                        List<PsiReference> psiReferences = new ArrayList<>();
 
-                if (nodetypeText != null) {
-                    List<PsiReference> psiReferences = new ArrayList<>();
+                        Matcher matcher = nodeTypeGlobalRegex.matcher(nodetypeText);
+                        while (matcher.find()) {
+                            String group = matcher.group();
 
-                    Matcher matcher = nodeTypeGlobalRegex.matcher(nodetypeText);
-                    while (matcher.find()) {
-                        String group = matcher.group();
+                            NodeTypeModel nodeTypeModel = null;
+                            try {
+                                nodeTypeModel = new NodeTypeModel(group);
+                            } catch (IllegalArgumentException e) {
+                                //Nothing to do
+                            }
 
-                        NodeTypeModel nodeTypeModel = null;
-                        try {
-                            nodeTypeModel = new NodeTypeModel(group);
-                        } catch (IllegalArgumentException e) {
-                            //Nothing to do
+                            if (nodeTypeModel != null) {
+                                int offset = (psiElement.getTextRange().getStartOffset() - element.getTextRange().getStartOffset()) + matcher.start();
+                                String namespace = nodeTypeModel.getNamespace();
+                                String nodeTypeName = nodeTypeModel.getNodeTypeName();
+
+                                //Text ranges here are relative!!
+                                psiReferences.add(new CndNamespaceIdentifierReference(element, new TextRange(offset, namespace.length() + offset), namespace));
+                                psiReferences.add(new CndNodeTypeIdentifierReference(element, new TextRange(namespace.length() + offset + 1, group.length() + offset), namespace, nodeTypeName));
+                            }
                         }
 
-                        if (nodeTypeModel != null) {
-                            int offset = (psiElement.getTextRange().getStartOffset() - element.getTextRange().getStartOffset()) + matcher.start();
-                            String namespace = nodeTypeModel.getNamespace();
-                            String nodeTypeName = nodeTypeModel.getNodeTypeName();
-
-                            //Text ranges here are relative!!
-                            psiReferences.add(new CndNamespaceIdentifierReference(element, new TextRange(offset, namespace.length() + offset), namespace));
-                            psiReferences.add(new CndNodeTypeIdentifierReference(element, new TextRange(namespace.length() + offset + 1, group.length() + offset), namespace, nodeTypeName));
-                        }
+                        PsiReference[] psiReferencesArray = new PsiReference[psiReferences.size()];
+                        return psiReferences.toArray(psiReferencesArray);
                     }
-
-                    PsiReference[] psiReferencesArray = new PsiReference[psiReferences.size()];
-                    return psiReferences.toArray(psiReferencesArray);
                 }
             }
         }
