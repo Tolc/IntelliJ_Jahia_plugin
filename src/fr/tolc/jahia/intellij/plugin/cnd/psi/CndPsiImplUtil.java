@@ -1,5 +1,12 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.*;
+
 import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
@@ -15,12 +22,6 @@ import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
 public class CndPsiImplUtil {
 
@@ -144,9 +145,25 @@ public class CndPsiImplUtil {
         return result;
     }
 
+    @NotNull
+    public static Set<CndProperty> getOwnProperties(CndNodeType element) {
+        return new LinkedHashSet<>(element.getPropertyList());
+    }
+
     @Nullable
     public static CndProperty getProperty(CndNodeType element, String propertyName) {
         Set<CndProperty> properties = element.getProperties();
+        for (CndProperty property : properties) {
+            if (property.getPropertyName().equals(propertyName)) {
+                return property;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public static CndProperty getOwnProperty(CndNodeType element, String propertyName) {
+        Set<CndProperty> properties = element.getOwnProperties();
         for (CndProperty property : properties) {
             if (property.getPropertyName().equals(propertyName)) {
                 return property;
