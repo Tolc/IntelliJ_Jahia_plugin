@@ -61,6 +61,28 @@ public class CndUtil {
     }
 
     @NotNull
+    public static Set<CndProperty> findProperties(Project project) {
+        Set<CndProperty> result = new LinkedHashSet<>();
+        List<CndNodeType> nodeTypes = findNodeTypes(project);
+        for (CndNodeType nodeType : nodeTypes) {
+            result.addAll(nodeType.getOwnProperties());
+        }
+        return result;
+    }
+
+    @NotNull
+    public static Set<CndProperty> findProperties(Project project, String propertyName) {
+        Set<CndProperty> result = new LinkedHashSet<>();
+        Set<CndProperty> properties = findProperties(project);
+        for (CndProperty property : properties) {
+            if (propertyName.equals(property.getPropertyName())) {
+                result.add(property);
+            }
+        }
+        return result;
+    }
+
+    @NotNull
     public static List<CndNodeType> findNodeTypes(Project project, String namespace, String nodeTypeName) {
         List<CndNodeType> result = new ArrayList<CndNodeType>();
         Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
