@@ -22,4 +22,6 @@ public class CndIcons {
 
     public static final Icon JAHIA_ACTION = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/jahiaAction.png");
     public static final Icon JAHIA_FILTER = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/jahiaFilter.png");
+    
+    public static final Icon JAHIA_LOGO_DXM = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/jahia_dxm.png");
 }
