@@ -100,6 +100,7 @@ public class ViewNode extends ProjectViewNode<View> implements ValidateableNode,
     public Comparable getSortKey() {
         return this;
     }
+    
     @Override
     public int compareTo(@NotNull Object o) {
         if (o instanceof ViewNode) {

@@ -24,7 +24,6 @@ public class ViewsFolder {
         return "views";
     }
 
-
     public PsiDirectory getJahiaWorkFolder() {
         return jahiaWorkFolder;
     }
@@ -39,8 +38,8 @@ public class ViewsFolder {
         if(this == object) {
             return true;
         } else if (object instanceof ViewsFolder) {
-            ViewsFolder view = (ViewsFolder) object;
-            return jahiaWorkFolder.equals(view.getJahiaWorkFolder());
+            ViewsFolder viewsFolder = (ViewsFolder) object;
+            return jahiaWorkFolder.equals(viewsFolder.getJahiaWorkFolder());
         }
         return false;
     }

@@ -233,7 +233,7 @@ Other files/languages features:
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceContributor"/>
 
     <!-- Tool Window -->
-    <toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/old/cnd.png" anchor="right" factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindow"/>
+    <toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/jahia_dxm.png" anchor="right" factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindow"/>
   </extensions>
 
 </idea-plugin>
