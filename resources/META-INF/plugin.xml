@@ -36,16 +36,16 @@
     <li>Go to declaration</li>
     <li>Refactoring</li>
     <li>File icon <img
-            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/cnd.png"
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/cnd.png"
             alt="CND file icon" style="max-width:100%;"></li>
     <li>Line markers <img
-            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/namespace.png"
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/namespace.png"
             alt="namespace" style="max-width:100%;"> <img
-            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeType.png"
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/nodeType.png"
             alt="nodetype" style="max-width:100%;"> <img
-            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/mixin.png"
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/mixin.png"
             alt="mixin" style="max-width:100%;"> <img
-            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/property.png"
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/property.png"
             alt="property" style="max-width:100%;"></li>
     <li>Code folding</li>
     <li>Brace matching</li>
@@ -69,11 +69,11 @@ CND files features:
         </ul>
     </li>
     <li>Nodetype folders icon in Project View <img
-            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/nodeTypeFolder.png"
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/nodeTypeFolder.png"
             alt="view folder" style="max-width:100%;">
     </li>
     <li>View files grouping <img
-            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/viewBig.png"
+            src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/viewBig.png"
             alt="view folder" style="max-width:100%;">
     </li>
     <li>Completion and other features on Jahia nodetypes (embedded Jahia base and main modules .cnd files)</li>
@@ -107,6 +107,8 @@ Other files/languages features:
       	  <dl>
               <dt>1.3.4</dt>
               <dd>(<strong>feature</strong>) Jahia Tool Window (showing mixins/nodetypes, Jahia actions, and Jahia filters trees)</dd>
+              <dd>(<strong>feature</strong>) Views virtual folder (#40)</dd>
+              <dd>(<strong>feature</strong>) Icons for Jahia technical folders (css, javascript, icons, errors, img)</dd>
               <dd>(<strong>enhancement</strong>) Better nodetypes reference and completion in JSP: nodetypes are now recognized in EL expressions and tag text</dd>
               <dd>(<strong>enhancement</strong>) <template:option/> 'view' attribute completion, reference, and line marker (#38)</dd>
               <dd>(<strong>enhancement</strong>) Better base Jahia modules .cnd loading (no need to restart project anymore)</dd>
@@ -233,7 +235,7 @@ Other files/languages features:
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceContributor"/>
 
     <!-- Tool Window -->
-    <toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/jahia_dxm.png" anchor="right" factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindow"/>
+    <toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahia_dxm.png" anchor="right" factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindow"/>
   </extensions>
 
 </idea-plugin>

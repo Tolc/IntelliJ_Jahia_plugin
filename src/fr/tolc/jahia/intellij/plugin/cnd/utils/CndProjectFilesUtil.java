@@ -33,9 +33,9 @@ import org.slf4j.LoggerFactory;
 
 public class CndProjectFilesUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(CndProjectFilesUtil.class);
-    private static final String JAHIA_6_WEBAPP = "webapp";
-    private static final String JAHIA_7_RESOURCES = "resources";
-    private static final String JEE_MAIN = "main";
+    public static final String JAHIA_6_WEBAPP = "webapp";
+    public static final String JAHIA_7_RESOURCES = "resources";
+    public static final String JEE_MAIN = "main";
     private static final String JAHIA_6_PATH = JEE_MAIN + "/" + JAHIA_6_WEBAPP;
     private static final String JAHIA_7_PATH = JEE_MAIN + "/" + JAHIA_7_RESOURCES;
 
