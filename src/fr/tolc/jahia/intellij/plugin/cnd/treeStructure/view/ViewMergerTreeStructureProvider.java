@@ -47,7 +47,7 @@ public class ViewMergerTreeStructureProvider implements TreeStructureProvider, D
                 return ApplicationManager.getApplication().runReadAction(new Computable<Collection<AbstractTreeNode>>() {
                     @Override
                     public Collection<AbstractTreeNode> compute() {
-                        Collection<AbstractTreeNode> result = new LinkedHashSet<>(children);
+                        Collection<AbstractTreeNode> result = new ArrayList<>(children);
                         ProjectViewNode[] copy = children.toArray(new ProjectViewNode[children.size()]);
 
                         List<PsiDirectory> nodeTypeFolders = new ArrayList<>();
@@ -113,11 +113,11 @@ public class ViewMergerTreeStructureProvider implements TreeStructureProvider, D
                                     Collection<BasePsiNode<? extends PsiElement>> viewNodes = findViewsIn(children, views);
                                     if (!viewNodes.isEmpty()) {
                                         Collection<PsiFile> viewFiles = convertToFiles(viewNodes);
-                                        //                                    Collection<BasePsiNode<? extends PsiElement>> subNodes = new ArrayList<>();
-                                        //                                    subNodes.add((BasePsiNode<? extends PsiElement>) element);
-                                        //                                    subNodes.addAll(viewNodes);
+//                                        Collection<BasePsiNode<? extends PsiElement>> subNodes = new ArrayList<>();
+//                                        subNodes.add((BasePsiNode<? extends PsiElement>) element);
+//                                        subNodes.addAll(viewNodes);
                                         result.add(new ViewNode(project, new View(viewModel, viewFiles), settings));
-                                        //                                    result.remove(element);
+//                                        result.remove(element);
                                         result.removeAll(viewNodes);
 
                                         alreadyDoneViews.add(viewModel.getName());
@@ -126,34 +126,6 @@ public class ViewMergerTreeStructureProvider implements TreeStructureProvider, D
                             }
                         }
                     }
-
-                    //TODO: have default at the top of the view. Below sort is sorting right but it does not sort in projectView
-                    //        if (!alreadyDoneViews.isEmpty()) {
-                    //            Collection<AbstractTreeNode> sortedResult = new TreeSet<AbstractTreeNode>(new Comparator<AbstractTreeNode>() {
-                    //                @Override
-                    //                public int compare(AbstractTreeNode o1, AbstractTreeNode o2) {
-                    //                    if (o1 instanceof ViewNode && o2 instanceof ViewNode) {
-                    //                        View view1 = ((ViewNode) o1).getValue();
-                    //                        View view2 = ((ViewNode) o2).getValue();
-                    //                        if ("default".equals(view1.getName())) {
-                    //                            return -1;
-                    //                        }
-                    //                        if ("default".equals(view2.getName())) {
-                    //                            return 1;
-                    //                        }
-                    //                        return view1.getName().compareTo(view2.getName());
-                    //                    } else if (o1 instanceof ViewNode) {
-                    //                        return -1;
-                    //                    } else if (o2 instanceof ViewNode) {
-                    //                        return 1;
-                    //                    }
-                    //                    return 0;
-                    //                }
-                    //            });
-                    //            sortedResult.addAll(result);
-                    //            result = sortedResult;
-                    //        }
-
                     return result;
                 }
             });

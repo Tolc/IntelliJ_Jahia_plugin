@@ -85,7 +85,7 @@ public class ViewsFolderNode extends ProjectViewNode<ViewsFolder> implements Com
 
     @Override
     public boolean isSortByFirstChild() {
-        return true;
+        return false;
     }
 
     @Nullable

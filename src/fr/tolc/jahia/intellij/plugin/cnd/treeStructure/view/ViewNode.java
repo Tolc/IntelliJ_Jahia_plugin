@@ -92,7 +92,7 @@ public class ViewNode extends ProjectViewNode<View> implements ValidateableNode,
 
     @Override
     public boolean isSortByFirstChild() {
-        return true;
+        return false;
     }
 
     @Nullable
