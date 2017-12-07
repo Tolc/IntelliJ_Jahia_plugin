@@ -235,7 +235,8 @@ Other files/languages features:
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceContributor"/>
 
     <!-- Tool Window -->
-    <toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahia_dxm.png" anchor="right" factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindow"/>
+    <toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahia_dxm.png" anchor="right" order="first"
+                factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindow" conditionClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindowCondition"/>
   </extensions>
 
 </idea-plugin>
