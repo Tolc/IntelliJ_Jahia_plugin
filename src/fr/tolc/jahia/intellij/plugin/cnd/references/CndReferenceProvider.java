@@ -17,6 +17,7 @@ import com.intellij.util.ProcessingContext;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.model.PropertiesFileCndKeyModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyConstraint;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeDefaultType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperType;
@@ -107,6 +108,9 @@ public class CndReferenceProvider extends PsiReferenceProvider {
             return  element.getText();
         } else if (element instanceof CndSubNodeDefaultType) {   //Cnd subnode default type
             return  element.getText();
+            //TODO: property constraint ref
+//        } else if (element instanceof CndPropertyConstraint) {   //Cnd property weakreference constraint
+//            return element.getText();
 //        } else if (element instanceof XmlAttributeValue) {    //XML Attribute value
 //            return ((XmlAttributeValue) element).getValue();
         } else if (element instanceof XmlToken) {           //XML Text
@@ -115,6 +119,7 @@ public class CndReferenceProvider extends PsiReferenceProvider {
         return null;
     }
     
+    //TODO: remove?
     private int getOffset(@NotNull PsiElement element) {
         if (element instanceof  PsiLiteralExpression) { //Java
             return 1;
@@ -125,6 +130,8 @@ public class CndReferenceProvider extends PsiReferenceProvider {
         } else if (element instanceof CndSubNodeType) {   //Cnd subnode types
             return 0;
         } else if (element instanceof CndSubNodeDefaultType) {   //Cnd subnode default type
+            return 0;
+        } else if (element instanceof CndPropertyConstraint) {   //Cnd property weakreference constraint
             return 0;
 //        } else if (element instanceof XmlAttributeValue) {    //XML Attribute value
 //            return 1;

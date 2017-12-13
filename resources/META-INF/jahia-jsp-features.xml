@@ -8,10 +8,13 @@
 		<completion.contributor language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.completion.JspCompletionContributor"/>
 		<codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.ViewJspLineMarkerProvider"/>
 
-		<psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.CndJspReferenceContributor"/>
+		<psi.referenceContributor order="first" implementation="fr.tolc.jahia.intellij.plugin.cnd.references.CndJspReferenceContributor"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.javaee.jsp">
 		<elImplicitVariablesProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.javaee.jsp.CndJspElVariablesProvider"/>
+	</extensions>
+	<extensions defaultExtensionNs="com.intellij.jsp">
+		<el.elLiteralCustomReferenceProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.jsp.CndJspElLiteralReferenceProvider"/>
 	</extensions>
 </idea-plugin>

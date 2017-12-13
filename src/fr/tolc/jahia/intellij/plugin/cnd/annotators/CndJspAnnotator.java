@@ -2,6 +2,7 @@ package fr.tolc.jahia.intellij.plugin.cnd.annotators;
 
 import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
 import static fr.tolc.jahia.intellij.plugin.cnd.model.PropertyModel.CURRENT_NODE;
+import static fr.tolc.jahia.intellij.plugin.cnd.model.PropertyModel.UNIVERSAL_PROPERTIES;
 import static fr.tolc.jahia.intellij.plugin.cnd.model.PropertyModel.propertyGetRegex;
 
 import java.util.Set;
@@ -24,6 +25,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.PsiUtil;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,19 +42,18 @@ public class CndJspAnnotator implements Annotator {
 
                 Matcher matcher = propertyGetRegex.matcher(value);
                 while (matcher.find()) {
-                    String group = matcher.group();
-
-                    String beforePart = StringUtils.isNotBlank(matcher.group(1))? matcher.group(1) : matcher.group(3);
+                    String nodeVar = StringUtils.isNotBlank(matcher.group(1))? matcher.group(1) : matcher.group(3);
                     String propertyName = StringUtils.isNotBlank(matcher.group(2))? matcher.group(2) : matcher.group(4);
 
-                    if (CURRENT_NODE.equals(beforePart)) {
+                    int offset = selectExpression.getTextRange().getStartOffset() + ((matcher.start(2) > -1)? matcher.start(2) : matcher.start(4));
+                    TextRange propertyRange = new TextRange(offset, offset + propertyName.length());
+                    
+                    if (CURRENT_NODE.equals(nodeVar) && !ArrayUtils.contains(UNIVERSAL_PROPERTIES, propertyName)) {
                         ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(element.getContainingFile().getVirtualFile());
                         if (viewModel != null) {
                             CndNodeType nodeType = CndUtil.findNodeType(element.getProject(), viewModel.getNodeType());
                             if (nodeType != null) {
                                 CndProperty property = nodeType.getProperty(propertyName);
-                                int offset = selectExpression.getTextRange().getStartOffset() + ((matcher.start(2) > -1)? matcher.start(2) : matcher.start(4));
-                                TextRange propertyRange = new TextRange(offset, offset + propertyName.length());
                                 if (property != null) {
                                     Annotation propertyAnnotation = holder.createInfoAnnotation(propertyRange, null);
                                     propertyAnnotation.setTextAttributes(DefaultLanguageHighlighterColors.NUMBER);
@@ -67,8 +68,16 @@ public class CndJspAnnotator implements Annotator {
                             }
                         }
                     } else {
-                        
-                        //TODO: Get all properties with same name from project
+                        //Get all properties with same name from project
+                        Set<CndProperty> possibleProperties = CndUtil.findProperties(element.getProject(), propertyName);
+                        if (!possibleProperties.isEmpty()) {
+                            Annotation propertyAnnotation = holder.createInfoAnnotation(propertyRange, null);
+                            propertyAnnotation.setTextAttributes(DefaultLanguageHighlighterColors.NUMBER);
+                        } else {
+                            Annotation propertyAnnotation = holder.createErrorAnnotation(propertyRange,
+                                    "Property '" + propertyName + "' not found in project or Jahia modules.\r\nAre you sure it exists?");
+                            propertyAnnotation.setTextAttributes(DefaultLanguageHighlighterColors.NUMBER);
+                        }
                     }
                 }
             }

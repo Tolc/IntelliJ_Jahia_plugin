@@ -369,7 +369,7 @@ public class CndProjectFilesUtil {
     }
 
     @Nullable
-    public static ViewModel getViewModelFromPotentialViewFile(VirtualFile virtualFile) {
+    public static ViewModel getViewModelFromPotentialViewFile(@NotNull VirtualFile virtualFile) {
         if (!virtualFile.isDirectory()) {
             String name = virtualFile.getName();
             String[] split = name.split("\\.");

@@ -83,4 +83,8 @@ public class JspUtil {
     public static boolean isTemplateOption(XmlTag tag) {
         return isTag(tag, TAGLIB_TEMPLATE_NAMESPACE, TAG_OPTION);
     }
+    
+    public static boolean isJcrNodeProperty(XmlTag tag) {
+        return isTag(tag, TAGLIB_JCR_NAMESPACE, TAG_NODEPROPERTY);
+    }
 }
