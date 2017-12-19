@@ -9,13 +9,19 @@ import com.intellij.navigation.ItemPresentation;
 
 public interface CndNamespaceIdentifier extends CndNamespaceIdentifierElement {
 
+  @Nullable
   String getNamespaceName();
 
   PsiElement setNamespaceName(String newName);
 
+  @Nullable
   PsiElement getNameIdentifier();
 
   ItemPresentation getPresentation();
+
+  //WARNING: toString(...) is skipped
+  //matching toString(CndNamespaceIdentifier, ...)
+  //methods are not found in CndPsiImplUtil
 
   String getName();
 

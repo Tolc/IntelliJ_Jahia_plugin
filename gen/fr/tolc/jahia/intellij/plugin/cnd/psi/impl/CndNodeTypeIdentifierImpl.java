@@ -27,6 +27,7 @@ public class CndNodeTypeIdentifierImpl extends CndNodeTypeIdentifierElementImpl 
     else super.accept(visitor);
   }
 
+  @Nullable
   public String getNodeTypeName() {
     return CndPsiImplUtil.getNodeTypeName(this);
   }
@@ -35,6 +36,7 @@ public class CndNodeTypeIdentifierImpl extends CndNodeTypeIdentifierElementImpl 
     return CndPsiImplUtil.setNodeTypeName(this, newName);
   }
 
+  @Nullable
   public PsiElement getNameIdentifier() {
     return CndPsiImplUtil.getNameIdentifier(this);
   }

@@ -44,6 +44,7 @@ public class CndSubNodeImpl extends CndSubNodeElementImpl implements CndSubNode 
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CndSubNodeType.class);
   }
 
+  @Nullable
   public String getSubNodeName() {
     return CndPsiImplUtil.getSubNodeName(this);
   }

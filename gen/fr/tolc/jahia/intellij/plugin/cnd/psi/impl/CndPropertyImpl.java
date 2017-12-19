@@ -68,16 +68,23 @@ public class CndPropertyImpl extends CndPropertyElementImpl implements CndProper
     return CndPsiImplUtil.setPropertyName(this, newName);
   }
 
+  @Nullable
   public PropertyTypeEnum getType() {
     return CndPsiImplUtil.getType(this);
   }
 
+  @Nullable
   public PropertyTypeMaskEnum getTypeMask() {
     return CndPsiImplUtil.getTypeMask(this);
   }
 
+  @NotNull
   public ItemPresentation getPresentation() {
     return CndPsiImplUtil.getPresentation(this);
+  }
+
+  public String toString() {
+    return CndPsiImplUtil.toString(this);
   }
 
   public boolean hasAttribute(AttributeEnum attribute) {

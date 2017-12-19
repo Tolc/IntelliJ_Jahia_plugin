@@ -9,10 +9,12 @@ import com.intellij.navigation.ItemPresentation;
 
 public interface CndPropertyIdentifier extends CndPropertyIdentifierElement {
 
+  @Nullable
   String getPropertyName();
 
   PsiElement setPropertyName(String newName);
 
+  @Nullable
   PsiElement getNameIdentifier();
 
   ItemPresentation getPresentation();

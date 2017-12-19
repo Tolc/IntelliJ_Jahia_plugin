@@ -9,10 +9,13 @@ import com.intellij.psi.PsiReference;
 
 public interface CndSuperType extends CndSuperTypeElement {
 
+  @NotNull
   PsiReference[] getReferences();
 
+  @Nullable
   String getNodeTypeName();
 
+  @Nullable
   String getNodeTypeNamespace();
 
 }
