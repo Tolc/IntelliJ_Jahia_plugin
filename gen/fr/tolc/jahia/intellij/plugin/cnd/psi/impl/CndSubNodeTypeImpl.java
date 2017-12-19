@@ -27,6 +27,7 @@ public class CndSubNodeTypeImpl extends CndSubNodeTypeElementImpl implements Cnd
     else super.accept(visitor);
   }
 
+  @NotNull
   public PsiReference[] getReferences() {
     return CndPsiImplUtil.getReferences(this);
   }

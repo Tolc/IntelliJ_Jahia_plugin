@@ -16,11 +16,6 @@ public class PropertyModel {
     public static final Pattern propertyGetRegexBrackets = Pattern.compile(PROPERTY_GET_BRACKETS);
     public static final Pattern propertyGetRegex = Pattern.compile(PROPERTY_GET_SIMPLE + "|" + PROPERTY_GET_BRACKETS);
 
-    /**
-     * Properties that don't need to be defined on a node to be usable
-     */
-    public static final String[] UNIVERSAL_PROPERTIES = {"j:defaultCategory"};
-
     private NodeTypeModel nodeType;
     private String propertyName;
 

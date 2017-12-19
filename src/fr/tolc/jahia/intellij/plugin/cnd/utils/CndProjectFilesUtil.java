@@ -431,6 +431,19 @@ public class CndProjectFilesUtil {
     }
 
     @NotNull
+    public static Collection<VirtualFile> findFilesInLibrariesOnly(Project project, FileType fileType) {
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, fileType, GlobalSearchScope.allScope(project));
+
+        Collection<VirtualFile> res = new ArrayList<VirtualFile>();
+        for (VirtualFile virtualFile : virtualFiles) {
+            if (FileIndexFacade.getInstance(project).getModuleForFile(virtualFile) == null) {
+                res.add(virtualFile);
+            }
+        }
+        return res;
+    }
+    
+    @NotNull
     public static Collection<VirtualFile> findFilesInSourcesOnly(Project project, FileType fileType) {
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, fileType, GlobalSearchScope.allScope(project));
         

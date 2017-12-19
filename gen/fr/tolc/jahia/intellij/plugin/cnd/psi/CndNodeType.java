@@ -38,8 +38,10 @@ public interface CndNodeType extends CndNodeTypeElement {
 
   PsiElement setNodeTypeName(String newName);
 
+  @Nullable
   String getNodeTypeNamespace();
 
+  @NotNull
   ItemPresentation getPresentation();
 
   @NotNull
@@ -64,5 +66,8 @@ public interface CndNodeType extends CndNodeTypeElement {
 
   @NotNull
   Set<CndNodeType> getAncestorsNodeTypes();
+
+  @NotNull
+  Set<CndNodeType> getExtensions();
 
 }

@@ -2,7 +2,6 @@ package fr.tolc.jahia.intellij.plugin.cnd.references;
 
 import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
 import static fr.tolc.jahia.intellij.plugin.cnd.model.PropertyModel.CURRENT_NODE;
-import static fr.tolc.jahia.intellij.plugin.cnd.model.PropertyModel.UNIVERSAL_PROPERTIES;
 import static fr.tolc.jahia.intellij.plugin.cnd.model.PropertyModel.propertyGetRegex;
 
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ import fr.tolc.jahia.intellij.plugin.cnd.references.types.CndNodeTypeIdentifierR
 import fr.tolc.jahia.intellij.plugin.cnd.references.types.CndPropertyIdentifierReference;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.PsiUtil;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -104,7 +102,7 @@ public class CndJspReferenceProvider extends PsiReferenceProvider {
                     if (element.getText().substring(startOffset, element.getText().length() - endOffset).equals(propertyName)) {
                         TextRange propertyRange = new TextRange(startOffset, startOffset + propertyName.length());
                         
-                        if (CURRENT_NODE.equals(nodeVar) && !ArrayUtils.contains(UNIVERSAL_PROPERTIES, propertyName)) {
+                        if (CURRENT_NODE.equals(nodeVar)) {
                             String namespace = null;
                             String nodeTypeName = null;
                             

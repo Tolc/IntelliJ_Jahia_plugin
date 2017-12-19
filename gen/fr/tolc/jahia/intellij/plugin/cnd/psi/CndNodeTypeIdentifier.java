@@ -9,10 +9,12 @@ import com.intellij.navigation.ItemPresentation;
 
 public interface CndNodeTypeIdentifier extends CndNodeTypeIdentifierElement {
 
+  @Nullable
   String getNodeTypeName();
 
   PsiElement setNodeTypeName(String newName);
 
+  @Nullable
   PsiElement getNameIdentifier();
 
   ItemPresentation getPresentation();

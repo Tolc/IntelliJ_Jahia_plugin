@@ -9,6 +9,7 @@ import com.intellij.psi.PsiReference;
 
 public interface CndSubNodeType extends CndSubNodeTypeElement {
 
+  @NotNull
   PsiReference[] getReferences();
 
 }
