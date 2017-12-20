@@ -2,11 +2,11 @@
 	<extensions defaultExtensionNs="com.intellij">
 		<!-- CND -->
 		<annotator language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJspAnnotator"/>
-		<codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndXmlLineMarkerProvider"/>
+		<codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndJspLineMarkerProvider"/>
 
 		<!-- Views -->
 		<completion.contributor language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.completion.JspCompletionContributor"/>
-		<codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.ViewJspLineMarkerProvider"/>
+		<codeInsight.lineMarkerProvider language="JSP" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndJspLineMarkerProvider"/>
 
 		<psi.referenceContributor order="first" implementation="fr.tolc.jahia.intellij.plugin.cnd.references.CndJspReferenceContributor"/>
 	</extensions>
