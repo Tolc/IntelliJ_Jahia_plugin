@@ -1,12 +1,12 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.*;
 
@@ -145,8 +145,8 @@ public class CndPsiImplUtil {
     }
 
     //TODO: use a proper cache mechanism...
-    private static Map<CndNodeType, Set<CndProperty>> propertiesCache = new HashMap<>();
-    private static Map<CndNodeType, Date> propertiesCacheDate = new HashMap<>();
+    private static Map<CndNodeType, Set<CndProperty>> propertiesCache = new ConcurrentHashMap<>();
+    private static Map<CndNodeType, Date> propertiesCacheDate = new ConcurrentHashMap<>();
     private static final long CACHE_DELAY = 10000;   //10s
     
     /**
@@ -156,7 +156,8 @@ public class CndPsiImplUtil {
     public static Set<CndProperty> getProperties(CndNodeType element) {
         Set<CndProperty> result = null;
         if (propertiesCacheDate.containsKey(element)) {
-            if (new Date().getTime() - propertiesCacheDate.get(element).getTime() >= CACHE_DELAY) {
+            Date date = propertiesCacheDate.get(element);
+            if (date != null && new Date().getTime() - date.getTime() >= CACHE_DELAY) {
                 //remove from cache
                 propertiesCache.remove(element);
                 propertiesCacheDate.remove(element);

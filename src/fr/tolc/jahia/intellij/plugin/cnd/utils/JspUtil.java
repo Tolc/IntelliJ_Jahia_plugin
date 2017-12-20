@@ -87,4 +87,15 @@ public class JspUtil {
     public static boolean isJcrNodeProperty(XmlTag tag) {
         return isTag(tag, TAGLIB_JCR_NAMESPACE, TAG_NODEPROPERTY);
     }
+    
+    public static boolean isJcrNodePropertyName(XmlAttributeValue attributeValue) {
+        PsiElement parent = attributeValue.getParent();
+        if (parent != null && parent instanceof XmlAttribute) {
+            XmlAttribute attr = (XmlAttribute) parent;
+            if (TAG_ATTRIBUTE_NAME.equals(attr.getName())) {
+                return isJcrNodeProperty(attr.getParent());
+            }
+        }
+        return false;
+    }
 }
