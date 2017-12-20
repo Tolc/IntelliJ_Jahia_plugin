@@ -34,16 +34,16 @@ public class CndJspAnnotator implements Annotator {
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
         if (XmlElementType.XML_ATTRIBUTE_VALUE.equals(element.getNode().getElementType())) {
 
-            Set<PsiElement> selectExpressions = PsiUtil.findFirstDescendantsByType(element, ELElementTypes.EL_SELECT_EXPRESSION);
-            for (PsiElement selectExpression : selectExpressions) {
-                String value = selectExpression.getText();
+            Set<PsiElement> elExpressions = PsiUtil.findFirstDescendantsByType(element, ELElementTypes.EL_SELECT_EXPRESSION, ELElementTypes.EL_SLICE_EXPRESSION);
+            for (PsiElement elExpression : elExpressions) {
+                String value = elExpression.getText();
 
                 Matcher matcher = propertyGetRegex.matcher(value);
                 while (matcher.find()) {
                     String nodeVar = StringUtils.isNotBlank(matcher.group(1))? matcher.group(1) : matcher.group(3);
                     String propertyName = StringUtils.isNotBlank(matcher.group(2))? matcher.group(2) : matcher.group(4);
 
-                    int offset = selectExpression.getTextRange().getStartOffset() + ((matcher.start(2) > -1)? matcher.start(2) : matcher.start(4));
+                    int offset = elExpression.getTextRange().getStartOffset() + ((matcher.start(2) > -1)? matcher.start(2) : matcher.start(4));
                     TextRange propertyRange = new TextRange(offset, offset + propertyName.length());
                     
                     if (CURRENT_NODE.equals(nodeVar)) {
@@ -63,6 +63,10 @@ public class CndJspAnnotator implements Annotator {
                                         propertyAnnotation.setTextAttributes(DefaultLanguageHighlighterColors.NUMBER);
                                     }
                                 }
+                            } else {
+                                Annotation propertyAnnotation = holder.createWarningAnnotation(propertyRange,
+                                        "Node type '" + viewModel.getNodeType().toString() + "' not found.\r\nAre you sure it exists?");
+                                propertyAnnotation.setTextAttributes(DefaultLanguageHighlighterColors.NUMBER);
                             }
                         }
                     } else {

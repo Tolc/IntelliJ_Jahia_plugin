@@ -72,11 +72,10 @@ public class CndXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
                                         .setTooltipText("Navigate to property [" + propertyName + "] of node type [" + possibleProperty.getNodeType().toString() + "]");
                             }
                         }
-                        result.add(builder.createLineMarkerInfo(element));
                     } else {
                         builder.setTarget(element.getContainingFile()).setTooltipText("Property [" + propertyName + "] of node [" + nodeVar + "]");
-                        result.add(builder.createLineMarkerInfo(element));
                     }
+                    result.add(builder.createLineMarkerInfo(element));
                 }
             } else {
                 XmlAttribute viewAttr = tag.getAttribute(JspUtil.TAG_ATTRIBUTE_VIEW);
