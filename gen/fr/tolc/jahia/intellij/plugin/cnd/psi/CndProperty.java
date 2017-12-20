@@ -44,4 +44,6 @@ public interface CndProperty extends CndPropertyElement {
 
   boolean isMultiple();
 
+  CndNodeType getNodeType();
+
 }

@@ -6,6 +6,7 @@ public class PropertyModel {
     private static final String PROPERTY_PART_SIMPLE = "([A-Za-z][A-Za-z0-9]*)";
     private static final String PROPERTY_PART = "([A-Za-z](?:[A-Za-z0-9:.]*[A-Za-z0-9])?)";
     public static final String CURRENT_NODE = "currentNode";
+    public static final String CURRENT_NODE_EL = "${currentNode}";
     private static final String PROPERTIES_MAP_PART = "\\.properties";
     private static final String BEFORE_PART = "([^\\s.{]+)";
 
