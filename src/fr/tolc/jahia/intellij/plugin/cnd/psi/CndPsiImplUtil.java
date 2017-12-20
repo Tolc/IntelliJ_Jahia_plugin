@@ -380,7 +380,7 @@ public class CndPsiImplUtil {
             @NotNull
             @Override
             public String getPresentableText() {
-                return element.getPropertyName() + " (" + element.getType() + ")";
+                return element.getNodeType().getPresentation().getPresentableText() + "  -  " + element.getPropertyName() + " (" + element.getType() + ")";
             }
 
             @Nullable
@@ -412,6 +412,10 @@ public class CndPsiImplUtil {
 
     public static boolean isMultiple(final CndProperty element) {
         return hasAttribute(element, AttributeEnum.MULTIPLE);
+    }
+
+    public static CndNodeType getNodeType(final CndProperty element) {
+        return (CndNodeType) element.getParent();
     }
 
 
