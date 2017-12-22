@@ -1,10 +1,7 @@
 package fr.tolc.jahia.intellij.plugin.cnd.references;
 
-import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 
 import com.intellij.lang.properties.psi.impl.PropertyKeyImpl;
 import com.intellij.openapi.util.TextRange;
@@ -14,7 +11,6 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.xml.XmlToken;
 import com.intellij.util.ProcessingContext;
-import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.model.PropertiesFileCndKeyModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyConstraint;
@@ -60,35 +56,13 @@ public class CndReferenceProvider extends PsiReferenceProvider {
                 return psiReferences;
             }
         } else {
+            List<PsiReference> psiReferences = new ArrayList<>();
             String nodetypeText = getNodeTypeText(element);
-            if (nodetypeText != null) {
-                List<PsiReference> psiReferences = new ArrayList<>();
 
-                Matcher matcher = nodeTypeGlobalRegex.matcher(nodetypeText);
-                while (matcher.find()) {
-                    String group = matcher.group();
+            ReferenceProviderUtil.createNodeTypeReferences(element, psiReferences, nodetypeText, getOffset(element));                
 
-                    NodeTypeModel nodeTypeModel = null;
-                    try {
-                        nodeTypeModel = new NodeTypeModel(group);
-                    } catch (IllegalArgumentException e) {
-                        //Nothing to do
-                    }
-
-                    if (nodeTypeModel != null) {
-                        int offset = getOffset(element) + matcher.start();
-                        String namespace = nodeTypeModel.getNamespace();
-                        String nodeTypeName = nodeTypeModel.getNodeTypeName();
-
-                        //Text ranges here are relative!!
-                        psiReferences.add(new CndNamespaceIdentifierReference(element, new TextRange(offset, namespace.length() + offset), namespace));
-                        psiReferences.add(new CndNodeTypeIdentifierReference(element, new TextRange(namespace.length() + offset + 1, group.length() + offset), namespace, nodeTypeName));
-                    }
-                }
-
-                PsiReference[] psiReferencesArray = new PsiReference[psiReferences.size()];
-                return psiReferences.toArray(psiReferencesArray);
-            }
+            PsiReference[] psiReferencesArray = new PsiReference[psiReferences.size()];
+            return psiReferences.toArray(psiReferencesArray);
         }
         return new PsiReference[0];
     }
