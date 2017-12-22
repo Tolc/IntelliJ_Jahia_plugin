@@ -1,11 +1,7 @@
 package fr.tolc.jahia.intellij.plugin.cnd.lineMarker;
 
-import static fr.tolc.jahia.intellij.plugin.cnd.model.PropertyModel.CURRENT_NODE;
-
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
@@ -18,10 +14,7 @@ import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlTag;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
-import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.JspUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,42 +33,7 @@ public class CndXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
                     String nodeVar = (nodeAttr.getValue() != null)? nodeAttr.getValue().replaceAll("\\$\\{|}", "") : "";
                     String propertyName = nameAttr.getValue();
 
-                    Set<CndProperty> possibleProperties = new LinkedHashSet<>();
-                    if (CURRENT_NODE.equals(nodeVar)) {
-                        ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(element.getContainingFile().getVirtualFile());
-                        if (viewModel != null) {
-                            CndNodeType nodeType = CndUtil.findNodeType(element.getProject(), viewModel.getNodeType());
-                            if (nodeType != null) {
-                                CndProperty property = nodeType.getProperty(propertyName);
-                                if (property != null) {
-                                    possibleProperties.add(property);
-                                } else {
-                                    possibleProperties.addAll(CndUtil.findProperties(element.getProject(), propertyName));
-                                }
-                            }
-                        }
-                    } else {
-                        //Get all properties with same name from project
-                        possibleProperties.addAll(CndUtil.findProperties(element.getProject(), propertyName));
-                    }
-
-                    NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(CndIcons.PROPERTY);
-                    if (!possibleProperties.isEmpty()) {
-                        if (possibleProperties.size() > 1) {
-                            builder
-                                    .setTargets(possibleProperties)
-                                    .setTooltipText("Several possible properties [" + propertyName + "]");
-                        } else {
-                            for (CndProperty possibleProperty : possibleProperties) {
-                                builder
-                                        .setTarget(possibleProperty)
-                                        .setTooltipText("Navigate to property [" + propertyName + "] of node type [" + possibleProperty.getNodeType().toString() + "]");
-                            }
-                        }
-                    } else {
-                        builder.setTarget(element.getContainingFile()).setTooltipText("Property [" + propertyName + "] of node [" + nodeVar + "]");
-                    }
-                    result.add(builder.createLineMarkerInfo(element));
+                    LineMarkerUtil.createPropertyLineMarkers(element, result, nodeVar, propertyName);
                 }
             } else {
                 XmlAttribute viewAttr = tag.getAttribute(JspUtil.TAG_ATTRIBUTE_VIEW);

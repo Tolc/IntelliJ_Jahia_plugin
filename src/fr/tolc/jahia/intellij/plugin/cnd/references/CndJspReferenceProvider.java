@@ -1,7 +1,5 @@
 package fr.tolc.jahia.intellij.plugin.cnd.references;
 
-import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
-import static fr.tolc.jahia.intellij.plugin.cnd.model.PropertyModel.CURRENT_NODE;
 import static fr.tolc.jahia.intellij.plugin.cnd.model.PropertyModel.propertyGetRegex;
 
 import java.util.ArrayList;
@@ -9,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
@@ -22,13 +19,6 @@ import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlElementType;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.HashSet;
-import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
-import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
-import fr.tolc.jahia.intellij.plugin.cnd.references.types.CndNamespaceIdentifierReference;
-import fr.tolc.jahia.intellij.plugin.cnd.references.types.CndNodeTypeIdentifierReference;
-import fr.tolc.jahia.intellij.plugin.cnd.references.types.CndPropertyIdentifierReference;
-import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.JspUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.PsiUtil;
 import org.apache.commons.lang.StringUtils;
@@ -52,34 +42,13 @@ public class CndJspReferenceProvider extends PsiReferenceProvider {
                 if (nodeAttr != null) {
                     String nodeVar = (nodeAttr.getValue() != null) ? nodeAttr.getValue().replaceAll("\\$\\{|}", "") : "";
 
-                    int offset = 1;
-                    TextRange propertyRange = new TextRange(offset, offset + propertyName.length());
+                    ReferenceProviderUtil.createPropertyReferences(element, psiReferences, nodeVar, propertyName, 1);
                     
-                    if (CURRENT_NODE.equals(nodeVar)) {
-                        String namespace = null;
-                        String nodeTypeName = null;
-
-                        ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(element.getContainingFile().getOriginalFile().getVirtualFile());
-                        if (viewModel != null) {
-                            namespace = viewModel.getNodeType().getNamespace();
-                            nodeTypeName = viewModel.getNodeType().getNodeTypeName();
-                        }
-                        //Text ranges here are relative!!
-                        psiReferences.add(new CndPropertyIdentifierReference(element, propertyRange, namespace, nodeTypeName, propertyName));
-                    } else {
-                        //Text ranges here are relative!!
-                        psiReferences.add(new CndPropertyIdentifierReference(element,propertyRange, propertyName));
-                    }
                     PsiReference[] psiReferencesArray = new PsiReference[psiReferences.size()];
                     return psiReferences.toArray(psiReferencesArray);
                 }
             } else {
-                Set<PsiElement> literalExpressions = PsiUtil.findDescendantsByType(element, ELElementTypes.EL_LITERAL_EXPRESSION);
-                Set<PsiElement> attributeValueTokens = PsiUtil.findDescendantsByType(element, XmlElementType.XML_ATTRIBUTE_VALUE_TOKEN);
-
-                Set<PsiElement> elements = new HashSet<PsiElement>();
-                elements.addAll(literalExpressions);
-                elements.addAll(attributeValueTokens);
+                Set<PsiElement> elements = PsiUtil.findDescendantsByType(element, ELElementTypes.EL_LITERAL_EXPRESSION, XmlElementType.XML_ATTRIBUTE_VALUE_TOKEN);
 
                 if (!elements.isEmpty()) {
                     for (PsiElement psiElement : elements) {
@@ -88,30 +57,8 @@ public class CndJspReferenceProvider extends PsiReferenceProvider {
                         if (!ELElementTypes.EL_SLICE_EXPRESSION.equals(parentElementType) && !ELElementTypes.EL_SELECT_EXPRESSION.equals(parentElementType)) {
                             String nodetypeText = psiElement.getText();
 
-                            if (nodetypeText != null) {
-
-                                Matcher matcher = nodeTypeGlobalRegex.matcher(nodetypeText);
-                                while (matcher.find()) {
-                                    String group = matcher.group();
-
-                                    NodeTypeModel nodeTypeModel = null;
-                                    try {
-                                        nodeTypeModel = new NodeTypeModel(group);
-                                    } catch (IllegalArgumentException e) {
-                                        //Nothing to do
-                                    }
-
-                                    if (nodeTypeModel != null) {
-                                        int offset = (psiElement.getTextRange().getStartOffset() - element.getTextRange().getStartOffset()) + matcher.start();
-                                        String namespace = nodeTypeModel.getNamespace();
-                                        String nodeTypeName = nodeTypeModel.getNodeTypeName();
-
-                                        //Text ranges here are relative!!
-                                        psiReferences.add(new CndNamespaceIdentifierReference(element, new TextRange(offset, namespace.length() + offset), namespace));
-                                        psiReferences.add(new CndNodeTypeIdentifierReference(element, new TextRange(namespace.length() + offset + 1, group.length() + offset), namespace, nodeTypeName));
-                                    }
-                                }
-                            }
+                            int offsetShift = (psiElement.getTextRange().getStartOffset() - element.getTextRange().getStartOffset());
+                            ReferenceProviderUtil.createNodeTypeReferences(element, psiReferences, nodetypeText, offsetShift);
                         }
                     }
                     PsiReference[] psiReferencesArray = new PsiReference[psiReferences.size()];
@@ -135,23 +82,7 @@ public class CndJspReferenceProvider extends PsiReferenceProvider {
                     int endOffset = element instanceof ELLiteralExpression ? 1 : 0;
 
                     if (element.getText().substring(startOffset, element.getText().length() - endOffset).equals(propertyName)) {
-                        TextRange propertyRange = new TextRange(startOffset, startOffset + propertyName.length());
-
-                        if (CURRENT_NODE.equals(nodeVar)) {
-                            String namespace = null;
-                            String nodeTypeName = null;
-
-                            ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(element.getContainingFile().getOriginalFile().getVirtualFile());
-                            if (viewModel != null) {
-                                namespace = viewModel.getNodeType().getNamespace();
-                                nodeTypeName = viewModel.getNodeType().getNodeTypeName();
-                            }
-                            //Text ranges here are relative!!
-                            psiReferences.add(new CndPropertyIdentifierReference(element, propertyRange, namespace, nodeTypeName, propertyName));
-                        } else {
-                            //Text ranges here are relative!!
-                            psiReferences.add(new CndPropertyIdentifierReference(element, propertyRange, propertyName));
-                        }
+                        ReferenceProviderUtil.createPropertyReferences(element, psiReferences, nodeVar, propertyName, startOffset);
                     }
                 }
             }
