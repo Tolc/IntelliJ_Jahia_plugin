@@ -32,7 +32,8 @@ public class CndJspElVariablesProvider extends ElVariablesProvider {
 
     static {
         ourData = new VariableInfoData(CND_EL_IMPLICIT_VARS_MAP);
-        ourData.add("currentNode", "org.jahia.services.content.JCRNodeWrapper");
+//        ourData.add("currentNode", "org.jahia.services.content.JCRNodeWrapper");
+        ourData.add("currentNode", "org.jahia.services.content.mod.JCRNodeWrapperMod");
         ourData.add("out", "java.io.PrintWriter");
         ourData.add("script", "org.jahia.services.render.scripting.Script");
         ourData.add("scriptInfo", "java.lang.String");
@@ -66,7 +67,7 @@ public class CndJspElVariablesProvider extends ElVariablesProvider {
 //                        JspImplicitVariableImpl variable = new JspImplicitVariableImpl(
 //                                containingFile, 
 //                                varName, 
-//                                elementFactory.createTypeByFQClassName("javax.jcr.Value", allScope), 
+//                                elementFactory.createTypeByFQClassName("org.jahia.services.content.JCRValueWrapper", allScope), 
 //                                containingFile,
 //                                BEGIN_RANGE
 //                        );
@@ -75,7 +76,7 @@ public class CndJspElVariablesProvider extends ElVariablesProvider {
 
 //                        Key<CachedValue<Map<String, JspImplicitVariable>>> key = Key.create("lol");
 //                        VariableInfoData lol = new VariableInfoData(key);
-//                        lol.add(varName , "javax.jcr.Value");
+//                        lol.add(varName , "org.jahia.services.content.JCRValueWrapper");
 //
 //                        Iterator variableIterator = ELResolveUtil.createOrGetPredefinedVariablesMapImpl(containingFile, ourData).values().iterator();
 //

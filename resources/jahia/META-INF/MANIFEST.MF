@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Created-By: Tolc
+Package: jahia.org.jahia.services.content.mod
+Export-Package: jahia.org.jahia.services.content.mod
+Extension-Name: jahia-plugin-cnds
+Implementation-Title: jahia.org.jahia.services.content.mod
+Implementation-Vendor: Tolc

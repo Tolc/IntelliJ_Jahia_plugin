@@ -31,7 +31,8 @@ public class CndApplicationComponent implements ApplicationComponent {
                 jarFile.delete();
             }
             try {
-                CndPluginUtil.fileToJar(jahiaPluginSubFolder, jahiaPluginSubFolder.getAbsolutePath() + "/" + JAHIA_CND_JAR_NAME, "cnd");
+//                CndPluginUtil.fileToJar(jahiaPluginSubFolder, jahiaPluginSubFolder.getAbsolutePath() + "/" + JAHIA_CND_JAR_NAME, "cnd");
+                CndPluginUtil.fileToJar(jahiaPluginSubFolder, jahiaPluginSubFolder.getAbsolutePath() + "/" + JAHIA_CND_JAR_NAME, "cnd", "class", "java");
             } catch (Exception e) {
                 LOGGER.warn("Error generating Jahia base cnd files 'fake' jar", e);
             }
