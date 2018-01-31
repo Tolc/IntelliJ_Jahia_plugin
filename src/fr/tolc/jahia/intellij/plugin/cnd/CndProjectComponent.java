@@ -81,6 +81,7 @@ public class CndProjectComponent implements ProjectComponent {
 
                                         Library.ModifiableModel modifiableModel = newLibrary.getModifiableModel();
                                         modifiableModel.addRoot("jar://" + libraryJar.getAbsolutePath() + "!/", OrderRootType.CLASSES);
+//                                        modifiableModel.addJarDirectory("jar://" + libraryJar.getAbsolutePath() + "!/", true, OrderRootType.SOURCES);
                                         modifiableModel.commit();
                                         moduleLibraryTable.commit();
                                         rootModel.commit();
