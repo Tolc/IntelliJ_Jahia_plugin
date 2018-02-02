@@ -1,8 +1,5 @@
 package fr.tolc.jahia.intellij.plugin.cnd.extensions.javaee.jsp;
 
-import java.util.Iterator;
-import java.util.Map;
-
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
@@ -16,10 +13,10 @@ import com.intellij.psi.jsp.JspFile;
 import com.intellij.psi.jsp.JspImplicitVariable;
 import com.intellij.psi.jsp.el.ELExpressionHolder;
 import com.intellij.psi.util.CachedValue;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.xml.XmlTag;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * See com.intellij.psi.impl.source.jsp.el.impl.JspElVariablesProvider
@@ -32,7 +29,8 @@ public class CndJspElVariablesProvider extends ElVariablesProvider {
 
     static {
         ourData = new VariableInfoData(CND_EL_IMPLICIT_VARS_MAP);
-        ourData.add("currentNode", "org.jahia.services.content.JCRNodeWrapper");
+//        ourData.add("currentNode", "org.jahia.services.content.JCRNodeWrapper");
+        ourData.add("currentNode", "org.jahia.services.content.mod.JCRNodeWrapperMod");
         ourData.add("out", "java.io.PrintWriter");
         ourData.add("script", "org.jahia.services.render.scripting.Script");
         ourData.add("scriptInfo", "java.lang.String");
@@ -53,12 +51,12 @@ public class CndJspElVariablesProvider extends ElVariablesProvider {
             return true;
         } else {
 
-            //TODO
-            XmlTag tag = PsiTreeUtil.getParentOfType(element, XmlTag.class, false);
-            if(tag != null) {
-                if ("http://www.jahia.org/tags/jcr".equals(tag.getNamespace()) && "nodeProperty".equals(tag.getLocalName())) {
-                    String varName = tag.getAttributeValue("var");
-                    if (StringUtils.isNotBlank(varName)) {
+            //TODO: find a better way to handle the properties completion than fake classes?
+//            XmlTag tag = PsiTreeUtil.getParentOfType(element, XmlTag.class, false);
+//            if(tag != null) {
+//                if ("http://www.jahia.org/tags/jcr".equals(tag.getNamespace()) && "nodeProperty".equals(tag.getLocalName())) {
+//                    String varName = tag.getAttributeValue("var");
+//                    if (StringUtils.isNotBlank(varName)) {
 //                        Project project = containingFile.getProject();
 //                        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
 //                        GlobalSearchScope allScope = GlobalSearchScope.allScope(project);
@@ -66,7 +64,7 @@ public class CndJspElVariablesProvider extends ElVariablesProvider {
 //                        JspImplicitVariableImpl variable = new JspImplicitVariableImpl(
 //                                containingFile, 
 //                                varName, 
-//                                elementFactory.createTypeByFQClassName("javax.jcr.Value", allScope), 
+//                                elementFactory.createTypeByFQClassName("org.jahia.services.content.JCRValueWrapper", allScope), 
 //                                containingFile,
 //                                BEGIN_RANGE
 //                        );
@@ -75,7 +73,7 @@ public class CndJspElVariablesProvider extends ElVariablesProvider {
 
 //                        Key<CachedValue<Map<String, JspImplicitVariable>>> key = Key.create("lol");
 //                        VariableInfoData lol = new VariableInfoData(key);
-//                        lol.add(varName , "javax.jcr.Value");
+//                        lol.add(varName , "org.jahia.services.content.JCRValueWrapper");
 //
 //                        Iterator variableIterator = ELResolveUtil.createOrGetPredefinedVariablesMapImpl(containingFile, ourData).values().iterator();
 //
@@ -87,9 +85,9 @@ public class CndJspElVariablesProvider extends ElVariablesProvider {
 //
 //                            jspImplicitVariable = (JspImplicitVariable) variableIterator.next();
 //                        } while (processor.processVariable(jspImplicitVariable));
-                    }
-                }
-            }
+//                    }
+//                }
+//            }
 
             Iterator variableIterator = ELResolveUtil.createOrGetPredefinedVariablesMapImpl(containingFile, ourData).values().iterator();
 

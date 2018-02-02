@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd;
+package fr.tolc.jahia.intellij.plugin.cnd.components;
 
 import java.io.File;
 
