@@ -4,7 +4,8 @@ import org.jahia.services.content.JCRValueWrapper;
 
 /**
  * This interface exists solely for IntelliJ completion purposes
- * @see org.jahia.services.content.JCRValueWrapper
+ * @author tolc
+ * @see JCRValueWrapper
  */
 public interface JCRValueWrapperMod extends JCRValueWrapper, Iterable<JCRValueWrapper> {
 
