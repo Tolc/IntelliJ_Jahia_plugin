@@ -185,14 +185,14 @@ Other files/languages features:
   <application-components>
     <!-- Add your application components here -->
     <component>
-      <implementation-class>fr.tolc.jahia.intellij.plugin.cnd.CndApplicationComponent</implementation-class>
+      <implementation-class>fr.tolc.jahia.intellij.plugin.cnd.components.CndApplicationComponent</implementation-class>
     </component>
   </application-components>
 
   <project-components>
     <!-- Add your project components here -->
     <component>
-      <implementation-class>fr.tolc.jahia.intellij.plugin.cnd.CndProjectComponent</implementation-class>
+      <implementation-class>fr.tolc.jahia.intellij.plugin.cnd.components.CndProjectComponent</implementation-class>
     </component>
   </project-components>
 

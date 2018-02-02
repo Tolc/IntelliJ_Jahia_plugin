@@ -1,4 +1,4 @@
-package fr.tolc.jahia.intellij.plugin.cnd;
+package fr.tolc.jahia.intellij.plugin.cnd.components;
 
 import java.io.File;
 
@@ -31,8 +31,7 @@ public class CndApplicationComponent implements ApplicationComponent {
                 jarFile.delete();
             }
             try {
-//                CndPluginUtil.fileToJar(jahiaPluginSubFolder, jahiaPluginSubFolder.getAbsolutePath() + "/" + JAHIA_CND_JAR_NAME, "cnd");
-                CndPluginUtil.fileToJar(jahiaPluginSubFolder, jahiaPluginSubFolder.getAbsolutePath() + "/" + JAHIA_CND_JAR_NAME, "cnd", "class", "java");
+                CndPluginUtil.fileToJar(jahiaPluginSubFolder, jahiaPluginSubFolder.getAbsolutePath() + "/" + JAHIA_CND_JAR_NAME, "cnd");
             } catch (Exception e) {
                 LOGGER.warn("Error generating Jahia base cnd files 'fake' jar", e);
             }

@@ -6,7 +6,8 @@ import javax.jcr.RepositoryException;
 
 /**
  * This interface exists solely for IntelliJ completion purposes
- * @see org.jahia.services.content.JCRNodeWrapper
+ * @author tolc
+ * @see JCRNodeWrapper
  */
 public interface JCRNodeWrapperMod extends JCRNodeWrapper {
 
