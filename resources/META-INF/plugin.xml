@@ -109,10 +109,12 @@ Other files/languages features:
               <dd>(<strong>feature</strong>) Jahia Tool Window (showing mixins/nodetypes, Jahia actions, and Jahia filters trees)</dd>
               <dd>(<strong>feature</strong>) Views virtual folder (#40)</dd>
               <dd>(<strong>feature</strong>) Icons for Jahia technical folders (css, javascript, icons, errors, img)</dd>
-              <dd>(<strong>feature</strong>) Custom edit mode icons (in 'icons' folder) displayed in the gutter in CND files next to the corresponding nodetype/mixin</dd>
+              <dd>(<strong>feature</strong>) Custom icons (in 'icons' folder) displayed in the gutter in CND files next to their corresponding nodetype/mixin</dd>
               <dd>(<strong>enhancement</strong>) Better nodetypes reference and completion in JSP: nodetypes are now recognized in EL expressions and tag text</dd>
               <dd>(<strong>enhancement</strong>) <template:option/> 'view' attribute completion, reference, and line marker (#38)</dd>
               <dd>(<strong>enhancement</strong>) Better base Jahia modules .cnd loading (no need to restart project anymore)</dd>
+              <dd>(<strong>enhancement</strong>) 'Create new view' helper when right clicking on a nodetype in a .cnd file or on a nodetype directory/subdirectory in the project explorer</dd>
+              <dd>(<strong>enhancement</strong>) 'Create new CND file' helper when right clicking on 'META-INF' directory/subdirectory in the project explorer</dd>
               <dd>Fixed issue with spaces not being allowed in property default values delimited by double quotes (#43)</dd>
               <dd>Fixed CND files containing only namespaces flagged as invalid (#37)</dd>
           </dl>
@@ -195,7 +197,25 @@ Other files/languages features:
   </project-components>
 
   <actions>
-    <!-- Add your actions here -->
+    <group id="cnd.NewCndFileGroup">
+      <add-to-group group-id="NewGroup" anchor="first"/>
+      <action id="cnd.NewCndFile" class="fr.tolc.jahia.intellij.plugin.cnd.actions.NewCndFileAction"
+              text="CND File" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/img/cnd.png"/>
+      <separator/>
+    </group>
+
+    <group id="cnd.NewNodeTypeViewGroup">
+      <add-to-group group-id="NewGroup" anchor="first"/>
+      <action id="cnd.NewNodeTypeView" class="fr.tolc.jahia.intellij.plugin.cnd.actions.NewNodeTypeViewAction"
+              text="Jahia Nodetype View" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/img/view.png"/>
+      <separator/>
+    </group>
+    <group id="cnd.EditorPopupMenuGroup">
+      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+      <action id="cnd.CreateNodeTypeView" class="fr.tolc.jahia.intellij.plugin.cnd.actions.CreateNodeTypeViewAction"
+              text="Create new view" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/img/view.png"/>
+      <separator/>
+    </group>
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">

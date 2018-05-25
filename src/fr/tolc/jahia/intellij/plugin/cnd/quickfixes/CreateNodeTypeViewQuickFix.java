@@ -14,6 +14,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -21,6 +22,7 @@ import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.IncorrectOperationException;
+import fr.tolc.jahia.intellij.plugin.cnd.dialogs.CreateNodeTypeViewDialog;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
@@ -34,13 +36,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
 
-    private String jahiaWorkFolderPath;
+    private Module module;
     private String namespace;
     private String nodeTypeName;
     private CndNodeType cndNodeType;
 
-    public CreateNodeTypeViewQuickFix(String jahiaWorkFolderPath, CndNodeType cndNodeType) {
-        this.jahiaWorkFolderPath = jahiaWorkFolderPath;
+    public CreateNodeTypeViewQuickFix(Module module, CndNodeType cndNodeType) {
+        this.module = module;
         this.namespace = cndNodeType.getNodeTypeNamespace();
         this.nodeTypeName = cndNodeType.getNodeTypeName();
         this.cndNodeType = cndNodeType;
@@ -69,7 +71,7 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-                CreateNodeTypeViewDialog createNodeTypeViewDialog = new CreateNodeTypeViewDialog(project, namespace + ":" + nodeTypeName);
+                CreateNodeTypeViewDialog createNodeTypeViewDialog = new CreateNodeTypeViewDialog(project, module, namespace + ":" + nodeTypeName);
                 createNodeTypeViewDialog.setVisible(true);
 
                 if (createNodeTypeViewDialog.isOkClicked()) {
@@ -77,8 +79,10 @@ public class CreateNodeTypeViewQuickFix extends BaseIntentionAction {
                     boolean isHiddenView = createNodeTypeViewDialog.isHiddenView();
                     String viewType = createNodeTypeViewDialog.getViewType();
                     String viewLanguage = createNodeTypeViewDialog.getViewLanguage();
+                    Module module = createNodeTypeViewDialog.getModule();
 
                     if (StringUtils.isNotBlank(viewType) && StringUtils.isNotBlank(viewLanguage)) {
+                        String jahiaWorkFolderPath = CndProjectFilesUtil.getJahiaWorkFolderPath(module);
                         String finalDirectory = CndProjectFilesUtil.getNodeTypeViewsFolderPath(jahiaWorkFolderPath, namespace, nodeTypeName, viewType);
                         String fileName = CndProjectFilesUtil.getNodeTypeViewFileName(nodeTypeName, viewName, viewLanguage, isHiddenView);
                         String propertiesFileName = CndProjectFilesUtil.getNodeTypeViewFileName(nodeTypeName, viewName, "properties", isHiddenView);

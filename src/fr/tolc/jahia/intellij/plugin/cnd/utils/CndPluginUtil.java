@@ -187,7 +187,8 @@ public class CndPluginUtil {
         });
         toDelete.delete();
     }
-    
+
+    @NotNull
     public static Module[] getProjectModules(Project project) {
         return ModuleManager.getInstance(project).getModules();
     }

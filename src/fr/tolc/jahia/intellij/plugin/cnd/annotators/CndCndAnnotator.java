@@ -57,7 +57,10 @@ public class CndCndAnnotator implements Annotator {
                                 if (jahiaWorkFolderPath != null) {
                                     Annotation newViewAnnotation = holder.createInfoAnnotation(element.getTextRange(), "Create a new view for " + namespace + ":" + nodeTypeName);
                                     newViewAnnotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
-                                    newViewAnnotation.registerFix(new CreateNodeTypeViewQuickFix(jahiaWorkFolderPath, ((CndNodeTypeIdentifier)element).getNodeType()));
+                                    newViewAnnotation.registerFix(new CreateNodeTypeViewQuickFix(
+                                                    CndProjectFilesUtil.getModuleForFile(element.getProject(), element.getContainingFile().getVirtualFile()),
+                                                    ((CndNodeTypeIdentifier)element).getNodeType()
+                                    ));
 
                                     //Translation
                                     if (CndTranslationUtil.getNodeTypeTranslation(element.getProject(), namespace, nodeTypeName) == null) {

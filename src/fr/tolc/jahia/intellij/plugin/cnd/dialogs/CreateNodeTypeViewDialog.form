@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeViewDialog">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="fr.tolc.jahia.intellij.plugin.cnd.dialogs.CreateNodeTypeViewDialog">
   <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
@@ -49,7 +49,7 @@
           </grid>
         </children>
       </grid>
-      <grid id="e3588" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="e3588" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -124,6 +124,23 @@
             <properties>
               <labelFor value="b013b"/>
               <text value="View Language"/>
+            </properties>
+          </component>
+          <component id="74caa" class="javax.swing.JComboBox" binding="moduleSelect">
+            <constraints>
+              <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <toolTipText value="View files will be created in the specified module"/>
+            </properties>
+          </component>
+          <component id="c1b9a" class="javax.swing.JLabel" binding="moduleLabel">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <labelFor value="74caa"/>
+              <text value="Module"/>
             </properties>
           </component>
         </children>

@@ -36,6 +36,7 @@ public class CndProjectFilesUtil {
     public static final String JAHIA_6_WEBAPP = "webapp";
     public static final String JAHIA_7_RESOURCES = "resources";
     public static final String JEE_MAIN = "main";
+    public static final String JEE_META_INF = "META-INF";
     private static final String JAHIA_6_PATH = JEE_MAIN + "/" + JAHIA_6_WEBAPP;
     private static final String JAHIA_7_PATH = JEE_MAIN + "/" + JAHIA_7_RESOURCES;
 
@@ -71,7 +72,17 @@ public class CndProjectFilesUtil {
     public static String getJahiaWorkFolderPath(PsiElement element) {
         return getJahiaWorkFolderPath(getModuleForFile(element.getProject(), element.getContainingFile().getVirtualFile()));
     }
-    
+
+    @Nullable
+    public static String getJahiaMetaInfFolderPath(Module module) {
+        return getJahiaWorkFolderPath(module) + "/" + JEE_META_INF;
+    }
+
+    @Nullable
+    public static String getJahiaMetaInfFolderPath(Project project, VirtualFile virtualFile) {
+        return getJahiaWorkFolderPath(getModuleForFile(project, virtualFile)) + "/" + JEE_META_INF;
+    }
+
     @NotNull
     @Contract(pure = true)
     public static String getNodeTypeFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName) {
@@ -453,5 +464,13 @@ public class CndProjectFilesUtil {
             }
         }
         return false;
+    }
+
+    @Nullable
+    public static PsiFile getPsiFileFromVirtualFile(Project project, VirtualFile virtualFile) {
+        if (project != null && virtualFile != null) {
+            return PsiManager.getInstance(project).findFile(virtualFile);
+        }
+        return null;
     }
 }
