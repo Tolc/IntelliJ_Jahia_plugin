@@ -58,6 +58,7 @@ Jahia project versions: **6.6.x** or **7.x**
         * Create nodetype quickfix (alt+enter on nodetype name) - if known namespace but unknown nodetype
         * `<template:module/>` line marker, 'view' attribute completion and reference ![template module](src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/templateModule.png) (both are affected by 'templateType' attribute if provided)
         * `<template:include/>` line marker, 'view' attribute completion and reference ![template include](src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/templateInclude.png) (both are affected by 'templateType' attribute if provided)
+        * Properties and property type completion in `${currentNode.properties.propertyName}`, `${currentNode.properties['propertyName']}` and `<jcr:nodeProperty/>`
      * Java
         * Nodetypes usages highlighting & line markers ![nodetype](src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/nodeType.png)/![mixin](src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/mixin.png)
         * Nodetypes completion
@@ -80,13 +81,11 @@ Jahia project versions: **6.6.x** or **7.x**
 
 
 
-## Roadmap
+## Roadmap (?)
 
 ##### This is just the beginning.
 
- * Improved JSP support:
-    * Properties and property type completion in `${currentNode.properties.propertyName}`, `${currentNode.properties['propertyName']}` and `jcr:property`
- * Improved Properties support:
+ * Improved cache .properties support:
     * Resource bundles .properties extension, to be able to find namespaces and nodetypes usages in it
     * View cache .properties custom language     
  * Plugin settings
