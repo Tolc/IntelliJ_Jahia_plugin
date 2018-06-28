@@ -27,6 +27,7 @@ public class CndNamespaceIdentifierImpl extends CndNamespaceIdentifierElementImp
     else super.accept(visitor);
   }
 
+  @Nullable
   public String getNamespaceName() {
     return CndPsiImplUtil.getNamespaceName(this);
   }
@@ -35,6 +36,7 @@ public class CndNamespaceIdentifierImpl extends CndNamespaceIdentifierElementImp
     return CndPsiImplUtil.setNamespaceName(this, newName);
   }
 
+  @Nullable
   public PsiElement getNameIdentifier() {
     return CndPsiImplUtil.getNameIdentifier(this);
   }

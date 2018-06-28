@@ -33,9 +33,10 @@ import org.slf4j.LoggerFactory;
 
 public class CndProjectFilesUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(CndProjectFilesUtil.class);
-    private static final String JAHIA_6_WEBAPP = "webapp";
-    private static final String JAHIA_7_RESOURCES = "resources";
-    private static final String JEE_MAIN = "main";
+    public static final String JAHIA_6_WEBAPP = "webapp";
+    public static final String JAHIA_7_RESOURCES = "resources";
+    public static final String JEE_MAIN = "main";
+    public static final String JEE_META_INF = "META-INF";
     private static final String JAHIA_6_PATH = JEE_MAIN + "/" + JAHIA_6_WEBAPP;
     private static final String JAHIA_7_PATH = JEE_MAIN + "/" + JAHIA_7_RESOURCES;
 
@@ -71,7 +72,17 @@ public class CndProjectFilesUtil {
     public static String getJahiaWorkFolderPath(PsiElement element) {
         return getJahiaWorkFolderPath(getModuleForFile(element.getProject(), element.getContainingFile().getVirtualFile()));
     }
-    
+
+    @Nullable
+    public static String getJahiaMetaInfFolderPath(Module module) {
+        return getJahiaWorkFolderPath(module) + "/" + JEE_META_INF;
+    }
+
+    @Nullable
+    public static String getJahiaMetaInfFolderPath(Project project, VirtualFile virtualFile) {
+        return getJahiaWorkFolderPath(getModuleForFile(project, virtualFile)) + "/" + JEE_META_INF;
+    }
+
     @NotNull
     @Contract(pure = true)
     public static String getNodeTypeFolderPath(String jahiaWorkFolderPath, String namespace, String nodeTypeName) {
@@ -300,8 +311,10 @@ public class CndProjectFilesUtil {
     @NotNull
     public static List<PsiFile> findViewFiles(CndNodeType element, String viewType, String viewName) {
         List<PsiFile> res = new ArrayList<PsiFile>();
-        for (Module module : CndPluginUtil.getProjectModules(element.getProject())) {
-            res.addAll(findViewFiles(module, element, viewType, viewName));
+        if (element != null) {
+            for (Module module : CndPluginUtil.getProjectModules(element.getProject())) {
+                res.addAll(findViewFiles(module, element, viewType, viewName));
+            }
         }
         return res;
     }
@@ -356,7 +369,7 @@ public class CndProjectFilesUtil {
     }
 
     @Nullable
-    public static ViewModel getViewModelFromPotentialViewFile(VirtualFile virtualFile) {
+    public static ViewModel getViewModelFromPotentialViewFile(@NotNull VirtualFile virtualFile) {
         if (!virtualFile.isDirectory()) {
             String name = virtualFile.getName();
             String[] split = name.split("\\.");
@@ -418,6 +431,19 @@ public class CndProjectFilesUtil {
     }
 
     @NotNull
+    public static Collection<VirtualFile> findFilesInLibrariesOnly(Project project, FileType fileType) {
+        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, fileType, GlobalSearchScope.allScope(project));
+
+        Collection<VirtualFile> res = new ArrayList<VirtualFile>();
+        for (VirtualFile virtualFile : virtualFiles) {
+            if (FileIndexFacade.getInstance(project).getModuleForFile(virtualFile) == null) {
+                res.add(virtualFile);
+            }
+        }
+        return res;
+    }
+    
+    @NotNull
     public static Collection<VirtualFile> findFilesInSourcesOnly(Project project, FileType fileType) {
         Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, fileType, GlobalSearchScope.allScope(project));
         
@@ -451,5 +477,13 @@ public class CndProjectFilesUtil {
             }
         }
         return false;
+    }
+
+    @Nullable
+    public static PsiFile getPsiFileFromVirtualFile(Project project, VirtualFile virtualFile) {
+        if (project != null && virtualFile != null) {
+            return PsiManager.getInstance(project).findFile(virtualFile);
+        }
+        return null;
     }
 }

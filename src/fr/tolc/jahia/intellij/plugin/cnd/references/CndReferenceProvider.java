@@ -1,16 +1,19 @@
 package fr.tolc.jahia.intellij.plugin.cnd.references;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.lang.properties.psi.impl.PropertyKeyImpl;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
-import com.intellij.psi.xml.XmlAttributeValue;
+import com.intellij.psi.xml.XmlToken;
 import com.intellij.util.ProcessingContext;
-import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.model.PropertiesFileCndKeyModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyConstraint;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeDefaultType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperType;
@@ -53,28 +56,13 @@ public class CndReferenceProvider extends PsiReferenceProvider {
                 return psiReferences;
             }
         } else {
+            List<PsiReference> psiReferences = new ArrayList<>();
             String nodetypeText = getNodeTypeText(element);
 
-            if (nodetypeText != null) {
-                NodeTypeModel nodeTypeModel = null;
-                try {
-                    nodeTypeModel = new NodeTypeModel(nodetypeText);
-                } catch (IllegalArgumentException e) {
-                    //Nothing to do
-                }
+            ReferenceProviderUtil.createNodeTypeReferences(element, psiReferences, nodetypeText, getOffset(element));                
 
-                if (nodeTypeModel != null) {
-                    int offset = getOffset(element);
-                    String namespace = nodeTypeModel.getNamespace();
-                    String nodeTypeName = nodeTypeModel.getNodeTypeName();
-
-                    return new PsiReference[] {
-                            //Text ranges here are relative!!
-                            new CndNamespaceIdentifierReference(element, new TextRange(offset, namespace.length() + offset), namespace),
-                            new CndNodeTypeIdentifierReference(element, new TextRange(namespace.length() + offset + 1, nodetypeText.length() + offset), namespace, nodeTypeName)
-                    };
-                }
-            }
+            PsiReference[] psiReferencesArray = new PsiReference[psiReferences.size()];
+            return psiReferences.toArray(psiReferencesArray);
         }
         return new PsiReference[0];
     }
@@ -94,12 +82,18 @@ public class CndReferenceProvider extends PsiReferenceProvider {
             return  element.getText();
         } else if (element instanceof CndSubNodeDefaultType) {   //Cnd subnode default type
             return  element.getText();
-        } else if (element instanceof XmlAttributeValue) {    //XML
-            return ((XmlAttributeValue) element).getValue();
+            //TODO: property constraint ref
+//        } else if (element instanceof CndPropertyConstraint) {   //Cnd property weakreference constraint
+//            return element.getText();
+//        } else if (element instanceof XmlAttributeValue) {    //XML Attribute value
+//            return ((XmlAttributeValue) element).getValue();
+        } else if (element instanceof XmlToken) {           //XML Text
+            return element.getText();
         }
         return null;
     }
     
+    //TODO: remove?
     private int getOffset(@NotNull PsiElement element) {
         if (element instanceof  PsiLiteralExpression) { //Java
             return 1;
@@ -111,8 +105,12 @@ public class CndReferenceProvider extends PsiReferenceProvider {
             return 0;
         } else if (element instanceof CndSubNodeDefaultType) {   //Cnd subnode default type
             return 0;
-        } else if (element instanceof XmlAttributeValue) {    //XML
-            return 1;
+        } else if (element instanceof CndPropertyConstraint) {   //Cnd property weakreference constraint
+            return 0;
+//        } else if (element instanceof XmlAttributeValue) {    //XML Attribute value
+//            return 1;
+        } else if (element instanceof XmlToken) {           //XML Text
+            return 0;
         }
         return 0;
     }

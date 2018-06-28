@@ -89,17 +89,38 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
     return CndPsiImplUtil.setNodeTypeName(this, newName);
   }
 
+  @Nullable
   public String getNodeTypeNamespace() {
     return CndPsiImplUtil.getNodeTypeNamespace(this);
   }
 
+  @NotNull
   public ItemPresentation getPresentation() {
     return CndPsiImplUtil.getPresentation(this);
+  }
+
+  public String toString() {
+    return CndPsiImplUtil.toString(this);
+  }
+
+  @NotNull
+  public Set<CndProperty> getProperties() {
+    return CndPsiImplUtil.getProperties(this);
+  }
+
+  @NotNull
+  public Set<CndProperty> getOwnProperties() {
+    return CndPsiImplUtil.getOwnProperties(this);
   }
 
   @Nullable
   public CndProperty getProperty(String propertyName) {
     return CndPsiImplUtil.getProperty(this, propertyName);
+  }
+
+  @Nullable
+  public CndProperty getOwnProperty(String propertyName) {
+    return CndPsiImplUtil.getOwnProperty(this, propertyName);
   }
 
   @NotNull
@@ -119,6 +140,11 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
   @NotNull
   public Set<CndNodeType> getAncestorsNodeTypes() {
     return CndPsiImplUtil.getAncestorsNodeTypes(this);
+  }
+
+  @NotNull
+  public Set<CndNodeType> getExtensions() {
+    return CndPsiImplUtil.getExtensions(this);
   }
 
 }

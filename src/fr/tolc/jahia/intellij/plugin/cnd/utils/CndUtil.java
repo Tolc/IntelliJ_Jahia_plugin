@@ -3,18 +3,23 @@ package fr.tolc.jahia.intellij.plugin.cnd.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndFile;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,8 +27,8 @@ public class CndUtil {
     private CndUtil() {}
 
     @NotNull
-    public static List<CndProperty> findProperties(Project project, String namespace, String nodeTypeName, String propertyName) {
-        List<CndProperty> result = new ArrayList<CndProperty>();
+    public static Set<CndProperty> findProperties(Project project, String namespace, String nodeTypeName, String propertyName) {
+        Set<CndProperty> result = new LinkedHashSet<CndProperty>();
         Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
         for (VirtualFile virtualFile : virtualFiles) {
             CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
@@ -32,7 +37,7 @@ public class CndUtil {
                 if (nodeTypes != null) {
                     for (CndNodeType nodeType : nodeTypes) {
                         if (namespace.equals(nodeType.getNodeTypeNamespace()) && nodeTypeName.equals(nodeType.getNodeTypeName())) {
-                            List<CndProperty> properties = nodeType.getPropertyList();
+                            Set<CndProperty> properties = nodeType.getProperties();
                             for (CndProperty property : properties) {
                                 if (propertyName.equals(property.getPropertyName())) {
                                     result.add(property);
@@ -48,11 +53,36 @@ public class CndUtil {
 
     @Nullable
     public static CndProperty findProperty(Project project, String namespace, String nodeTypeName, String propertyName) {
-        List<CndProperty> properties = findProperties(project, namespace, nodeTypeName, propertyName);
+        Set<CndProperty> properties = findProperties(project, namespace, nodeTypeName, propertyName);
         if (!properties.isEmpty()) {
-            return properties.get(0);
+            for (CndProperty property : properties) {
+                return property;
+            }
+
         }
         return null;
+    }
+
+    @NotNull
+    public static Set<CndProperty> findProperties(Project project) {
+        Set<CndProperty> result = new LinkedHashSet<>();
+        List<CndNodeType> nodeTypes = findNodeTypes(project);
+        for (CndNodeType nodeType : nodeTypes) {
+            result.addAll(nodeType.getOwnProperties());
+        }
+        return result;
+    }
+
+    @NotNull
+    public static Set<CndProperty> findProperties(Project project, String propertyName) {
+        Set<CndProperty> result = new LinkedHashSet<>();
+        Set<CndProperty> properties = findProperties(project);
+        for (CndProperty property : properties) {
+            if (propertyName.equals(property.getPropertyName())) {
+                result.add(property);
+            }
+        }
+        return result;
     }
 
     @NotNull
@@ -154,6 +184,58 @@ public class CndUtil {
         return null;
     }
 
+    @NotNull
+    public static Set<CndNodeType> findExtensionNodeTypes(CndNodeType element) {
+        Set<CndNodeType> result = new LinkedHashSet<CndNodeType>();
+        Project project = element.getProject();
+
+        Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
+        if (!virtualFiles.isEmpty()) {
+            Set<CndNodeType> ancestorsNodeTypes = element.getAncestorsNodeTypes();
+
+            for (VirtualFile virtualFile : virtualFiles) {
+                CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
+                if (cndFile != null) {
+                    Set<PsiElement> extensions = PsiUtil.findDescendantsByType(cndFile, CndTypes.EXTENSION);
+                    if (extensions != null) {
+                        for (PsiElement extensionEl : extensions) {
+                            if (extensionEl instanceof CndExtension) {
+                                CndExtension extension = (CndExtension) extensionEl;
+
+                                String nodeTypeNamespace = element.getNodeTypeNamespace();
+                                String nodeTypeName = element.getNodeTypeName();
+
+                                boolean isExt = nodeTypeNamespace != null && nodeTypeName != null 
+                                        && nodeTypeNamespace.equals(extension.getNodeTypeNamespace()) && nodeTypeName.equals(extension.getNodeTypeName());
+                                if (!isExt) {
+                                    for (CndNodeType ancestorNodeType : ancestorsNodeTypes) {
+                                        String ancestorNodeTypeNamespace = ancestorNodeType.getNodeTypeNamespace();
+                                        String ancestorNodeTypeName = ancestorNodeType.getNodeTypeName();
+                                        if (ancestorNodeTypeNamespace != null && ancestorNodeTypeName != null 
+                                                && ancestorNodeTypeNamespace.equals(extension.getNodeTypeNamespace()) && ancestorNodeTypeName.equals(extension.getNodeTypeName())) {
+                                            isExt = true;
+                                            break;
+                                        }
+                                    }
+                                }
+    
+                                if (isExt) {
+                                    PsiElement parent = extension.getParent();
+                                    if (parent != null) {
+                                        PsiElement grandParent = parent.getParent();
+                                        if (grandParent != null) {
+                                            result.add((CndNodeType) grandParent);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
 
     private static final String[] JAHIA_NAMESPACES = {"mix", "nt", "jmix", "jnt"};
     

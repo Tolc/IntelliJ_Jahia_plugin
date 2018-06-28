@@ -32,7 +32,7 @@ public class ViewReferenceProvider extends PsiReferenceProvider {
                                 //Text ranges here are relative!!
                                 new ViewIncludeReference(element, new TextRange(1, value.length() + 1), viewModel),
                         };
-                    } else if (JspUtil.TAG_MODULE.equals(localName)) {
+                    } else if (JspUtil.TAG_MODULE.equals(localName) || JspUtil.TAG_OPTION.equals(localName)) {
                         return new PsiReference[] {
                                 //Text ranges here are relative!!
                                 new ViewModuleReference(element, new TextRange(1, value.length() + 1), viewModel),

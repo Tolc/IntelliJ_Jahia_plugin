@@ -158,7 +158,7 @@ ATTRIBUTE=[:jletter:]([^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+)?
 	{CRLF}+{WHITE_SPACE}*{ATTRIBUTE}			{ yypushback(yytext().toString().replaceAll("\\r", "").replaceAll("\\n", "").trim().length()); yybegin(PROPERTY_ATTRIBUTES); return TokenType.WHITE_SPACE; }
 }
 <PROPERTY_DEFAULT_VALUE> {
-	[^\r\n\ ]+ | "'"[^\r\n']+"'"				{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
+	[^\r\n\ ]+ | "'"[^\r\n']+"'" | "\""[^\r\n\"]+"\""	    { yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
 }
 
 <PROPERTY_ATTRIBUTES> {

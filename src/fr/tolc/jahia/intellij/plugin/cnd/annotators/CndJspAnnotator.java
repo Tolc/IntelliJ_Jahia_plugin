@@ -1,56 +1,70 @@
 package fr.tolc.jahia.intellij.plugin.cnd.annotators;
 
-import java.util.regex.Pattern;
+import static fr.tolc.jahia.intellij.plugin.cnd.model.PropertyModel.propertyGetRegex;
+
+import java.util.Set;
+import java.util.regex.Matcher;
 
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.jsp.JspTokenType;
+import com.intellij.psi.impl.source.jsp.jspXml.JspOuterLanguageElement;
+import com.intellij.psi.jsp.el.ELElementTypes;
+import com.intellij.psi.xml.XmlAttribute;
+import com.intellij.psi.xml.XmlAttributeValue;
+import com.intellij.psi.xml.XmlElementType;
+import com.intellij.psi.xml.XmlTag;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.JspUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.PsiUtil;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Class not needed because XML annotator gets called when IntelliJ analyzes JSP files
- */
 public class CndJspAnnotator implements Annotator {
 
-    private static final Pattern nodeTypeRegex = Pattern.compile("^[A-Za-z]+" + ":" + "[A-Za-z0-9]+$");
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
-        if (JspTokenType.XML_ATTRIBUTE_VALUE_TOKEN.equals(element.getNode().getElementType())) {
+        if (XmlElementType.XML_ATTRIBUTE_VALUE.equals(element.getNode().getElementType())) {
+            if (JspUtil.isJcrNodePropertyName((XmlAttributeValue) element)) {
+                //<jcr:nodeProperty var="lol" node="${currentNode}" name="lol"/>
+                XmlAttributeValue attributeValue = (XmlAttributeValue) element;
+
+                String propertyName = attributeValue.getValue();
+                XmlAttribute nodeAttr = ((XmlTag) attributeValue.getParent().getParent()).getAttribute(JspUtil.TAG_ATTRIBUTE_NODE);
+
+                if (nodeAttr != null) {
+                    String nodeVar = (nodeAttr.getValue() != null) ? nodeAttr.getValue().replaceAll("\\$\\{|}", "") : "";
+
+                    int offset = attributeValue.getTextRange().getStartOffset() + 1;
+
+                    AnnotatorUtil.createPropertyAnnotations(element, holder, nodeVar, propertyName, offset);
+                }
+                
+                return;
+            }
+        }
+
+        if (element instanceof JspOuterLanguageElement) {
             String value = element.getText();
 
-//            if (value != null && value.contains(":")) {
-//                Matcher matcher = nodeTypeRegex.matcher(value);
-//                if (matcher.matches()) {
-//                    String[] splitValue = value.split(":");
-//                    String namespace = splitValue[0];
-//                    String nodeTypeName = splitValue[1];
-//                    Project project = element.getProject();
-//                    int offset = element.getTextRange().getStartOffset();
-//                    TextRange namespaceRange = new TextRange(offset, offset + namespace.length());
-//                    TextRange colonRange = new TextRange(offset + namespace.length(), offset + namespace.length() + 1);
-//                    TextRange nodeTypeNameRange = new TextRange(offset + namespace.length() + 1, element.getTextRange().getEndOffset());
-//
-//                    //Color ":"
-//                    Annotation colonAnnotation = holder.createInfoAnnotation(colonRange, null);
-//                    colonAnnotation.setTextAttributes(DefaultLanguageHighlighterColors.LINE_COMMENT);
-//
-//                    if (CndUtil.findNamespace(project, namespace) != null) {
-//                        Annotation namespaceAnnotation = holder.createInfoAnnotation(namespaceRange, null);
-//                        namespaceAnnotation.setTextAttributes(CndSyntaxHighlighter.NAMESPACE);
-//
-//                        if (CndUtil.findNodeType(project, namespace, nodeTypeName) != null) {
-//                            Annotation nodeTypeNameAnnotation = holder.createInfoAnnotation(nodeTypeNameRange, null);
-//                            nodeTypeNameAnnotation.setTextAttributes(CndSyntaxHighlighter.NODE_TYPE);
-//                        } else {
-//                            holder.createErrorAnnotation(nodeTypeNameRange, "Unresolved CND node type").registerFix(new CreateNodeTypeQuickFix(namespace, nodeTypeName));
-//                        }
-//                    } else {
-//                        holder.createErrorAnnotation(namespaceRange, "Unresolved CND namespace");
-//                    }
-//                }
-//            }
+            Matcher matcher = propertyGetRegex.matcher(value);
+            while (matcher.find()) {
+                String nodeVar = StringUtils.isNotBlank(matcher.group(1)) ? matcher.group(1) : matcher.group(3);
+                String propertyName = StringUtils.isNotBlank(matcher.group(2)) ? matcher.group(2) : matcher.group(4);
+
+                int offset = element.getTextRange().getStartOffset() + ((matcher.start(2) > -1) ? matcher.start(2) : matcher.start(4));
+
+                AnnotatorUtil.createPropertyAnnotations(element, holder, nodeVar, propertyName, offset);
+            }
         }
+
+        Set<PsiElement> literalExpressions = PsiUtil.findFirstDescendantsByType(element, ELElementTypes.EL_LITERAL_EXPRESSION);
+        for (PsiElement literalExpression : literalExpressions) {
+            if (!ELElementTypes.EL_SLICE_EXPRESSION.equals(literalExpression.getParent().getNode().getElementType())) {
+                String value = literalExpression.getText();
+                AnnotatorUtil.createNodeTypeAnnotations(literalExpression, holder, value);
+            }
+        }
+    
     }
 }

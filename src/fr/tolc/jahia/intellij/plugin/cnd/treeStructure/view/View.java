@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import com.intellij.openapi.actionSystem.DataKey;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import org.apache.commons.lang.StringUtils;
@@ -46,16 +45,6 @@ public class View {
         return this.viewFiles.get(0);
     }
     
-    public boolean containsFile(final VirtualFile vFile) {
-        for (PsiFile psiFile : viewFiles) {
-            final VirtualFile virtualFile = psiFile.getVirtualFile();
-            if (virtualFile != null && virtualFile.equals(vFile)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     public boolean equals(Object object) {
         if(this == object) {

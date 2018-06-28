@@ -2,12 +2,14 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi;
 
 import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement;
-import com.intellij.navigation.ItemPresentation;
 import java.util.Set;
+
+import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface CndNodeType extends CndNodeTypeElement {
 
@@ -36,12 +38,23 @@ public interface CndNodeType extends CndNodeTypeElement {
 
   PsiElement setNodeTypeName(String newName);
 
+  @Nullable
   String getNodeTypeNamespace();
 
+  @NotNull
   ItemPresentation getPresentation();
+
+  @NotNull
+  Set<CndProperty> getProperties();
+
+  @NotNull
+  Set<CndProperty> getOwnProperties();
 
   @Nullable
   CndProperty getProperty(String propertyName);
+
+  @Nullable
+  CndProperty getOwnProperty(String propertyName);
 
   @NotNull
   Set<OptionEnum> getOptions();
@@ -53,5 +66,8 @@ public interface CndNodeType extends CndNodeTypeElement {
 
   @NotNull
   Set<CndNodeType> getAncestorsNodeTypes();
+
+  @NotNull
+  Set<CndNodeType> getExtensions();
 
 }

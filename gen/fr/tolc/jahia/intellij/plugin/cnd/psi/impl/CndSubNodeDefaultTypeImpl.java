@@ -27,6 +27,7 @@ public class CndSubNodeDefaultTypeImpl extends CndSubNodeDefaultTypeElementImpl 
     else super.accept(visitor);
   }
 
+  @NotNull
   public PsiReference[] getReferences() {
     return CndPsiImplUtil.getReferences(this);
   }
