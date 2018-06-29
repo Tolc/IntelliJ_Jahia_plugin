@@ -151,7 +151,8 @@ ATTRIBUTE=[:jletter:]([^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+)?
 }
 
 <PROPERTY_DEFAULT> {
-	{CRLF}*{WHITE_SPACE}*"="					{ yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
+	({CRLF}|{WHITE_SPACE})+"="					{ yypushback(1); return TokenType.WHITE_SPACE; }
+	"="					                        { yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
 	{CRLF}+{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT_NEWLINE); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
 	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
 	{ATTRIBUTE}									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
