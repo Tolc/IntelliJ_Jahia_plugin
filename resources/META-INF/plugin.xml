@@ -106,6 +106,7 @@ Other files/languages features:
       <html>
           <dl>
               <dt>2.0.1</dt>
+              <dt>(<strong>feature</strong>) <template:addResources/> completion, references, and line markers (#41)</dt>
               <dt>Fixed CND formatting adding spaces between property type and default value (#46)</dt>
           </dl>
       	  <dl>
@@ -261,6 +262,8 @@ Other files/languages features:
 
     <!-- Views -->
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceContributor"/>
+    <!-- addResources -->
+    <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ResourceReferenceContributor"/>
 
     <!-- Tool Window -->
     <toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahia_dxm.png" anchor="right" order="first"

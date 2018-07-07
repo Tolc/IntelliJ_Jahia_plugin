@@ -1,6 +1,7 @@
 package fr.tolc.jahia.intellij.plugin.cnd.completion;
 
 import java.util.List;
+import java.util.Map;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -8,11 +9,14 @@ import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.module.Module;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlElementType;
 import com.intellij.util.ProcessingContext;
+import fr.tolc.jahia.intellij.plugin.cnd.model.ResourcesModel;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.JspUtil;
@@ -33,21 +37,35 @@ public class JspCompletionContributor extends CompletionContributor {
                         if (element != null) {
                             PsiElement elementParent = element.getParent();
                             if (elementParent instanceof XmlAttributeValue) {
-                                ViewModel viewModel = JspUtil.getViewModelFromJspTagAttributeValue((XmlAttributeValue) elementParent, parameters.getOriginalFile().getVirtualFile());
 
-                                if (viewModel != null) {
-                                    List<ViewModel> nodeTypeViews = null;
-                                    String localName = viewModel.getTagName();
-                                    if (JspUtil.TAG_INCLUDE.equals(localName)) {
-                                        nodeTypeViews = CndProjectFilesUtil.getNodeTypeAndAncestorsViews(element.getProject(), viewModel.getNodeType().getNamespace(), 
-                                                viewModel.getNodeType().getNodeTypeName(), viewModel.getType());
-                                    } else if (JspUtil.TAG_MODULE.equals(localName) || JspUtil.TAG_OPTION.equals(localName)) {
-                                        nodeTypeViews = CndProjectFilesUtil.getProjectNodeTypeViews(element.getProject(), viewModel.getType());
+                                //template:addResources
+                                ResourcesModel resourcesModel = JspUtil.getResourcesModelFromJspTagAttributeValue((XmlAttributeValue) elementParent);
+                                if (resourcesModel != null) {
+                                    if (resourcesModel.getType() != null) {
+                                        Module module = CndProjectFilesUtil.getModuleForFile(element.getProject(), parameters.getOriginalFile().getVirtualFile());
+                                        Map<String, PsiFile> resources = CndProjectFilesUtil.getResources(module, resourcesModel.getType());
+                                        for (String resource : resources.keySet()) {
+                                            resultSet.addElement(LookupElementBuilder.create(resource));
+                                        }
                                     }
 
-                                    if (nodeTypeViews != null) {
-                                        for (ViewModel nodeTypeView : nodeTypeViews) {
-                                            resultSet.addElement(LookupElementBuilder.create(nodeTypeView.getFormattedName()));
+                                } else {
+                                    //template:module/include
+                                    ViewModel viewModel = JspUtil.getViewModelFromJspTagAttributeValue((XmlAttributeValue) elementParent, parameters.getOriginalFile().getVirtualFile());
+                                    if (viewModel != null) {
+                                        List<ViewModel> nodeTypeViews = null;
+                                        String localName = viewModel.getTagName();
+                                        if (JspUtil.TAG_INCLUDE.equals(localName)) {
+                                            nodeTypeViews = CndProjectFilesUtil.getNodeTypeAndAncestorsViews(element.getProject(), viewModel.getNodeType().getNamespace(),
+                                                    viewModel.getNodeType().getNodeTypeName(), viewModel.getType());
+                                        } else if (JspUtil.TAG_MODULE.equals(localName) || JspUtil.TAG_OPTION.equals(localName)) {
+                                            nodeTypeViews = CndProjectFilesUtil.getProjectNodeTypeViews(element.getProject(), viewModel.getType());
+                                        }
+
+                                        if (nodeTypeViews != null) {
+                                            for (ViewModel nodeTypeView : nodeTypeViews) {
+                                                resultSet.addElement(LookupElementBuilder.create(nodeTypeView.getFormattedName()));
+                                            }
                                         }
                                     }
                                 }

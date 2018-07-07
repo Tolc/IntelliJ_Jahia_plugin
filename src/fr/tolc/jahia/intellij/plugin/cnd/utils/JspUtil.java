@@ -5,6 +5,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlTag;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.ResourcesTypeEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.model.ResourcesModel;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -12,9 +14,12 @@ import org.jetbrains.annotations.Nullable;
 public class JspUtil {
     public static final String TAG_ATTRIBUTE_VIEW = "view";
     public static final String TAG_ATTRIBUTE_TEMPLATETYPE = "templateType";
+    public static final String TAG_ATTRIBUTE_TYPE = "type";
+    public static final String TAG_ATTRIBUTE_RESOURCES = "resources";
     public static final String TAG_INCLUDE = "include";
     public static final String TAG_MODULE = "module";
     public static final String TAG_OPTION = "option";
+    public static final String TAG_ADD_RESOURCES = "addResources";
     public static final String TAGLIB_TEMPLATE_NAMESPACE = "http://www.jahia.org/tags/templateLib";
 
     public static final String TAG_ATTRIBUTE_NODE = "node";
@@ -62,6 +67,36 @@ public class JspUtil {
         }
         return null;
     }
+
+    @Nullable
+    public static ResourcesModel getResourcesModelFromJspTagAttributeValue(XmlAttributeValue attributeValue) {
+        String value = attributeValue.getValue();
+
+        PsiElement xmlAttribute = attributeValue.getParent();
+        if (xmlAttribute instanceof XmlAttribute) {
+            String attributeName = ((XmlAttribute) xmlAttribute).getName();
+            if (TAG_ATTRIBUTE_RESOURCES.equals(attributeName)) {
+                PsiElement xmlTag = xmlAttribute.getParent();
+                if (xmlTag instanceof XmlTag) {
+                    String tagNamespace = ((XmlTag) xmlTag).getNamespace();
+                    if (TAGLIB_TEMPLATE_NAMESPACE.equals(tagNamespace)) {
+                        String localName = ((XmlTag) xmlTag).getLocalName();
+                        if (TAG_ADD_RESOURCES.equals(localName)) {
+                            //'type' attribute
+                            XmlAttribute typeAttribute = ((XmlTag) xmlTag).getAttribute(TAG_ATTRIBUTE_TYPE);
+                            if (typeAttribute != null) {
+                                String type = typeAttribute.getValue();
+                                if (StringUtils.isNotBlank(type)) {
+                                    return new ResourcesModel(ResourcesTypeEnum.fromAnything(type), value);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
     
     public static boolean isTag(XmlTag tag, String namespace, String tagName) {
         String tagNamespace = tag.getNamespace();
@@ -78,6 +113,10 @@ public class JspUtil {
 
     public static boolean isTemplateModule(XmlTag tag) {
         return isTag(tag, TAGLIB_TEMPLATE_NAMESPACE, TAG_MODULE);
+    }
+
+    public static boolean isTemplateAddResources(XmlTag tag) {
+        return isTag(tag, TAGLIB_TEMPLATE_NAMESPACE, TAG_ADD_RESOURCES);
     }
 
     public static boolean isTemplateOption(XmlTag tag) {
