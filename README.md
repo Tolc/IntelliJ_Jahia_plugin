@@ -59,6 +59,7 @@ Jahia project versions: **6.6.x** or **7.x**
         * `<template:module/>` line marker, 'view' attribute completion and reference ![template module](src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/templateModule.png) (both are affected by 'templateType' attribute if provided)
         * `<template:include/>` line marker, 'view' attribute completion and reference ![template include](src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/templateInclude.png) (both are affected by 'templateType' attribute if provided)
         * Properties and property type completion in `${currentNode.properties.propertyName}`, `${currentNode.properties['propertyName']}` and `<jcr:nodeProperty/>`
+        * `<template:addResources/>` line marker, completion and reference
      * Java
         * Nodetypes usages highlighting & line markers ![nodetype](src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/nodeType.png)/![mixin](src/fr/tolc/jahia/intellij/plugin/cnd/icons/img/mixin.png)
         * Nodetypes completion
