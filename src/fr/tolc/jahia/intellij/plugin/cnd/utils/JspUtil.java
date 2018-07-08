@@ -97,6 +97,23 @@ public class JspUtil {
         }
         return null;
     }
+
+    public static boolean isTagAttribute(PsiElement attribute, String namespace, String tagName, String attributeName) {
+        if (attribute instanceof XmlAttribute) {
+            String attrName = ((XmlAttribute) attribute).getName();
+            if (attributeName.equals(attrName)) {
+                PsiElement xmlTag = attribute.getParent();
+                if (xmlTag instanceof XmlTag) {
+                    String tagNamespace = ((XmlTag) xmlTag).getNamespace();
+                    if (namespace.equals(tagNamespace)) {
+                        String localName = ((XmlTag) xmlTag).getLocalName();
+                        return tagName.equals(localName);
+                    }
+                }
+            }
+        }
+        return false;
+    }
     
     public static boolean isTag(XmlTag tag, String namespace, String tagName) {
         String tagNamespace = tag.getNamespace();
