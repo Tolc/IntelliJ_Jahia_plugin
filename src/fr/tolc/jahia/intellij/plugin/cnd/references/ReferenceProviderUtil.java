@@ -25,7 +25,7 @@ public class ReferenceProviderUtil {
     public static void createPropertyReferences(@NotNull PsiElement element, @NotNull List<PsiReference> psiReferences, String nodeVar, String propertyName, int offset) {
         TextRange propertyRange = new TextRange(offset, offset + propertyName.length());
 
-        if (CURRENT_NODE.equals(nodeVar)) {
+        if (CURRENT_NODE.equals(nodeVar.trim())) {
             String namespace = null;
             String nodeTypeName = null;
 

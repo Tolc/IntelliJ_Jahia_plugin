@@ -108,6 +108,7 @@ Other files/languages features:
               <dt>2.0.1</dt>
               <dt>(<strong>feature</strong>) <template:addResources/> completion, references, and line markers (#41)</dt>
               <dt>Fixed CND formatting adding spaces between property type and default value (#46)</dt>
+              <dt>Fixed ${currentNode} checks not being trimmed (#48)</dt>
               <dt>Fixed views not being identified as views if nodetype name contains underscores (#49)</dt>
           </dl>
       	  <dl>

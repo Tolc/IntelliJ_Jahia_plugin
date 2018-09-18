@@ -30,7 +30,7 @@ public class LineMarkerUtil {
     
     public static void createPropertyLineMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result, String nodeVar, String propertyName) {
         Set<CndProperty> possibleProperties = new LinkedHashSet<>();
-        if (CURRENT_NODE.equals(nodeVar)) {
+        if (CURRENT_NODE.equals(nodeVar.trim())) {
             ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(element.getContainingFile().getOriginalFile().getVirtualFile());
             if (viewModel != null) {
                 CndNodeType nodeType = CndUtil.findNodeType(element.getProject(), viewModel.getNodeType());
@@ -62,7 +62,7 @@ public class LineMarkerUtil {
                 }
             }
         } else {
-            builder.setTarget(element.getContainingFile()).setTooltipText("Property [" + propertyName + "] of node [" + nodeVar + "]");
+            builder.setTarget(element.getContainingFile()).setTooltipText("Property [" + propertyName + "] of node [" + nodeVar.trim() + "]");
         }
         result.add(builder.createLineMarkerInfo(element));
     }
