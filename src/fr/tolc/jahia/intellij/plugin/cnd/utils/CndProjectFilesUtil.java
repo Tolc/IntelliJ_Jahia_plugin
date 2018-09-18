@@ -392,7 +392,7 @@ public class CndProjectFilesUtil {
 
                     if (nodeTypeFolder != null && nodeTypeFolder.isDirectory()) {
                         String nodeTypeFolderName = nodeTypeFolder.getName();
-                        String[] nodeTypeSplit = nodeTypeFolderName.split("_");
+                        String[] nodeTypeSplit = nodeTypeFolderName.split("_", 2);
 
                         if (nodeTypeSplit.length == 2) {
                             if (nodeTypeSplit[1].equals(nodeTypeName)) {
