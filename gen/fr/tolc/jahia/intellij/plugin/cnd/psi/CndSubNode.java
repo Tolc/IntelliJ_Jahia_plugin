@@ -17,6 +17,7 @@ public interface CndSubNode extends CndSubNodeElement {
   @NotNull
   List<CndSubNodeType> getSubNodeTypeList();
 
+  @Nullable
   String getSubNodeName();
 
 }

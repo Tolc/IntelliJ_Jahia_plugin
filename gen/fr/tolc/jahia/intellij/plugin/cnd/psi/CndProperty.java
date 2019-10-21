@@ -31,14 +31,19 @@ public interface CndProperty extends CndPropertyElement {
 
   PsiElement setPropertyName(String newName);
 
+  @Nullable
   PropertyTypeEnum getType();
 
+  @Nullable
   PropertyTypeMaskEnum getTypeMask();
 
+  @NotNull
   ItemPresentation getPresentation();
 
   boolean hasAttribute(AttributeEnum attribute);
 
   boolean isMultiple();
+
+  CndNodeType getNodeType();
 
 }

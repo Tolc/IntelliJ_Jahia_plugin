@@ -45,6 +45,7 @@ public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndName
     return CndPsiImplUtil.getNamespaceURI(this);
   }
 
+  @NotNull
   public ItemPresentation getPresentation() {
     return CndPsiImplUtil.getPresentation(this);
   }

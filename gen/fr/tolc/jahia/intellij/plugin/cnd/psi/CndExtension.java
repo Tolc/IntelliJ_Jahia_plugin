@@ -9,6 +9,13 @@ import com.intellij.psi.PsiReference;
 
 public interface CndExtension extends CndExtensionElement {
 
+  @NotNull
   PsiReference[] getReferences();
+
+  @Nullable
+  String getNodeTypeNamespace();
+
+  @Nullable
+  String getNodeTypeName();
 
 }

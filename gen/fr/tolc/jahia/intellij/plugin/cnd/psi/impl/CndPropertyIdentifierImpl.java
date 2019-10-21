@@ -27,6 +27,7 @@ public class CndPropertyIdentifierImpl extends CndPropertyIdentifierElementImpl 
     else super.accept(visitor);
   }
 
+  @Nullable
   public String getPropertyName() {
     return CndPsiImplUtil.getPropertyName(this);
   }
@@ -35,6 +36,7 @@ public class CndPropertyIdentifierImpl extends CndPropertyIdentifierElementImpl 
     return CndPsiImplUtil.setPropertyName(this, newName);
   }
 
+  @Nullable
   public PsiElement getNameIdentifier() {
     return CndPsiImplUtil.getNameIdentifier(this);
   }

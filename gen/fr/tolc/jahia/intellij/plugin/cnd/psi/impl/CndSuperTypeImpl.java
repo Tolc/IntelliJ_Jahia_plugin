@@ -27,14 +27,17 @@ public class CndSuperTypeImpl extends CndSuperTypeElementImpl implements CndSupe
     else super.accept(visitor);
   }
 
+  @NotNull
   public PsiReference[] getReferences() {
     return CndPsiImplUtil.getReferences(this);
   }
 
+  @Nullable
   public String getNodeTypeName() {
     return CndPsiImplUtil.getNodeTypeName(this);
   }
 
+  @Nullable
   public String getNodeTypeNamespace() {
     return CndPsiImplUtil.getNodeTypeNamespace(this);
   }
