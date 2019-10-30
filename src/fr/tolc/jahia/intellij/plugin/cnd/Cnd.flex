@@ -158,7 +158,7 @@ ATTRIBUTE=[:jletter:]([^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+)?
 	{CRLF}+{WHITE_SPACE}*{ATTRIBUTE}			{ yypushback(yytext().toString().replaceAll("\\r", "").replaceAll("\\n", "").trim().length()); yybegin(PROPERTY_ATTRIBUTES); return TokenType.WHITE_SPACE; }
 }
 <PROPERTY_DEFAULT_VALUE> {
-	[^\r\n\ ]+ | "'"[^\r\n']+"'" | "\""[^\r\n\"]+"\""	    { yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
+	[^\r\n'\"\-\+\ \t\f]+ ({WHITE_SPACE}*","{WHITE_SPACE}*[^\r\n'\"\-\+\ \t\f]+)* | "'"[^\r\n']+"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']+"'")* | "\""[^\r\n\"]+"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""[^\r\n\"]+"\"")*		    { yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
 }
 
 <PROPERTY_ATTRIBUTES> {
@@ -167,7 +167,7 @@ ATTRIBUTE=[:jletter:]([^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+)?
 	{CRLF}+{WHITE_SPACE}*{ATTRIBUTE}			{ yypushback(yytext().toString().replaceAll("\\r", "").replaceAll("\\n", "").trim().length()); return TokenType.WHITE_SPACE; }
 }
 
-<PROPERTY_CONSTRAINT> [^\r\n'\-\+\ \t\f]+ ({WHITE_SPACE}*","{WHITE_SPACE}*[^\r\n'\-\+\ \t\f]+)*	| "'"[^\r\n]+"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']+"'")*		{ return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
+<PROPERTY_CONSTRAINT> [^\r\n'\"\-\+\ \t\f]+ ({WHITE_SPACE}*","{WHITE_SPACE}*[^\r\n'\"\-\+\ \t\f]+)*	| "'"[^\r\n']+"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']+"'")* | "\""[^\r\n\"]+"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""[^\r\n\"]+"\"")*		  { return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
 
 
 
