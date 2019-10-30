@@ -1,4 +1,4 @@
-# CND Language / [Jahia][1] Framework support for [IntelliJ IDEA][3]
+# CND Language / [Jahia][1] Framework support for [IntelliJ IDEA][2]
 
 [![release](https://img.shields.io/github/release/Tolc/IntelliJ_Jahia_Plugin.svg?style=flat-square)](https://github.com/Tolc/IntelliJ_Jahia_plugin/releases)
 
@@ -7,7 +7,7 @@ definitions.cnd files syntax highlighting, code completion, and other amazing st
 
 ## Requirements
 
-Tested under IntelliJ IDEA from 14.1.4 to 2017.1.5 (can't see why it wouldn't work with older versions though).
+Tested under IntelliJ IDEA from 14.1.4 to 2019.2 (can't see why it wouldn't work with older versions though).
 
 IntelliJ plugins dependencies (optional): **jsp**, **properties**. Java **8** needed.
  
@@ -37,7 +37,7 @@ Jahia project versions: **6.6.x** or **7.x**
 
 
 ### Jahia Framework
-![Jahia][2]
+[![Jahia](resources/jahia/jahia.png)][1]
 
 #### Compatible with Jahia versions **6.6.x** & **7.x**
 
@@ -100,5 +100,4 @@ Jahia project versions: **6.6.x** or **7.x**
 ##### This plugin is neither official nor endorsed by [Jahia][1] in any way. I am just a guy who loves this CMS and wanted to make working with it easier for everyone (or at least everyone using IntelliJ, duh).
 
  [1]: https://www.jahia.com/
- [2]: https://www.jahia.com/files/live/sites/jahiacom/files/logo-jahia-2016.png
- [3]: https://www.jetbrains.com/idea/
+ [2]: https://www.jetbrains.com/idea/
