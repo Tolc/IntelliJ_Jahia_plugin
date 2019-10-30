@@ -111,6 +111,7 @@ Other files/languages features:
               <dt>Fixed issue with choicelist options being allowed to contain + and - even when not between quotes (#47)</dt>
               <dt>Fixed ${currentNode} checks not being trimmed (#48)</dt>
               <dt>Fixed views not being identified as views if nodetype name contains underscores (#49)</dt>
+              <dt>Fixed 'currentNode' property access being flagged as a non 'currentNode' property access when in a JSTL function (#50)</dt>
               <dt>Fixed issue with property multiple default value (#51)</dt>
               <dt>Added various missing completion values and default cache properties options</dt>
           </dl>
