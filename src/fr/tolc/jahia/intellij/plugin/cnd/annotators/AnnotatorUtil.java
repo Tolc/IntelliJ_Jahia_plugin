@@ -28,7 +28,7 @@ public class AnnotatorUtil {
     
     public static void createPropertyAnnotations(@NotNull final PsiElement element, @NotNull AnnotationHolder holder, String nodeVar, String propertyName, int offset) {
         TextRange propertyRange = new TextRange(offset, offset + propertyName.length());
-        if (CURRENT_NODE.equals(nodeVar)) {
+        if (CURRENT_NODE.equals(nodeVar.trim())) {
             ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(element.getContainingFile().getOriginalFile().getVirtualFile());
             if (viewModel != null) {
                 CndNodeType nodeType = CndUtil.findNodeType(element.getProject(), viewModel.getNodeType());
@@ -58,7 +58,7 @@ public class AnnotatorUtil {
         } else {
             //Warn about cache
             Annotation cacheAnnotation = holder.createWarningAnnotation(element.getTextRange(),
-                    "You should not be accessing properties from another node. It is not cache efficient. Use a <template:module node=\"" + nodeVar + "\"> instead.");
+                    "You should not be accessing properties from another node. It is not cache efficient. Use a <template:module node=\"${" + nodeVar.trim() + "}\"> instead.");
             //TODO: quick fix
             
             

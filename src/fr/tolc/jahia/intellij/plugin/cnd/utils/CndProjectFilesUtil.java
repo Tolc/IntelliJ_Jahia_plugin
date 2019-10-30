@@ -1,13 +1,5 @@
 package fr.tolc.jahia.intellij.plugin.cnd.utils;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -21,6 +13,7 @@ import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import fr.tolc.jahia.intellij.plugin.cnd.CndFileType;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.ResourcesTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ViewModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
@@ -30,6 +23,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CndProjectFilesUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(CndProjectFilesUtil.class);
@@ -391,7 +392,7 @@ public class CndProjectFilesUtil {
 
                     if (nodeTypeFolder != null && nodeTypeFolder.isDirectory()) {
                         String nodeTypeFolderName = nodeTypeFolder.getName();
-                        String[] nodeTypeSplit = nodeTypeFolderName.split("_");
+                        String[] nodeTypeSplit = nodeTypeFolderName.split("_", 2);
 
                         if (nodeTypeSplit.length == 2) {
                             if (nodeTypeSplit[1].equals(nodeTypeName)) {
@@ -485,5 +486,57 @@ public class CndProjectFilesUtil {
             return PsiManager.getInstance(project).findFile(virtualFile);
         }
         return null;
+    }
+
+    @Nullable
+    public static VirtualFile getVirtualFileFromIoFile(File file) {
+        return LocalFileSystem.getInstance().findFileByIoFile(file);
+    }
+
+    @Nullable
+    public static PsiFile getPsiFileFromIoFile(Project project, File file) {
+        VirtualFile virtualFile = getVirtualFileFromIoFile(file);
+        if (virtualFile != null) {
+            return getPsiFileFromVirtualFile(project, virtualFile);
+        }
+        return null;
+    }
+
+    @Nullable
+    public static PsiFile getResource(Module module, ResourcesTypeEnum resourcesType, String resource) {
+        String jahiaWorkFolderPath = getJahiaWorkFolderPath(module);
+        File resourceFile = new File(jahiaWorkFolderPath + "/" + resourcesType.name() + "/" + resource);
+        if (resourceFile.exists() && !resourceFile.isDirectory()) {
+            return getPsiFileFromIoFile(module.getProject(), resourceFile);
+        }
+        return null;
+    }
+
+    @NotNull
+    public static Map<String, PsiFile> getResources(Module module, ResourcesTypeEnum resourcesType) {
+        String jahiaWorkFolderPath = getJahiaWorkFolderPath(module);
+        File resourcesFolder = new File(jahiaWorkFolderPath + "/" + resourcesType.name());
+
+        return getFilesRecursive(module.getProject(), resourcesFolder, resourcesFolder.getAbsolutePath() + "\\");
+    }
+
+    @NotNull
+    private static Map<String, PsiFile> getFilesRecursive(Project project, File file, String relativeToFolder) {
+        Map<String, PsiFile> res = new HashMap<>();
+
+        if (file != null && file.exists()) {
+            if (file.isDirectory()) {
+                for (File child : file.listFiles()) {
+                    res.putAll(getFilesRecursive(project, child, relativeToFolder));
+                }
+            } else {
+                res.put(
+                        StringUtils.substringAfter(file.getAbsolutePath(), relativeToFolder).replace("\\", "/"),
+                        getPsiFileFromIoFile(project, file)
+                        );
+            }
+        }
+
+        return res;
     }
 }
