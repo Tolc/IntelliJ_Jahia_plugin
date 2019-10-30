@@ -30,8 +30,9 @@ public enum PropertyTypeMaskOptionEnum {
     SEPARATOR("separator"),
     FOLDER("folder"),
     ROOT("root"),
+    CKEDITOR_TOOLBAR("ckeditor.toolbar"),
     CKEDITOR_CUSTOMCONFIG("ckeditor.customConfig");
-    
+
     private String value;
 
     PropertyTypeMaskOptionEnum(String value) {
