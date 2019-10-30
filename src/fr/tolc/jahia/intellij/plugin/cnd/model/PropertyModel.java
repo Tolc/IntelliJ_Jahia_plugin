@@ -7,7 +7,7 @@ public class PropertyModel {
     private static final String PROPERTY_PART = "([A-Za-z](?:[A-Za-z0-9:.]*[A-Za-z0-9])?)";
     public static final String CURRENT_NODE = "currentNode";
     private static final String PROPERTIES_MAP_PART = "\\.properties";
-    private static final String BEFORE_PART = "([^\\s.{]+)";
+    private static final String BEFORE_PART = "([^\\s.{(]+)";
 
     private static final String PROPERTY_GET_SIMPLE = BEFORE_PART + PROPERTIES_MAP_PART + "\\." + PROPERTY_PART_SIMPLE;
     private static final String PROPERTY_GET_BRACKETS = BEFORE_PART + PROPERTIES_MAP_PART + "\\[['\"]" + PROPERTY_PART + "['\"]]";
