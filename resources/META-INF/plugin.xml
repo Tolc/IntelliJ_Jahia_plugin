@@ -99,6 +99,9 @@ Other files/languages features:
         </ul>
     </li>
 </ul>
+<br>
+This plugin is neither official nor endorsed by <a href="https://www.jahia.com/">Jahia</a> in any way.<br>
+I am just a guy who loves this CMS and wanted to make working with it easier for everyone (or at least everyone using IntelliJ, duh).
 </html>
   ]]></description>
   
@@ -106,17 +109,19 @@ Other files/languages features:
       <html>
            <dl>
               <dt>2.0.2</dt>
+              <dd>Fixed issue with 'resourceBundle' property default value</dd>
+              <dd>Fixed issue with empty string as property default value</dd>
           </dl>
           <dl>
               <dt>2.0.1</dt>
-              <dt>(<strong>feature</strong>) <template:addResources/> completion, references, and line markers (#41)</dt>
-              <dt>Fixed CND formatting adding spaces between property type and default value (#46)</dt>
-              <dt>Fixed issue with choicelist options being allowed to contain + and - even when not between quotes (#47)</dt>
-              <dt>Fixed ${currentNode} checks not being trimmed (#48)</dt>
-              <dt>Fixed views not being identified as views if nodetype name contains underscores (#49)</dt>
-              <dt>Fixed 'currentNode' property access being flagged as a non 'currentNode' property access when in a JSTL function (#50)</dt>
-              <dt>Fixed issue with property multiple default value (#51)</dt>
-              <dt>Added various missing completion values and default cache properties options</dt>
+              <dd>(<strong>feature</strong>) <template:addResources/> completion, references, and line markers (#41)</dd>
+              <dd>Fixed CND formatting adding spaces between property type and default value (#46)</dd>
+              <dd>Fixed issue with choicelist options being allowed to contain + and - even when not between quotes (#47)</dd>
+              <dd>Fixed ${currentNode} checks not being trimmed (#48)</dd>
+              <dd>Fixed views not being identified as views if nodetype name contains underscores (#49)</dd>
+              <dd>Fixed 'currentNode' property access being flagged as a non 'currentNode' property access when in a JSTL function (#50)</dd>
+              <dd>Fixed issue with property multiple default value (#51)</dd>
+              <dd>Added various missing completion values and default cache properties options</dd>
           </dl>
       	  <dl>
               <dt>2.0.0</dt>
