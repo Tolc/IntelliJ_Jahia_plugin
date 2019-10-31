@@ -166,6 +166,7 @@ ATTRIBUTE=[:jletter:]([^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+)?
 	{ATTRIBUTE}									{ return CndTypes.PROPERTY_ATTRIBUTE; }
 	{CRLF}+{WHITE_SPACE}*{ATTRIBUTE}			{ yypushback(yytext().toString().replaceAll("\\r", "").replaceAll("\\n", "").trim().length()); return TokenType.WHITE_SPACE; }
 }
+
 <PROPERTY_CONSTRAINT> [^\r\n'\"\-\+\ \t\f]+ ({WHITE_SPACE}*","{WHITE_SPACE}*[^\r\n'\"\-\+\ \t\f]+)*    | "'"[^\r\n']*"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']*"'")* | "\""[^\r\n\"]*"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""[^\r\n\"]*"\"")*          { return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
 
 
