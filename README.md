@@ -4,6 +4,7 @@
 
 definitions.cnd files syntax highlighting, code completion, and other amazing stuff.
 
+Rate it on [JetBrains Plugins Repository][3]!
 
 ## Requirements
 
@@ -101,3 +102,4 @@ Jahia project versions: **6.6.x** or **7.x**
 
  [1]: https://www.jahia.com/
  [2]: https://www.jetbrains.com/idea/
+ [3]: https://plugins.jetbrains.com/plugin/9221-cnd-language--jahia-framework/

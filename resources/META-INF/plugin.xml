@@ -202,6 +202,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
   <!-- uncomment to enable plugin in all products
   <depends>com.intellij.modules.lang</depends>
   -->
+  <depends>com.intellij.modules.java</depends>
   <depends optional="true" config-file="jahia-properties-features.xml">com.intellij.properties</depends>
   <depends optional="true" config-file="jahia-jsp-features.xml">com.intellij.jsp</depends>
 
