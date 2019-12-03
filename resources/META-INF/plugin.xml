@@ -109,7 +109,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
       <html>
           <dl>
               <dt>2.0.3</dt>
-              <dd>(<strong>IMPORTANT FIX</strong>) Fixed plugin breaking issue with IntelliJ 2019.3 (coming from a deprecated use of FileTypeIndex)</dd>
+              <dd>(<strong>IMPORTANT FIX</strong>) Fixed plugin breaking issue with IntelliJ 2019.3 (coming from a malformed cnd files jar)</dd>
           </dl>
           <dl>
               <dt>2.0.2</dt>
