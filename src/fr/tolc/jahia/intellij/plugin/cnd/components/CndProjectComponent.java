@@ -16,6 +16,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import fr.tolc.jahia.intellij.plugin.cnd.CndFileType;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndPluginUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.generate.exception.PluginException;
 import org.slf4j.Logger;
@@ -66,7 +67,7 @@ public class CndProjectComponent implements ProjectComponent {
 
                             //Adding it to the modules libraries
                             Set<Module> alreadyDoneModules = new HashSet<>();
-                            Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
+                            Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
                             for (VirtualFile virtualFile : virtualFiles) {
                                 try {
                                     Module fileModule = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);

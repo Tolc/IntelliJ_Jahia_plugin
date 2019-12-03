@@ -8,7 +8,7 @@ Rate it on [JetBrains Plugins Repository][3]!
 
 ## Requirements
 
-Tested under IntelliJ IDEA from 14.1.4 to 2019.2 (can't see why it wouldn't work with older versions though).
+Tested under IntelliJ IDEA from 14.1.4 to 2019.3 (can't see why it wouldn't work with older versions though).
 
 IntelliJ plugins dependencies (optional): **jsp**, **properties**. Java **8** needed.
  

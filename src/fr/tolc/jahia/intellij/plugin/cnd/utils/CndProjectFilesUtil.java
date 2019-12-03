@@ -410,12 +410,13 @@ public class CndProjectFilesUtil {
 
     @NotNull
     public static Collection<VirtualFile> getProjectCndFiles(Project project) {
-        return FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
+        return FileTypeIndex.getFiles(CndFileType.INSTANCE, GlobalSearchScope.allScope(project));
     }
 
     @NotNull
     public static Collection<VirtualFile> getModuleCndFiles(Module module) {
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, CndFileType.INSTANCE, GlobalSearchScope.allScope(module.getProject()));
+        //TODO: moduleScope ?
+        Collection<VirtualFile> virtualFiles = getProjectCndFiles(module.getProject());
 
         Collection<VirtualFile> res = new ArrayList<VirtualFile>();
         for (VirtualFile virtualFile : virtualFiles) {
@@ -433,7 +434,7 @@ public class CndProjectFilesUtil {
 
     @NotNull
     public static Collection<VirtualFile> findFilesInLibrariesOnly(Project project, FileType fileType) {
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, fileType, GlobalSearchScope.allScope(project));
+        Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(fileType, GlobalSearchScope.allScope(project));
 
         Collection<VirtualFile> res = new ArrayList<VirtualFile>();
         for (VirtualFile virtualFile : virtualFiles) {
@@ -446,8 +447,8 @@ public class CndProjectFilesUtil {
     
     @NotNull
     public static Collection<VirtualFile> findFilesInSourcesOnly(Project project, FileType fileType) {
-        Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, fileType, GlobalSearchScope.allScope(project));
-        
+        Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(fileType, GlobalSearchScope.allScope(project));
+
         Collection<VirtualFile> res = new ArrayList<VirtualFile>();
         for (VirtualFile virtualFile : virtualFiles) {
             if (FileIndexFacade.getInstance(project).getModuleForFile(virtualFile) != null) {
