@@ -109,7 +109,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
       <html>
           <dl>
               <dt>2.0.4</dt>
-              <dd></dd>
+              <dd>(<strong>IMPORTANT FIX</strong>) Fixed forced reindexing of Project, Project's JDK, and Local Maven repo happening in IntelliJ 2020.1 (#53)</dd>
           </dl>
           <dl>
               <dt>2.0.3</dt>
