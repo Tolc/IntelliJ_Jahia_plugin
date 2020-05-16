@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>fr.tolc.jahia.intellij.plugin</id>
   <name>CND Language / Jahia Framework</name>
-  <version>2.0.4</version>
+  <version>2.0.5</version>
   <vendor email="contact@thomas-coquel.fr" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
 
   <description><![CDATA[
@@ -107,6 +107,10 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
   
   <change-notes><![CDATA[
       <html>
+          <dl>
+              <dt>2.0.5</dt>
+              <dd></dd>
+          </dl>
           <dl>
               <dt>2.0.4</dt>
               <dd>(<strong>IMPORTANT FIX</strong>) Fixed forced reindexing of Project, Project's JDK, and Local Maven repo happening in IntelliJ 2020.1 (#53)</dd>
