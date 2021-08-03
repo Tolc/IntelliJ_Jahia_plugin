@@ -36,6 +36,7 @@ public class CndFormattingModelBuilder implements FormattingModelBuilder {
                 around(TokenSet.create(CndTypes.RIGHT_ONLY_ANGLE_BRACKET, CndTypes.LEFT_ONLY_ANGLE_BRACKET, CndTypes.MINUS, CndTypes.PLUS,
                                 CndTypes.PROPERTY_ATTRIBUTE, CndTypes.NODE_ATTRIBUTE)).spaces(1).
                 after(TokenSet.create(CndTypes.COMMA, CndTypes.RIGHT_PARENTHESIS)).spaces(1).
+                between(CndTypes.RIGHT_PARENTHESIS, CndTypes.EQUAL).spaces(1).
                 before(CndTypes.LEFT_PARENTHESIS).spaces(1).
                 before(CndTypes.COMMA).spaces(0).
                 after(CndTypes.LEFT_PARENTHESIS).spaces(0).
