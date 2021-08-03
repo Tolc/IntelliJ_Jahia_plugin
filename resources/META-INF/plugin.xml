@@ -114,6 +114,8 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
           <dl>
               <dt>2.0.5</dt>
               <dd>(<strong>IMPORTANT FIX</strong>) Refactored code for IntelliJ 2021.2 API</dd>
+              <dd>Fixed issue with namespaces declarations without linebreak in CND file</dd>
+              <dd>Fixed CND file auto formatting between right parenthesis and equal</dd>
           </dl>
           <dl>
               <dt>2.0.4</dt>
