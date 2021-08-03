@@ -94,7 +94,7 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (COMMENT|CRLF)* (namespace CRLF)* (namespace | (nodeType | COMMENT | CRLF)*)
+  // (COMMENT|CRLF)* (namespace CRLF*)* (namespace | (nodeType | COMMENT | CRLF)*)
   static boolean cnd(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "cnd")) return false;
     boolean r;
@@ -129,7 +129,7 @@ public class CndParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (namespace CRLF)*
+  // (namespace CRLF*)*
   private static boolean cnd_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "cnd_1")) return false;
     int c = current_position_(b);
@@ -141,18 +141,31 @@ public class CndParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // namespace CRLF
+  // namespace CRLF*
   private static boolean cnd_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "cnd_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = namespace(b, l + 1);
-    r = r && consumeToken(b, CRLF);
+    r = r && cnd_1_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // namespace | (nodeType | COMMENT | CRLF)*
+  // CRLF*
+  private static boolean cnd_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "cnd_1_0_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, CRLF)) break;
+      if (!empty_element_parsed_guard_(b, "cnd_1_0_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // (nodeType | COMMENT | CRLF)*
   private static boolean cnd_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "cnd_2")) return false;
     boolean r;

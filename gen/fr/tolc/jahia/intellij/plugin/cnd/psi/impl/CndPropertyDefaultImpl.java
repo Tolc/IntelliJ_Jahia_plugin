@@ -13,7 +13,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
 public class CndPropertyDefaultImpl extends ASTWrapperPsiElement implements CndPropertyDefault {
 
-  public CndPropertyDefaultImpl(ASTNode node) {
+  public CndPropertyDefaultImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -21,6 +21,7 @@ public class CndPropertyDefaultImpl extends ASTWrapperPsiElement implements CndP
     visitor.visitPropertyDefault(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);

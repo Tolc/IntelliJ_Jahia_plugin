@@ -2,31 +2,22 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
 
 import java.util.List;
-
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
+import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndPropertyElementImpl;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
+import com.intellij.navigation.ItemPresentation;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.AttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyAttributes;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyConstraint;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyDefault;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyIdentifier;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyTypeMaskOption;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPsiImplUtil;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndVisitor;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndPropertyElementImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class CndPropertyImpl extends CndPropertyElementImpl implements CndProperty {
 
-  public CndPropertyImpl(ASTNode node) {
+  public CndPropertyImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -34,6 +25,7 @@ public class CndPropertyImpl extends CndPropertyElementImpl implements CndProper
     visitor.visitProperty(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
@@ -69,41 +61,50 @@ public class CndPropertyImpl extends CndPropertyElementImpl implements CndProper
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CndPropertyTypeMaskOption.class);
   }
 
+  @Override
   public String getPropertyName() {
     return CndPsiImplUtil.getPropertyName(this);
   }
 
+  @Override
   public PsiElement setPropertyName(String newName) {
     return CndPsiImplUtil.setPropertyName(this, newName);
   }
 
+  @Override
   @Nullable
   public PropertyTypeEnum getType() {
     return CndPsiImplUtil.getType(this);
   }
 
+  @Override
   @Nullable
   public PropertyTypeMaskEnum getTypeMask() {
     return CndPsiImplUtil.getTypeMask(this);
   }
 
+  @Override
   @NotNull
   public ItemPresentation getPresentation() {
     return CndPsiImplUtil.getPresentation(this);
   }
 
+  @Override
   public String toString() {
     return CndPsiImplUtil.toString(this);
   }
 
+  @Override
   public boolean hasAttribute(AttributeEnum attribute) {
     return CndPsiImplUtil.hasAttribute(this, attribute);
   }
 
+  @Override
   public boolean isMultiple() {
     return CndPsiImplUtil.isMultiple(this);
   }
 
+  @Override
   public CndNodeType getNodeType() {
     return CndPsiImplUtil.getNodeType(this);
   }

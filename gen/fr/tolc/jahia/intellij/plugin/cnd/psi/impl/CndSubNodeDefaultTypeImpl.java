@@ -14,7 +14,7 @@ import com.intellij.psi.PsiReference;
 
 public class CndSubNodeDefaultTypeImpl extends CndSubNodeDefaultTypeElementImpl implements CndSubNodeDefaultType {
 
-  public CndSubNodeDefaultTypeImpl(ASTNode node) {
+  public CndSubNodeDefaultTypeImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -22,11 +22,13 @@ public class CndSubNodeDefaultTypeImpl extends CndSubNodeDefaultTypeElementImpl 
     visitor.visitSubNodeDefaultType(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 
+  @Override
   @NotNull
   public PsiReference[] getReferences() {
     return CndPsiImplUtil.getReferences(this);

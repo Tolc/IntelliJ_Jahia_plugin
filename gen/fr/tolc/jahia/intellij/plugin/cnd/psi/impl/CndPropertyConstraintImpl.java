@@ -13,7 +13,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
 public class CndPropertyConstraintImpl extends ASTWrapperPsiElement implements CndPropertyConstraint {
 
-  public CndPropertyConstraintImpl(ASTNode node) {
+  public CndPropertyConstraintImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -21,6 +21,7 @@ public class CndPropertyConstraintImpl extends ASTWrapperPsiElement implements C
     visitor.visitPropertyConstraint(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);

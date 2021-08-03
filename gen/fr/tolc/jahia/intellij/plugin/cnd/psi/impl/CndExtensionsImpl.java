@@ -13,7 +13,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
 public class CndExtensionsImpl extends ASTWrapperPsiElement implements CndExtensions {
 
-  public CndExtensionsImpl(ASTNode node) {
+  public CndExtensionsImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -21,6 +21,7 @@ public class CndExtensionsImpl extends ASTWrapperPsiElement implements CndExtens
     visitor.visitExtensions(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);

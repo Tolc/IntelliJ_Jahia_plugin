@@ -14,7 +14,7 @@ import com.intellij.psi.PsiReference;
 
 public class CndSuperTypeImpl extends CndSuperTypeElementImpl implements CndSuperType {
 
-  public CndSuperTypeImpl(ASTNode node) {
+  public CndSuperTypeImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -22,21 +22,25 @@ public class CndSuperTypeImpl extends CndSuperTypeElementImpl implements CndSupe
     visitor.visitSuperType(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 
+  @Override
   @NotNull
   public PsiReference[] getReferences() {
     return CndPsiImplUtil.getReferences(this);
   }
 
+  @Override
   @Nullable
   public String getNodeTypeName() {
     return CndPsiImplUtil.getNodeTypeName(this);
   }
 
+  @Override
   @Nullable
   public String getNodeTypeNamespace() {
     return CndPsiImplUtil.getNodeTypeNamespace(this);
