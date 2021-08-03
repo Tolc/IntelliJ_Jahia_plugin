@@ -1,14 +1,14 @@
 package fr.tolc.jahia.intellij.plugin.cnd.extensions.properties;
 
-import com.intellij.codeInspection.unused.ImplicitPropertyUsageProvider;
+import com.intellij.lang.properties.codeInspection.unused.ImplicitPropertyUsageProvider;
 import com.intellij.lang.properties.psi.Property;
 import com.intellij.openapi.project.Project;
 import fr.tolc.jahia.intellij.plugin.cnd.model.PropertiesFileCndKeyModel;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 
-public class CndImplicitPropertyUsageProvider extends ImplicitPropertyUsageProvider {
+public class CndImplicitPropertyUsageProvider implements ImplicitPropertyUsageProvider {
     @Override
-    protected boolean isUsed(Property property) {
+    public boolean isUsed(Property property) {
         PropertiesFileCndKeyModel cndKeyModel = null;
         try {
             cndKeyModel = new PropertiesFileCndKeyModel(property.getKey());

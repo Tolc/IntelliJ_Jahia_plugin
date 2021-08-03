@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.jsp.ELElementType;
+import com.intellij.psi.jsp.el.ELElementType;
 import com.intellij.psi.jsp.el.ELElementTypes;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlToken;

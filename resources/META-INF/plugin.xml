@@ -109,7 +109,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
       <html>
           <dl>
               <dt>2.0.5</dt>
-              <dd></dd>
+              <dd>(<strong>IMPORTANT FIX</strong>) Refactored code for IntelliJ 2021.2 API</dd>
           </dl>
           <dl>
               <dt>2.0.4</dt>
@@ -204,7 +204,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
   ]]></change-notes>
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="107.105"/>
+  <idea-version since-build="212"/>
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->

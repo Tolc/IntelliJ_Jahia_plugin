@@ -3,7 +3,7 @@ package fr.tolc.jahia.intellij.plugin.cnd.references;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiReferenceContributor;
 import com.intellij.psi.PsiReferenceRegistrar;
-import com.intellij.psi.jsp.ELElementType;
+import com.intellij.psi.jsp.el.ELElementType;
 import com.intellij.psi.jsp.el.ELElementTypes;
 import com.intellij.psi.xml.XmlElementType;
 import org.jetbrains.annotations.NotNull;
