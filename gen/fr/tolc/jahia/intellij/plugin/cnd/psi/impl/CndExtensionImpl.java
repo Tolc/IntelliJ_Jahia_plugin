@@ -1,16 +1,15 @@
 // This is a generated file. Not intended for manual editing.
 package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndExtensionElementImpl;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 import com.intellij.psi.PsiReference;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtension;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPsiImplUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndVisitor;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndExtensionElementImpl;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CndExtensionImpl extends CndExtensionElementImpl implements CndExtension {
 
@@ -27,8 +26,19 @@ public class CndExtensionImpl extends CndExtensionElementImpl implements CndExte
     else super.accept(visitor);
   }
 
+  @NotNull
   public PsiReference[] getReferences() {
     return CndPsiImplUtil.getReferences(this);
+  }
+
+  @Nullable
+  public String getNodeTypeNamespace() {
+    return CndPsiImplUtil.getNodeTypeNamespace(this);
+  }
+
+  @Nullable
+  public String getNodeTypeName() {
+    return CndPsiImplUtil.getNodeTypeName(this);
   }
 
 }

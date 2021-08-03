@@ -18,6 +18,7 @@ public interface CndNamespace extends CndNamespaceElement {
 
   String getNamespaceURI();
 
+  @NotNull
   ItemPresentation getPresentation();
 
 }

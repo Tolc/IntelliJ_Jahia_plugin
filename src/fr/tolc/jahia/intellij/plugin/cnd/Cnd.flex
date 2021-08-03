@@ -151,25 +151,23 @@ ATTRIBUTE=[:jletter:]([^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+)?
 }
 
 <PROPERTY_DEFAULT> {
-	{CRLF}*{WHITE_SPACE}*"="					{ yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
-	{CRLF}+{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT_NEWLINE); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
-	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
+	({CRLF}|{WHITE_SPACE})+"="					{ yypushback(1); return TokenType.WHITE_SPACE; }
+	"="					                        { yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
+	{CRLF}*{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
 	{ATTRIBUTE}									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
 	{CRLF}+{WHITE_SPACE}*{ATTRIBUTE}			{ yypushback(yytext().toString().replaceAll("\\r", "").replaceAll("\\n", "").trim().length()); yybegin(PROPERTY_ATTRIBUTES); return TokenType.WHITE_SPACE; }
 }
 <PROPERTY_DEFAULT_VALUE> {
-	[^\r\n\ ]+ | "'"[^\r\n']+"'"				{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
+    [^\r\n'\"\-\+\ \t\f]+ ({WHITE_SPACE}*","{WHITE_SPACE}*[^\r\n'\"\-\+\ \t\f]+)* | "'"[^\r\n']*"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']*"'")* | "\""[^\r\n\"]*"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""[^\r\n\"]*"\"")* | [^\r\n\(]+"("([^\r\n']+ | "'"[^\r\n']+"'")")"            { yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
 }
 
 <PROPERTY_ATTRIBUTES> {
-	{CRLF}+{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT_NEWLINE); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
-	"<"											{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
+	{CRLF}*{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
 	{ATTRIBUTE}									{ return CndTypes.PROPERTY_ATTRIBUTE; }
 	{CRLF}+{WHITE_SPACE}*{ATTRIBUTE}			{ yypushback(yytext().toString().replaceAll("\\r", "").replaceAll("\\n", "").trim().length()); return TokenType.WHITE_SPACE; }
 }
 
-<PROPERTY_CONSTRAINT> [^\r\n\ \t\f][^\r\n]+[^\r\n\ \t\f]					{ return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
-<PROPERTY_CONSTRAINT_NEWLINE> "'"[^\r\n]+"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']+"'")*			{ return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
+<PROPERTY_CONSTRAINT> [^\r\n'\"\-\+\ \t\f]+ ({WHITE_SPACE}*","{WHITE_SPACE}*[^\r\n'\"\-\+\ \t\f]+)*    | "'"[^\r\n']*"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']*"'")* | "\""[^\r\n\"]*"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""[^\r\n\"]*"\"")*          { return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
 
 
 

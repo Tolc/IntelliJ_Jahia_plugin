@@ -23,6 +23,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
+import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,7 +74,7 @@ public class CndPluginUtil {
         return null;
     }
 
-    public static void fileToJar(File rootFile, String jarPath, String extensions) throws IOException {
+    public static void fileToJar(File rootFile, String jarPath, String... extensions) throws IOException {
         FileOutputStream fout = new FileOutputStream(jarPath);
         JarOutputStream jarOut = new JarOutputStream(fout);
         addFileToJarRecursive(jarOut, rootFile, rootFile, extensions);
@@ -81,7 +82,7 @@ public class CndPluginUtil {
         fout.close();
     }
 
-    private static void addFileToJarRecursive(JarOutputStream jarOut, File file, File rootFile, String extensions) throws IOException {
+    private static void addFileToJarRecursive(JarOutputStream jarOut, File file, File rootFile, String... extensions) throws IOException {
         if (file.isDirectory()) {
             if (!FileUtil.filesEqual(file, rootFile)) {
                 jarOut.putNextEntry(new ZipEntry(getRelativePath(rootFile, file) + "/"));
@@ -101,7 +102,7 @@ public class CndPluginUtil {
             }
 
             String[] split = entryName.split("\\.");
-            if (extensions.contains(split[split.length - 1])) {
+            if (ArrayUtils.contains(extensions, split[split.length - 1])) {
                 jarOut.putNextEntry(new ZipEntry(entryName));
                 jarOut.write(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
                 jarOut.closeEntry();
@@ -187,7 +188,8 @@ public class CndPluginUtil {
         });
         toDelete.delete();
     }
-    
+
+    @NotNull
     public static Module[] getProjectModules(Project project) {
         return ModuleManager.getInstance(project).getModules();
     }

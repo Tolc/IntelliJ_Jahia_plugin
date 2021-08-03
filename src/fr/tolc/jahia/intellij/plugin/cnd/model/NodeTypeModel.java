@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class NodeTypeModel {
     private static final String NAMESPACE_PART = "[A-Za-z][A-Za-z0-9]*";
-    private static final String NODETYPE_PART = "[A-Za-z][A-Za-z0-9]*";
+    private static final String NODETYPE_PART = "[A-Za-z][A-Za-z0-9_]*";
     public static final Pattern nodeTypeGlobalRegex = Pattern.compile(NAMESPACE_PART + ":" + NODETYPE_PART);
     private static final Pattern nodeTypeRegex = Pattern.compile("^" + NAMESPACE_PART + ":" + NODETYPE_PART + "$");
     private static final Pattern nodeTypeFolderRegex = Pattern.compile("^" + NAMESPACE_PART + "_" + NODETYPE_PART + "$");
@@ -28,7 +28,7 @@ public class NodeTypeModel {
             if (isFolder) {
                 Matcher matcher = nodeTypeFolderRegex.matcher(sourceString);
                 if (matcher.matches()) {
-                    split = sourceString.split("_");
+                    split = sourceString.split("_", 2);
                 }
             } else {
                 Matcher matcher = nodeTypeRegex.matcher(sourceString);
