@@ -13,7 +13,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
 public class CndPropertyTypeMaskOptionImpl extends ASTWrapperPsiElement implements CndPropertyTypeMaskOption {
 
-  public CndPropertyTypeMaskOptionImpl(ASTNode node) {
+  public CndPropertyTypeMaskOptionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -21,6 +21,7 @@ public class CndPropertyTypeMaskOptionImpl extends ASTWrapperPsiElement implemen
     visitor.visitPropertyTypeMaskOption(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);

@@ -15,7 +15,7 @@
   psiImplUtilClass="fr.tolc.jahia.intellij.plugin.cnd.psi.CndPsiImplUtil"
 }
 
-cnd ::= (COMMENT|CRLF)* (namespace CRLF)* (namespace | (nodeType | COMMENT | CRLF)*)
+cnd ::= (COMMENT|CRLF)* (namespace CRLF*)* (namespace | (nodeType | COMMENT | CRLF)*)
 
 
 

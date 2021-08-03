@@ -14,7 +14,7 @@ import com.intellij.navigation.ItemPresentation;
 
 public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndNamespace {
 
-  public CndNamespaceImpl(ASTNode node) {
+  public CndNamespaceImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -22,6 +22,7 @@ public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndName
     visitor.visitNamespace(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
@@ -33,18 +34,22 @@ public class CndNamespaceImpl extends CndNamespaceElementImpl implements CndName
     return findNotNullChildByClass(CndNamespaceIdentifier.class);
   }
 
+  @Override
   public String getNamespaceName() {
     return CndPsiImplUtil.getNamespaceName(this);
   }
 
+  @Override
   public PsiElement setNamespaceName(String newName) {
     return CndPsiImplUtil.setNamespaceName(this, newName);
   }
 
+  @Override
   public String getNamespaceURI() {
     return CndPsiImplUtil.getNamespaceURI(this);
   }
 
+  @Override
   @NotNull
   public ItemPresentation getPresentation() {
     return CndPsiImplUtil.getPresentation(this);

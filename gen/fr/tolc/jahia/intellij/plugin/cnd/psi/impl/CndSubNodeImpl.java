@@ -13,7 +13,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
 
 public class CndSubNodeImpl extends CndSubNodeElementImpl implements CndSubNode {
 
-  public CndSubNodeImpl(ASTNode node) {
+  public CndSubNodeImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -21,6 +21,7 @@ public class CndSubNodeImpl extends CndSubNodeElementImpl implements CndSubNode 
     visitor.visitSubNode(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
@@ -44,6 +45,7 @@ public class CndSubNodeImpl extends CndSubNodeElementImpl implements CndSubNode 
     return PsiTreeUtil.getChildrenOfTypeAsList(this, CndSubNodeType.class);
   }
 
+  @Override
   @Nullable
   public String getSubNodeName() {
     return CndPsiImplUtil.getSubNodeName(this);
