@@ -4,7 +4,9 @@
 
 definitions.cnd files syntax highlighting, code completion, and other amazing stuff.
 
-Rate it on [JetBrains Plugins Repository][3]!
+[![marketplace](marketplace.png)][3]
+
+You can also rate it on the [JetBrains Plugins Repository][3]!
 
 ## Requirements
 
