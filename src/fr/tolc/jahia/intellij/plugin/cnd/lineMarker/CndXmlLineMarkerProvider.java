@@ -25,7 +25,7 @@ import java.util.List;
 public class CndXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
-    protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
+    protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
         if (element instanceof XmlTag) {
             XmlTag tag = (XmlTag) element;
             

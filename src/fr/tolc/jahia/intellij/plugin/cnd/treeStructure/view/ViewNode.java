@@ -30,9 +30,9 @@ public class ViewNode extends ProjectViewNode<View> implements ValidateableNode,
     }
 
     @NotNull
-    public Collection<AbstractTreeNode> getChildren() {
+    public Collection<AbstractTreeNode<?>> getChildren() {
         List<PsiFile> viewFiles = this.getValue().getViewFiles();
-        ArrayList<AbstractTreeNode> children = new ArrayList<AbstractTreeNode>();
+        ArrayList<AbstractTreeNode<?>> children = new ArrayList<AbstractTreeNode<?>>();
 
         for (PsiFile viewFile : viewFiles) {
             PsiFileNode node = new PsiFileNode(this.myProject, viewFile.getContainingFile(), this.getSettings());

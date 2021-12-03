@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 public class CndCndLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
-    protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
+    protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
         if (element instanceof CndNamespace) {
             CndNamespace cndNamespace = (CndNamespace) element;
 

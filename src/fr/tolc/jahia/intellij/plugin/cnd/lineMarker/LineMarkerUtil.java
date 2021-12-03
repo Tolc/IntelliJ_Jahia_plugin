@@ -28,7 +28,7 @@ public class LineMarkerUtil {
     
     private LineMarkerUtil() {}
     
-    public static void createPropertyLineMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result, String nodeVar, String propertyName) {
+    public static void createPropertyLineMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo<?>> result, String nodeVar, String propertyName) {
         Set<CndProperty> possibleProperties = new LinkedHashSet<>();
         if (CURRENT_NODE.equals(nodeVar.trim())) {
             ViewModel viewModel = CndProjectFilesUtil.getViewModelFromPotentialViewFile(element.getContainingFile().getOriginalFile().getVirtualFile());
@@ -67,7 +67,7 @@ public class LineMarkerUtil {
         result.add(builder.createLineMarkerInfo(element));
     }
     
-    public static void createNodeTypeLineMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result, String text) {
+    public static void createNodeTypeLineMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo<?>> result, String text) {
         if (StringUtils.isNotBlank(text)) {
             Matcher matcher = nodeTypeGlobalRegex.matcher(text);
             while (matcher.find()) {

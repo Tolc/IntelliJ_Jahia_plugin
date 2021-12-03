@@ -8,9 +8,9 @@ import java.util.regex.Matcher;
 
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
+import com.intellij.javaee.el.ELElementType;
+import com.intellij.javaee.el.psi.ELElementTypes;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.jsp.el.ELElementType;
-import com.intellij.psi.jsp.el.ELElementTypes;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlToken;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.PsiUtil;
@@ -20,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
 public class CndJspLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
-    protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
-        if (ELElementType.JSP_EL_HOLDER.equals(element.getNode().getElementType())) {
+    protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
+        if (ELElementType.EL_HOLDER.equals(element.getNode().getElementType())) {
 
             Set<PsiElement> elExpressions = PsiUtil.findFirstDescendantsByType(element, ELElementTypes.EL_SELECT_EXPRESSION, ELElementTypes.EL_SLICE_EXPRESSION);
             for (PsiElement elExpression : elExpressions) {

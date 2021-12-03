@@ -4,15 +4,17 @@
 
 definitions.cnd files syntax highlighting, code completion, and other amazing stuff.
 
-Rate it on [JetBrains Plugins Repository][3]!
+[![marketplace](marketplace.png)][3]
+
+You can also rate it on the [JetBrains Plugins Repository][3]!
 
 ## Requirements
 
-Tested under IntelliJ IDEA from 14.1.4 to 2019.3 (can't see why it wouldn't work with older versions though).
+Tested under IntelliJ IDEA from 14.1.4 to 2021.3 (can't see why it wouldn't work with older versions though).
 
-IntelliJ plugins dependencies (optional): **jsp**, **properties**. Java **8** needed.
+IntelliJ plugins dependencies (optional): **jsp**, **properties**. Requires Java **8** or higher.
  
-Jahia project versions: **6.6.x** or **7.x**
+Jahia project versions: **6.6.x** or **7.x** (I have not tested it with **8.x** yet)
 
 
 

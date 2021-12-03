@@ -1,22 +1,23 @@
 package fr.tolc.jahia.intellij.plugin.cnd.extensions.javaee.jsp;
 
+import java.util.Iterator;
+import java.util.Map;
+
+import com.intellij.javaee.el.ELElementProcessor;
+import com.intellij.javaee.el.ELExpressionHolder;
+import com.intellij.javaee.el.providers.ElVariablesProvider;
+import com.intellij.javaee.el.util.ELImplicitVariable;
+import com.intellij.javaee.model.psi.JavaeeImplicitVariable;
+import com.intellij.jsp.el.impl.JspELResolveUtil;
+import com.intellij.jsp.el.impl.JspELResolveUtil.VariableInfoData;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiLanguageInjectionHost;
-import com.intellij.jsp.el.impl.ELElementProcessor;
-import com.intellij.jsp.el.impl.ELResolveUtil;
-import com.intellij.jsp.el.impl.ELResolveUtil.VariableInfoData;
-import com.intellij.jsp.el.impl.ElVariablesProvider;
 import com.intellij.psi.jsp.JspFile;
-import com.intellij.psi.jsp.JspImplicitVariable;
-import com.intellij.psi.jsp.el.ELExpressionHolder;
 import com.intellij.psi.util.CachedValue;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * See com.intellij.psi.impl.source.jsp.el.impl.JspElVariablesProvider
@@ -24,7 +25,7 @@ import java.util.Map;
 public class CndJspElVariablesProvider extends ElVariablesProvider {
     private static final VariableInfoData ourData;
 
-    private static final Key<CachedValue<Map<String, JspImplicitVariable>>> CND_EL_IMPLICIT_VARS_MAP = Key.create("cnd el implicit vars");
+    private static final Key<CachedValue<Map<String, JavaeeImplicitVariable>>> CND_EL_IMPLICIT_VARS_MAP = Key.create("cnd el implicit vars");
     //    private static final Pattern ourVarCommentAnnotationPattern = Pattern.compile("@elvariable id=\"(.+)\" type=\"(.*)\"");
 
     static {
@@ -89,15 +90,15 @@ public class CndJspElVariablesProvider extends ElVariablesProvider {
 //                }
 //            }
 
-            Iterator variableIterator = ELResolveUtil.createOrGetPredefinedVariablesMapImpl(containingFile, ourData).values().iterator();
+            Iterator variableIterator = JspELResolveUtil.createOrGetPredefinedVariablesMapImpl(containingFile, ourData).values().iterator();
 
-            JspImplicitVariable jspImplicitVariable;
+            ELImplicitVariable jspImplicitVariable;
             do {
                 if (!variableIterator.hasNext()) {
                     return true;
                 }
 
-                jspImplicitVariable = (JspImplicitVariable) variableIterator.next();
+                jspImplicitVariable = (ELImplicitVariable) variableIterator.next();
             } while (processor.processVariable(jspImplicitVariable));
 
             return false;
