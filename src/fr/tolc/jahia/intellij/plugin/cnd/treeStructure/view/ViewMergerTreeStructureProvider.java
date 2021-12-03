@@ -37,21 +37,21 @@ public class ViewMergerTreeStructureProvider implements TreeStructureProvider, D
     }
 
     @NotNull
-    public Collection<AbstractTreeNode> modify(@NotNull AbstractTreeNode parent, @NotNull Collection<AbstractTreeNode> children, ViewSettings settings) {
+    public Collection<AbstractTreeNode<?>> modify(@NotNull AbstractTreeNode<?> parent, @NotNull Collection<AbstractTreeNode<?>> children, ViewSettings settings) {
         if (!children.isEmpty() && parent.getValue() instanceof PsiDirectory) {
 
             //Views global virtual folder
             VirtualFile parentFile = ((PsiDirectory) parent.getValue()).getVirtualFile();
             String jahiaWorkFolderPath = CndProjectFilesUtil.getJahiaWorkFolderPath(CndProjectFilesUtil.getModuleForFile(project, parentFile));
             if (parentFile.getPath().equals(jahiaWorkFolderPath)) {
-                return ApplicationManager.getApplication().runReadAction(new Computable<Collection<AbstractTreeNode>>() {
+                return ApplicationManager.getApplication().runReadAction(new Computable<Collection<AbstractTreeNode<?>>>() {
                     @Override
-                    public Collection<AbstractTreeNode> compute() {
-                        Collection<AbstractTreeNode> result = new ArrayList<>(children);
-                        ProjectViewNode[] copy = children.toArray(new ProjectViewNode[children.size()]);
+                    public Collection<AbstractTreeNode<?>> compute() {
+                        Collection<AbstractTreeNode<?>> result = new ArrayList<>(children);
+                        ProjectViewNode<?>[] copy = children.toArray(new ProjectViewNode[children.size()]);
 
                         List<PsiDirectory> nodeTypeFolders = new ArrayList<>();
-                        for (ProjectViewNode element : copy) {
+                        for (ProjectViewNode<?> element : copy) {
                             if (element.getValue() instanceof PsiDirectory) {
                                 PsiDirectory psiDirectory = (PsiDirectory) element.getValue();
                                 NodeTypeModel nodeTypeModel = null;
@@ -89,18 +89,18 @@ public class ViewMergerTreeStructureProvider implements TreeStructureProvider, D
             }
 
             //View individual virtual folders
-            return ApplicationManager.getApplication().runReadAction(new Computable<Collection<AbstractTreeNode>>() {
+            return ApplicationManager.getApplication().runReadAction(new Computable<Collection<AbstractTreeNode<?>>>() {
                 @Override
-                public Collection<AbstractTreeNode> compute() {
+                public Collection<AbstractTreeNode<?>> compute() {
                     if (!CndProjectFilesUtil.isNodeTypeFolderChildFolder(((PsiDirectory) parent.getValue()).getVirtualFile())) {
                         return children;
                     }
 
-                    Collection<AbstractTreeNode> result = new LinkedHashSet<>(children);
-                    ProjectViewNode[] copy = children.toArray(new ProjectViewNode[children.size()]);
+                    Collection<AbstractTreeNode<?>> result = new LinkedHashSet<>(children);
+                    ProjectViewNode<?>[] copy = children.toArray(new ProjectViewNode<?>[children.size()]);
                     List<String> alreadyDoneViews = new ArrayList<String>();
 
-                    for (ProjectViewNode element : copy) {
+                    for (ProjectViewNode<?> element : copy) {
                         if (element.getValue() instanceof PsiFile) {
                             PsiFile file = (PsiFile) element.getValue();
                             if (file.getFileType() != StdFileTypes.PROPERTIES) {
@@ -134,7 +134,7 @@ public class ViewMergerTreeStructureProvider implements TreeStructureProvider, D
         return children;
     }
 
-    public Object getData(Collection<AbstractTreeNode> selected, String dataId) {
+    public Object getData(Collection<AbstractTreeNode<?>> selected, String dataId) {
         if (selected != null) {
             if (View.DATA_KEY.is(dataId)) {
                 List<View> result = new ArrayList<>();
@@ -166,19 +166,19 @@ public class ViewMergerTreeStructureProvider implements TreeStructureProvider, D
 
     private static Collection<PsiFile> convertToFiles(Collection<BasePsiNode<? extends PsiElement>> viewNodes) {
         ArrayList<PsiFile> psiFiles = new ArrayList<>();
-        for (AbstractTreeNode treeNode : viewNodes) {
+        for (AbstractTreeNode<?> treeNode : viewNodes) {
             psiFiles.add((PsiFile) treeNode.getValue());
         }
         return psiFiles;
     }
 
-    private static Collection<BasePsiNode<? extends PsiElement>> findViewsIn(Collection<AbstractTreeNode> children, List<PsiFile> views) {
+    private static Collection<BasePsiNode<? extends PsiElement>> findViewsIn(Collection<AbstractTreeNode<?>> children, List<PsiFile> views) {
         if (children.isEmpty() || views.isEmpty()) {
             return Collections.emptyList();
         }
         ArrayList<BasePsiNode<? extends PsiElement>> result = new ArrayList<>();
         HashSet<PsiFile> psiFiles = new HashSet<>(views);
-        for (final AbstractTreeNode child : children) {
+        for (final AbstractTreeNode<?> child : children) {
             if (child instanceof BasePsiNode) {
                 BasePsiNode<? extends PsiElement> treeNode = (BasePsiNode<? extends PsiElement>) child;
                 if (psiFiles.contains(treeNode.getValue())) {

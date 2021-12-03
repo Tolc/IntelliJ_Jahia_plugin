@@ -6,9 +6,9 @@ import java.util.regex.Matcher;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.jsp.el.ELElementTypes;
-import com.intellij.psi.jsp.el.ELLiteralExpression;
-import com.intellij.psi.jsp.el.ElLiteralCustomReferenceProvider;
+import com.intellij.javaee.el.psi.ELElementTypes;
+import com.intellij.javaee.el.psi.ELLiteralExpression;
+import com.intellij.javaee.el.ElLiteralCustomReferenceProvider;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ProcessingContext;
 import fr.tolc.jahia.intellij.plugin.cnd.references.CndJspReferenceProvider;

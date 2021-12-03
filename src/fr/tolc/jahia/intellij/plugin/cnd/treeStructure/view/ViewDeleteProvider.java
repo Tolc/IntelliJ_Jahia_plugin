@@ -1,5 +1,9 @@
 package fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.intellij.ide.DeleteProvider;
 import com.intellij.ide.util.DeleteHandler;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
@@ -11,14 +15,10 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 public class ViewDeleteProvider implements DeleteProvider {
     private final PsiElement[] elements;
 
-    public ViewDeleteProvider(final Collection<AbstractTreeNode> selected) {
+    public ViewDeleteProvider(final Collection<AbstractTreeNode<?>> selected) {
         elements = collectViewPsiElements(selected);
     }
 
@@ -31,9 +31,9 @@ public class ViewDeleteProvider implements DeleteProvider {
         return DeleteHandler.shouldEnableDeleteAction(elements);
     }
 
-    private static PsiElement[] collectViewPsiElements(Collection<AbstractTreeNode> selected) {
+    private static PsiElement[] collectViewPsiElements(Collection<AbstractTreeNode<?>> selected) {
         Set<PsiElement> result = new HashSet<>();
-        for (AbstractTreeNode node : selected) {
+        for (AbstractTreeNode<?> node : selected) {
             if (node.getValue() instanceof View) {
                 View view = (View) node.getValue();
                 ContainerUtil.addAll(result, view.getViewFiles());

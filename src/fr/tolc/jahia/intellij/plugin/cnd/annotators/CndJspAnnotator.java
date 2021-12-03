@@ -9,7 +9,7 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.jsp.jspXml.JspOuterLanguageElement;
-import com.intellij.psi.jsp.el.ELElementTypes;
+import com.intellij.javaee.el.psi.ELElementTypes;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlElementType;

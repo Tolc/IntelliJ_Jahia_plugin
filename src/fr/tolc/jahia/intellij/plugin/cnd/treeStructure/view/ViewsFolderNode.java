@@ -27,9 +27,9 @@ public class ViewsFolderNode extends ProjectViewNode<ViewsFolder> implements Com
     }
 
     @NotNull
-    public Collection<AbstractTreeNode> getChildren() {
+    public Collection<AbstractTreeNode<?>> getChildren() {
         List<PsiDirectory> nodeTypeFolders = this.getValue().getNodeTypeFolders();
-        ArrayList<AbstractTreeNode> children = new ArrayList<AbstractTreeNode>();
+        ArrayList<AbstractTreeNode<?>> children = new ArrayList<AbstractTreeNode<?>>();
 
         for (PsiDirectory directory : nodeTypeFolders) {
             PsiDirectoryNode node = new PsiDirectoryNode(this.myProject, directory, this.getSettings());
