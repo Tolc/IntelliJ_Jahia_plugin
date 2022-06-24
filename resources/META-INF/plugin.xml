@@ -109,11 +109,11 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
       <html>
           <dl>
               <dt>2.0.7</dt>
-              <dd></dd>
+              <dd>(<strong>IMPORTANT FIX</strong>) Refactored tool window for IntelliJ 2022.1 API (#61)</dd>
           </dl>
           <dl>
               <dt>2.0.6</dt>
-              <dd>(<strong>IMPORTANT FIX</strong>) Refactored code for IntelliJ 2021.3 API #58)</dd>
+              <dd>(<strong>IMPORTANT FIX</strong>) Refactored code for IntelliJ 2021.3 API (#58)</dd>
           </dl>
           <dl>
               <dt>2.0.5</dt>
@@ -213,11 +213,10 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
       </html>
   ]]></change-notes>
 
-  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="213.3714.440"/>
+  <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
+  <idea-version since-build="221.4501.155"/>
 
-  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-       on how to target different products -->
+  <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html on how to target different products -->
   <!-- uncomment to enable plugin in all products
   <depends>com.intellij.modules.lang</depends>
   -->
@@ -303,8 +302,8 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
     <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ResourceReferenceContributor"/>
 
     <!-- Tool Window -->
-    <toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahia_dxm.png" anchor="right" order="first"
-                factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindow" conditionClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindowCondition"/>
+<!--    <toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahia_dxm.png" anchor="right" order="first"-->
+<!--                factoryClass="fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaToolWindowFactory"/>-->
   </extensions>
 
 </idea-plugin>

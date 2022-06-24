@@ -48,3 +48,6 @@ crashlytics.properties
 crashlytics-build.properties
 
 target/
+
+/*.jar
+/*.zip

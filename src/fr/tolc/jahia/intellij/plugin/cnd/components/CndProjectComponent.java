@@ -3,6 +3,7 @@ package fr.tolc.jahia.intellij.plugin.cnd.components;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
@@ -11,7 +12,17 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTable;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.wm.RegisterToolWindowTask;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowAnchor;
+import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.ui.content.Content;
+import com.intellij.ui.content.ContentFactory;
+import com.intellij.ui.treeStructure.SimpleTree;
 import com.intellij.util.indexing.FileBasedIndex;
+import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
+import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.JahiaTreeStructure;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndPluginUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +30,7 @@ import org.jetbrains.java.generate.exception.PluginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.tree.TreeSelectionModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -63,10 +75,28 @@ public class CndProjectComponent implements ProjectComponent {
                         
                         File jahiaPluginSubFolder = CndPluginUtil.getPluginFile(JAHIA_PLUGIN_SUBFOLDER);
                         if (jahiaPluginSubFolder.exists() && jahiaPluginSubFolder.isDirectory()) {
+                            Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
+
+                            //Tool window
+                            if (!virtualFiles.isEmpty()) {
+                                DumbService.getInstance(project).smartInvokeLater(() -> {
+                                    ToolWindow toolWindow = ToolWindowManager.getInstance(project).registerToolWindow(
+                                            RegisterToolWindowTask.closable("Jahia", CndIcons.JAHIA_LOGO_DXM, ToolWindowAnchor.RIGHT)
+                                    );
+
+                                    ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+                                    SimpleTree tree = new SimpleTree();
+                                    tree.getEmptyText().clear();
+                                    tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+                                    new JahiaTreeStructure(project, tree);
+
+                                    Content treeContent = contentFactory.createContent(ScrollPaneFactory.createScrollPane(tree), "", false);
+                                    toolWindow.getContentManager().addContent(treeContent);
+                                });
+                            }
 
                             //Adding it to the modules libraries
                             Set<Module> alreadyDoneModules = new HashSet<>();
-                            Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
                             for (VirtualFile virtualFile : virtualFiles) {
                                 try {
                                     Module fileModule = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(virtualFile);
