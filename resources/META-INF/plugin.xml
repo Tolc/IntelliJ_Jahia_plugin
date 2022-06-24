@@ -110,6 +110,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
           <dl>
               <dt>2.0.7</dt>
               <dd>(<strong>IMPORTANT FIX</strong>) Refactored tool window for IntelliJ 2022.1 API (#61)</dd>
+              <dd>Fixed JSP EL variables completion and references (not working since IntelliJ 2022.1)</dd>
           </dl>
           <dl>
               <dt>2.0.6</dt>
@@ -223,6 +224,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
   <depends>com.intellij.modules.java</depends>
   <depends optional="true" config-file="jahia-properties-features.xml">com.intellij.properties</depends>
   <depends optional="true" config-file="jahia-jsp-features.xml">com.intellij.jsp</depends>
+  <depends optional="true" config-file="jahia-el-features.xml">com.intellij.javaee.el</depends>
 
   <application-components>
     <!-- Add your application components here -->
