@@ -111,7 +111,8 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
               <dt>2.1.0</dt>
               <dd>(<strong>IMPORTANT FIX</strong>) Refactored tool window for IntelliJ 2022.1 API (#61)</dd>
               <dd>(<strong>IMPORTANT FIX</strong>) Fixed JSP EL variables completion and references (apparently not working since official JSP plugin has been separated into JavaEE + JSP plugins)</dd>
-              <dd>Fixed grammar-breaking issue with property default value not being recognized as such when containing ) character between simple or double quotes (#62)</dd>
+              <dd>Fixed grammar-breaking issue with property default value not being recognized as such when containing ")" character between simple or double quotes (#62)</dd>
+              <dd>Fixed stack-overflow error that could occur when getting all properties of a nodetype recursively (#60)</dd>
           </dl>
           <dl>
               <dt>2.0.6</dt>

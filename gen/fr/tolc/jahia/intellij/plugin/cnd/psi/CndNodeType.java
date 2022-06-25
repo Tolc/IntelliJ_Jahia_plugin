@@ -42,6 +42,10 @@ public interface CndNodeType extends CndNodeTypeElement {
   @NotNull
   ItemPresentation getPresentation();
 
+  boolean equals(Object o);
+
+  int hashCode();
+
   @NotNull
   Set<CndProperty> getProperties();
 
