@@ -2,14 +2,12 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi;
 
 import java.util.List;
-import java.util.Set;
-
-import com.intellij.navigation.ItemPresentation;
+import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.navigation.ItemPresentation;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
+import java.util.Set;
 
 public interface CndNodeType extends CndNodeTypeElement {
 

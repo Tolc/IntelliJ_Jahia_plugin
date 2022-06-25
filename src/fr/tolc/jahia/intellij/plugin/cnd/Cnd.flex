@@ -116,8 +116,8 @@ ATTRIBUTE=[:jletter:]([^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+)?
 //Item type
 //<YYINITIAL> "itemtype"                          				{ yybegin(ITEMTYPE); return CndTypes.ITEMTYPE; }
 <ITEMTYPE> {
-	"="                           								{ return CndTypes.EQUAL; }
-	[^\r\n\ =]+                                                { return CndTypes.ITEMTYPE_TYPE; }
+	"="                           					{ return CndTypes.EQUAL; }
+	[^\r\n\ =]+                                     { return CndTypes.ITEMTYPE_TYPE; }
 }
 
 
@@ -127,7 +127,8 @@ ATTRIBUTE=[:jletter:]([^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+)?
 //Node type property -
 <YYINITIAL> "-"									{ yybegin(PROPERTY); return CndTypes.MINUS; }
 <PROPERTY> {
-	[:jletter:]([:jletterdigit:]|":"|".")* | "*"		{ return CndTypes.PROPERTY_NAME; }
+	[:jletter:]([:jletterdigit:]|":"|".")*
+	| "*"		                                { return CndTypes.PROPERTY_NAME; }
 	"("											{ yybegin(PROPERTY_TYPE); return CndTypes.LEFT_PARENTHESIS; }
 }
 <PROPERTY_TYPE> {
@@ -141,7 +142,9 @@ ATTRIBUTE=[:jletter:]([^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+)?
 	"["											{ yybegin(PROPERTY_MASK_OPTION_NAME); return CndTypes.LEFT_BRACKET; }
 	")"											{ yybegin(PROPERTY_DEFAULT); return CndTypes.RIGHT_PARENTHESIS; }
 }
-<PROPERTY_MASK_OPTION_NAME> [^\r\n\ \]=)',]+		{ yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
+<PROPERTY_MASK_OPTION_NAME> {
+    [^\r\n\ \]=)',]+	                        { yybegin(PROPERTY_MASK_OPTION); return CndTypes.PROPERTY_MASK_OPTION; }
+}
 <PROPERTY_MASK_OPTION> {
 	"="											{ return CndTypes.EQUAL; }
 	"'"[^\r\n\]']+"'" | [^\r\n\ \]=)',]+		{ return CndTypes.PROPERTY_MASK_OPTION_VALUE; }
@@ -152,13 +155,16 @@ ATTRIBUTE=[:jletter:]([^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+)?
 
 <PROPERTY_DEFAULT> {
 	({CRLF}|{WHITE_SPACE})+"="					{ yypushback(1); return TokenType.WHITE_SPACE; }
-	"="					                        { yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
+	"="{WHITE_SPACE}*	                        { yybegin(PROPERTY_DEFAULT_VALUE); return CndTypes.EQUAL; }
 	{CRLF}*{WHITE_SPACE}*"<"					{ yybegin(PROPERTY_CONSTRAINT); return CndTypes.LEFT_ONLY_ANGLE_BRACKET; }
 	{ATTRIBUTE}									{ yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_ATTRIBUTE; }
 	{CRLF}+{WHITE_SPACE}*{ATTRIBUTE}			{ yypushback(yytext().toString().replaceAll("\\r", "").replaceAll("\\n", "").trim().length()); yybegin(PROPERTY_ATTRIBUTES); return TokenType.WHITE_SPACE; }
 }
 <PROPERTY_DEFAULT_VALUE> {
-    [^\r\n'\"\-\+\ \t\f]+ ({WHITE_SPACE}*","{WHITE_SPACE}*[^\r\n'\"\-\+\ \t\f]+)* | "'"[^\r\n']*"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']*"'")* | "\""[^\r\n\"]*"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""[^\r\n\"]*"\"")* | [^\r\n\(]+"("([^\r\n']+ | "'"[^\r\n']+"'")")"            { yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
+    [^\r\n'\"\-\+\ \t\f]+ ({WHITE_SPACE}*","{WHITE_SPACE}*[^\r\n'\"\-\+\ \t\f]+)*
+    | "'"[^\r\n']*"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']*"'")*
+    | "\""[^\r\n\"]*"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""[^\r\n\"]*"\"")*
+    | [^\r\n\ \t\f\(]+"("([^\r\n']+ | "'"[^\r\n']+"'")")"                                                         { yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
 }
 
 <PROPERTY_ATTRIBUTES> {
@@ -167,8 +173,11 @@ ATTRIBUTE=[:jletter:]([^\r\n\ ]+({WHITE_SPACE}*"="{WHITE_SPACE}*)?[^\r\n\ ]+)?
 	{CRLF}+{WHITE_SPACE}*{ATTRIBUTE}			{ yypushback(yytext().toString().replaceAll("\\r", "").replaceAll("\\n", "").trim().length()); return TokenType.WHITE_SPACE; }
 }
 
-<PROPERTY_CONSTRAINT> [^\r\n'\"\-\+\ \t\f]+ ({WHITE_SPACE}*","{WHITE_SPACE}*[^\r\n'\"\-\+\ \t\f]+)*    | "'"[^\r\n']*"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']*"'")* | "\""[^\r\n\"]*"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""[^\r\n\"]*"\"")*          { return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
-
+<PROPERTY_CONSTRAINT> {
+    [^\r\n'\"\-\+\ \t\f]+ ({WHITE_SPACE}*","{WHITE_SPACE}*[^\r\n'\"\-\+\ \t\f]+)*
+    | "'"[^\r\n']*"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']*"'")*
+    | "\""[^\r\n\"]*"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""[^\r\n\"]*"\"")*          { return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
+}
 
 
 

@@ -51,3 +51,4 @@ target/
 
 /*.jar
 /*.zip
+/*.skeleton

@@ -23,73 +23,15 @@ public class CndParser implements PsiParser, LightPsiParser {
     boolean r;
     b = adapt_builder_(t, b, this, null);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    if (t == EXTENSION) {
-      r = extension(b, 0);
-    }
-    else if (t == EXTENSIONS) {
-      r = extensions(b, 0);
-    }
-    else if (t == ITEM_TYPE) {
-      r = itemType(b, 0);
-    }
-    else if (t == NAMESPACE) {
-      r = namespace(b, 0);
-    }
-    else if (t == NAMESPACE_IDENTIFIER) {
-      r = namespaceIdentifier(b, 0);
-    }
-    else if (t == NODE_OPTION) {
-      r = nodeOption(b, 0);
-    }
-    else if (t == NODE_TYPE) {
-      r = nodeType(b, 0);
-    }
-    else if (t == NODE_TYPE_IDENTIFIER) {
-      r = nodeTypeIdentifier(b, 0);
-    }
-    else if (t == PROPERTY) {
-      r = property(b, 0);
-    }
-    else if (t == PROPERTY_ATTRIBUTES) {
-      r = propertyAttributes(b, 0);
-    }
-    else if (t == PROPERTY_CONSTRAINT) {
-      r = propertyConstraint(b, 0);
-    }
-    else if (t == PROPERTY_DEFAULT) {
-      r = propertyDefault(b, 0);
-    }
-    else if (t == PROPERTY_IDENTIFIER) {
-      r = propertyIdentifier(b, 0);
-    }
-    else if (t == PROPERTY_TYPE_MASK_OPTION) {
-      r = propertyTypeMaskOption(b, 0);
-    }
-    else if (t == SUB_NODE) {
-      r = subNode(b, 0);
-    }
-    else if (t == SUB_NODE_ATTRIBUTES) {
-      r = subNodeAttributes(b, 0);
-    }
-    else if (t == SUB_NODE_DEFAULT_TYPE) {
-      r = subNodeDefaultType(b, 0);
-    }
-    else if (t == SUB_NODE_TYPE) {
-      r = subNodeType(b, 0);
-    }
-    else if (t == SUPER_TYPE) {
-      r = superType(b, 0);
-    }
-    else if (t == SUPER_TYPES) {
-      r = superTypes(b, 0);
-    }
-    else {
-      r = parse_root_(t, b, 0);
-    }
+    r = parse_root_(t, b);
     exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
   }
 
-  protected boolean parse_root_(IElementType t, PsiBuilder b, int l) {
+  protected boolean parse_root_(IElementType t, PsiBuilder b) {
+    return parse_root_(t, b, 0);
+  }
+
+  static boolean parse_root_(IElementType t, PsiBuilder b, int l) {
     return cnd(b, l + 1);
   }
 
@@ -109,11 +51,10 @@ public class CndParser implements PsiParser, LightPsiParser {
   // (COMMENT|CRLF)*
   private static boolean cnd_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "cnd_0")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!cnd_0_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "cnd_0", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -122,21 +63,18 @@ public class CndParser implements PsiParser, LightPsiParser {
   private static boolean cnd_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "cnd_0_0")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = consumeToken(b, COMMENT);
     if (!r) r = consumeToken(b, CRLF);
-    exit_section_(b, m, null, r);
     return r;
   }
 
   // (namespace CRLF*)*
   private static boolean cnd_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "cnd_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!cnd_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "cnd_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -152,20 +90,18 @@ public class CndParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // namespace | (nodeType | COMMENT | CRLF)*
   // CRLF*
   private static boolean cnd_1_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "cnd_1_0_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!consumeToken(b, CRLF)) break;
       if (!empty_element_parsed_guard_(b, "cnd_1_0_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
 
-  // (nodeType | COMMENT | CRLF)*
+  // namespace | (nodeType | COMMENT | CRLF)*
   private static boolean cnd_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "cnd_2")) return false;
     boolean r;
@@ -179,11 +115,10 @@ public class CndParser implements PsiParser, LightPsiParser {
   // (nodeType | COMMENT | CRLF)*
   private static boolean cnd_2_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "cnd_2_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!cnd_2_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "cnd_2_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -192,11 +127,9 @@ public class CndParser implements PsiParser, LightPsiParser {
   private static boolean cnd_2_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "cnd_2_1_0")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = nodeType(b, l + 1);
     if (!r) r = consumeToken(b, COMMENT);
     if (!r) r = consumeToken(b, CRLF);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -229,11 +162,10 @@ public class CndParser implements PsiParser, LightPsiParser {
   // (COMMA extension)*
   private static boolean extensions_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "extensions_3")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!extensions_3_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "extensions_3", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -415,11 +347,10 @@ public class CndParser implements PsiParser, LightPsiParser {
   // (CRLF+ COMMENT | CRLF+ property | CRLF+ subNode)*
   private static boolean nodeType_13(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "nodeType_13")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!nodeType_13_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "nodeType_13", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -453,11 +384,10 @@ public class CndParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, CRLF);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!consumeToken(b, CRLF)) break;
       if (!empty_element_parsed_guard_(b, "nodeType_13_0_0_0", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, m, null, r);
     return r;
@@ -480,11 +410,10 @@ public class CndParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, CRLF);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!consumeToken(b, CRLF)) break;
       if (!empty_element_parsed_guard_(b, "nodeType_13_0_1_0", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, m, null, r);
     return r;
@@ -507,11 +436,10 @@ public class CndParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, CRLF);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!consumeToken(b, CRLF)) break;
       if (!empty_element_parsed_guard_(b, "nodeType_13_0_2_0", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, m, null, r);
     return r;
@@ -544,11 +472,10 @@ public class CndParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = options_0(b, l + 1);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!options_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "options", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, m, null, r);
     return r;
@@ -625,11 +552,10 @@ public class CndParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, PROPERTY_ATTRIBUTE);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!consumeToken(b, PROPERTY_ATTRIBUTE)) break;
       if (!empty_element_parsed_guard_(b, "propertyAttributes", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, m, PROPERTY_ATTRIBUTES, r);
     return r;
@@ -689,11 +615,10 @@ public class CndParser implements PsiParser, LightPsiParser {
   // (COMMA propertyTypeMaskOption)*
   private static boolean propertyMaskOptions_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyMaskOptions_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!propertyMaskOptions_2_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "propertyMaskOptions_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -806,11 +731,10 @@ public class CndParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, NODE_ATTRIBUTE);
-    int c = current_position_(b);
     while (r) {
+      int c = current_position_(b);
       if (!consumeToken(b, NODE_ATTRIBUTE)) break;
       if (!empty_element_parsed_guard_(b, "subNodeAttributes", c)) break;
-      c = current_position_(b);
     }
     exit_section_(b, m, SUB_NODE_ATTRIBUTES, r);
     return r;
@@ -869,11 +793,10 @@ public class CndParser implements PsiParser, LightPsiParser {
   // (COMMA subNodeType)*
   private static boolean subNodeTypes_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "subNodeTypes_1")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!subNodeTypes_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "subNodeTypes_1", c)) break;
-      c = current_position_(b);
     }
     return true;
   }
@@ -919,11 +842,10 @@ public class CndParser implements PsiParser, LightPsiParser {
   // (COMMA superType)*
   private static boolean superTypes_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "superTypes_2")) return false;
-    int c = current_position_(b);
     while (true) {
+      int c = current_position_(b);
       if (!superTypes_2_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "superTypes_2", c)) break;
-      c = current_position_(b);
     }
     return true;
   }

@@ -14,7 +14,7 @@ import com.intellij.navigation.ItemPresentation;
 
 public class CndNodeTypeIdentifierImpl extends CndNodeTypeIdentifierElementImpl implements CndNodeTypeIdentifier {
 
-  public CndNodeTypeIdentifierImpl(ASTNode node) {
+  public CndNodeTypeIdentifierImpl(@NotNull ASTNode node) {
     super(node);
   }
 
@@ -22,37 +22,45 @@ public class CndNodeTypeIdentifierImpl extends CndNodeTypeIdentifierElementImpl 
     visitor.visitNodeTypeIdentifier(this);
   }
 
+  @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CndVisitor) accept((CndVisitor)visitor);
     else super.accept(visitor);
   }
 
+  @Override
   @Nullable
   public String getNodeTypeName() {
     return CndPsiImplUtil.getNodeTypeName(this);
   }
 
+  @Override
   public PsiElement setNodeTypeName(String newName) {
     return CndPsiImplUtil.setNodeTypeName(this, newName);
   }
 
+  @Override
   @Nullable
   public PsiElement getNameIdentifier() {
     return CndPsiImplUtil.getNameIdentifier(this);
   }
 
+  @Override
   public ItemPresentation getPresentation() {
     return CndPsiImplUtil.getPresentation(this);
   }
 
+  @Override
   public String getName() {
     return CndPsiImplUtil.getName(this);
   }
 
+  @Override
   public PsiElement setName(String newName) {
     return CndPsiImplUtil.setName(this, newName);
   }
 
+  @Override
   public CndNodeType getNodeType() {
     return CndPsiImplUtil.getNodeType(this);
   }

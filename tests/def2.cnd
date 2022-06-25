@@ -1,8 +1,8 @@
 <nt = 'http://www.jcp.org/jcr/nt/1.0'>
 <jnt = 'http://www.jahia.org/jahia/nt/1.0'>
 <jmix = 'http://www.jahia.org/jahia/mix/1.0'>
-<scp = 'http://www.lol.com/jahia/sitecp.com/nt/1.0'>
-<scpmix = 'http://www.lol.com/jahia/sitecp.com/mix/1.0'>
+<scp = 'http://www.scp/jahia/nt/1.0'>
+<scpmix = 'http://www.scp/jahia/mix/1.0'>
 
 // General template mixin
 [scpmix:lopubComponent] > jmix:droppableContent mixin

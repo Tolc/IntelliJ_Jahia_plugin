@@ -66,7 +66,7 @@ public interface CndTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == EXTENSION) {
+      if (type == EXTENSION) {
         return new CndExtensionImpl(node);
       }
       else if (type == EXTENSIONS) {
