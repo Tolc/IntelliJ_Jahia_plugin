@@ -64,7 +64,7 @@ public class JspCompletionContributor extends CompletionContributor {
                                             List<ViewModel> nodeTypeViews = null;
                                             String localName = viewModel.getTagName();
                                             if (JspUtil.TAG_INCLUDE.equals(localName)) {
-                                                nodeTypeViews = CndProjectFilesUtil.getNodeTypeAndAncestorsViews(element.getProject(), viewModel.getNodeType().getNamespace(),
+                                                nodeTypeViews = CndProjectFilesUtil.getNodeTypeApplicableViews(element.getProject(), viewModel.getNodeType().getNamespace(),
                                                         viewModel.getNodeType().getNodeTypeName(), viewModel.getType());
                                             } else if (JspUtil.TAG_MODULE.equals(localName) || JspUtil.TAG_OPTION.equals(localName)) {
                                                 nodeTypeViews = CndProjectFilesUtil.getProjectNodeTypeViews(element.getProject(), viewModel.getType());

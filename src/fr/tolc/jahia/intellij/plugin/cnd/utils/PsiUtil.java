@@ -48,10 +48,10 @@ public class PsiUtil {
             boolean shouldCache = true;
             //Ancestors
             try {
-                for (CndNodeType ancestorNodeType : element.getAncestorsNodeTypes()) {
-                    if (!alreadyDoneTypes.contains(ancestorNodeType)) {
-                        alreadyDoneTypes.add(ancestorNodeType);     //prevent infinite loop
-                        result.addAll(getNodeTypeProperties(ancestorNodeType, alreadyDoneTypes));
+                for (CndNodeType parentNodeType : element.getParentsNodeTypes()) {
+                    if (!alreadyDoneTypes.contains(parentNodeType)) {
+                        alreadyDoneTypes.add(parentNodeType);
+                        result.addAll(getNodeTypeProperties(parentNodeType, alreadyDoneTypes));
                     }
                 }
             } catch (StackOverflowError soe) {
@@ -63,7 +63,7 @@ public class PsiUtil {
             try {
                 for (CndNodeType extensionNodeType : element.getExtensions()) {
                     if (!alreadyDoneTypes.contains(extensionNodeType)) {
-                        alreadyDoneTypes.add(extensionNodeType);    //prevent infinite loop
+                        alreadyDoneTypes.add(extensionNodeType);
                         result.addAll(getNodeTypeProperties(extensionNodeType, alreadyDoneTypes));
                     }
                 }

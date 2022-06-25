@@ -96,7 +96,7 @@ public class CndXmlLineMarkerProvider extends RelatedItemLineMarkerProvider {
                         if (JspUtil.TAG_INCLUDE.equals(localName)) {
                             NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(CndIcons.TEMPLATE_INCLUDE);
 
-                            List<PsiFile> viewFiles = CndProjectFilesUtil.findViewFilesIncludingAncestors(element.getProject(),
+                            List<PsiFile> viewFiles = CndProjectFilesUtil.findFirstApplicableViewFiles(element.getProject(),
                                     viewModel.getNodeType().getNamespace(), viewModel.getNodeType().getNodeTypeName(), viewModel.getType(), viewModel.getName());
                             if (!viewFiles.isEmpty()) {
                                 //TODO: maybe better icon depending on hidden or not?
