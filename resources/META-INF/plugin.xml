@@ -114,6 +114,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
               <dd>Fixed grammar-breaking issue with property default value not being recognized as such when containing ")" character between simple or double quotes (#62)</dd>
               <dd>Fixed stack-overflow error that could occur when getting all properties of a nodetype recursively (#60)</dd>
               <dd>Fixed template:include view completion and references not including extends views (#54)</dd>
+              <dd>Fixed template:addResources completion and references (#52)</dd>
           </dl>
           <dl>
               <dt>2.0.6</dt>

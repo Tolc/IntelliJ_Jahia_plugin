@@ -24,15 +24,17 @@ import java.util.List;
 import java.util.Map;
 
 public class JspCompletionContributor extends CompletionContributor {
+    public static final String RESOURCE_SECONDARY_START = "${url.currentModule}/";
+    public static final String RESOURCE_SECONDARY_END = "?v=${script.view.moduleVersion}";
+
     public JspCompletionContributor() {
         //Namespaces
-        
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement(XmlElementType.XML_ATTRIBUTE_VALUE_TOKEN),
                 new CompletionProvider<CompletionParameters>() {
                     public void addCompletions(@NotNull CompletionParameters parameters,
-                            ProcessingContext context,
-                            @NotNull CompletionResultSet resultSet) {
+                                               @NotNull ProcessingContext context,
+                                               @NotNull CompletionResultSet resultSet) {
 
                         PsiElement element = parameters.getOriginalPosition();
                         if (element != null) {
@@ -54,6 +56,7 @@ public class JspCompletionContributor extends CompletionContributor {
                                             Map<String, PsiFile> resources = CndProjectFilesUtil.getResources(module, resourcesModel.getType());
                                             for (String resource : resources.keySet()) {
                                                 resultSet.addElement(LookupElementBuilder.create(resource));
+                                                resultSet.addElement(LookupElementBuilder.create(RESOURCE_SECONDARY_START + resourcesModel.getType() + "/" + resource + RESOURCE_SECONDARY_END));
                                             }
                                         }
 
@@ -84,5 +87,4 @@ public class JspCompletionContributor extends CompletionContributor {
                 }
         );
     }
-    
 }
