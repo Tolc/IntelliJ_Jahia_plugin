@@ -15,6 +15,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.enums.ResourcesTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.model.ResourcesModel;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,13 +24,15 @@ import java.util.List;
 import java.util.Map;
 
 public class ResourceReference extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
-    private ResourcesModel resourcesModel;
-    private String resource;
+    private final ResourcesModel resourcesModel;
+    private final String resource;
 
     public ResourceReference(@NotNull PsiElement element, TextRange textRange, ResourcesModel resourcesModel, String resource) {
         super(element, textRange);
         this.resourcesModel = resourcesModel;
-        this.resource = resource;
+        this.resource = resource.trim()
+                .replaceAll("^\\$\\{url\\.currentModule}/" + resourcesModel.getType().toString(), "")
+                .replaceAll("\\?.+$", "");
     }
 
     @Nullable
@@ -45,7 +48,7 @@ public class ResourceReference extends PsiReferenceBase<PsiElement> implements P
         Project project = myElement.getProject();
         Module module = CndProjectFilesUtil.getModuleForFile(project, myElement.getContainingFile().getVirtualFile());
         Map<String, PsiFile> resourcesMap = CndProjectFilesUtil.getResources(module, resourcesModel.getType());
-        List<LookupElement> variants = new ArrayList<LookupElement>();
+        List<LookupElement> variants = new ArrayList<>();
         for (Map.Entry<String, PsiFile> resource : resourcesMap.entrySet()) {
             variants.add(LookupElementBuilder.create(resource.getValue())
                     .withTypeText(resource.getKey())
@@ -57,12 +60,14 @@ public class ResourceReference extends PsiReferenceBase<PsiElement> implements P
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        Project project = myElement.getProject();
-        Module module = CndProjectFilesUtil.getModuleForFile(project, myElement.getContainingFile().getVirtualFile());
-        PsiFile resourcefile = CndProjectFilesUtil.getResource(module, resourcesModel.getType(), resource);
-        List<ResolveResult> results = new ArrayList<ResolveResult>();
-        if (resourcefile != null) {
-            results.add(new PsiElementResolveResult(resourcefile));
+        List<ResolveResult> results = new ArrayList<>();
+        if (StringUtils.isNotBlank(resource)) {
+            Project project = myElement.getProject();
+            Module module = CndProjectFilesUtil.getModuleForFile(project, myElement.getContainingFile().getVirtualFile());
+            PsiFile resourceFile = CndProjectFilesUtil.getResource(module, resourcesModel.getType(), resource);
+            if (resourceFile != null) {
+                results.add(new PsiElementResolveResult(resourceFile));
+            }
         }
         return results.toArray(new ResolveResult[results.size()]);
     }

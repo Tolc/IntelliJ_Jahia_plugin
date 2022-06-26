@@ -11,7 +11,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.indexing.FileBasedIndex;
 import fr.tolc.jahia.intellij.plugin.cnd.CndFileType;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.ResourcesTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
@@ -29,8 +28,10 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CndProjectFilesUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(CndProjectFilesUtil.class);
@@ -214,17 +215,31 @@ public class CndProjectFilesUtil {
     }
 
     @NotNull
-    public static List<ViewModel> getNodeTypeAndAncestorsViews(Project project, String namespace, String nodeTypeName, String templateType) {
+    public static List<ViewModel> getNodeTypeApplicableViews(Project project, String namespace, String nodeTypeName, String templateType) {
         CndNodeType nodeType = CndUtil.findNodeType(project, namespace, nodeTypeName);
-        return getNodeTypeAndAncestorsViews(nodeType, templateType);
+        return getNodeTypeApplicableViews(nodeType, templateType);
     }
 
     @NotNull
-    public static List<ViewModel> getNodeTypeAndAncestorsViews(CndNodeType nodeType, String templateType) {
+    public static List<ViewModel> getNodeTypeApplicableViews(CndNodeType nodeType, String templateType) {
+        return getNodeTypeApplicableViewsRecursive(nodeType, templateType, new HashSet<>());
+    }
+
+    @NotNull
+    private static List<ViewModel> getNodeTypeApplicableViewsRecursive(CndNodeType nodeType, String templateType, Set<CndNodeType> alreadyDoneTypes) {
         List<ViewModel> res = new ArrayList<ViewModel>();
         res.addAll(getNodeTypeViews(nodeType.getProject(), nodeType.getNodeTypeNamespace(), nodeType.getNodeTypeName(), templateType));
         for (CndNodeType parentNodeType : nodeType.getParentsNodeTypes()) {
-            res.addAll(getNodeTypeAndAncestorsViews(parentNodeType, templateType));
+            if (!alreadyDoneTypes.contains(parentNodeType)) {
+                alreadyDoneTypes.add(parentNodeType);
+                res.addAll(getNodeTypeApplicableViewsRecursive(parentNodeType, templateType, alreadyDoneTypes));
+            }
+        }
+        for (CndNodeType extensionNodeType : nodeType.getExtensions()) {
+            if (!alreadyDoneTypes.contains(extensionNodeType)) {
+                alreadyDoneTypes.add(extensionNodeType);
+                res.addAll(getNodeTypeApplicableViewsRecursive(extensionNodeType, templateType, alreadyDoneTypes));
+            }
         }
         return res;
     }
@@ -347,24 +362,41 @@ public class CndProjectFilesUtil {
     }
 
     @NotNull
-    public static List<PsiFile> findViewFilesIncludingAncestors(Project project, String namespace, String nodeTypeName, String viewType, String viewName) {
-        return findViewFilesIncludingAncestors(CndUtil.findNodeType(project, namespace, nodeTypeName), viewType, viewName);
+    public static List<PsiFile> findFirstApplicableViewFiles(Project project, String namespace, String nodeTypeName, String viewType, String viewName) {
+        CndNodeType nodeType = CndUtil.findNodeType(project, namespace, nodeTypeName);
+        return findFirstApplicableViewFiles(nodeType, viewType, viewName);
     }
 
     @NotNull
-    public static List<PsiFile> findViewFilesIncludingAncestors(CndNodeType nodeType, String viewType, String viewName) {
+    public static List<PsiFile> findFirstApplicableViewFiles(CndNodeType nodeType, String viewType, String viewName) {
+       return findFirstApplicableViewFilesRecursive(nodeType, viewType, viewName, new HashSet<>());
+    }
+
+    @NotNull
+    private static List<PsiFile> findFirstApplicableViewFilesRecursive(CndNodeType nodeType, String viewType, String viewName, Set<CndNodeType> alreadyDoneTypes) {
         List<PsiFile> viewFiles = findViewFiles(nodeType, viewType, viewName);
         if (!viewFiles.isEmpty()) {
             return viewFiles;
         }
         if (nodeType != null) {
-            for (CndNodeType parentType : nodeType.getParentsNodeTypes()) {
-                List<PsiFile> parentViewFiles = findViewFilesIncludingAncestors(parentType, viewType, viewName);
-                if (!parentViewFiles.isEmpty()) {
-                    return parentViewFiles;
+            for (CndNodeType parentNodeType : nodeType.getParentsNodeTypes()) {
+                if (!alreadyDoneTypes.contains(parentNodeType)) {
+                    alreadyDoneTypes.add(parentNodeType);
+                    List<PsiFile> parentViewFiles = findFirstApplicableViewFilesRecursive(parentNodeType, viewType, viewName, alreadyDoneTypes);
+                    if (!parentViewFiles.isEmpty()) {
+                        return parentViewFiles;
+                    }
                 }
             }
-
+            for (CndNodeType extensionNodeType : nodeType.getExtensions()) {
+                if (!alreadyDoneTypes.contains(extensionNodeType)) {
+                    alreadyDoneTypes.add(extensionNodeType);
+                    List<PsiFile> extensionViewFiles = findFirstApplicableViewFilesRecursive(extensionNodeType, viewType, viewName, alreadyDoneTypes);
+                    if (!extensionViewFiles.isEmpty()) {
+                        return extensionViewFiles;
+                    }
+                }
+            }
         }
         return viewFiles;
     }

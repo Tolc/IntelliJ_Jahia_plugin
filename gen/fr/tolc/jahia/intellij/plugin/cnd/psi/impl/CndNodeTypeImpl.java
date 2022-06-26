@@ -100,6 +100,16 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
   }
 
   @Override
+  public boolean equals(Object o) {
+    return CndPsiImplUtil.equals(this, o);
+  }
+
+  @Override
+  public int hashCode() {
+    return CndPsiImplUtil.hashCode(this);
+  }
+
+  @Override
   @NotNull
   public Set<CndProperty> getProperties() {
     return CndPsiImplUtil.getProperties(this);

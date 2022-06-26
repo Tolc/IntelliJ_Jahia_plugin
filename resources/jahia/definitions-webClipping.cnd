@@ -1,0 +1,11 @@
+<jnt = 'http://www.jahia.org/jahia/nt/1.0'>
+
+[jnt:webClipping] > jnt:content, jmix:siteComponent, mix:title
+ - url (string) mandatory indexed=no
+//- cacheDelay (long) = '0' indexed=no
+ - connectionTimeout (long) = '0' indexed=no
+ - expectContinue (boolean) = false indexed=no
+ - includeCss (boolean) = true indexed=no
+ - specificTag (string) indexed=no
+ - specificAttr (string) indexed=no
+ - specificAttrValue (string) indexed=no

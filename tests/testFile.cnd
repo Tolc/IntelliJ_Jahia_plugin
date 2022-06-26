@@ -1,7 +1,7 @@
 <jnt = 'http://www.jahia.org/jahia/nt/1.0'>
 <jmix = 'http://www.jahia.org/jahia/mix/1.0'>
-<lint = 'http://www.lodh.com/jahia/intranet/nt/1.0'>
-<limix = 'http://www.lodh.com/jahia/intranet/mix/1.0'>
+<lint = 'http://www.lol/jahia/nt/1.0'>
+<limix = 'http://www.lol/jahia/mix/1.0'>
 
 [limix:liComponent] > jmix:droppableContent mixin
 
@@ -42,7 +42,8 @@
 
 [limix:boxOptions] mixin
 	extends = lint:newsList, jnt:nodeLink, jnt:externalLink, jnt:bigText, jnt:form
-	- width (string) = '100%'
+	- width (string) = '100% (gfdg)' i18n
+	- width2 (string) = 100% i18n
 
 [limix:extendFile] mixin
     extends = jnt:file

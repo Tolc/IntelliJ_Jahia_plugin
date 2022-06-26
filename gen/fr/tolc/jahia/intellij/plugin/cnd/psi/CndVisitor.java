@@ -4,17 +4,17 @@ package fr.tolc.jahia.intellij.plugin.cnd.psi;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeTypeElement;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndPropertyIdentifierElement;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndNodeTypeIdentifierElement;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSuperTypeElement;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndExtensionElement;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeDefaultTypeElement;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNamespaceElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndNodeTypeIdentifierElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndNamespaceIdentifierElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeDefaultTypeElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeTypeElement;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndPropertyElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNamespaceElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSuperTypeElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.identifiers.CndPropertyIdentifierElement;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndSubNodeElement;
 
 public class CndVisitor extends PsiElementVisitor {
 
@@ -106,23 +106,11 @@ public class CndVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitNamespaceIdentifierElement(@NotNull CndNamespaceIdentifierElement o) {
-    visitPsiElement(o);
-  }
-
   public void visitNodeTypeElement(@NotNull CndNodeTypeElement o) {
     visitPsiElement(o);
   }
 
-  public void visitNodeTypeIdentifierElement(@NotNull CndNodeTypeIdentifierElement o) {
-    visitPsiElement(o);
-  }
-
   public void visitPropertyElement(@NotNull CndPropertyElement o) {
-    visitPsiElement(o);
-  }
-
-  public void visitPropertyIdentifierElement(@NotNull CndPropertyIdentifierElement o) {
     visitPsiElement(o);
   }
 
@@ -139,6 +127,18 @@ public class CndVisitor extends PsiElementVisitor {
   }
 
   public void visitSuperTypeElement(@NotNull CndSuperTypeElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNamespaceIdentifierElement(@NotNull CndNamespaceIdentifierElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNodeTypeIdentifierElement(@NotNull CndNodeTypeIdentifierElement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitPropertyIdentifierElement(@NotNull CndPropertyIdentifierElement o) {
     visitPsiElement(o);
   }
 

@@ -72,7 +72,9 @@ public class CndCompletionContributor extends CompletionContributor {
                                                ProcessingContext context,
                                                @NotNull CompletionResultSet resultSet) {
                         for (OptionEnum option : OptionEnum.values()) {
-                            resultSet.addElement(LookupElementBuilder.create(option.toString()));
+                            for (String completion : option.getCompletions()) {
+                                resultSet.addElement(LookupElementBuilder.create(completion));
+                            }
                         }
                         
                         //Workaround for 'extends' and 'itemtype' completions

@@ -1,18 +1,19 @@
 package fr.tolc.jahia.intellij.plugin.cnd.enums;
 
 public enum ItemTypeEnum {
-    DEFAULT("default"),
-    OPTIONS("options"),
-    LAYOUT("layout"),
-    METADATA("metadata"),
-    CONTENT("content"),
+    CHANNELS("channels"),
     CLASSIFICATION("classification"),
-    PERMISSIONS("permissions"),
-    LIST_ORDERING("listOrdering"),
+    CONTENT("content"),
     CONTRIBUTE_MODE("contributeMode"),
+    DEFAULT("default"),
+    LAYOUT("layout"),
+    LIST_ORDERING("listOrdering"),
+    METADATA("metadata"),
+    OPTIONS("options"),
+    PERMISSIONS("permissions"),
     PROPERTIES_VIEW("propertiesView");
 
-    private String value;
+    private final String value;
 
     ItemTypeEnum(String value) {
         this.value = value;

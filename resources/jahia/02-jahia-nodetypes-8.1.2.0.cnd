@@ -12,7 +12,7 @@
 //---------------------------------------------------------
 
 [jmix:nodenameInfo] > mix:referenceable mixin
- - j:nodename (string) protected hidden nofulltext
+ - j:nodename (string) protected hidden
  - j:fullpath (string) protected hidden nofulltext
 
 [jmix:systemNode] mixin
@@ -40,7 +40,7 @@
 
 [jmix:description] mixin
  itemtype = metadata
-  - jcr:description (string,textarea) i18n itemtype = metadata
+ - jcr:description (string,textarea) i18n itemtype = metadata
 
 [jmix:keywords] mixin
  extends = nt:hierarchyNode, jnt:content, jnt:page
@@ -52,21 +52,26 @@
 
 [jmix:lastPublished] mixin
  itemtype = metadata
-  - j:published (boolean) = false hidden
-  - j:lastPublished (date) protected onconflict=ignore
-  - j:lastPublishedBy (string) protected nofulltext onconflict=ignore
-  - j:workInProgress (boolean) = false hidden nofulltext onconflict=ignore
+ - j:published (boolean) = false hidden
+ - j:lastPublished (date) protected onconflict=ignore
+ - j:lastPublishedBy (string) protected nofulltext onconflict=ignore
+ - j:workInProgress (boolean) = false hidden nofulltext onconflict=ignore
+ - j:workInProgressStatus (string) hidden nofulltext onconflict=ignore < 'DISABLED', 'ALL_CONTENT', 'LANGUAGES'
+ - j:workInProgressLanguages (string) hidden nofulltext onconflict=ignore multiple
 
 [jmix:originWS] mixin
-  - j:originWS (string) protected nofulltext hidden
+ - j:originWS (string) protected nofulltext hidden
+
+[jmix:liveProperties] mixin
+ - j:liveProperties (string) nofulltext multiple
 
 [jmix:deletedChildren] mixin
-  - j:deletedChildren (string) multiple hidden indexed=no
+ - j:deletedChildren (string) multiple hidden indexed=no
 
 [jmix:tagged] mixin
  extends = nt:hierarchyNode, jnt:content, jnt:page
  itemtype = metadata
- // j:tags and j:newTag deprecated
+// j:tags and j:newTag deprecated
  - j:tagList (string,tag[autocomplete=10,separator=',']) facetable nofulltext multiple
  - j:tags (weakreference) multiple hidden
  - j:newTag (string) hidden indexed=no
@@ -101,8 +106,8 @@
 //---------------------------------------------------------
 
 [jnt:translation] > nt:base, jmix:lockable, mix:language, mix:lastModified, jmix:lastPublished, mix:versionable, jmix:observable, jmix:workflow
-  - * (undefined) multiple
-  - * (undefined)
+ - * (undefined) multiple
+ - * (undefined)
 
 [jmix:i18n] mixin
  - j:invalidLanguages (string) multiple nofulltext hidden
@@ -149,7 +154,7 @@
 [jnt:roles] > nt:base, jmix:observable, jmix:nolive
  + * (jnt:role)
 
-[jnt:externalPermissions]
+[jnt:externalPermissions] > jmix:observable
  - j:path (string) nofulltext
  - j:permissions (weakreference) protected hidden multiple < jnt:permission
  - j:permissionNames (string) protected hidden nofulltext multiple
@@ -188,7 +193,7 @@
 
 
 [jmix:workflowRulesable] mixin
-+ j:workflowRules (jnt:workflowRules) = jnt:workflowRules autocreated
+ + j:workflowRules (jnt:workflowRules) = jnt:workflowRules autocreated
 
 //---------------------------------------------------------
 // Query
@@ -210,18 +215,19 @@
 [jnt:folder] > nt:folder, jmix:nodenameInfo, jmix:basemetadata, jmix:publication, jmix:observable, jmix:list, jmix:searchable
 
 [jnt:file] > nt:file, jmix:lockable, jmix:nodenameInfo, jmix:basemetadata, jmix:thumbnail, jmix:publication, jmix:observable, mix:title, jmix:searchable
+ - j:filename (string) protected
 
 [jmix:image] mixin
  - j:height (long) protected
  - j:width (long) protected
 
 [jnt:tempFolder] > nt:base
-+ * (jnt:tempFolder)
-+ * (jnt:tempFile)
+ + * (jnt:tempFolder)
+ + * (jnt:tempFile)
 
 [jnt:tempFile] > nt:base, mix:lastModified
-- jcr:mimeType (string) indexed=no nofulltext
-- jcr:data (binary) mandatory indexed=no
+ - jcr:mimeType (string) indexed=no nofulltext
+ - jcr:data (binary) mandatory indexed=no
 
 //---------------------------------------------------------
 // Text extracts
@@ -241,7 +247,7 @@
 //---------------------------------------------------------
 
 [jnt:category] > nt:base, jmix:unversionedBasemetadata, mix:title, jmix:nodenameInfo, jmix:publication, jmix:autoPublish
-+ * (jnt:category) version
+ + * (jnt:category) version
 
 //---------------------------------------------------------
 // Tags (deprecated)
@@ -257,27 +263,27 @@
 // Constants
 //---------------------------------------------------------
 [jnt:constants] > nt:base, jmix:nodenameInfo, jmix:list, jmix:basemetadata
-+ * (jnt:constant) = jnt:constant
+ + * (jnt:constant) = jnt:constant
 
 [jnt:constant] > nt:base, jmix:nodenameInfo, jmix:basemetadata
-- constantKey (string)
-- constantValue (string)
+ - constantKey (string)
+ - constantValue (string)
 
 //---------------------------------------------------------
 // Preferences
 //---------------------------------------------------------
 
 [jnt:preferences] > nt:base, jmix:nodenameInfo
-+ * (jnt:preferenceProvider)
+ + * (jnt:preferenceProvider)
 
 [jnt:preferenceProvider] > nt:base, jmix:nodenameInfo
-+ * (nt:base) multiple
+ + * (nt:base) multiple
 
 [jnt:portletPreference] > nt:base, jmix:nodenameInfo
-- j:portletName (string) nofulltext
-- j:prefName (string) nofulltext
-- j:readOnly (boolean)
-- j:values (string) multiple
+ - j:portletName (string) nofulltext
+ - j:prefName (string) nofulltext
+ - j:readOnly (boolean)
+ - j:values (string) multiple
 
 //---------------------------------------------------------
 // Global settings
@@ -292,6 +298,7 @@
  - j:from (string) indexed=no
  - j:to (string) indexed=no
  - j:notificationLevel (string,choicelist[resourceBundle]) = 'Disabled' indexed=no < 'Disabled','Standard','Wary','Paranoid'
+ - j:workflowNotificationsDisabled (boolean) = false indexed=no
 
 [jnt:searchServerSettings] > nt:base
  - j:provider (string) indexed=no
@@ -302,7 +309,7 @@
  - j:password (string) indexed=no
 
 [jnt:forgesServerSettings] > nt:base
-  + * (jnt:forgeServerSettings)
+ + * (jnt:forgeServerSettings)
 
 
 //---------------------------------------------------------
@@ -327,9 +334,9 @@
  + * (jnt:address)
 
 [jnt:phoneNumber] > nt:base
-- j:numberType (string)
-- j:number (string)
-- j:numberIsPublic (boolean)=true
+ - j:numberType (string)
+ - j:number (string)
+ - j:numberIsPublic (boolean)=true
 
 [jnt:phoneNumbers] > nt:base
  - j:defaultPhone (weakreference) < jnt:phoneNumber
@@ -357,7 +364,7 @@
  - j:organization (string)
  - j:function (string)
  - j:about (string,richtext)
- - j:email (string) < '^$|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}'
+ - j:email (string) < '^$|[A-Za-z0-9._%+-]+@(?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,}'
  - j:skypeID (string)
  - j:twitterID (string)
  - j:facebookID (string)
@@ -376,10 +383,10 @@
  + * (jnt:group) = jnt:group
  + * (jnt:groupsFolder)
 
-[jnt:member] > nt:base, jmix:observable
+[jnt:member] > nt:base, jmix:observable, jmix:autoPublish, jmix:publication, jmix:unversionedBasemetadata
  - j:member (weakreference) < jnt:user, jnt:group
 
-[jnt:members]  > nt:base
+[jnt:members] > nt:base, jmix:autoPublish, jmix:publication, jmix:unversionedBasemetadata
  + * (jnt:members)
  + * (jnt:member)
 
@@ -413,6 +420,15 @@
  - j:templateNode (weakreference,choicelist[templatesNode]) hidden < jnt:template
  - j:templateName (string,choicelist[templatesNode]) mandatory nofulltext
 
+[jmix:canBeUseAsTemplateModel] mixin
+ extends = jnt:page
+ itemtype = options
+ - j:pageTemplateTitle (string) i18n mandatory
+ - j:copySubPages (boolean)
+
+[jmix:createdFromPageModel] > jmix:templateMixin mixin
+ extends = jnt:page
+
 [jnt:template] > nt:base, jmix:nodenameInfo, jmix:basemetadata, jmix:requiredPermissions, jmix:renderable, jmix:observable, jmix:hasIcon, mix:title
  - j:hiddenTemplate (boolean)
  - j:moduleTemplate (string) hidden nofulltext
@@ -433,6 +449,7 @@
  - j:invertCondition (boolean)
 
 [jnt:pageTemplate] > jnt:template
+ - j:templateThumbnail (weakreference,picker[type='image']) < jmix:image
 
 [jnt:contentTemplate] > jnt:template
  - j:applyOn (string, choicelist[subnodetypes = 'nt:base']) nofulltext multiple
@@ -441,6 +458,10 @@
 
 [jmix:mockupStyle] mixin
  - j:mockupStyle (string)
+
+[jnt:templateLink] > jnt:content, mix:title, jmix:requiredPermissions, jmix:observable, jmix:hasIcon, mix:title
+ - j:templateLink (string)
+ - j:hashLocation (string)
 
 [jnt:mainResourceDisplay] > nt:base, jmix:nodenameInfo, jmix:observable, jmix:basemetadata, jmix:renderableMainResource, jmix:layoutComponentContent, jmix:mockupStyle, jmix:studioOnly
 
@@ -487,7 +508,7 @@
 
 [jmix:theme] mixin
  extends = jnt:page, jnt:template
- //deprecated
+//deprecated
  - j:theme (weakreference,choicelist[nodes='$currentSiteTemplatesSet/templates/files/themes;jnt:folder']) nofulltext hidden
  - j:themeName (string,choicelist[nodes='$currentSiteTemplatesSet/templates/files/themes;jnt:folder;name']) nofulltext
 
@@ -510,12 +531,13 @@
  - j:virtualsitesFolderSkeleton (string) nofulltext
  + * (jnt:virtualsite)
 
-[jnt:virtualsite] > nt:base, jmix:nodenameInfo, jmix:publication, jmix:autoPublish, jmix:observable, jmix:htmlSettings, mix:referenceable, mix:created, jmix:lockable, mix:lastModified, jmix:lastPublished, jmix:i18n, jmix:originWS, jmix:workflow
+[jnt:virtualsite] > nt:base, jmix:nodenameInfo, jmix:publication, jmix:autoPublish, jmix:observable, jmix:htmlSettings, mix:referenceable, mix:created, jmix:lockable, mix:lastModified, jmix:lastPublished, jmix:i18n, jmix:originWS, jmix:workflow, mix:title
  orderable
  - j:defaultTemplate (weakreference,choicelist[templatesNode=pageTemplate]) nofulltext hidden
  - j:defaultTemplateName (string, choicelist[templatesNode=pageTemplate]) nofulltext
  - j:title (string) protected nofulltext primary
  - j:serverName (string) protected nofulltext
+ - j:serverNameAliases (string) multiple protected nofulltext
  - j:description (string) protected
  - j:siteId (long) protected hidden
  - j:installedModules (string) multiple protected nofulltext
@@ -560,14 +582,19 @@
  + * (nt:base)
 
 [jmix:mountPointFactory] mixin
-- j:mountPointType (string, choicelist[subnodetypes = 'jnt:mountPoint']) nofulltext mandatory
-- j:templateName (string,choicelist[templatesNode]) mandatory nofulltext
+ - j:mountPointType (string, choicelist[subnodetypes = 'jnt:mountPoint']) nofulltext mandatory
+ - j:templateName (string,choicelist[templatesNode]) mandatory nofulltext
 
 //---------------------------------------------------------
 // Definition Content
 //---------------------------------------------------------
 
 [jmix:editorialContent] mixin
+
+// @since 7.3.1.0
+[jmix:browsableInEditorialPicker] mixin
+
+[jmix:siteContent] mixin
 
 //---------------------------------------------------------
 // Definition organization (left panel)
@@ -584,6 +611,8 @@
 [jmix:basicContent] > jmix:droppableContent, jmix:accessControllableContent mixin
 
 [jmix:structuredContent] > jmix:droppableContent, jmix:accessControllableContent mixin
+
+[jmix:portletContent] > jmix:droppableContent, jmix:accessControllableContent mixin
 
 [jmix:socialComponent] > jmix:droppableContent, jmix:accessControllableContent mixin
 
@@ -627,6 +656,8 @@
 
 [jmix:templateMixin] mixin
 
+[jmix:dynamicFieldset] > jmix:templateMixin mixin
+
 [jmix:markedForDeletion] mixin
 
 [jmix:markedForDeletionRoot] mixin
@@ -639,11 +670,11 @@
 
 // @since Jahia 6.6.2.0
 [jmix:unstructured] mixin
-  - * (UNDEFINED) i18n multiple
-  - * (UNDEFINED) i18n
-  - * (UNDEFINED) multiple
-  - * (UNDEFINED)
-  + * (nt:base) = nt:unstructured sns VERSION
+ - * (UNDEFINED) i18n multiple
+ - * (UNDEFINED) i18n
+ - * (UNDEFINED) multiple
+ - * (UNDEFINED)
+ + * (nt:base) = nt:unstructured sns VERSION
 
 // @since Jahia 7.0
 [jmix:hasIcon] mixin
@@ -651,6 +682,10 @@
 
 [jmix:requireLicense] mixin
  - j:requiredLicenseFeature (string) hidden indexed=no
+
+[jmix:mainResource] mixin
+
+[jmix:systemNameReadonly] mixin
 
 //---------------------------------------------------------
 // References and links
@@ -690,10 +725,10 @@
  - j:bindedComponent (weakreference) hidden
 
 [jmix:externalReference] mixin
-- j:referenceNodeIdentifiers (string) multiple i18n nofulltext
-- j:referencePropertyNames (string) multiple i18n nofulltext
-- j:sharedRefNodeIdentifiers (string) multiple nofulltext
-- j:sharedRefPropertyNames (string) multiple nofulltext
+ - j:referenceNodeIdentifiers (string) multiple i18n nofulltext
+ - j:referencePropertyNames (string) multiple i18n nofulltext
+ - j:sharedRefNodeIdentifiers (string) multiple nofulltext
+ - j:sharedRefPropertyNames (string) multiple nofulltext
 
 [jnt:fileI18nReference] > jnt:fileReference
  - j:node (weakreference,picker[type='file']) i18n < jnt:file
@@ -703,10 +738,10 @@
 //---------------------------------------------------------
 
 [jmix:cache] mixin
-itemtype=options
-extends = jnt:content
-- j:expiration (long)
-- j:perUser (boolean)
+ itemtype=options
+ extends = jnt:content
+ - j:expiration (long)
+ - j:perUser (boolean)
 
 //---------------------------------------------------------
 // Pages, content lists, reusable components
@@ -720,6 +755,8 @@ extends = jnt:content
 
 [jmix:navMenuItem] mixin
 
+[jmix:automaticallyOrderable] mixin
+
 [jnt:page] > nt:base, jmix:nodenameInfo, jmix:observable, jmix:basemetadata, mix:title, jmix:publication, jmix:tagged, jmix:navMenuItem, jmix:hasTemplateNode, jmix:searchable
  orderable
  - jcr:title (string) i18n mandatory boost=2.0
@@ -729,8 +766,8 @@ extends = jnt:content
  + * (jmix:navMenuItem)
 
 [jnt:noni18npage] > jnt:page
-- jcr:title (string) mandatory boost=2.0
-- jcr:description (string)
+ - jcr:title (string) mandatory boost=2.0
+ - jcr:description (string)
 
 [jnt:content] > nt:base, jmix:nodenameInfo, jmix:observable, jmix:basemetadata, jmix:searchable
 
@@ -740,7 +777,7 @@ extends = jnt:content
 
 [jmix:orderedList] mixin
  itemtype = listOrdering
- extends = jnt:contentList, jnt:area
+ extends = jnt:contentList, jnt:area, jmix:automaticallyOrderable
  - ignoreCase (boolean) = true autocreated
  - firstField (string, choicelist[sortableFieldnames]) indexed=no
  - firstDirection (string, choicelist[resourceBundle]) = 'asc' autocreated indexed=no < 'asc','desc'
@@ -791,6 +828,10 @@ extends = jnt:content
 // an item will be displayed in the Pages tab of the selector
 [jmix:visibleInPagesTree] mixin
 
+// apply this mixin to display content as a leaf in content trees
+// @since Jahia 7.3.5.0
+[jmix:visibleInContentTree] mixin
+
 //---------------------------------------------------------
 // Template studio
 //---------------------------------------------------------
@@ -804,7 +845,7 @@ extends = jnt:content
  - j:contributeTypes (string, choicelist[componenttypes = 'jmix:editorialContent,jnt:file,jnt:folder,jnt:contentFolder']) multiple nofulltext
 
 [jmix:listRestrictions] mixin
- - j:allowedTypes (string, choicelist[componenttypes = 'jmix:droppableContent,jnt:file,jnt:folder']) multiple nofulltext
+ - j:allowedTypes (string, choicelist[componenttypes = 'notRestrictedToDependencies;jmix:droppableContent,jnt:file,jnt:folder']) multiple nofulltext
  - j:numberOfItems (long) < '[0,]'
 
 //---------------------------------------------------------
@@ -832,7 +873,7 @@ extends = jnt:content
  + * (jnt:portlet) = jnt:portlet
  + * (jnt:portletFolder)
 
-[jnt:portletReference] > jnt:content,  jmix:nodeReference, jmix:structuredContent
+[jnt:portletReference] > jnt:content,  jmix:nodeReference, jmix:portletContent
  - j:node (weakreference,picker[type='portlet']) < jnt:portlet
 
 //---------------------------------------------------------
@@ -901,7 +942,7 @@ extends = jnt:content
  - cache.requestParameters (string)
  - cache.mainResource (boolean)
  - cache.perUser (boolean)
- - cache.latch (boolean)
+ - skip.aggregation (boolean)
  - visible (string,choicelist) nofulltext < 'false','true','studioOnly'
  - requirePermissions (string)
  - cache.expiration (long)
@@ -909,6 +950,9 @@ extends = jnt:content
  - type (string)
 
 [jnt:viewFile] > jnt:editableFile, jmix:viewProperties
+ - nodeTypeName (string)
+
+[jnt:templateFile] > jnt:editableFile
  - nodeTypeName (string)
 
 [jnt:metaInfFolder] > jnt:folder
@@ -929,7 +973,7 @@ extends = jnt:content
  - j:mixinExtends (string,choicelist[nodetypes='PRIMARY;fromDependencies;useName']) multiple
 
 [jnt:primaryNodeType] > jnt:nodeType
- - j:supertype (NAME,choicelist[nodetypes='PRIMARY;fromDependencies;useName'])
+ - j:supertype (NAME,choicelist[nodetypes='PRIMARY;fromDependencies;useName']) = 'jnt:content'
  - j:mixins (NAME,choicelist[nodetypes='MIXIN;fromDependencies;useName']) multiple
  - j:isAbstract (BOOLEAN) mandatory
  - j:isQueryable (BOOLEAN) = true mandatory
@@ -948,7 +992,7 @@ extends = jnt:content
  - j:selectorType (STRING,choicelist) nofulltext
    < 'Text','RichText','DateTimePicker','DatePicker',
      'TextArea','Picker','FileUpload','Checkbox',
-     'Color','Category','Choicelist'
+     'Color','Category','Choicelist','Cron','Tag'
  - j:selectorOptions (STRING) multiple nofulltext
  - j:multiple (BOOLEAN)
  - j:defaultValues (STRING) multiple
@@ -1011,11 +1055,41 @@ extends = jnt:content
  + * (jnt:container) version
 
 [jmix:legacyContent] mixin
-    - jmix:legacySiteKey (string) hidden nofulltext
+ - jmix:legacySiteKey (string) hidden nofulltext
+ - jmix:legacyUuid (string) hidden nofulltext
 
 [jmix:legacyPage] > jmix:legacyContent mixin
-    - jmix:legacyPid (string) hidden nofulltext
-    - jmix:legacyPageKey (string) hidden nofulltext
+ - jmix:legacyPid (string) hidden nofulltext
+ - jmix:legacyPageKey (string) hidden nofulltext
 
 [jmix:legacyFile] > jmix:legacyContent mixin
-    - jmix:legacyPath (string) hidden nofulltext
+ - jmix:legacyPath (string) hidden nofulltext
+
+
+//---------------------------------------------------------
+// Module Management nodes
+//---------------------------------------------------------
+
+[jnt:moduleManagement] > nt:base, mix:created, mix:lastModified, jmix:nolive
+ - j:bundlesPersistentState (string) nofulltext
+ - j:bundlesScripts (string) nofulltext
+ + bundles (jnt:moduleManagementBundleFolder) = jnt:moduleManagementBundleFolder
+ + configs (jnt:configurationsFolder) = jnt:configurationsFolder
+
+[jnt:configurationsFolder] > nt:base, mix:created, mix:lastModified, jmix:nolive
+ + * (jnt:configurationFile) = jnt:configurationFile
+
+[jnt:configurationFile] > nt:file, jmix:nolive
+ - configType (string) nofulltext
+
+[jnt:moduleManagementBundleFolder] > nt:base, mix:created, mix:lastModified, jmix:nolive
+ + * (jnt:moduleManagementBundleFolder) = jnt:moduleManagementBundleFolder
+ + * (jnt:moduleManagementBundle) = jnt:moduleManagementBundle
+
+[jnt:moduleManagementBundle] > nt:file, mix:created, mix:lastModified, jmix:nolive
+ - j:groupId (string) nofulltext
+ - j:symbolicName (string) nofulltext
+ - j:version (string) nofulltext
+ - j:displayName (string) nofulltext
+ - j:checksum (string) nofulltext
+ - j:transformationRequired (boolean)

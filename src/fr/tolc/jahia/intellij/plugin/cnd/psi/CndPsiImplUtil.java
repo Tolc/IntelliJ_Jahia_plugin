@@ -1,12 +1,10 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.*;
 
@@ -23,6 +21,7 @@ import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.utils.PsiUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,7 +62,7 @@ public class CndPsiImplUtil {
                 return containingFile == null ? null : containingFile.getName();
             }
 
-            @Nullable
+            @NotNull
             @Override
             public Icon getIcon(boolean unused) {
                 return CndIcons.NAMESPACE;
@@ -144,43 +143,12 @@ public class CndPsiImplUtil {
         return null;
     }
 
-    //TODO: use a proper cache mechanism...
-    private static Map<CndNodeType, Set<CndProperty>> propertiesCache = new ConcurrentHashMap<>();
-    private static Map<CndNodeType, Date> propertiesCacheDate = new ConcurrentHashMap<>();
-    private static final long CACHE_DELAY = 10000;   //10s
-    
     /**
      * Get nodetype properties recursively
      */
     @NotNull
     public static Set<CndProperty> getProperties(CndNodeType element) {
-        Set<CndProperty> result = null;
-        if (propertiesCacheDate.containsKey(element)) {
-            Date date = propertiesCacheDate.get(element);
-            if (date != null && new Date().getTime() - date.getTime() >= CACHE_DELAY) {
-                //remove from cache
-                propertiesCache.remove(element);
-                propertiesCacheDate.remove(element);
-            } else {
-                result = propertiesCache.get(element);
-            }
-        } 
-        if (result == null) {
-            result = new LinkedHashSet<>();
-            result.addAll(element.getPropertyList());
-            for (CndNodeType ancestorNodeType : element.getAncestorsNodeTypes()) {
-                result.addAll(getProperties(ancestorNodeType));
-            }
-
-            for (CndNodeType extensionNodeType : element.getExtensions()) {
-                result.addAll(getProperties(extensionNodeType));
-            }
-            
-            //Put in cache
-            propertiesCache.put(element, result);
-            propertiesCacheDate.put(element, new Date());
-        }
-        return result;
+        return PsiUtil.getNodeTypeProperties(element);
     }
 
     @NotNull
@@ -284,6 +252,20 @@ public class CndPsiImplUtil {
     
     public static String toString(CndNodeType element) {
         return element.getPresentation().getPresentableText();
+    }
+
+    public static boolean equals(CndNodeType element, Object o) {
+        if (o == element) return true;
+        if (!(o instanceof CndNodeType)) {
+            return false;
+        }
+        CndNodeType otherType = (CndNodeType) o;
+        return Objects.equals(element.getNodeTypeNamespace(), otherType.getNodeTypeNamespace()) &&
+                Objects.equals(element.getNodeTypeName(),otherType.getNodeTypeName());
+    }
+
+    public static int hashCode(CndNodeType element) {
+        return Objects.hash(element.getNodeTypeNamespace(), element.getNodeTypeName());
     }
 
 

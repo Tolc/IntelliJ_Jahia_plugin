@@ -10,11 +10,4 @@
 
 		<psi.referenceContributor order="first" implementation="fr.tolc.jahia.intellij.plugin.cnd.references.CndJspReferenceContributor"/>
 	</extensions>
-
-	<extensions defaultExtensionNs="com.intellij.javaee.jsp">
-		<elImplicitVariablesProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.javaee.jsp.CndJspElVariablesProvider"/>
-	</extensions>
-	<extensions defaultExtensionNs="com.intellij.jsp">
-		<el.elLiteralCustomReferenceProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.jsp.CndJspElLiteralReferenceProvider"/>
-	</extensions>
 </idea-plugin>

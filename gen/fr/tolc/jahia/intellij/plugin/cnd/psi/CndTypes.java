@@ -34,6 +34,7 @@ public interface CndTypes {
   IElementType COMMENT = new CndTokenType("COMMENT");
   IElementType CRLF = new CndTokenType("CRLF");
   IElementType EQUAL = new CndTokenType("EQUAL");
+  IElementType EQUAL_PROPERTY_DEFAULT_VALUE = new CndTokenType("EQUAL_PROPERTY_DEFAULT_VALUE");
   IElementType EXTENDS = new CndTokenType("EXTENDS");
   IElementType ITEMTYPE = new CndTokenType("ITEMTYPE");
   IElementType ITEMTYPE_TYPE = new CndTokenType("ITEMTYPE_TYPE");
@@ -48,6 +49,7 @@ public interface CndTypes {
   IElementType NODE_NAME = new CndTokenType("NODE_NAME");
   IElementType NODE_TYPE_NAME = new CndTokenType("NODE_TYPE_NAME");
   IElementType OPTION = new CndTokenType("OPTION");
+  IElementType OPTION_VALUE = new CndTokenType("OPTION_VALUE");
   IElementType PLUS = new CndTokenType("PLUS");
   IElementType PROPERTY_ATTRIBUTE = new CndTokenType("PROPERTY_ATTRIBUTE");
   IElementType PROPERTY_CONSTRAINT_VALUE = new CndTokenType("PROPERTY_CONSTRAINT_VALUE");
@@ -66,7 +68,7 @@ public interface CndTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == EXTENSION) {
+      if (type == EXTENSION) {
         return new CndExtensionImpl(node);
       }
       else if (type == EXTENSIONS) {
