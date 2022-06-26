@@ -42,7 +42,7 @@ Jahia project versions: **6.6.x**, **7.x**, and **8.x**.
 ### Jahia Framework
 [![Jahia](resources/jahia/jahia.png)][1]
 
-#### Compatible with Jahia versions **6.6.x** & **7.x**
+#### Compatible with Jahia **6.6.x**, **7.x**, and **8.x**.
 
 * CND files features:
     * Helpers/Quickfixes (alt+enter on nodetype name)
