@@ -1,0 +1,10 @@
+<jnt = 'http://www.jahia.org/jahia/nt/1.0'>
+<jmix = 'http://www.jahia.org/jahia/mix/1.0'>
+
+[jmix:googleAnalytics] mixin
+ extends=jnt:virtualsite
+ itemtype=options
+ - webPropertyID (string) nofulltext
+ - cookieExpires (long) = 31536000 indexed=no
+
+[jnt:googleAnalyticsBind] > jnt:content, jmix:bindedComponent, jmix:siteComponent, jmix:studioOnly
