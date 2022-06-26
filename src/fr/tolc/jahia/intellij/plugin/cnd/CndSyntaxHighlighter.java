@@ -20,6 +20,7 @@ public class CndSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey ATTRIBUTE = createTextAttributesKey("CND_ATTRIBUTE", DefaultLanguageHighlighterColors.NUMBER);
     public static final TextAttributesKey TYPE = createTextAttributesKey("CND_TYPE", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
     public static final TextAttributesKey STRING = createTextAttributesKey("CND_STRING", DefaultLanguageHighlighterColors.STRING);
+    public static final TextAttributesKey SEPARATOR = createTextAttributesKey("CND_SEPARATOR", DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR);
     public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("CND_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
 
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
@@ -29,6 +30,8 @@ public class CndSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] ATTRIBUTE_KEYS = new TextAttributesKey[]{ATTRIBUTE};
     private static final TextAttributesKey[] TYPE_KEYS = new TextAttributesKey[]{TYPE};
     private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{STRING};
+    private static final TextAttributesKey[] SEPARATOR_KEYS = new TextAttributesKey[]{SEPARATOR};
+    private static final TextAttributesKey[] SEPARATOR_HIGHLIGHT_KEYS = new TextAttributesKey[]{SEPARATOR, KEYWORD};
     private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
@@ -67,6 +70,12 @@ public class CndSyntaxHighlighter extends SyntaxHighlighterBase {
                 || tokenType.equals(CndTypes.PROPERTY_MASK)
                 || tokenType.equals(CndTypes.PROPERTY_MASK_OPTION)) {
             return TYPE_KEYS;
+        } else if (tokenType.equals(CndTypes.LEFT_ONLY_ANGLE_BRACKET)
+                || tokenType.equals(CndTypes.EQUAL_PROPERTY_DEFAULT_VALUE)) {
+            return SEPARATOR_HIGHLIGHT_KEYS;
+        } else if (tokenType.equals(CndTypes.EQUAL)
+                || tokenType.equals(CndTypes.RIGHT_ONLY_ANGLE_BRACKET)) {
+            return SEPARATOR_KEYS;
         } else if (tokenType.equals(TokenType.BAD_CHARACTER)) {
             return BAD_CHAR_KEYS;
         } else {

@@ -116,6 +116,8 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
               <dd>Fixed template:include view completion and references not including extends views (#54)</dd>
               <dd>Fixed template:addResources completion and references (#52)</dd>
               <dd>Added several CND files for nodetypes completion purposes (#55)</dd>
+              <dd>Way better nodetypes options and properties attributes grammar and syntax validation</dd>
+              <dd>Better syntax highlighting</dd>
           </dl>
           <dl>
               <dt>2.0.6</dt>

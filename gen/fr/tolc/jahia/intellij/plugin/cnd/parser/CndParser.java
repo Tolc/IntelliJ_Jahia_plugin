@@ -220,14 +220,33 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // OPTION
+  // OPTION [PROPERTY_NAME | EQUAL OPTION_VALUE]
   public static boolean nodeOption(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "nodeOption")) return false;
     if (!nextTokenIs(b, OPTION)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, OPTION);
+    r = r && nodeOption_1(b, l + 1);
     exit_section_(b, m, NODE_OPTION, r);
+    return r;
+  }
+
+  // [PROPERTY_NAME | EQUAL OPTION_VALUE]
+  private static boolean nodeOption_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeOption_1")) return false;
+    nodeOption_1_0(b, l + 1);
+    return true;
+  }
+
+  // PROPERTY_NAME | EQUAL OPTION_VALUE
+  private static boolean nodeOption_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nodeOption_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PROPERTY_NAME);
+    if (!r) r = parseTokens(b, 0, EQUAL, OPTION_VALUE);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -574,13 +593,13 @@ public class CndParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EQUAL PROPERTY_DEFAULT_VALUE
+  // EQUAL_PROPERTY_DEFAULT_VALUE PROPERTY_DEFAULT_VALUE
   public static boolean propertyDefault(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "propertyDefault")) return false;
-    if (!nextTokenIs(b, EQUAL)) return false;
+    if (!nextTokenIs(b, EQUAL_PROPERTY_DEFAULT_VALUE)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, EQUAL, PROPERTY_DEFAULT_VALUE);
+    r = consumeTokens(b, 0, EQUAL_PROPERTY_DEFAULT_VALUE, PROPERTY_DEFAULT_VALUE);
     exit_section_(b, m, PROPERTY_DEFAULT, r);
     return r;
   }

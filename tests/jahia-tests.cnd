@@ -1,0 +1,270 @@
+<test = 'http://www.apache.org/jackrabbit/test'>
+<nt = 'http://www.jcp.org/jcr/nt/1.0'>
+
+[test:emptyNodeType] > nt:base
+
+[test:mixinNodeType]
+  mixin
+
+[test:orderedNodeType] > nt:base
+  orderable
+
+[test:itemNodeType] > nt:base
+- * (string) queryops '=,<>,<,<=,>,>='
+- test:emptyItem (string) queryops '=,<>,<,<=,>,>='
+- test:autoCreatedItem (string) = 'defvalue' autocreated queryops '=,<>,LIKE'
+- test:mandatoryItem (string) mandatory
+- test:copyItem (string) copy
+- test:versionItem (string) version
+- test:initializeItem (string) initialize
+- test:computeItem (string) compute
+- test:abortItem (string) abort
+- test:protectedItem (string) protected
+
+[test:propertyNodeType] > nt:base
+- test:emptyProperty (string)
+- test:binaryProperty (binary) < '[0,)'
+- test:booleanProperty (boolean) = true < true, false
+- test:dateProperty (date) = '2005-01-01T00:00:00.000Z' < '[2005-01-01T00:00:00.000Z,2006-01-01T00:00:00.000Z)'
+- test:doubleProperty (double) = '1.5' nofulltext queryops '=,<>,>,>=,<,<=' < '[,0.0)', '(1.0,2.0)', '(3.0,]'
+- test:longProperty (long) = 25 nofulltext < '(-10,0]', '[1,2]', '[10,100)'
+- test:nameProperty (name) = 'test:testName' nofulltext < 'test:testName'
+- test:pathProperty (path) nofulltext < '/test:testPath'
+- test:pathProperty1 (path) nofulltext < '/test:testPath/*'
+- test:pathProperty2 (path) nofulltext < 'test:testPath/*'
+- test:referenceProperty (reference) nofulltext < 'nt:base'
+- test:stringProperty (string) = 'banana','bananas' multiple nofulltext < 'bananas?'
+- test:multipleProperty (string) multiple nofulltext
+
+[test:childNodeType] > nt:base
++ test:emptyNode (nt:base)
++ test:siblingNode (nt:base) multiple
++ test:defaultTypeNode (nt:base) = nt:base
++ test:requiredTypeNode (nt:base, nt:unstructured)
+
+[test:versionable] > nt:base, mix:versionable
+- * (undefined) copy
+- test:copyOnParentVersionProp (string) copy
+- test:versionOnParentVersionProp (string) version
+- test:initializeOnParentVersionProp (string) initialize
+- test:computeOnParentVersionProp (string) compute
+- test:ignoreOnParentVersionProp (string) ignore
+- test:abortOnParentVersionProp (string) abort
++ * (nt:base) = test:versionable copy
++ test:copyOnParentVersion (nt:base) = nt:unstructured copy
++ test:versionOnParentVersion (nt:base) = nt:unstructured version
++ test:initializeOnParentVersion (nt:base) = nt:unstructured initialize
++ test:computeOnParentVersion (nt:base) = nt:unstructured compute
++ test:ignoreOnParentVersion (nt:base) = nt:unstructured ignore
++ test:abortOnParentVersion (nt:base) = nt:unstructured abort
+
+[test:refTargetNode] > nt:base, mix:versionable
+- * (undefined) copy
+
+[test:canSetProperty] > nt:base
+- String (string) copy
+- StringMultiple (string) copy multiple
+- StringConstraints (string) copy < 'abc', 'def', 'ghi'
+- StringMultipleConstraints (string) copy multiple < 'abc', 'def', 'ghi'
+- Binary (binary) copy
+- BinaryMultiple (binary) copy multiple
+- BinaryConstraints (binary) copy < '(,100)'
+- BinaryMultipleConstraints (binary) copy < '(,100)'
+- Date (date) copy
+- DateMultiple (date) copy multiple
+- DateConstraints (date) copy < '(1974-02-15T00:00:00.000Z,)'
+- DateMultipleConstraints (date) copy < '(1974-02-15T00:00:00.000Z,)'
+- Double (double) copy
+- DoubleMultiple (double) copy multiple
+- DoubleConstraints (double) copy < '(100,)'
+- DoubleMultipleConstraints (double) copy < '(,100)'
+- Long (long) copy
+- LongMultiple (long) copy multiple
+- LongConstraints (long) copy < '(100,)'
+- LongMultipleConstraints (long) copy < '(,100)'
+- Boolean (boolean) copy
+- BooleanMultiple (boolean) copy multiple
+- BooleanConstraints (boolean) copy < true
+- BooleanMultipleConstraints (boolean) copy < true
+- Name (name) copy
+- NameMultiple (name) copy multiple
+- NameConstraints (name) copy < 'abc'
+- NameMultipleConstraints (name) copy < 'abc'
+- Path (path) copy
+- PathMultiple (path) copy multiple
+- PathConstraints (path) copy < '/abc'
+- PathMultipleConstraints (path) copy < '/abc'
+- ReferenceConstraints (reference) copy < test:canSetProperty
+- ReferenceMultipleConstraints (reference) copy < test:canSetProperty
+
+[test:canAddChildNode] > nt:base
++ testChildWithDefaultType (nt:base) = nt:base copy
++ testChildWithoutDefaultType (nt:base) copy
+
+[test:setProperty] > nt:base, mix:referenceable
+- * (undefined) copy
+- test:multiProperty (undefined) copy multiple
++ * (nt:base) = test:setProperty copy
+
+[test:setPropertyAssumingType] > nt:base
+- test:singleProperty (undefined) copy
+- test:multipleProperty (undefined) copy multiple
++ * (nt:base) = test:setPropertyAssumingType copy
+
+[test:sameNameSibsFalseChildNodeDefinition] > nt:base
+- * (undefined) copy
++ * (nt:base) = test:sameNameSibsFalseChildNodeDefinition compute
+
+[test:externalReference] > nt:base, jmix:droppableContent
+- test:simpleNode (reference)
+- test:multipleI18NNode (reference) multiple i18n
+
+[test:externalWeakReference] > nt:base, jmix:droppableContent
+- test:simpleNode (weakreference)
+- test:multipleNode (weakreference) multiple
+- test:multipleI18NNode (weakreference) multiple i18n
+
+[test:validatedNode] > nt:base, jmix:droppableContent
+- test:notNull (string)
+- test:sizeBetween6And20 (string)
+- test:email (string)
+- test:confirmEmail (string)
+- test:futureDate (date)
+- test:greaterThan2 (long)
+
+[jnt:contentTemplate] > jnt:template
+ - j:applyOn (string, choicelist[subnodetypes = 'jnt:content,jnt:contentList,jnt:folder,jnt:file,jnt:user,jnt:group,jnt:virtualsite',resourceBundle]) multiple
+ - j:defaultTemplate (boolean) = false
+ - j:priority (long)
+
+[jmix:requiredPermissions] mixin
+ extends = jnt:content, jnt:area, jnt:mainResourceDisplay
+ itemtype = permissions
+ - j:requireLoggedUser (boolean)
+ - j:requirePrivilegedUser (boolean)
+ - j:requiredMode (string, choicelist[renderModes]) nofulltext
+ - j:requiredPermissions (weakreference, choicelist[nodes='/permissions//*;jnt:permission']) nofulltext multiple
+ - j:contextNodePath (string)
+ - j:invertCondition (boolean)
+
+[jmix:contributeMode] mixin
+ itemtype=contributeMode
+ extends = jnt:contentList, jnt:folder, jnt:contentFolder, jnt:area, jnt:mainResourceDisplay
+ - j:editableInContribution (boolean) = true autocreated
+ - j:canOrderInContribution (boolean) hidden
+ - j:canDeleteInContribution (boolean) hidden
+ - j:contributeTypes (string, choicelist[componenttypes = 'jmix:editorialContent,jnt:file,jnt:folder,jnt:contentFolder']) multiple nofulltext
+
+[jmix:listRestrictions] mixin
+ - j:allowedTypes (string, choicelist[componenttypes = 'jmix:droppableContent,jnt:file,jnt:folder']) multiple nofulltext
+ - j:numberOfItems (long) < '[0,]'
+
+[jnt:mixinNodeType] > jnt:nodeType
+ - j:mixins (NAME,choicelist[nodetypes='MIXIN;fromDependencies',resourceBundle]) multiple
+ - j:isQueryable (BOOLEAN) = true mandatory
+ - j:itemsType (string,choicelist) < 'content','metadata','layout','options'
+ - j:mixinExtends (string,choicelist[nodetypes='PRIMARY;fromDependencies']) multiple
+
+[jnt:primaryNodeType] > jnt:nodeType
+ - j:supertype (NAME,choicelist[nodetypes='PRIMARY;fromDependencies',resourceBundle])
+ - j:mixins (NAME,choicelist[nodetypes='MIXIN;fromDependencies',resourceBundle]) multiple
+ - j:isAbstract (BOOLEAN) mandatory
+ - j:isQueryable (BOOLEAN) = true mandatory
+ - j:hasOrderableChildNodes (BOOLEAN) mandatory
+ - j:primaryItemName (NAME,choicelist[nodes='.;jnt:itemDefinition;name'])
+ - j:itemsType (STRING,choicelist) < 'content','metadata','layout','options'
+
+[jnt:contentRetrieval] > jnt:content, jmix:list, jmix:renderableList, jmix:queryContent, mix:title, jmix:cache
+- j:type (string, choicelist[subnodetypes = 'jnt:page,jmix:basicContent,jmix:editorialContent,jmix:retrievableContent',resourceBundle]) indexed=no mandatory
+- j:criteria (string,choicelist[resourceBundle]) = 'jcr:created' autocreated indexed=no < 'jcr:created','jcr:lastModified','j:lastPublished'
+- j:sortDirection (string, choicelist[resourceBundle]) = 'asc' autocreated indexed=no < 'asc','desc'
+- maxItems (long) indexed=no
+- j:startNode (weakreference)
+- j:filter (weakreference, category[autoSelectParent=false]) multiple
+- j:noResultsMessage (string) i18n indexed=no
+- j:subNodesView (string, choicelist[templates=subnodes,resourceBundle,image,dependentProperties='j:type']) nofulltext itemtype = layout
+
+[jnt:tree] > jnt:content, jmix:siteComponent
+ - nodeType (string, choicelist[subnodetypes = 'jnt:page,jnt:contentList,jnt:folder',resourceBundle]) mandatory indexed=no
+ - templateForLink (string, choicelist[templates,resourceBundle]) mandatory indexed=no
+
+[jnt:addContent] > jnt:content, mix:title, jmix:siteComponent, jmix:bindedComponent, jmix:studioOnly
+ - j:type (string, choicelist[nodetypes=jmix:editorialContent,resourceBundle]) multiple indexed=no
+
+[jnt:facets] > jnt:content, jmix:queryContent, jmix:bindedComponent
+orderable
+- j:bindedComponent (weakreference)
+- j:type (string, choicelist[subnodetypes = 'jnt:file,jnt:folder,nt:hierarchyNode,jnt:page,jnt:content,jmix:basicContent,jmix:editorialContent,jmix:retrievableContent',resourceBundle]) indexed=no mandatory
++ * (jnt:facet)
+
+[jnt:facet] > jnt:content abstract
+- facet (string) mandatory indexed=no
+- label (string) i18n indexed=no
+- field (string, choicelist[choicelistfacets]) indexed=no
+- mincount (long) = 1 indexed=no
+- labelRenderer (string) indexed=no
+
+[jnt:fieldFacet] > jnt:facet
+- sort (string, choicelist[resourceBundle]) indexed=no < count,index
+- prefix (string) indexed=no
+- limit (long) = 100 indexed=no
+- offset (long) = 0 indexed=no
+- missing (boolean) indexed=no
+
+[jnt:fieldHierarchicalFacet] > jnt:fieldFacet
+- prefix (string, picker[type='hierarchyNode']) = '/sites/systemsite/categories' mandatory indexed=no
+- field (string, choicelist[choicelisthierarchicalfacets]) = 'jmix:categorized;j:defaultCategory' mandatory indexed=no
+
+[jnt:role] > nt:base, mix:title, jmix:autoPublish, jmix:observable
+ - jcr:description (string,textarea) i18n itemtype = content
+ - j:nodeTypes (string,choicelist[nodetypes=nt:base,resourceBundle]) multiple
+ - j:permissions (weakreference) protected hidden multiple < jnt:permission
+ - j:dependencies (weakreference) protected hidden multiple < jnt:role
+ - j:privilegedAccess (boolean)
+ - j:hidden (boolean) protected hidden
+ - j:roleGroup (string,choicelist[resourceBundle]) < 'live-role','edit-role'
+ + * (jnt:externalPermissions)
+
+[jnt:mixinNodeType] > jnt:nodeType
+ - j:mixins (NAME,choicelist[nodetypes='MIXIN;fromDependencies',resourceBundle]) multiple
+ - j:isQueryable (BOOLEAN) = true mandatory
+ - j:itemsType (string,choicelist) < 'content','metadata','layout','options'
+ - j:mixinExtends (string,choicelist[nodetypes='PRIMARY;fromDependencies']) multiple
+
+[jnt:primaryNodeType] > jnt:nodeType
+ - j:supertype (NAME,choicelist[nodetypes='PRIMARY;fromDependencies',resourceBundle])
+ - j:mixins (NAME,choicelist[nodetypes='MIXIN;fromDependencies',resourceBundle]) multiple
+ - j:isAbstract (BOOLEAN) mandatory
+ - j:isQueryable (BOOLEAN) = true mandatory
+ - j:hasOrderableChildNodes (BOOLEAN) mandatory
+ - j:primaryItemName (NAME,choicelist[nodes='.;jnt:itemDefinition;name'])
+ - j:itemsType (STRING,choicelist) < 'content','metadata','layout','options'
+
+[jmix:channelSelection] mixin
+ extends = jnt:content, jnt:area
+ itemtype = channels
+ - j:channelSelection (string,choicelist[channels]) multiple
+ - j:channelIncludeOrExclude (string,choicelist[resourceBundle]) = exclude autocreated < 'exclude','include'
+
+[jmix:glossary] > jmix:templateMixin mixin
+ extends = jmix:list, jnt:area
+ itemtype = layout
+ - field (string, choicelist[sortableFieldnames]) indexed=no
+ - useMainResource (boolean)
+
+[jmix:keywords] mixin
+ extends = nt:hierarchyNode, jnt:content, jnt:page
+ itemtype = metadata
+ - j:keywords (string) multiple
+
+[jmix:rating] mixin
+ - j:nbOfVotes (long) = 0  autocreated hidden onconflict=sum
+ - j:sumOfVotes (long) = 0 autocreated hidden onconflict=sum
+ - j:lastVote (long) hidden onconflict=latest
+ - j:type (string,choicelist[resourceBundle]) = 'average' indexed=no < 'average','plusminus'
+
+[jnt:topRated] > jnt:content, jmix:list, jmix:socialComponent
+ - j:typeOfContent (string,choicelist[nodetypes,resourceBundle]) mandatory indexed=no
+ - j:minNbOfVotes (long) = 10 autocreated
+
+[jnt:rateable] > jnt:content, jmix:bindedComponent, jmix:socialComponent

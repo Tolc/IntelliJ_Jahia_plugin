@@ -46,7 +46,7 @@ superType ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
   methods=[getReferences getNodeTypeName getNodeTypeNamespace] }
 
 private options ::= ([CRLF] nodeOption)+
-nodeOption ::= OPTION
+nodeOption ::= OPTION [PROPERTY_NAME | EQUAL OPTION_VALUE]
 
 extensions ::= EXTENDS EQUAL extension (COMMA extension)*
 extension ::= NAMESPACE_NAME COLON NODE_TYPE_NAME
@@ -70,7 +70,7 @@ private propertyType ::= LEFT_PARENTHESIS PROPERTY_TYPE [COMMA PROPERTY_MASK [pr
 private propertyMaskOptions ::= LEFT_BRACKET propertyTypeMaskOption (COMMA propertyTypeMaskOption)* RIGHT_BRACKET 
 propertyTypeMaskOption ::= PROPERTY_MASK_OPTION [EQUAL PROPERTY_MASK_OPTION_VALUE]
 
-propertyDefault ::= EQUAL PROPERTY_DEFAULT_VALUE
+propertyDefault ::= EQUAL_PROPERTY_DEFAULT_VALUE PROPERTY_DEFAULT_VALUE
 
 propertyAttributes ::= PROPERTY_ATTRIBUTE+
 
