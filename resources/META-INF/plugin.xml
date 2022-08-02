@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>fr.tolc.jahia.intellij.plugin</id>
   <name>CND Language / Jahia Framework</name>
-  <version>2.1.0</version>
+  <version>2.1.1</version>
   <vendor email="contact@thomas-coquel.fr" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
 
   <description><![CDATA[
@@ -107,6 +107,10 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
 
   <change-notes><![CDATA[
       <html>
+          <dl>
+              <dt>2.1.1</dt>
+              <dd>Fixed grammar issue with escaped quotes in property default value (#64)</dd>
+          </dl>
           <dl>
               <dt>2.1.0</dt>
               <dd>(<strong>IMPORTANT FIX</strong>) Refactored tool window for IntelliJ 2022.1 API (#61)</dd>
