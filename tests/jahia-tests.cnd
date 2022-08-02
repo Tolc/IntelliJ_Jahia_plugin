@@ -65,7 +65,7 @@
 - String (string) copy
 - StringMultiple (string) copy multiple
 - StringConstraints (string) copy < 'abc', 'def', 'ghi'
-- StringMultipleConstraints (string) copy multiple < 'abc', 'def', 'ghi'
+- StringMultipleConstraints (string) copy multiple < 'abc', 'def', 'ghi', 'J\'arrive'
 - Binary (binary) copy
 - BinaryMultiple (binary) copy multiple
 - BinaryConstraints (binary) copy < '(,100)'

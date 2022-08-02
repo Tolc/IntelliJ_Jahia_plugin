@@ -169,9 +169,9 @@ ATTRIBUTE=("*"|"!"|{CHARS})({WHITE_SPACE}+"'"[^']*"'"|{WHITE_SPACE}*"="{WHITE_SP
 }
 <PROPERTY_DEFAULT_VALUE> {
     [^\r\n'\"\-\+\ \t\f]+ ({WHITE_SPACE}*","{WHITE_SPACE}*[^\r\n'\"\-\+\ \t\f]+)*
-    | "'"[^\r\n']*"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']*"'")*
-    | "\""[^\r\n\"]*"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""[^\r\n\"]*"\"")*
-    | [^\r\n\ \t\f\(]+"("([^\r\n']+ | "'"[^\r\n']+"'")")"                                                         { yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
+    | "'"(\\'|[^\r\n'])*"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"(\\'|[^\r\n'])*"'")*
+    | "\""(\\\"|[^\r\n\"])*"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""(\\\"|[^\r\n\"])*"\"")*
+    | [^\r\n\ \t\f\(]+"("([^\r\n']+ | "'"(\\'|[^\r\n'])+"'")")"                                                   { yybegin(PROPERTY_ATTRIBUTES); return CndTypes.PROPERTY_DEFAULT_VALUE; }
 }
 
 <PROPERTY_ATTRIBUTES> {
