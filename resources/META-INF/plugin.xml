@@ -109,6 +109,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
       <html>
           <dl>
               <dt>2.1.1</dt>
+              <dd>(<strong>IMPORTANT FIX</strong>) Refactored code for IntelliJ 2022.2 API (#65)</dd>
               <dd>Fixed grammar issue with escaped quotes in property default value (#64)</dd>
           </dl>
           <dl>
@@ -226,7 +227,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
   ]]></change-notes>
 
   <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-  <idea-version since-build="221.4501.155"/>
+  <idea-version since-build="222.3345.118"/>
 
   <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html on how to target different products -->
   <!-- uncomment to enable plugin in all products

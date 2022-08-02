@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.source.jsp.jspXml.JspOuterLanguageElement;
+import com.intellij.jsp.psi.impl.jspXml.JspOuterLanguageElement;
 import com.intellij.javaee.el.psi.ELElementTypes;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
