@@ -34,6 +34,7 @@ public class CndStartupActivity implements StartupActivity {
 
     private static final String JAHIA_PLUGIN_SUBFOLDER = "jahia";
     private static final String JAHIA_CND_JAR_NAME = "jahia-plugin-cnds.jar";
+    private static final String JAHIA_CND_JAR_VERSION = "1";    //increment this when cnd-jar needs updating
 
     private static final String JAHIA_PLUGIN_CND_LIBRARY_NAME = "jahia-plugin-base-cnd-files";
     private static final String JAHIA_PLUGIN_LIBRARY_NAME = "jahia-plugin-completion-library";
@@ -44,7 +45,8 @@ public class CndStartupActivity implements StartupActivity {
     public void runActivity(@NotNull Project project) {
         logger.info("Project " + project.getName() + " started");
 
-        RunOnceUtil.runOnceForApp("jahia-plugin-regenerate-cnd-jar", () -> {
+        //This will run once for the entire IntelliJ installation, not at each app restart
+        RunOnceUtil.runOnceForApp("jahia-plugin-regenerate-cnd-jar-" + JAHIA_CND_JAR_VERSION, () -> {
             logger.info("runOnceForApp started");
             File jahiaPluginSubFolder = CndPluginUtil.getPluginFile(JAHIA_PLUGIN_SUBFOLDER);
 
