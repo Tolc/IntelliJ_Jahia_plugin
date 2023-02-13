@@ -6,10 +6,14 @@ import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
 import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespaceIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyIdentifier;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndTranslationUtil;
 import org.apache.commons.lang.StringUtils;
@@ -25,12 +29,17 @@ public class CndCndLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
-        if (element instanceof CndNamespace cndNamespace) {
+        IElementType type = element.getNode().getElementType();
+        //Should only create line marker for leaf elements
+
+        if (type.equals(CndTypes.NAMESPACE_NAME) && element.getParent() instanceof CndNamespaceIdentifier cndNamespaceIdentifier) {
             NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(CndIcons.NAMESPACE)
                     .setTarget(null)
-                    .setTooltipText("Namespace " + cndNamespace.getNamespaceName());
+                    .setTooltipText("Namespace " + cndNamespaceIdentifier.getNamespace().getNamespaceName());
             result.add(builder.createLineMarkerInfo(element));
-        } else  if (element instanceof CndNodeType cndNodeType) {
+
+        } else  if (type.equals(CndTypes.NODE_TYPE_NAME) && element.getParent() instanceof CndNodeTypeIdentifier cndNodeTypeIdentifier) {
+            CndNodeType cndNodeType = cndNodeTypeIdentifier.getNodeType();
             NavigationGutterIconBuilder<PsiElement> builder;
 
             //Custom icon
@@ -64,7 +73,9 @@ public class CndCndLineMarkerProvider extends RelatedItemLineMarkerProvider {
                         .setTooltipText("Node type " + cndNodeType);
             }
             result.add(builder.createLineMarkerInfo(element));
-        } else if (element instanceof CndProperty cndProperty) {
+
+        } else if (type.equals(CndTypes.PROPERTY_NAME) && element.getParent() instanceof CndPropertyIdentifier cndPropertyIdentifier) {
+            CndProperty cndProperty = cndPropertyIdentifier.getProperty();
             CndNodeType currentNodeType = cndProperty.getNodeType();
             Set<CndProperty> propertiesWithName = currentNodeType.getPropertiesWithName(cndProperty.getPropertyName());
             for (CndProperty propertyWithName : propertiesWithName) {
