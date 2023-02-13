@@ -1,13 +1,5 @@
 package fr.tolc.jahia.intellij.plugin.cnd.psi;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
-import javax.swing.*;
-
 import com.google.common.collect.Lists;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
@@ -25,6 +17,13 @@ import fr.tolc.jahia.intellij.plugin.cnd.utils.PsiUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.Icon;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class CndPsiImplUtil {
 
@@ -373,7 +372,7 @@ public class CndPsiImplUtil {
                 return containingFile == null ? null : containingFile.getName();
             }
 
-            @Nullable
+            @NotNull
             @Override
             public Icon getIcon(boolean unused) {
                 return CndIcons.PROPERTY;
@@ -393,9 +392,38 @@ public class CndPsiImplUtil {
         return false;
     }
 
+    public static boolean hasAttributeValue(final CndProperty element, final AttributeEnum attribute, final String value) {
+        CndPropertyAttributes propertyAttributes = element.getPropertyAttributes();
+        if (propertyAttributes != null) {
+            return AttributeEnum.textContainsAttribute(propertyAttributes.getText(), attribute);
+        }
+        return false;
+    }
+
     public static boolean isMultiple(final CndProperty element) {
         return hasAttribute(element, AttributeEnum.MULTIPLE);
     }
+
+    public static boolean isHidden(final CndProperty element) {
+        return hasAttribute(element, AttributeEnum.HIDDEN);
+    }
+
+    public static boolean isProtected(final CndProperty element) {
+        return hasAttribute(element, AttributeEnum.PROTECTED);
+    }
+
+    public static boolean isMandatory(final CndProperty element) {
+        return hasAttribute(element, AttributeEnum.MANDATORY);
+    }
+
+    public static boolean isInternationalized(final CndProperty element) {
+        return hasAttribute(element, AttributeEnum.INTERNATIONALIZED);
+    }
+
+    public static boolean isSearchable(final CndProperty element) {
+        return !hasAttribute(element, AttributeEnum.NOFULLTEXT) && !hasAttributeValue(element, AttributeEnum.INDEXED, "no|n") && !hasAttributeValue(element, AttributeEnum.FULLTEXTSEARCHABLE, "no|n");
+    }
+
 
     public static CndNodeType getNodeType(final CndProperty element) {
         return (CndNodeType) element.getParent();

@@ -3,15 +3,12 @@ package fr.tolc.jahia.intellij.plugin.cnd.actions;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeViewQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
-import org.apache.commons.lang.StringUtils;
 
 public class CreateNodeTypeViewAction extends AnAction {
 

@@ -1,11 +1,5 @@
 package fr.tolc.jahia.intellij.plugin.cnd.annotators;
 
-import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
-import static fr.tolc.jahia.intellij.plugin.cnd.model.PropertyModel.CURRENT_NODE;
-
-import java.util.Set;
-import java.util.regex.Matcher;
-
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
@@ -21,6 +15,12 @@ import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
+import java.util.regex.Matcher;
+
+import static fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel.nodeTypeGlobalRegex;
+import static fr.tolc.jahia.intellij.plugin.cnd.model.PropertyModel.CURRENT_NODE;
 
 public class AnnotatorUtil {
     
@@ -58,7 +58,7 @@ public class AnnotatorUtil {
         } else {
             //Warn about cache
             Annotation cacheAnnotation = holder.createWarningAnnotation(element.getTextRange(),
-                    "You should not be accessing properties from another node. It is not cache efficient. Use a <template:module node=\"${" + nodeVar.trim() + "}\"> instead.");
+                    "You should not be accessing properties from another node, it may not be cache efficient. Use a <template:module node=\"${" + nodeVar.trim() + "}\"> instead.");
             //TODO: quick fix
             
             

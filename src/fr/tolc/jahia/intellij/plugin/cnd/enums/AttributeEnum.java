@@ -1,10 +1,11 @@
 package fr.tolc.jahia.intellij.plugin.cnd.enums;
 
+import fr.tolc.jahia.intellij.plugin.cnd.constants.CndConstants;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import org.jetbrains.annotations.NotNull;
 
 /**
  * <a href="https://github.com/Jahia/jahia-configuration/blob/master/osgi-tools/src/main/java/org/jahia/utils/osgi/parsers/cnd/Lexer.java">See Jahia CND lexer for reference</a>
@@ -17,28 +18,33 @@ public enum AttributeEnum {
     COMPUTE("compute", true),
     COPY("copy", true),
     FACETABLE("facetable"),
-    FULLTEXTSEARCHABLE("fulltextsearchable", new String[] { "fulltextsearchable=no", "fulltextsearchable=yes" }, "(fulltextsearchable|fts)\\s*=\\s*(no|n|yes|y)"),
+    FULLTEXTSEARCHABLE("fulltextsearchable", new String[] { "fulltextsearchable=no", "fulltextsearchable=yes" },
+            "(fulltextsearchable|fts)\\s*=\\s*(no|n|yes|y)", "(fulltextsearchable|fts)\\s*=\\s*" + CndConstants.VALUE_REPLACE),
     HIDDEN("hidden"),
     HIERARCHICAL("hierarchical"),
     IGNORE("ignore", true),
-    INDEXED("indexed", new String[] { "indexed=yes", "indexed=no", "indexed=tokenized", "indexed=untokenized" }, "(indexed|ind|x)\\s*=\\s*'?(yes|y|no|n|tokenized|tok|t|untokenized|untok|u)'?"),
+    INDEXED("indexed", new String[] { "indexed=yes", "indexed=no", "indexed=tokenized", "indexed=untokenized" },
+            "(indexed|ind|x)\\s*=\\s*('(yes|y|no|n|tokenized|tok|t|untokenized|untok|u)'|(yes|y|no|n|tokenized|tok|t|untokenized|untok|u))", "(indexed|ind|x)\\s*=\\s*('" + CndConstants.VALUE_REPLACE + "'|" + CndConstants.VALUE_REPLACE + ")"),
     INITIALIZE("initialize", true),
     INTERNATIONALIZED("internationalized", new String[] { "i18n", "internationalized" }, "internationalized|i18n|i15d|i"),
-    ITEMTYPE("itemtype", new String[] { "itemtype=content", "itemtype=metadata", "itemtype=layout", "itemtype=options", "itemtype=codeEditor" }, "(itemtype|type)\\s*=\\s*(content|metadata|layout|options|codeEditor)"),
+    ITEMTYPE("itemtype", new String[] { "itemtype=content", "itemtype=metadata", "itemtype=layout", "itemtype=options", "itemtype=codeEditor" },
+            "(itemtype|type)\\s*=\\s*(content|metadata|layout|options|codeEditor)", "(itemtype|type)\\s*=\\s*" + CndConstants.VALUE_REPLACE),
     MANDATORY("mandatory", "mandatory", "mandatory|man|m", true),
     MULTIPLE("multiple", "multiple", "multiple|mul|\\*|sns", true),
     NOFULLTEXT("nofulltext","nofulltext|nof"),
     NOQUERYORDER("noqueryorder", "noqueryorder|nqord"),
-    ONCONFLICT("onconflict", new String[] { "onconflict=sum", "onconflict=latest", "onconflict=oldest", "onconflict=min", "onconflict=max", "onconflict=ignore" }, "onconflict\\s*=\\s*(sum|latest|oldest|min|max|ignore)"),
+    ONCONFLICT("onconflict", new String[] { "onconflict=sum", "onconflict=latest", "onconflict=oldest", "onconflict=min", "onconflict=max", "onconflict=ignore" },
+            "onconflict\\s*=\\s*(sum|latest|oldest|min|max|ignore)"),
     PRIMARY("primary", "primary", "primary|pri|!", true),
     PROTECTED("protected", "protected",  "protected|pro|p", true),
     QUERYOPS("queryops", "queryops '<,<=,<>,=,>,>=,like'", "(queryops|qop)\\s+'((<|<=|<>|=|>|>=|like)(,)?)+'"),
     SORTABLE("sortable"),
     VERSION("version", true);
-    
+
     private final String value;
     private final String[] completions;
     private final String validationRegex;
+    private String valueRegex;
     private boolean subNodeUsable = false;
 
     AttributeEnum(String value) {
@@ -52,31 +58,45 @@ public enum AttributeEnum {
         this.subNodeUsable = subNodeUsable;
     }
 
-    AttributeEnum(String value, String regex) {
+    AttributeEnum(String value, String validationRegex) {
         this.value = value;
         this.completions = new String[] { value };
-        this.validationRegex = regex;
+        this.validationRegex = validationRegex;
     }
 
-    AttributeEnum(String value, String completion, String regex) {
+    AttributeEnum(String value, String completion, String validationRegex) {
         this.value = value;
         this.completions = new String[] { completion };
-        this.validationRegex = regex;
+        this.validationRegex = validationRegex;
     }
 
-    AttributeEnum(String value, String completion, String regex, boolean subNodeUsable) {
-        this(value, completion, regex);
+    AttributeEnum(String value, String completion, String validationRegex, String valueRegex) {
+        this.value = value;
+        this.completions = new String[] { completion };
+        this.validationRegex = validationRegex;
+        this.valueRegex = valueRegex;
+    }
+
+    AttributeEnum(String value, String completion, String validationRegex, boolean subNodeUsable) {
+        this(value, completion, validationRegex);
         this.subNodeUsable = subNodeUsable;
     }
     
-    AttributeEnum(String value, String[] completions, String regex) {
+    AttributeEnum(String value, String[] completions, String validationRegex) {
         this.value = value;
         this.completions = completions;
-        this.validationRegex = regex;
+        this.validationRegex = validationRegex;
     }
 
-    AttributeEnum(String value, String[] completions, String regex, boolean subNodeUsable) {
-        this(value, completions, regex);
+    AttributeEnum(String value, String[] completions, String validationRegex, String valueRegex) {
+        this.value = value;
+        this.completions = completions;
+        this.validationRegex = validationRegex;
+        this.valueRegex = valueRegex;
+    }
+
+    AttributeEnum(String value, String[] completions, String validationRegex, boolean subNodeUsable) {
+        this(value, completions, validationRegex);
         this.subNodeUsable = subNodeUsable;
     }
 
@@ -125,6 +145,24 @@ public enum AttributeEnum {
     
     public static boolean textContainsAttribute(String source, AttributeEnum attribute) {
         Pattern pattern = Pattern.compile(attribute.validationRegex, Pattern.CASE_INSENSITIVE);
-        return pattern.matcher(source).find();
+        String[] attrs = source.split(" ");
+        for (String attr : attrs) {
+            if (pattern.matcher(attr).matches()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean textContainsAttributeValue(String source, AttributeEnum attribute, String value) {
+        String searchRegex = (attribute.valueRegex != null) ? (attribute.valueRegex.replaceAll(CndConstants.VALUE_REPLACE, value)) : (attribute.validationRegex + "=" + value);
+        Pattern pattern = Pattern.compile(searchRegex, Pattern.CASE_INSENSITIVE);
+        String[] attrs = source.split(" ");
+        for (String attr : attrs) {
+            if (pattern.matcher(attr).matches()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

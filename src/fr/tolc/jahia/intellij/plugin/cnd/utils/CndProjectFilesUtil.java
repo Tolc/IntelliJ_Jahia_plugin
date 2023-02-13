@@ -141,7 +141,7 @@ public class CndProjectFilesUtil {
 
     @NotNull
     public static List<ViewModel> getNodeTypeViews(PsiElement element, String namespace, String nodeTypeName, String templateType) {
-        List<ViewModel> res = new ArrayList<ViewModel>();
+        List<ViewModel> res = new ArrayList<>();
 
         List<ViewModel> nodeTypeViews = getNodeTypeViews(element, namespace, nodeTypeName);
         for (ViewModel nodeTypeView : nodeTypeViews) {
@@ -155,7 +155,7 @@ public class CndProjectFilesUtil {
 
     @NotNull
     public static List<ViewModel> getNodeTypeViews(Project project, String namespace, String nodeTypeName, String templateType) {
-        List<ViewModel> res = new ArrayList<ViewModel>();
+        List<ViewModel> res = new ArrayList<>();
         for (Module module : CndPluginUtil.getProjectModules(project)) {
             String nodeTypeFolderPath = getNodeTypeFolderPath(getJahiaWorkFolderPath(module), namespace, nodeTypeName);
             List<ViewModel> nodeTypeViews = getNodeTypeViews(nodeTypeFolderPath, namespace, nodeTypeName);
@@ -175,36 +175,38 @@ public class CndProjectFilesUtil {
 
     @NotNull
     public static List<ViewModel> getNodeTypeViews(String nodeTypeFolderPath, String namespace, String nodeTypeName) {
-        List<ViewModel> res = new ArrayList<ViewModel>();
+        List<ViewModel> res = new ArrayList<>();
         File nodeTypeFolder = new File(nodeTypeFolderPath);
 
         if (nodeTypeFolder.exists() && nodeTypeFolder.isDirectory()) {
             File[] viewTypesFolders = nodeTypeFolder.listFiles();
-            for (File viewTypeFolder : viewTypesFolders) {
-                if (viewTypeFolder.isDirectory()) {
-                    String viewType = viewTypeFolder.getName();
+            if (viewTypesFolders != null) {
+                for (File viewTypeFolder : viewTypesFolders) {
+                    if (viewTypeFolder.isDirectory()) {
+                        String viewType = viewTypeFolder.getName();
 
-                    File[] viewsFiles = viewTypeFolder.listFiles(new FilenameFilter() {
-                        @Override
-                        public boolean accept(File dir, String name) {
-                            return !name.endsWith(".properties") && name.startsWith(nodeTypeName + ".");
-                        }
-                    });
+                        File[] viewsFiles = viewTypeFolder.listFiles(new FilenameFilter() {
+                            @Override
+                            public boolean accept(File dir, String name) {
+                                return !name.endsWith(".properties") && name.startsWith(nodeTypeName + ".");
+                            }
+                        });
 
-                    if (viewsFiles != null) {
-                        for (File viewFile : viewsFiles) {
-                            String name = viewFile.getName();
-                            String[] split = name.split("\\.");
-                            if (split.length >= 2) {
-                                String viewLanguage = split[split.length - 1];
-                                String viewName;
-                                if (split.length == 2) {
-                                    viewName = "";
-                                } else {
-                                    viewName = name.substring(name.indexOf('.') + 1, name.lastIndexOf('.'));
+                        if (viewsFiles != null) {
+                            for (File viewFile : viewsFiles) {
+                                String name = viewFile.getName();
+                                String[] split = name.split("\\.");
+                                if (split.length >= 2) {
+                                    String viewLanguage = split[split.length - 1];
+                                    String viewName;
+                                    if (split.length == 2) {
+                                        viewName = "";
+                                    } else {
+                                        viewName = name.substring(name.indexOf('.') + 1, name.lastIndexOf('.'));
+                                    }
+                                    ViewModel viewModel = new ViewModel(namespace, nodeTypeName, viewName, viewType, viewLanguage);
+                                    res.add(viewModel);
                                 }
-                                ViewModel viewModel = new ViewModel(namespace, nodeTypeName, viewName, viewType, viewLanguage);
-                                res.add(viewModel);
                             }
                         }
                     }
@@ -227,18 +229,20 @@ public class CndProjectFilesUtil {
 
     @NotNull
     private static List<ViewModel> getNodeTypeApplicableViewsRecursive(CndNodeType nodeType, String templateType, Set<CndNodeType> alreadyDoneTypes) {
-        List<ViewModel> res = new ArrayList<ViewModel>();
-        res.addAll(getNodeTypeViews(nodeType.getProject(), nodeType.getNodeTypeNamespace(), nodeType.getNodeTypeName(), templateType));
-        for (CndNodeType parentNodeType : nodeType.getParentsNodeTypes()) {
-            if (!alreadyDoneTypes.contains(parentNodeType)) {
-                alreadyDoneTypes.add(parentNodeType);
-                res.addAll(getNodeTypeApplicableViewsRecursive(parentNodeType, templateType, alreadyDoneTypes));
+        List<ViewModel> res = new ArrayList<>();
+        if (nodeType != null) {
+            res.addAll(getNodeTypeViews(nodeType.getProject(), nodeType.getNodeTypeNamespace(), nodeType.getNodeTypeName(), templateType));
+            for (CndNodeType parentNodeType : nodeType.getParentsNodeTypes()) {
+                if (!alreadyDoneTypes.contains(parentNodeType)) {
+                    alreadyDoneTypes.add(parentNodeType);
+                    res.addAll(getNodeTypeApplicableViewsRecursive(parentNodeType, templateType, alreadyDoneTypes));
+                }
             }
-        }
-        for (CndNodeType extensionNodeType : nodeType.getExtensions()) {
-            if (!alreadyDoneTypes.contains(extensionNodeType)) {
-                alreadyDoneTypes.add(extensionNodeType);
-                res.addAll(getNodeTypeApplicableViewsRecursive(extensionNodeType, templateType, alreadyDoneTypes));
+            for (CndNodeType extensionNodeType : nodeType.getExtensions()) {
+                if (!alreadyDoneTypes.contains(extensionNodeType)) {
+                    alreadyDoneTypes.add(extensionNodeType);
+                    res.addAll(getNodeTypeApplicableViewsRecursive(extensionNodeType, templateType, alreadyDoneTypes));
+                }
             }
         }
         return res;
@@ -246,7 +250,7 @@ public class CndProjectFilesUtil {
     
     @NotNull
     public static List<ViewModel> getProjectNodeTypeViews(Project project) {
-        List<ViewModel> res = new ArrayList<ViewModel>();
+        List<ViewModel> res = new ArrayList<>();
         List<CndNodeType> nodeTypes = CndUtil.findNodeTypes(project);
         for (CndNodeType nodeType : nodeTypes) {
             for (Module module : CndPluginUtil.getProjectModules(project)) {
@@ -261,7 +265,7 @@ public class CndProjectFilesUtil {
 
     @NotNull
     public static List<ViewModel> getProjectNodeTypeViews(Project project, String templateType) {
-        List<ViewModel> res = new ArrayList<ViewModel>();
+        List<ViewModel> res = new ArrayList<>();
 
         List<ViewModel> nodeTypeViews = getProjectNodeTypeViews(project);
         for (ViewModel nodeTypeView : nodeTypeViews) {
@@ -450,7 +454,7 @@ public class CndProjectFilesUtil {
         //TODO: moduleScope ?
         Collection<VirtualFile> virtualFiles = getProjectCndFiles(module.getProject());
 
-        Collection<VirtualFile> res = new ArrayList<VirtualFile>();
+        Collection<VirtualFile> res = new ArrayList<>();
         for (VirtualFile virtualFile : virtualFiles) {
             if (module.equals(getModuleForFile(module.getProject(), virtualFile))) {
                 res.add(virtualFile);
@@ -468,7 +472,7 @@ public class CndProjectFilesUtil {
     public static Collection<VirtualFile> findFilesInLibrariesOnly(Project project, FileType fileType) {
         Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(fileType, GlobalSearchScope.allScope(project));
 
-        Collection<VirtualFile> res = new ArrayList<VirtualFile>();
+        Collection<VirtualFile> res = new ArrayList<>();
         for (VirtualFile virtualFile : virtualFiles) {
             if (FileIndexFacade.getInstance(project).getModuleForFile(virtualFile) == null) {
                 res.add(virtualFile);
@@ -481,7 +485,7 @@ public class CndProjectFilesUtil {
     public static Collection<VirtualFile> findFilesInSourcesOnly(Project project, FileType fileType) {
         Collection<VirtualFile> virtualFiles = FileTypeIndex.getFiles(fileType, GlobalSearchScope.allScope(project));
 
-        Collection<VirtualFile> res = new ArrayList<VirtualFile>();
+        Collection<VirtualFile> res = new ArrayList<>();
         for (VirtualFile virtualFile : virtualFiles) {
             if (FileIndexFacade.getInstance(project).getModuleForFile(virtualFile) != null) {
                res.add(virtualFile);
@@ -504,9 +508,7 @@ public class CndProjectFilesUtil {
                 VirtualFile webappOrResources = nodeTypeFolder.getParent();
                 if (webappOrResources != null) {
                     String folderName = webappOrResources.getName();
-                    if (JAHIA_6_WEBAPP.equals(folderName) || JAHIA_7_RESOURCES.equals(folderName)) {
-                        return true;
-                    }
+                    return JAHIA_6_WEBAPP.equals(folderName) || JAHIA_7_RESOURCES.equals(folderName);
                 }
             }
         }
@@ -559,14 +561,17 @@ public class CndProjectFilesUtil {
 
         if (file != null && file.exists()) {
             if (file.isDirectory()) {
-                for (File child : file.listFiles()) {
-                    res.putAll(getFilesRecursive(project, child, relativeToFolder));
+                File[] childrenFiles = file.listFiles();
+                if (childrenFiles != null) {
+                    for (File child : childrenFiles) {
+                        res.putAll(getFilesRecursive(project, child, relativeToFolder));
+                    }
                 }
             } else {
                 res.put(
                         StringUtils.substringAfter(file.getAbsolutePath(), relativeToFolder).replace("\\", "/"),
                         getPsiFileFromIoFile(project, file)
-                        );
+                );
             }
         }
 

@@ -1,8 +1,5 @@
 package fr.tolc.jahia.intellij.plugin.cnd.codeFormatting;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intellij.formatting.Alignment;
 import com.intellij.formatting.Block;
 import com.intellij.formatting.Indent;
@@ -18,8 +15,11 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CndBlock extends AbstractBlock {
-    private SpacingBuilder spacingBuilder;
+    private final SpacingBuilder spacingBuilder;
 
     protected CndBlock(@NotNull ASTNode node, @Nullable Wrap wrap, @Nullable Alignment alignment,
                        SpacingBuilder spacingBuilder) {
