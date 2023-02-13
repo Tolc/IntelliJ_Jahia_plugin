@@ -1,17 +1,27 @@
 // This is a generated file. Not intended for manual editing.
 package fr.tolc.jahia.intellij.plugin.cnd.psi.impl;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import static fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes.*;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndNodeTypeElementImpl;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.*;
-import com.intellij.navigation.ItemPresentation;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndExtensions;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndItemType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeOption;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeIdentifier;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPsiImplUtil;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSubNode;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndSuperTypes;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndVisitor;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.impl.CndNodeTypeElementImpl;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 import java.util.Set;
 
 public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeType {
@@ -113,6 +123,12 @@ public class CndNodeTypeImpl extends CndNodeTypeElementImpl implements CndNodeTy
   @NotNull
   public Set<CndProperty> getProperties() {
     return CndPsiImplUtil.getProperties(this);
+  }
+
+  @Override
+  @NotNull
+  public Set<CndProperty> getPropertiesWithName(String propertyName) {
+    return CndPsiImplUtil.getPropertiesWithName(this, propertyName);
   }
 
   @Override

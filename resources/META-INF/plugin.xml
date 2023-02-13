@@ -110,6 +110,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
           <dl>
               <dt>2.2.0</dt>
               <dd>(<strong>feature</strong>) Better syntax highlighting of node properties (#69)</dd>
+              <dd>(<strong>feature</strong>) Line marker for property overrides (#70)</dd>
               <dd>Fixed grammar issue with escaped quotes in property constraint (#64)</dd>
           </dl>
           <dl>
@@ -284,7 +285,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
     <!-- CND -->
     <fileTypeFactory implementation="fr.tolc.jahia.intellij.plugin.cnd.CndFileTypeFactory"/>
     <lang.parserDefinition language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndParserDefinition"/>
-    <lang.syntaxHighlighterFactory key="Cnd" language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighterFactory"/>
+    <lang.syntaxHighlighterFactory language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighterFactory"/>
     <!--<colorSettingsPage implementation="fr.tolc.jahia.intellij.plugin.cnd.CndColorSettingsPage"/>-->
     <annotator language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJavaAnnotator"/>
     <annotator language="XML" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndXmlAnnotator"/>

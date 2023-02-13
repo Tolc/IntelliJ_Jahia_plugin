@@ -89,7 +89,9 @@ public class CndPsiImplUtil {
         if (nameNode != null) {
             CndNamespace namespace = CndElementFactory.createNamespace(element.getProject(), newName);
             ASTNode newNamespaceNode = namespace.getNamespaceIdentifier().getNode().findChildByType(CndTypes.NAMESPACE_NAME);
-            element.getNode().replaceChild(nameNode, newNamespaceNode);
+            if (newNamespaceNode != null) {
+                element.getNode().replaceChild(nameNode, newNamespaceNode);
+            }
         }
         return element;
     }
@@ -166,6 +168,18 @@ public class CndPsiImplUtil {
         return null;
     }
 
+    @NotNull
+    public static Set<CndProperty> getPropertiesWithName(CndNodeType element, String propertyName) {
+        Set<CndProperty> propertiesWithName = new LinkedHashSet<>();
+        Set<CndProperty> properties = element.getProperties();
+        for (CndProperty property : properties) {
+            if (property.getPropertyName().equals(propertyName)) {
+                propertiesWithName.add(property);
+            }
+        }
+        return propertiesWithName;
+    }
+
     @Nullable
     public static CndProperty getOwnProperty(CndNodeType element, String propertyName) {
         Set<CndProperty> properties = element.getOwnProperties();
@@ -179,7 +193,7 @@ public class CndPsiImplUtil {
 
     @NotNull
     public static Set<OptionEnum> getOptions(CndNodeType element) {
-        Set<OptionEnum> result = new HashSet<OptionEnum>();
+        Set<OptionEnum> result = new HashSet<>();
         for (CndNodeOption cndOption : element.getNodeOptionList()) {
             try {
                 result.add(OptionEnum.fromValue(cndOption.getText()));
@@ -196,7 +210,7 @@ public class CndPsiImplUtil {
 
     @NotNull
     public static Set<CndNodeType> getParentsNodeTypes(CndNodeType element) {
-        Set<CndNodeType> result = new LinkedHashSet<CndNodeType>();
+        Set<CndNodeType> result = new LinkedHashSet<>();
         if (element.getSuperTypes() != null) {
             List<CndSuperType> superTypes = Lists.reverse(element.getSuperTypes().getSuperTypeList());  //Reverse list because Jahia super types priority is from right to left
             for (CndSuperType superType : superTypes) {
@@ -211,7 +225,7 @@ public class CndPsiImplUtil {
 
     @NotNull
     public static Set<CndNodeType> getAncestorsNodeTypes(CndNodeType element) {
-        Set<CndNodeType> result = new LinkedHashSet<CndNodeType>();
+        Set<CndNodeType> result = new LinkedHashSet<>();
         for (CndNodeType parentNodeType : element.getParentsNodeTypes()) {
             result.add(parentNodeType);
             result.addAll(getAncestorsNodeTypes(parentNodeType));
@@ -241,7 +255,7 @@ public class CndPsiImplUtil {
                 return containingFile == null ? null : containingFile.getName();
             }
 
-            @Nullable
+            @NotNull
             @Override
             public Icon getIcon(boolean unused) {
                 return element.isMixin()? CndIcons.MIXIN : CndIcons.NODE_TYPE;
@@ -255,12 +269,11 @@ public class CndPsiImplUtil {
 
     public static boolean equals(CndNodeType element, Object o) {
         if (o == element) return true;
-        if (!(o instanceof CndNodeType)) {
-            return false;
+        if (o instanceof CndNodeType otherType) {
+            return Objects.equals(element.getNodeTypeNamespace(), otherType.getNodeTypeNamespace()) &&
+                    Objects.equals(element.getNodeTypeName(), otherType.getNodeTypeName());
         }
-        CndNodeType otherType = (CndNodeType) o;
-        return Objects.equals(element.getNodeTypeNamespace(), otherType.getNodeTypeNamespace()) &&
-                Objects.equals(element.getNodeTypeName(),otherType.getNodeTypeName());
+        return false;
     }
 
     public static int hashCode(CndNodeType element) {
@@ -284,7 +297,9 @@ public class CndPsiImplUtil {
         if (nameNode != null) {
             CndNodeType nodeType = CndElementFactory.createNodeType(element.getProject(), newName);
             ASTNode newNodeTypeNode = nodeType.getNodeTypeIdentifier().getNode().findChildByType(CndTypes.NODE_TYPE_NAME);
-            element.getNode().replaceChild(nameNode, newNodeTypeNode);
+            if (newNodeTypeNode != null) {
+                element.getNode().replaceChild(nameNode, newNodeTypeNode);
+            }
         }
         return element;
     }
@@ -447,7 +462,9 @@ public class CndPsiImplUtil {
         if (nameNode != null) {
             CndProperty property = CndElementFactory.createProperty(element.getProject(), newName);
             ASTNode newPropertyNameNode = property.getPropertyIdentifier().getNode().findChildByType(CndTypes.PROPERTY_NAME);
-            element.getNode().replaceChild(nameNode, newPropertyNameNode);
+            if (newPropertyNameNode != null) {
+                element.getNode().replaceChild(nameNode, newPropertyNameNode);
+            }
         }
         return element;
     }
