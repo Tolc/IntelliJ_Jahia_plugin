@@ -110,6 +110,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
           <dl>
               <dt>2.2.0</dt>
               <dd>(<strong>feature</strong>) Better syntax highlighting of node properties (#69)</dd>
+              <dd>Fixed grammar issue with escaped quotes in property constraint (#64)</dd>
           </dl>
           <dl>
               <dt>2.1.1</dt>
