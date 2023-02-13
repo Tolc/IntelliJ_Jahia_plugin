@@ -1,8 +1,8 @@
 package fr.tolc.jahia.intellij.plugin.cnd.icons;
 
-import javax.swing.Icon;
-
 import com.intellij.openapi.util.IconLoader;
+
+import javax.swing.Icon;
 
 public class CndIcons {
     public static final Icon FILE = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/img/cnd.png", CndIcons.class.getClassLoader());
@@ -24,7 +24,8 @@ public class CndIcons {
     public static final Icon JAHIA_FILTER = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahiaFilter.png", CndIcons.class.getClassLoader());
     
     public static final Icon JAHIA_LOGO_DXM = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahia_dxm.png", CndIcons.class.getClassLoader());
-    
+    public static final Icon JAHIA_TOOL_WINDOW = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahia_toolWindow.png", CndIcons.class.getClassLoader());
+
     public static final Icon JAHIA_FOLDER_CSS = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahia_css.png", CndIcons.class.getClassLoader());
     public static final Icon JAHIA_FOLDER_JAVASCRIPT = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahia_javascript.png", CndIcons.class.getClassLoader());
     public static final Icon JAHIA_FOLDER_ICONS = IconLoader.getIcon("/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahia_icons.png", CndIcons.class.getClassLoader());

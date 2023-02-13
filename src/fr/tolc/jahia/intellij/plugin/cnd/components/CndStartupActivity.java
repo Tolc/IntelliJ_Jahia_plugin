@@ -1,7 +1,8 @@
 package fr.tolc.jahia.intellij.plugin.cnd.components;
 
+import com.intellij.ide.util.RunOnceUtil;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -11,6 +12,7 @@ import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTable;
+import com.intellij.openapi.startup.StartupActivity;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.RegisterToolWindowTask;
 import com.intellij.openapi.wm.ToolWindow;
@@ -27,8 +29,6 @@ import fr.tolc.jahia.intellij.plugin.cnd.utils.CndPluginUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.java.generate.exception.PluginException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.swing.tree.TreeSelectionModel;
 import java.io.File;
@@ -39,32 +39,40 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static fr.tolc.jahia.intellij.plugin.cnd.components.CndApplicationComponent.JAHIA_CND_JAR_NAME;
-import static fr.tolc.jahia.intellij.plugin.cnd.components.CndApplicationComponent.JAHIA_PLUGIN_SUBFOLDER;
+public class CndStartupActivity implements StartupActivity {
+    private static final Logger logger = Logger.getInstance(CndStartupActivity.class);
 
-public class CndProjectComponent implements ProjectComponent {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CndProjectComponent.class);
+    private static final String JAHIA_PLUGIN_SUBFOLDER = "jahia";
+    private static final String JAHIA_CND_JAR_NAME = "jahia-plugin-cnds.jar";
 
     private static final String JAHIA_PLUGIN_CND_LIBRARY_NAME = "jahia-plugin-base-cnd-files";
-
     private static final String JAHIA_PLUGIN_LIBRARY_NAME = "jahia-plugin-completion-library";
     private static final String JAHIA_COMPLETION_JAR = JAHIA_PLUGIN_LIBRARY_NAME + ".jar";
     private static final String JAHIA_COMPLETION_SOURCES = JAHIA_PLUGIN_LIBRARY_NAME + "-sources.jar";
 
-    private Project project;
-
-    public CndProjectComponent(Project project) {
-        this.project = project;
-    }
-
-    @NotNull
     @Override
-    public String getComponentName() {
-        return "CndProjectComponent";
-    }
+    public void runActivity(@NotNull Project project) {
+        logger.info("Project " + project.getName() + " started");
 
-    @Override
-    public void projectOpened() {
+        RunOnceUtil.runOnceForApp("jahia-plugin-regenerate-cnd-jar", () -> {
+            logger.info("runOnceForApp started");
+            File jahiaPluginSubFolder = CndPluginUtil.getPluginFile(JAHIA_PLUGIN_SUBFOLDER);
+
+            if (jahiaPluginSubFolder.exists() && jahiaPluginSubFolder.isDirectory()) {
+                //Re-generate 'fake' jar containing cnd files
+                File jarFile = CndPluginUtil.getPluginFile(JAHIA_PLUGIN_SUBFOLDER + "/" + JAHIA_CND_JAR_NAME);
+                if (jarFile.exists()) {
+                    jarFile.delete();
+                }
+                try {
+                    CndPluginUtil.fileToJar(jahiaPluginSubFolder, jahiaPluginSubFolder.getAbsolutePath() + "/" + JAHIA_CND_JAR_NAME, "cnd");
+                } catch (Exception e) {
+                    logger.warn("Error generating Jahia base cnd files 'fake' jar", e);
+                }
+            }
+        });
+
+
         ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -76,24 +84,6 @@ public class CndProjectComponent implements ProjectComponent {
                         File jahiaPluginSubFolder = CndPluginUtil.getPluginFile(JAHIA_PLUGIN_SUBFOLDER);
                         if (jahiaPluginSubFolder.exists() && jahiaPluginSubFolder.isDirectory()) {
                             Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
-
-                            //Tool window
-                            if (!virtualFiles.isEmpty()) {
-                                DumbService.getInstance(project).smartInvokeLater(() -> {
-                                    ToolWindow toolWindow = ToolWindowManager.getInstance(project).registerToolWindow(
-                                            RegisterToolWindowTask.closable("Jahia", CndIcons.JAHIA_LOGO_DXM, ToolWindowAnchor.RIGHT)
-                                    );
-
-                                    ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-                                    SimpleTree tree = new SimpleTree();
-                                    tree.getEmptyText().clear();
-                                    tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-                                    new JahiaTreeStructure(project, tree);
-
-                                    Content treeContent = contentFactory.createContent(ScrollPaneFactory.createScrollPane(tree), "", false);
-                                    toolWindow.getContentManager().addContent(treeContent);
-                                });
-                            }
 
                             //Adding it to the modules libraries
                             Set<Module> alreadyDoneModules = new HashSet<>();
@@ -153,36 +143,39 @@ public class CndProjectComponent implements ProjectComponent {
                                                     FileBasedIndex.getInstance().requestReindex(virtualFileReindex);
                                                 }
                                             } catch (Exception e) {
-                                                LOGGER.warn("Error reindexing file [" + fileReindex.getAbsolutePath() + "]", e);
+                                                logger.warn("Error reindexing file [" + fileReindex.getAbsolutePath() + "]", e);
                                             }
                                         }
                                     }
                                 } catch (Exception e) {
-                                    LOGGER.warn("Error while adding Jahia CND files to module(s) libraries", e);
+                                    logger.warn("Error while adding Jahia CND files to module(s) libraries", e);
                                 }
                             }
+
+                            //Tool window
+                            if (!virtualFiles.isEmpty()) {
+                                DumbService.getInstance(project).smartInvokeLater(() -> {
+                                    ToolWindow toolWindow = ToolWindowManager.getInstance(project).registerToolWindow(
+                                            RegisterToolWindowTask.closable("Jahia", CndIcons.JAHIA_TOOL_WINDOW, ToolWindowAnchor.RIGHT)
+                                    );
+
+                                    ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+                                    SimpleTree tree = new SimpleTree();
+                                    tree.getEmptyText().clear();
+                                    tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+                                    new JahiaTreeStructure(project, tree);
+
+                                    Content treeContent = contentFactory.createContent(ScrollPaneFactory.createScrollPane(tree), "", false);
+                                    toolWindow.getContentManager().addContent(treeContent);
+                                });
+                            }
                         } else {
-                            LOGGER.error("Error finding Jahia plugin resources folder");
+                            logger.error("Error finding Jahia plugin resources folder");
                             throw new PluginException("Error finding Jahia plugin resources folder", new FileNotFoundException("Missing folder " + jahiaPluginSubFolder.getPath()));
                         }
                     }
                 });
             }
         });
-    }
-
-    @Override
-    public void initComponent() {
-
-    }
-
-    @Override
-    public void disposeComponent() {
-
-    }
-
-    @Override
-    public void projectClosed() {
-
     }
 }

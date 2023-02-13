@@ -244,18 +244,6 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
   <depends optional="true" config-file="jahia-el-features.xml">com.intellij.javaee.el</depends>
   <depends optional="true" config-file="jahia-jsp-features.xml">com.intellij.jsp</depends>
 
-  <application-components>
-    <component>
-      <implementation-class>fr.tolc.jahia.intellij.plugin.cnd.components.CndApplicationComponent</implementation-class>
-    </component>
-  </application-components>
-
-  <project-components>
-    <component>
-      <implementation-class>fr.tolc.jahia.intellij.plugin.cnd.components.CndProjectComponent</implementation-class>
-    </component>
-  </project-components>
-
   <actions>
     <group id="cnd.NewCndFileGroup">
       <add-to-group group-id="NewGroup" anchor="first"/>
@@ -281,6 +269,8 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
   <extensions defaultExtensionNs="com.intellij">
     <additionalTextAttributes scheme="Default" file="colorSchemes/CndColorsDefault.xml"/>
     <additionalTextAttributes scheme="Darcula" file="colorSchemes/CndColorsDefault.xml"/>
+
+    <postStartupActivity implementation="fr.tolc.jahia.intellij.plugin.cnd.components.CndStartupActivity"/>
 
     <!-- CND -->
     <fileTypeFactory implementation="fr.tolc.jahia.intellij.plugin.cnd.CndFileTypeFactory"/>

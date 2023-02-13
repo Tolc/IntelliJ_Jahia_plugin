@@ -1,7 +1,5 @@
 package fr.tolc.jahia.intellij.plugin.cnd.treeStructure.view;
 
-import java.util.Set;
-
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
@@ -9,8 +7,10 @@ import com.intellij.refactoring.move.MoveHandlerDelegate;
 import com.intellij.refactoring.move.moveFilesOrDirectories.MoveFilesOrDirectoriesHandler;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
+
 public class ViewMoveProvider extends MoveHandlerDelegate {
-  private static final Logger LOG = Logger.getInstance(ViewMoveProvider.class);
+  private static final Logger logger = Logger.getInstance(ViewMoveProvider.class);
 
   @Override
   public boolean canMove(DataContext dataContext) {
@@ -30,7 +30,7 @@ public class ViewMoveProvider extends MoveHandlerDelegate {
   @Override
   public void collectFilesOrDirsFromContext(DataContext dataContext, Set<PsiElement> filesOrDirs) {
     View[] views = View.DATA_KEY.getData(dataContext);
-    LOG.assertTrue(views != null);
+    logger.assertTrue(views != null);
     for (View view : views) {
       filesOrDirs.addAll(view.getViewFiles());
     }

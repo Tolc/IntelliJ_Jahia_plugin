@@ -20,8 +20,6 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -34,7 +32,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class CndProjectFilesUtil {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CndProjectFilesUtil.class);
     public static final String JAHIA_6_WEBAPP = "webapp";
     public static final String JAHIA_7_RESOURCES = "resources";
     public static final String JEE_MAIN = "main";
