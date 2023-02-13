@@ -111,7 +111,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
               <dt>2.2.0</dt>
               <dd>(<strong>feature</strong>) Better syntax highlighting of node properties (#69)</dd>
               <dd>(<strong>feature</strong>) Line marker for property overrides (#70)</dd>
-              <dd>(<strong>IMPORTANT FIX</strong>) Fixed plugin jars dependencies not being correctly added to jahia modules, thus preventing CND and JSP completions from working properly</dd>
+              <dd>(<strong>IMPORTANT FIX</strong>) Fixed plugin jars dependencies not being correctly added to jahia modules anymore, thus preventing CND and JSP completions from working properly on newly created modules</dd>
               <dd>Fixed grammar issue with escaped quotes in property constraint (#64)</dd>
           </dl>
           <dl>
