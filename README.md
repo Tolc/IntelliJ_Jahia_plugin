@@ -6,13 +6,13 @@ definitions.cnd files syntax highlighting, code completion, and other amazing st
 
 [![marketplace](marketplace.png)][3]
 
-You can also rate it on the [JetBrains Plugins Repository][3]!
+You can also rate it on the [JetBrains Plugins Repository][3].
 
 ## Requirements
 
-Tested under IntelliJ IDEA from 14.1.4 to **2022.1.3**
+Tested under IntelliJ IDEA from 14.1.4 to **2022.3.2**
 
-IntelliJ plugins dependencies (optional): **JavaEE**, **JSP**, **Properties**. Requires Java **8** or higher.
+IntelliJ plugins dependencies (optional): **JavaEE**, **JSP**, **Properties**. Requires Java **17** or higher (Java 8 before v2.2.0).
 
 Jahia project versions: **6.6.x**, **7.x**, and **8.x**.
 
