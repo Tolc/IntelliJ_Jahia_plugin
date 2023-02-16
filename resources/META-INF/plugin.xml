@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>fr.tolc.jahia.intellij.plugin</id>
   <name>CND Language / Jahia Framework</name>
-  <version>2.1.1</version>
+  <version>2.2.0</version>
   <vendor email="contact@thomas-coquel.fr" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
 
   <description><![CDATA[
@@ -107,6 +107,13 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
 
   <change-notes><![CDATA[
       <html>
+          <dl>
+              <dt>2.2.0</dt>
+              <dd>(<strong>feature</strong>) Better syntax highlighting of node properties (#69)</dd>
+              <dd>(<strong>feature</strong>) Line marker for property overrides (#70)</dd>
+              <dd>(<strong>IMPORTANT FIX</strong>) Fixed plugin jars dependencies not being correctly added to jahia modules anymore, thus preventing CND and JSP completions from working properly on newly created modules</dd>
+              <dd>Fixed grammar issue with escaped quotes in property constraint (#64)</dd>
+          </dl>
           <dl>
               <dt>2.1.1</dt>
               <dd>(<strong>IMPORTANT FIX</strong>) Refactored code for IntelliJ 2022.2 API (#65)</dd>
@@ -227,7 +234,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
   ]]></change-notes>
 
   <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-  <idea-version since-build="222.3345.118"/>
+  <idea-version since-build="223"/>
 
   <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html on how to target different products -->
   <!-- uncomment to enable plugin in all products
@@ -235,20 +242,8 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
   -->
   <depends>com.intellij.modules.java</depends>
   <depends optional="true" config-file="jahia-properties-features.xml">com.intellij.properties</depends>
-  <depends optional="true" config-file="jahia-jsp-features.xml">com.intellij.jsp</depends>
   <depends optional="true" config-file="jahia-el-features.xml">com.intellij.javaee.el</depends>
-
-  <application-components>
-    <component>
-      <implementation-class>fr.tolc.jahia.intellij.plugin.cnd.components.CndApplicationComponent</implementation-class>
-    </component>
-  </application-components>
-
-  <project-components>
-    <component>
-      <implementation-class>fr.tolc.jahia.intellij.plugin.cnd.components.CndProjectComponent</implementation-class>
-    </component>
-  </project-components>
+  <depends optional="true" config-file="jahia-jsp-features.xml">com.intellij.jsp</depends>
 
   <actions>
     <group id="cnd.NewCndFileGroup">
@@ -273,10 +268,15 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
+    <additionalTextAttributes scheme="Default" file="colorSchemes/CndColorsDefault.xml"/>
+    <additionalTextAttributes scheme="Darcula" file="colorSchemes/CndColorsDefault.xml"/>
+
+    <postStartupActivity implementation="fr.tolc.jahia.intellij.plugin.cnd.components.CndStartupActivity"/>
+
     <!-- CND -->
     <fileTypeFactory implementation="fr.tolc.jahia.intellij.plugin.cnd.CndFileTypeFactory"/>
     <lang.parserDefinition language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndParserDefinition"/>
-    <lang.syntaxHighlighterFactory key="Cnd" language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighterFactory"/>
+    <lang.syntaxHighlighterFactory language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighterFactory"/>
     <!--<colorSettingsPage implementation="fr.tolc.jahia.intellij.plugin.cnd.CndColorSettingsPage"/>-->
     <annotator language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndJavaAnnotator"/>
     <annotator language="XML" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.annotators.CndXmlAnnotator"/>
@@ -285,7 +285,7 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndJavaLineMarkerProvider"/>
     <codeInsight.lineMarkerProvider language="XML" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.lineMarker.CndXmlLineMarkerProvider"/>
     <completion.contributor language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.completion.CndCompletionContributor"/>
-    <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.CndReferenceContributor"/>
+    <psi.referenceContributor language="Cnd" implementation="fr.tolc.jahia.intellij.plugin.cnd.references.CndReferenceContributor"/>
     <lang.findUsagesProvider language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFindUsagesProvider"/>
     <!--<lang.refactoringSupport language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndRefactoringSupportProvider"/>-->
     <lang.foldingBuilder language="Cnd" implementationClass="fr.tolc.jahia.intellij.plugin.cnd.CndFoldingBuilder"/>
@@ -309,9 +309,9 @@ I am just a guy who loves this CMS and wanted to make working with it easier for
                      <!--implementationClass="fr.tolc.jahia.intellij.plugin.cnd.inspections.UnknownJavaCndNodeTypeInspection"/>-->
 
     <!-- Views -->
-    <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceContributor"/>
+    <psi.referenceContributor language="Cnd" implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ViewReferenceContributor"/>
     <!-- addResources -->
-    <psi.referenceContributor implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ResourceReferenceContributor"/>
+    <psi.referenceContributor language="Cnd" implementation="fr.tolc.jahia.intellij.plugin.cnd.references.ResourceReferenceContributor"/>
 
     <!-- Tool Window -->
 <!--    <toolWindow id="Jahia" icon="/fr/tolc/jahia/intellij/plugin/cnd/icons/img/jahia_dxm.png" anchor="right" order="first"-->

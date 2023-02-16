@@ -6,11 +6,8 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.model.NodeTypeModel;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeViewQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil;
 import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
@@ -18,7 +15,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 
-import static fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil.JEE_META_INF;
 import static fr.tolc.jahia.intellij.plugin.cnd.utils.CndProjectFilesUtil.getModuleForFile;
 
 public class NewNodeTypeViewAction extends AnAction {

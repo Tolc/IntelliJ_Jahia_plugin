@@ -1,36 +1,54 @@
 package fr.tolc.jahia.intellij.plugin.cnd.toolWindow;
 
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.RegisterToolWindowTask;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowAnchor;
+import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.ui.content.Content;
+import com.intellij.ui.content.ContentFactory;
+import com.intellij.ui.tree.AsyncTreeModel;
+import com.intellij.ui.tree.StructureTreeModel;
+import com.intellij.ui.treeStructure.SimpleNode;
+import com.intellij.ui.treeStructure.SimpleTree;
+import com.intellij.ui.treeStructure.SimpleTreeStructure;
+import com.intellij.ui.treeStructure.Tree;
+import fr.tolc.jahia.intellij.plugin.cnd.icons.CndIcons;
+import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.CndSimpleNode;
+import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.RootNode;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
-
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
-import com.intellij.ui.treeStructure.SimpleNode;
-import com.intellij.ui.treeStructure.SimpleTree;
-import com.intellij.ui.treeStructure.SimpleTreeBuilder;
-import com.intellij.ui.treeStructure.SimpleTreeStructure;
-import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.CndSimpleNode;
-import fr.tolc.jahia.intellij.plugin.cnd.toolWindow.tree.RootNode;
-
-public class JahiaTreeStructure extends SimpleTreeStructure {
-    private final SimpleTreeBuilder myTreeBuilder;
+public class JahiaTreeStructure extends SimpleTreeStructure implements Disposable {
     private final RootNode myRoot;
 
-    public JahiaTreeStructure(Project project, SimpleTree tree) {
+    public JahiaTreeStructure(Project project) {
+        Tree tree = new SimpleTree();
+        tree.getEmptyText().clear();
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+
         tree.setRootVisible(false);
         tree.setShowsRootHandles(true);
         
-        myTreeBuilder = new SimpleTreeBuilder(tree, (DefaultTreeModel)tree.getModel(), this, null);
-        Disposer.register(project, myTreeBuilder);
-
         myRoot = new RootNode(project);
-        myTreeBuilder.expand(myRoot, null);
-        myTreeBuilder.initRoot();
+
+        StructureTreeModel<JahiaTreeStructure> structureTreeModel = new StructureTreeModel<>(this, this);
+        AsyncTreeModel asyncTreeModel = new AsyncTreeModel(structureTreeModel, this);
+        tree.setModel(asyncTreeModel);
+
+        ToolWindow toolWindow = ToolWindowManager.getInstance(project)
+                .registerToolWindow(RegisterToolWindowTask.closable("Jahia", CndIcons.JAHIA_TOOL_WINDOW, ToolWindowAnchor.RIGHT));
+        Content treeContent = ContentFactory.getInstance().createContent(ScrollPaneFactory.createScrollPane(tree), "", false);
+        toolWindow.getContentManager().addContent(treeContent);
     }
 
+    @NotNull
     @Override
     public Object getRootElement() {
         return myRoot;
@@ -57,5 +75,10 @@ public class JahiaTreeStructure extends SimpleTreeStructure {
             }
         }
         return nodes;
+    }
+
+    @Override
+    public void dispose() {
+        //Nothing to do
     }
 }

@@ -28,11 +28,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CndPluginUtil {
-    
     private static final String PLUGIN_ID = "fr.tolc.jahia.intellij.plugin";
     private static final String CLASSES_FOLDER = "classes";
     private static final String PLUGIN_FOLDER_NAME = ".IntelliJ_Jahia_Plugin";
-    
+
     private static File pluginFolder = getPlugin().getPath();
 //    private static File pluginFolder = new File(getPlugin().getPath().getAbsolutePath() + "/IntelliJ_Jahia_Plugin.jar");
     

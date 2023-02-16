@@ -1,6 +1,5 @@
 package fr.tolc.jahia.intellij.plugin.cnd.actions;
 
-import com.intellij.ProjectTopics;
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -12,7 +11,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.Navigatable;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.IncorrectOperationException;
 import fr.tolc.jahia.intellij.plugin.cnd.dialogs.CreateCndFileDialog;

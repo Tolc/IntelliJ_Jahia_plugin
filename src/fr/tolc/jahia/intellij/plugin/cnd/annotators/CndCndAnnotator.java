@@ -1,21 +1,23 @@
 package fr.tolc.jahia.intellij.plugin.cnd.annotators;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.intellij.lang.ASTNode;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
 import fr.tolc.jahia.intellij.plugin.cnd.CndSyntaxHighlighter;
+import fr.tolc.jahia.intellij.plugin.cnd.enums.AttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.ItemTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
-import fr.tolc.jahia.intellij.plugin.cnd.enums.AttributeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.PropertyTypeMaskEnum;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNamespace;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeType;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndNodeTypeIdentifier;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndProperty;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.CndPropertyIdentifier;
 import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeTranslationsQuickFix;
 import fr.tolc.jahia.intellij.plugin.cnd.quickfixes.CreateNodeTypeViewQuickFix;
@@ -25,15 +27,21 @@ import fr.tolc.jahia.intellij.plugin.cnd.utils.CndUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class CndCndAnnotator implements Annotator {
 
     private static final Pattern namespaceUriPattern = Pattern.compile("^http(s)?://[A-Za-z0-9][A-Za-z0-9./\\-_]+[A-Za-z0-9]$");
 
     @Override
     public void annotate(@NotNull final PsiElement element, @NotNull AnnotationHolder holder) {
-        if (element.getNode() != null) {
+        ASTNode node = element.getNode();
+        if (node != null) {
+            IElementType elementType = node.getElementType();
+
             //Node type declaration
-            if (CndTypes.NODE_TYPE_IDENTIFIER.equals(element.getNode().getElementType())) {
+            if (CndTypes.NODE_TYPE_IDENTIFIER.equals(elementType)) {
                 String nodeTypeName = element.getText();
 
                 PsiElement nextSibling = element.getNextSibling();
@@ -76,7 +84,7 @@ public class CndCndAnnotator implements Annotator {
             }
 
             //Namespace URI
-            else if (CndTypes.NAMESPACE_URI.equals(element.getNode().getElementType())) {
+            else if (CndTypes.NAMESPACE_URI.equals(elementType)) {
                 Matcher matcher = namespaceUriPattern.matcher(element.getText());
                 if (!matcher.matches()) {
                     holder.createWarningAnnotation(element.getTextRange(), "Not a valid URI");
@@ -84,7 +92,7 @@ public class CndCndAnnotator implements Annotator {
             }
 
             //Option
-            else if (CndTypes.OPTION.equals(element.getNode().getElementType())) {
+            else if (CndTypes.OPTION.equals(elementType)) {
                 try {
                     OptionEnum.fromValue(element.getText());
                 } catch (IllegalArgumentException e) {
@@ -92,8 +100,50 @@ public class CndCndAnnotator implements Annotator {
                 }
             }
 
+            //Property name
+            else if (CndTypes.PROPERTY_IDENTIFIER.equals(elementType)) {
+                CndPropertyIdentifier propertyIdentifier = (CndPropertyIdentifier) element;
+                CndProperty property = propertyIdentifier.getProperty();
+                if (property.isMandatory()) {
+                    holder.newAnnotation(HighlightSeverity.TEXT_ATTRIBUTES, "Mandatory property")
+                            .range(propertyIdentifier)
+                            .textAttributes(CndSyntaxHighlighter.CND_PROPERTY_MANDATORY)
+                            .create();
+                }
+                if (property.isHidden()) {
+                    holder.newAnnotation(HighlightSeverity.TEXT_ATTRIBUTES, "Hidden property")
+                            .range(propertyIdentifier)
+                            .textAttributes(CndSyntaxHighlighter.CND_PROPERTY_HIDDEN)
+                            .create();
+                }
+                if (property.isProtected()) {
+                    holder.newAnnotation(HighlightSeverity.TEXT_ATTRIBUTES, "Protected property")
+                            .range(propertyIdentifier)
+                            .textAttributes(CndSyntaxHighlighter.CND_PROPERTY_PROTECTED)
+                            .create();
+                }
+                if (property.isMultiple()) {
+                    holder.newAnnotation(HighlightSeverity.TEXT_ATTRIBUTES, "Multiple property")
+                            .range(propertyIdentifier)
+                            .textAttributes(CndSyntaxHighlighter.CND_PROPERTY_MULTIPLE)
+                            .create();
+                }
+                if (property.isInternationalized()) {
+                    holder.newAnnotation(HighlightSeverity.TEXT_ATTRIBUTES, "I18n property")
+                            .range(propertyIdentifier)
+                            .textAttributes(CndSyntaxHighlighter.CND_PROPERTY_INTERNATIONALIZED)
+                            .create();
+                }
+                if (!property.isSearchable()) {
+                    holder.newAnnotation(HighlightSeverity.TEXT_ATTRIBUTES, "Not searchable")
+                            .range(propertyIdentifier)
+                            .textAttributes(CndSyntaxHighlighter.CND_PROPERTY_NOT_SEARCHABLE)
+                            .create();
+                }
+            }
+
             //Property type
-            else if (CndTypes.PROPERTY_TYPE.equals(element.getNode().getElementType())) {
+            else if (CndTypes.PROPERTY_TYPE.equals(elementType)) {
                 try {
                     PropertyTypeEnum.fromValue(element.getText());
                 } catch (IllegalArgumentException e) {
@@ -102,7 +152,7 @@ public class CndCndAnnotator implements Annotator {
             }
 
             //Property mask
-            else if (CndTypes.PROPERTY_MASK.equals(element.getNode().getElementType())) {
+            else if (CndTypes.PROPERTY_MASK.equals(elementType)) {
                 try {
                     PropertyTypeMaskEnum.fromValue(element.getText());
                 } catch (IllegalArgumentException e) {
@@ -111,7 +161,7 @@ public class CndCndAnnotator implements Annotator {
             }
 
             //Property attribute
-            else if (CndTypes.PROPERTY_ATTRIBUTE.equals(element.getNode().getElementType())) {
+            else if (CndTypes.PROPERTY_ATTRIBUTE.equals(elementType)) {
                 try {
                     AttributeEnum.fromValue(element.getText());
                 } catch (IllegalArgumentException e) {
@@ -122,7 +172,7 @@ public class CndCndAnnotator implements Annotator {
             }
 
             //Item type
-            else if (CndTypes.ITEMTYPE_TYPE.equals(element.getNode().getElementType())) {
+            else if (CndTypes.ITEMTYPE_TYPE.equals(elementType)) {
                 try {
                     ItemTypeEnum.fromValue(element.getText());
                 } catch (IllegalArgumentException e) {
@@ -131,7 +181,7 @@ public class CndCndAnnotator implements Annotator {
             }
 
             //Sub node attribute
-            else if (CndTypes.NODE_ATTRIBUTE.equals(element.getNode().getElementType())) {
+            else if (CndTypes.NODE_ATTRIBUTE.equals(elementType)) {
                 try {
                     AttributeEnum.fromValueForSubNode(element.getText());
                 } catch (IllegalArgumentException e) {
@@ -140,10 +190,10 @@ public class CndCndAnnotator implements Annotator {
             }
 
             //Check for invalid namespaces and nodetypes
-            else if (CndTypes.SUPER_TYPE.equals(element.getNode().getElementType())
-                || CndTypes.EXTENSION.equals(element.getNode().getElementType())
-                || CndTypes.SUB_NODE_TYPE.equals(element.getNode().getElementType())
-                || CndTypes.SUB_NODE_DEFAULT_TYPE.equals(element.getNode().getElementType())) {
+            else if (CndTypes.SUPER_TYPE.equals(elementType)
+                || CndTypes.EXTENSION.equals(elementType)
+                || CndTypes.SUB_NODE_TYPE.equals(elementType)
+                || CndTypes.SUB_NODE_DEFAULT_TYPE.equals(elementType)) {
 
                 PsiElement namespaceElt = element.getFirstChild();
                 if (namespaceElt != null) {

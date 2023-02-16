@@ -1,12 +1,14 @@
 // This is a generated file. Not intended for manual editing.
 package fr.tolc.jahia.intellij.plugin.cnd.psi;
 
-import java.util.List;
-import org.jetbrains.annotations.*;
-import com.intellij.psi.PsiElement;
-import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.intellij.plugin.cnd.enums.OptionEnum;
+import fr.tolc.jahia.intellij.plugin.cnd.psi.elements.CndNodeTypeElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 import java.util.Set;
 
 public interface CndNodeType extends CndNodeTypeElement {
@@ -42,12 +44,17 @@ public interface CndNodeType extends CndNodeTypeElement {
   @NotNull
   ItemPresentation getPresentation();
 
+  String toString();
+
   boolean equals(Object o);
 
   int hashCode();
 
   @NotNull
   Set<CndProperty> getProperties();
+
+  @NotNull
+  Set<CndProperty> getPropertiesWithName(String propertyName);
 
   @NotNull
   Set<CndProperty> getOwnProperties();

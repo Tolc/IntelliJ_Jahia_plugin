@@ -1,12 +1,5 @@
 package fr.tolc.jahia.intellij.plugin.cnd.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -23,12 +16,19 @@ import fr.tolc.jahia.intellij.plugin.cnd.psi.CndTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 public class CndUtil {
     private CndUtil() {}
 
     @NotNull
     public static Set<CndProperty> findProperties(Project project, String namespace, String nodeTypeName, String propertyName) {
-        Set<CndProperty> result = new LinkedHashSet<CndProperty>();
+        Set<CndProperty> result = new LinkedHashSet<>();
         Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
         for (VirtualFile virtualFile : virtualFiles) {
             CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
@@ -87,19 +87,23 @@ public class CndUtil {
 
     @NotNull
     public static List<CndNodeType> findNodeTypes(Project project, String namespace, String nodeTypeName) {
-        List<CndNodeType> result = new ArrayList<CndNodeType>();
+        List<CndNodeType> result = new ArrayList<>();
         Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
         for (VirtualFile virtualFile : virtualFiles) {
-            CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
-            if (cndFile != null) {
-                CndNodeType[] nodeTypes = PsiTreeUtil.getChildrenOfType(cndFile, CndNodeType.class);
-                if (nodeTypes != null) {
-                    for (CndNodeType nodeType : nodeTypes) {
-                        if (namespace.equals(nodeType.getNodeTypeNamespace()) && nodeTypeName.equals(nodeType.getNodeTypeName())) {
-                            result.add(nodeType);
+            try {
+                CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
+                if (cndFile != null) {
+                    CndNodeType[] nodeTypes = PsiTreeUtil.getChildrenOfType(cndFile, CndNodeType.class);
+                    if (nodeTypes != null) {
+                        for (CndNodeType nodeType : nodeTypes) {
+                            if (namespace.equals(nodeType.getNodeTypeNamespace()) && nodeTypeName.equals(nodeType.getNodeTypeName())) {
+                                result.add(nodeType);
+                            }
                         }
                     }
                 }
+            } catch (ClassCastException e) {
+                //Nothing to do
             }
         }
         return result;
@@ -121,7 +125,7 @@ public class CndUtil {
 
     @NotNull
     public static List<CndNodeType> findNodeTypes(Project project, String namespace) {
-        List<CndNodeType> result = new ArrayList<CndNodeType>();
+        List<CndNodeType> result = new ArrayList<>();
         List<CndNodeType> projectNodeTypes =  findNodeTypes(project);
         for (CndNodeType nodeType : projectNodeTypes) {
             if (namespace.equals(nodeType.getNodeTypeNamespace())) {
@@ -133,7 +137,7 @@ public class CndUtil {
 
     @NotNull
     public static List<CndNodeType> findNodeTypes(Project project) {
-        List<CndNodeType> result = new ArrayList<CndNodeType>();
+        List<CndNodeType> result = new ArrayList<>();
         Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
         for (VirtualFile virtualFile : virtualFiles) {
             CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
@@ -149,15 +153,19 @@ public class CndUtil {
 
     @NotNull
     public static List<CndNamespace> findNamespaces(Project project) {
-        List<CndNamespace> result = new ArrayList<CndNamespace>();
+        List<CndNamespace> result = new ArrayList<>();
         Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);
         for (VirtualFile virtualFile : virtualFiles) {
-            CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
-            if (cndFile != null) {
-                CndNamespace[] namespaces = PsiTreeUtil.getChildrenOfType(cndFile, CndNamespace.class);
-                if (namespaces != null) {
-                    Collections.addAll(result, namespaces);
+            try {
+                CndFile cndFile = (CndFile) PsiManager.getInstance(project).findFile(virtualFile);
+                if (cndFile != null) {
+                    CndNamespace[] namespaces = PsiTreeUtil.getChildrenOfType(cndFile, CndNamespace.class);
+                    if (namespaces != null) {
+                        Collections.addAll(result, namespaces);
+                    }
                 }
+            } catch (ClassCastException e) {
+                //Nothing to do
             }
         }
         return result;
@@ -165,7 +173,7 @@ public class CndUtil {
 
     @NotNull
     public static List<CndNamespace> findNamespaces(Project project, String namespace) {
-        List<CndNamespace> result = new ArrayList<CndNamespace>();
+        List<CndNamespace> result = new ArrayList<>();
         List<CndNamespace> projectNamespaces = findNamespaces(project);
         for (CndNamespace cndNamespace: projectNamespaces) {
             if (namespace.equals(cndNamespace.getNamespaceName())) {
@@ -186,7 +194,7 @@ public class CndUtil {
 
     @NotNull
     public static Set<CndNodeType> findExtensionNodeTypes(CndNodeType element) {
-        Set<CndNodeType> result = new LinkedHashSet<CndNodeType>();
+        Set<CndNodeType> result = new LinkedHashSet<>();
         Project project = element.getProject();
 
         Collection<VirtualFile> virtualFiles = CndProjectFilesUtil.getProjectCndFiles(project);

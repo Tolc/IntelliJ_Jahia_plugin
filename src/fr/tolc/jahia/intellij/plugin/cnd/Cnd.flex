@@ -16,7 +16,7 @@ import com.intellij.psi.TokenType;
 %eof{  return;
 %eof}
 
-CRLF= \n|\r|\r\n
+CRLF=\n|\r|\r\n
 WHITE_SPACE=[\ \t\f]
 //FIRST_VALUE_CHARACTER=[^ \n\r\f\\] | "\\"{CRLF} | "\\".
 //VALUE_CHARACTER=[^\n\r\f\\] | "\\"{CRLF} | "\\".
@@ -183,8 +183,8 @@ ATTRIBUTE=("*"|"!"|{CHARS})({WHITE_SPACE}+"'"[^']*"'"|{WHITE_SPACE}*"="{WHITE_SP
 
 <PROPERTY_CONSTRAINT> {
     [^\r\n'\"\-\+\ \t\f]+ ({WHITE_SPACE}*","{WHITE_SPACE}*[^\r\n'\"\-\+\ \t\f]+)*
-    | "'"[^\r\n']*"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"[^\r\n']*"'")*
-    | "\""[^\r\n\"]*"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""[^\r\n\"]*"\"")*          { return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
+    | "'"(\\'|[^\r\n'])*"'" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"'"(\\'|[^\r\n'])*"'")*
+    | "\""(\\\"|[^\r\n\"])*"\"" ({WHITE_SPACE}*","{WHITE_SPACE}*{CRLF}*{WHITE_SPACE}*"\""(\\\"|[^\r\n\"])*"\"")*          { return CndTypes.PROPERTY_CONSTRAINT_VALUE; }
 }
 
 
