@@ -1,0 +1,135 @@
+/**
+ * JahiaCndReader. Parses node type definitions written in the compact
+ * node type definition format and returns a list of JahiaNodeTypeDef objects that
+ * can then be used to register node types.
+ * <p/>
+ * The EBNF grammar of the compact node type definition:<br>
+ * <pre>
+ * cnd ::= ns_mapping* node_type_def+
+ *
+ * ns_mapping ::= "&lt;" prefix "=" namespace "&gt;"
+ *
+ * prefix ::= string
+ *
+ * namespace ::= string
+ *
+ * node_type_def ::= node_type_name [super_types] [options] {property_def | node_def}
+ *
+ * node_type_name ::= "[" string "]"
+ *
+ * super_types ::= "&gt;" string_list
+ *
+ * options ::= orderable_opt | mixin_opt | orderable_opt mixin_opt | mixin_opt orderable_opt
+ *
+ * orderable_opt ::= "orderable" | "ord" | "o"
+ *
+ * mixin_opt ::= "mixin" | "mix" | "m"
+ *
+ * property_def ::= "-" property_name [property_type_decl] [default_values] [attributes] [value_constraints]
+ *
+ * property_name ::= string
+ *
+ * property_type_decl ::= "(" property_type ")"
+ *
+ * property_type ::= "STRING" | "String |"string" |
+ *                   "BINARY" | "Binary" | "binary" |
+ *                   "LONG" | "Long" | "long" |
+ *                   "DOUBLE" | "Double" | "double" |
+ *                   "BOOLEAN" | "Boolean" | "boolean" |
+ *                   "DATE" | "Date" | "date" |
+ *                   "NAME | "Name | "name |
+ *                   "PATH" | "Path" | "path" |
+ *                   "REFERENCE" | "Reference" | "reference" |
+ *                   "UNDEFINED" | "Undefined" | "undefined" | "*"
+ *
+ *
+ * default_values ::= "=" string_list
+ *
+ * value_constraints ::= "&lt;" string_list
+ *
+ * node_def ::= "+" node_name [required_types] [default_type] [attributes]
+ *
+ * node_name ::= string
+ *
+ * required_types ::= "(" string_list ")"
+ *
+ * default_type ::= "=" string
+ *
+ * attributes ::= "primary" | "pri" | "!" |
+ *                "autocreated" | "aut" | "a" |
+ *                "mandatory" | "man" | "m" |
+ *                "protected" | "pro" | "p" |
+ *                "multiple" | "mul" | "*" |
+ *                "COPY" | "Copy" | "copy" |
+ *                "VERSION" | "Version" | "version" |
+ *                "INITIALIZE" | "Initialize" | "initialize" |
+ *                "COMPUTE" | "Compute" | "compute" |
+ *                "IGNORE" | "Ignore" | "ignore" |
+ *                "ABORT" | "Abort" | "abort"
+ *
+ * string_list ::= string {"," string}
+ *
+ * string ::= quoted_string | unquoted_string
+ *
+ * quoted_string :: = "'" unquoted_string "'"
+ *
+ * unquoted_string ::= [A-Za-z0-9:_]+
+ * </pre>
+ */
+{
+  parserClass="fr.tolc.jahia.language.cnd.parser.CndParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Cnd"
+  psiImplClassSuffix="Impl"
+  psiPackage="fr.tolc.jahia.language.cnd.psi"
+  psiImplPackage="fr.tolc.jahia.language.cnd.psi.impl"
+
+  elementTypeHolderClass="fr.tolc.jahia.language.cnd.psi.CndTypes"
+  elementTypeClass="fr.tolc.jahia.language.cnd.psi.CndElementType"
+  tokenTypeClass="fr.tolc.jahia.language.cnd.psi.CndTokenType"
+}
+
+cndFile ::= item_*
+private item_ ::= (COMMENT|CRLF|namespace|nodetype)
+
+
+namespace ::= NS_START NS_NAME NS_EQUAL NS_URI_QUOTE NS_URI NS_URI_QUOTE NS_END
+
+
+nodetype ::= NT_START NT_NAME NT_END [supertypes_] option_* subitem_*
+{mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndNodetypeMixin"}
+
+private supertypes_ ::= ST_START supertype_ (ST_SEP supertype_)*
+private supertype_ ::= ST_NAME
+
+private option_ ::= OPT [OPT_EQUAL option_values_]
+private option_values_ ::= option_value_ (OPT_VALUE_SEP option_value_)*
+private option_value_ ::= OPT_VALUE
+
+private subitem_ ::= CRLF+ (property|subnode)
+
+
+property ::= PROP_START PROP_NAME [prop_type_] [prop_default_] prop_attr_* [prop_constraint_]
+
+private prop_type_ ::= PROP_TYPE_START PROP_TYPE [prop_type_mask_] PROP_TYPE_END
+private prop_type_mask_ ::= PROP_TYPE_MASK_START PROP_TYPE_MASK [prop_type_mask_options_]
+private prop_type_mask_options_ ::= PROP_TYPE_MASK_OPTS_START prop_type_mask_option_ (PROP_TYPE_MASK_OPT_SEP prop_type_mask_option_)* PROP_TYPE_MASK_OPTS_END
+private prop_type_mask_option_ ::= PROP_TYPE_MASK_OPT [PROP_TYPE_MASK_OPT_EQUAL PROP_TYPE_MASK_OPT_VALUE]
+
+private prop_default_ ::= PROP_DEFAULT_EQUAL PROP_DEFAULT
+
+private prop_attr_ ::= PROP_ATTR
+
+private prop_constraint_ ::= PROP_CONST_START PROP_CONST
+
+
+subnode ::= SUB_START SUB_NAME [subnode_types_] [subnode_default_] subnode_attr_*
+
+private subnode_types_ ::= SUB_TYPES_START subnode_type_ (SUB_TYPE_SEP subnode_type_)* SUB_TYPES_END
+private subnode_type_ ::= SUB_TYPE
+
+private subnode_default_ ::= SUB_DEFAULT_EQUAL SUB_DEFAULT
+
+private subnode_attr_ ::= SUB_ATTR

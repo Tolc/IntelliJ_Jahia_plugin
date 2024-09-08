@@ -1,0 +1,46 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>fr.tolc.jahia.intellij.plugin</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>CND Language / Jahia Framework</name>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
+    <idea-version since-build="232"/>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="contact@thomas-coquel.fr" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+        <img src="https://github.com/Tolc/IntelliJ_Jahia_plugin/raw/master/resources/jahia/jahia.png" alt="Jahia logo" style="width:100%;">
+        <h2>
+            CND Language / <a href="https://www.jahia.com/">Jahia</a> Framework
+        </h2>
+
+        <p>Adds definitions.cnd and Jahia features to IntelliJ IDEA</p>
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.java-capable</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="CND file" implementationClass="fr.tolc.jahia.language.cnd.CndFileType" fieldName="INSTANCE" language="Cnd" extensions="cnd"/>
+        <lang.parserDefinition language="Cnd" implementationClass="fr.tolc.jahia.language.cnd.CndParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="Cnd" implementationClass="fr.tolc.jahia.language.cnd.CndSyntaxHighlighterFactory"/>
+        <additionalTextAttributes scheme="Default" file="colorSchemes/CndColorsDefault.xml"/>
+        <additionalTextAttributes scheme="Darcula" file="colorSchemes/CndColorsDefault.xml"/>
+        <colorSettingsPage implementation="fr.tolc.jahia.language.cnd.CndColorSettingsPage"/>
+
+
+    </extensions>
+</idea-plugin>
