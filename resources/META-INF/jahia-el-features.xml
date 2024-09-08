@@ -1,8 +1,0 @@
-<idea-plugin>
-	<extensions defaultExtensionNs="com.intellij.javaee.el">
-		<implicitVariablesProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.javaee.jsp.CndJspElVariablesProvider"/>
-	</extensions>
-	<extensions defaultExtensionNs="com.intellij.javaee.el">
-		<elLiteralCustomReferenceProvider implementation="fr.tolc.jahia.intellij.plugin.cnd.extensions.jsp.CndJspElLiteralReferenceProvider"/>
-	</extensions>
-</idea-plugin>

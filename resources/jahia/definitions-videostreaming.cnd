@@ -1,9 +1,0 @@
-<jnt = 'http://www.jahia.org/jahia/nt/1.0'>
-
-[jnt:videostreaming] > jnt:content, jmix:multimediaContent
- - provider (string,choicelist[resourceBundle]) = youtube indexed=no < youtube, dailymotion, vimeo, watt
- - identifier (string) indexed=no
- - width (long) = 480 indexed=no
- - height (long) = 385 indexed=no
- - allowfullscreen (boolean) = true indexed=no
- - html5Player (boolean) = false indexed=no
