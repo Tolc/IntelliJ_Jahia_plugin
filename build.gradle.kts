@@ -2,6 +2,7 @@ plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.9.25"
     id("org.jetbrains.intellij") version "1.17.4"
+    id("org.jetbrains.grammarkit") version "2022.3.2.2"
 }
 
 group = "fr.tolc"
@@ -32,8 +33,22 @@ intellij {
 }
 
 tasks {
+    generateLexer {
+        sourceFile.set(file("src/main/grammar/Cnd.flex"))
+        targetOutputDir.set(file("src/main/gen/fr/tolc/jahia/language/cnd"))
+        purgeOldFiles.set(true)
+    }
+    generateParser {
+        sourceFile.set(file("src/main/grammar/Cnd.bnf"))
+        targetRootOutputDir.set(file("src/main/gen"))
+        pathToParser.set("fr/tolc/jahia/language/cnd/CndParser.java")
+        pathToPsiRoot.set("fr/tolc/jahia/language/cnd/psi")
+        purgeOldFiles.set(true)
+    }
+
     // Set the JVM compatibility versions
     withType<JavaCompile> {
+        dependsOn(generateLexer, generateParser)
         sourceCompatibility = "17"
         targetCompatibility = "17"
     }

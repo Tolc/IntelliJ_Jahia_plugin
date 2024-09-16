@@ -62,7 +62,7 @@ PARENTHESIS_RIGHT=\)
 //Node type declaration "[tnt:test]"
 <YYINITIAL> {BRACKET_LEFT}                                  { yybegin(NT); return CndTypes.NT_START; }
 <NT> {
-    [^\]]+                                                  { return CndTypes.NT_NAME; }
+    [^\s\]]+([^\]]*[^\s\]]+)?                               { return CndTypes.NT_NAME; }
     {BRACKET_RIGHT}                                         { yybegin(NT_AFTER); return CndTypes.NT_END; }
 }
 

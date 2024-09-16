@@ -77,7 +77,7 @@
  * </pre>
  */
 {
-  parserClass="fr.tolc.jahia.language.cnd.parser.CndParser"
+  parserClass="fr.tolc.jahia.language.cnd.CndParser"
 
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
@@ -95,41 +95,64 @@ cndFile ::= item_*
 private item_ ::= (COMMENT|CRLF|namespace|nodetype)
 
 
-namespace ::= NS_START NS_NAME NS_EQUAL NS_URI_QUOTE NS_URI NS_URI_QUOTE NS_END
+namespace ::= NS_START namespaceIdentifier NS_EQUAL NS_URI_QUOTE NS_URI NS_URI_QUOTE NS_END
+namespaceIdentifier ::= NS_NAME
 
 
-nodetype ::= NT_START NT_NAME NT_END [supertypes_] option_* subitem_*
-{mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndNodetypeMixin"}
+nodetype ::= NT_START nodetypeIdentifier NT_END [supertypes_] option* subitem_* {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndNodetypeMixin"
+  implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndNodetypeInterface"
+}
+nodetypeIdentifier ::= NT_NAME {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndNodetypeIdentifierMixin"
+  implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndNodetypeIdentifierInterface"
+}
 
-private supertypes_ ::= ST_START supertype_ (ST_SEP supertype_)*
-private supertype_ ::= ST_NAME
+private supertypes_ ::= ST_START supertype? (ST_SEP supertype?)*
+supertype ::= ST_NAME {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndSupertypeMixin"
+}
 
-private option_ ::= OPT [OPT_EQUAL option_values_]
-private option_values_ ::= option_value_ (OPT_VALUE_SEP option_value_)*
-private option_value_ ::= OPT_VALUE
+option ::= option_name [OPT_EQUAL option_values_]
+option_name ::= OPT
+private option_values_ ::= option_value? (OPT_VALUE_SEP option_value?)*
+option_value ::= OPT_VALUE
 
 private subitem_ ::= CRLF+ (property|subnode)
 
 
-property ::= PROP_START PROP_NAME [prop_type_] [prop_default_] prop_attr_* [prop_constraint_]
+property ::= PROP_START property_name? [prop_type_] [prop_default_] property_attribute* [prop_constraint_]
+property_name ::= PROP_NAME
 
-private prop_type_ ::= PROP_TYPE_START PROP_TYPE [prop_type_mask_] PROP_TYPE_END
-private prop_type_mask_ ::= PROP_TYPE_MASK_START PROP_TYPE_MASK [prop_type_mask_options_]
-private prop_type_mask_options_ ::= PROP_TYPE_MASK_OPTS_START prop_type_mask_option_ (PROP_TYPE_MASK_OPT_SEP prop_type_mask_option_)* PROP_TYPE_MASK_OPTS_END
-private prop_type_mask_option_ ::= PROP_TYPE_MASK_OPT [PROP_TYPE_MASK_OPT_EQUAL PROP_TYPE_MASK_OPT_VALUE]
+private prop_type_ ::= PROP_TYPE_START property_type? [prop_type_mask_] PROP_TYPE_END
+property_type ::= PROP_TYPE
+private prop_type_mask_ ::= PROP_TYPE_MASK_START property_type_mask [prop_type_mask_options_]
+property_type_mask ::= PROP_TYPE_MASK
+private prop_type_mask_options_ ::= PROP_TYPE_MASK_OPTS_START property_type_mask_option (PROP_TYPE_MASK_OPT_SEP property_type_mask_option)* PROP_TYPE_MASK_OPTS_END
+property_type_mask_option ::= property_type_mask_option_name [PROP_TYPE_MASK_OPT_EQUAL property_type_mask_option_value]
+property_type_mask_option_name ::= PROP_TYPE_MASK_OPT
+property_type_mask_option_value ::= PROP_TYPE_MASK_OPT_VALUE
 
-private prop_default_ ::= PROP_DEFAULT_EQUAL PROP_DEFAULT
+private prop_default_ ::= PROP_DEFAULT_EQUAL property_default?
+property_default ::=  PROP_DEFAULT
 
-private prop_attr_ ::= PROP_ATTR
+property_attribute ::= PROP_ATTR
 
-private prop_constraint_ ::= PROP_CONST_START PROP_CONST
+private prop_constraint_ ::= PROP_CONST_START property_constraint?
+property_constraint ::= PROP_CONST
 
 
-subnode ::= SUB_START SUB_NAME [subnode_types_] [subnode_default_] subnode_attr_*
+subnode ::= SUB_START subnode_name? [subnode_types_] [subnode_default_] subnode_attribute*
+subnode_name ::= SUB_NAME
 
-private subnode_types_ ::= SUB_TYPES_START subnode_type_ (SUB_TYPE_SEP subnode_type_)* SUB_TYPES_END
-private subnode_type_ ::= SUB_TYPE
+private subnode_types_ ::= SUB_TYPES_START subnode_type? (SUB_TYPE_SEP subnode_type?)* SUB_TYPES_END
+subnode_type ::= SUB_TYPE {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndSubnodeTypeMixin"
+}
 
-private subnode_default_ ::= SUB_DEFAULT_EQUAL SUB_DEFAULT
+private subnode_default_ ::= SUB_DEFAULT_EQUAL subnode_default?
+subnode_default ::= SUB_DEFAULT {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndSubnodeDefaultMixin"
+}
 
-private subnode_attr_ ::= SUB_ATTR
+subnode_attribute ::= SUB_ATTR
