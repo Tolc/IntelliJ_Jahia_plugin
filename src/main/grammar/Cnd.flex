@@ -48,10 +48,14 @@ PARENTHESIS_RIGHT=\)
 
 //Namespaces "<tnt = 'http://www.thomas-coquel.fr/jahia/nt/1.0'>"
 <YYINITIAL> {ANGLE_BRACKET_LEFT}                            { yybegin(NS); return CndTypes.NS_START; }
-<NS> [^\s=]+                                                { yybegin(NS_SEP); return CndTypes.NS_NAME; }
+<NS> {
+    [^\s=>]+                                                { yybegin(NS_SEP); return CndTypes.NS_NAME; }
+    {ANGLE_BRACKET_RIGHT}                                   { yybegin(YYINITIAL); return CndTypes.NS_END; }
+}
 <NS_SEP> {
     {EQUAL}                                                 { return CndTypes.NS_EQUAL; }
     {QUOTE_SIMPLE}                                          { yybegin(NS_URI); return CndTypes.NS_URI_QUOTE; }
+    {ANGLE_BRACKET_RIGHT}                                   { yybegin(YYINITIAL); return CndTypes.NS_END; }
 }
 <NS_URI> {
     [^'>]+                                                  { return CndTypes.NS_URI; }
@@ -165,7 +169,7 @@ PARENTHESIS_RIGHT=\)
 }
 <SUB_TYPE> {
     {PARENTHESIS_LEFT}                                      { return CndTypes.SUB_TYPES_START; }
-    [^(),]+                                                 { return CndTypes.SUB_TYPE; }
+    [^\s(),]+                                               { return CndTypes.SUB_TYPE; }
     {COMMA}                                                 { return CndTypes.SUB_TYPE_SEP; }
     {PARENTHESIS_RIGHT}                                     { yybegin(SUB_TYPE_AFTER); return CndTypes.SUB_TYPES_END; }
 }

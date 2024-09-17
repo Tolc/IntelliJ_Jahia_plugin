@@ -10,7 +10,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import fr.tolc.jahia.language.cnd.parser.CndParser;
 import fr.tolc.jahia.language.cnd.psi.CndFile;
 import fr.tolc.jahia.language.cnd.psi.CndTokenSets;
 import fr.tolc.jahia.language.cnd.psi.CndTypes;

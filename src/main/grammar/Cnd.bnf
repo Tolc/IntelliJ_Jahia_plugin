@@ -95,11 +95,11 @@ cndFile ::= item_*
 private item_ ::= (COMMENT|CRLF|namespace|nodetype)
 
 
-namespace ::= NS_START namespaceIdentifier NS_EQUAL NS_URI_QUOTE NS_URI NS_URI_QUOTE NS_END
+namespace ::= NS_START namespaceIdentifier? NS_EQUAL? (NS_URI_QUOTE NS_URI? NS_URI_QUOTE)? NS_END
 namespaceIdentifier ::= NS_NAME
 
 
-nodetype ::= NT_START nodetypeIdentifier NT_END [supertypes_] option* subitem_* {
+nodetype ::= NT_START nodetypeIdentifier? NT_END [supertypes_] option* subitem_* {
   mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndNodetypeMixin"
   implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndNodetypeInterface"
 }

@@ -39,6 +39,7 @@ tasks {
         purgeOldFiles.set(true)
     }
     generateParser {
+        dependsOn(generateLexer)
         sourceFile.set(file("src/main/grammar/Cnd.bnf"))
         targetRootOutputDir.set(file("src/main/gen"))
         pathToParser.set("fr/tolc/jahia/language/cnd/CndParser.java")

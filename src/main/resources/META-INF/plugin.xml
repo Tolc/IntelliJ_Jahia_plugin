@@ -30,17 +30,39 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.java-capable</depends>
+    <depends>com.intellij.java</depends>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <fileType name="CND file" implementationClass="fr.tolc.jahia.language.cnd.CndFileType" fieldName="INSTANCE" language="Cnd" extensions="cnd"/>
-        <lang.parserDefinition language="Cnd" implementationClass="fr.tolc.jahia.language.cnd.CndParserDefinition"/>
-        <lang.syntaxHighlighterFactory language="Cnd" implementationClass="fr.tolc.jahia.language.cnd.CndSyntaxHighlighterFactory"/>
+        <fileType name="CND file" implementationClass="fr.tolc.jahia.language.cnd.CndFileType" fieldName="INSTANCE" language="CND" extensions="cnd"/>
+        <lang.parserDefinition language="CND" implementationClass="fr.tolc.jahia.language.cnd.CndParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="CND" implementationClass="fr.tolc.jahia.language.cnd.CndSyntaxHighlighterFactory"/>
         <additionalTextAttributes scheme="Default" file="colorSchemes/CndColorsDefault.xml"/>
         <additionalTextAttributes scheme="Darcula" file="colorSchemes/CndColorsDefault.xml"/>
         <colorSettingsPage implementation="fr.tolc.jahia.language.cnd.CndColorSettingsPage"/>
 
+        <annotator language="CND" implementationClass="fr.tolc.jahia.plugin.annotators.CndAnnotator"/>
+        <annotator language="JAVA" implementationClass="fr.tolc.jahia.plugin.annotators.JavaAnnotator"/>
 
+        <codeInsight.lineMarkerProvider language="CND" implementationClass="fr.tolc.jahia.plugin.linemarkers.CndLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.tolc.jahia.plugin.linemarkers.JavaLineMarkerProvider"/>
+
+        <completion.contributor language="CND" implementationClass="fr.tolc.jahia.plugin.completions.CndCompletionContributor"/>
+
+        <psi.referenceContributor language="CND" implementation="fr.tolc.jahia.plugin.references.CndReferenceContributor"/>
+        <lang.findUsagesProvider language="CND" implementationClass="fr.tolc.jahia.plugin.usages.CndFindUsagesProvider"/>
+        <gotoSymbolContributor implementation="fr.tolc.jahia.plugin.symbols.CndChooseByNameContributor"/>
+
+        <lang.foldingBuilder language="CND" implementationClass="fr.tolc.jahia.plugin.folding.CndFoldingBuilder"/>
+        <lang.formatter language="CND" implementationClass="fr.tolc.jahia.plugin.formatter.CndFormattingModelBuilder"/>
+        <lang.braceMatcher language="CND" implementationClass="fr.tolc.jahia.plugin.formatter.CndBraceMatcher"/>
+        <quoteHandler fileType="CND" className="fr.tolc.jahia.plugin.formatter.CndQuoteHandler"/>
+        <lang.commenter language="CND" implementationClass="fr.tolc.jahia.plugin.formatter.CndCommenter"/>
+        <spellchecker.support language="CND" implementationClass="fr.tolc.jahia.plugin.spellcheck.CndSpellcheckingStrategy"/>
+
+        <iconProvider implementation="fr.tolc.jahia.plugin.icons.CndIconProvider"/>
+        <lang.psiStructureViewFactory language="CND" implementationClass="fr.tolc.jahia.plugin.structure.CndStructureViewFactory"/>
+        <navbar implementation="fr.tolc.jahia.plugin.structure.CndStructureAwareNavbar"/>
     </extensions>
 </idea-plugin>
