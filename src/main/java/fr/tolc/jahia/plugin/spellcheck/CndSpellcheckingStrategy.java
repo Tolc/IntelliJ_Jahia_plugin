@@ -19,8 +19,11 @@ public class CndSpellcheckingStrategy extends SpellcheckingStrategy {
         if (element instanceof CndNodetypeIdentifier) {
             return new CndNodetypeTokenizer();
         }
-        if (element instanceof CndPropertyName || element instanceof CndSubnodeName) {
-            return new CndPropertySubnodeTokenizer();
+        if (element instanceof CndPropertyName) {
+            return new CndPropertyTokenizer();
+        }
+        if (element instanceof CndSubnodeName) {
+            return new CndSubnodeTokenizer();
         }
 
         return EMPTY_TOKENIZER;
