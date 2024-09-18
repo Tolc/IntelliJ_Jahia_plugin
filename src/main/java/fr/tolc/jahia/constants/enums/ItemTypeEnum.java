@@ -1,5 +1,7 @@
 package fr.tolc.jahia.constants.enums;
 
+import org.jetbrains.annotations.Nullable;
+
 public enum ItemTypeEnum {
     CHANNELS("channels"),
     CLASSIFICATION("classification"),
@@ -19,16 +21,20 @@ public enum ItemTypeEnum {
         this.value = value;
     }
 
-    public static ItemTypeEnum fromValue(String value) throws IllegalArgumentException {
+    public static @Nullable ItemTypeEnum fromValue(String value) throws IllegalArgumentException {
         for (ItemTypeEnum type : ItemTypeEnum.values()) {
             if (type.value.equalsIgnoreCase(value)) {
                 return type;
             }
         }
-        throw new IllegalArgumentException("Unknown item type [" + value + "]");
+        return null;
     }
 
     public String toString() {
+        return this.value;
+    }
+
+    public String getCompletion() {
         return this.value;
     }
 }

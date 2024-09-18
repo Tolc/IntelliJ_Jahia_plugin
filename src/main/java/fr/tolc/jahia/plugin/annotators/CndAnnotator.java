@@ -8,10 +8,12 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import fr.tolc.jahia.constants.CndConstants;
 import fr.tolc.jahia.constants.enums.AttributeEnum;
+import fr.tolc.jahia.constants.enums.OptionEnum;
 import fr.tolc.jahia.language.cnd.CndSyntaxHighlighter;
 import fr.tolc.jahia.language.cnd.CndUtil;
 import fr.tolc.jahia.language.cnd.psi.CndNamespace;
 import fr.tolc.jahia.language.cnd.psi.CndNodetypeIdentifier;
+import fr.tolc.jahia.language.cnd.psi.CndOptionValue;
 import fr.tolc.jahia.language.cnd.psi.CndSubnode;
 import fr.tolc.jahia.language.cnd.psi.CndSubnodeAttribute;
 import fr.tolc.jahia.language.cnd.psi.CndSubnodeDefault;
@@ -33,13 +35,13 @@ public class CndAnnotator extends AbstractAnnotator {
 
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
-
         handleNodetypes(element, holder);
         handleSubnodes(element, holder);
     }
 
     private static void handleNodetypes(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
-        if (element instanceof CndNodetypeIdentifier || element instanceof CndSupertype || element instanceof CndSubnodeType || element instanceof CndSubnodeDefault) {
+        if (element instanceof CndNodetypeIdentifier || element instanceof CndSupertype || element instanceof CndSubnodeType || element instanceof CndSubnodeDefault
+                || (element instanceof CndOptionValue optionValue && OptionEnum.EXTENDS == optionValue.getOptionType())) {
             String text = element.getText();
             if (text == null || StringUtils.isBlank(text)) {
                 holder.newAnnotation(HighlightSeverity.ERROR, CndBundle.message("annotations.cnd.error.nodetype.blank"))

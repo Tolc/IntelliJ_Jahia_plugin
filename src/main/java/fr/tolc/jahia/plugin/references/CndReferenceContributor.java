@@ -22,6 +22,7 @@ public class CndReferenceContributor extends PsiReferenceContributor {
         registrar.registerReferenceProvider(
                 PlatformPatterns.or(
                         PlatformPatterns.psiElement(CndTypes.SUPERTYPE),
+                        PlatformPatterns.psiElement(CndTypes.OPTION_VALUE),
                         PlatformPatterns.psiElement(CndTypes.SUBNODE_TYPE),
                         PlatformPatterns.psiElement(CndTypes.SUBNODE_DEFAULT)
                 ),

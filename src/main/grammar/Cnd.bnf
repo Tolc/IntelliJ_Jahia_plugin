@@ -113,10 +113,16 @@ supertype ::= ST_NAME {
   mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndSupertypeMixin"
 }
 
-option ::= option_name [OPT_EQUAL option_values_]
+option ::= option_name [OPT_EQUAL option_values_] {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndOptionMixin"
+  implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndOptionInterface"
+}
 option_name ::= OPT
 private option_values_ ::= option_value? (OPT_VALUE_SEP option_value?)*
-option_value ::= OPT_VALUE
+option_value ::= OPT_VALUE {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndOptionValueMixin"
+  implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndOptionValueInterface"
+}
 
 private subitem_ ::= CRLF+ (property|subnode)
 
