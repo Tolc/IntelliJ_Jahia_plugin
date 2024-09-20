@@ -18,21 +18,23 @@ public enum OptionEnum {
     QUERY("query", "query|q"),
     VALIDATOR("validator", "validator=myValidator", "validator|val|v"),
 
-    PRIMARYITEM("primaryitem", "primaryitem|!", "primaryitem ", TokenType.WHITE_SPACE), //TODO: reference property from value (which is identified as another option name)
+    EXTENDS("extends", "extends = ", "extends", CndTypes.OPT_VALUE_SEP, true),
+    ITEMTYPE("itemtype", "itemtype = ", "itemtype", CndTypes.OPT_VALUE_SEP, false),
 
-    EXTENDS("extends", "extends = ", "extends", CndTypes.OPT_VALUE_SEP),
-    ITEMTYPE("itemtype", "itemtype = ", "itemtype", CndTypes.OPT_VALUE_SEP);
+    PRIMARYITEM("primaryitem", "primaryitem ", "primaryitem|!", TokenType.WHITE_SPACE, true); //TODO: reference subnode/property from value (which is identified as another option name)
 
     private final String value;
     private final String[] completions;
     private final String validationRegex;
     private final IElementType separatorType;
+    private final boolean isValueReference;
 
     OptionEnum(String value) {
         this.value = value;
         this.completions = new String[]{value};
         this.validationRegex = value;
         this.separatorType = null;
+        this.isValueReference = false;
     }
 
     OptionEnum(String value, String regex) {
@@ -40,6 +42,7 @@ public enum OptionEnum {
         this.completions = new String[]{value};
         this.validationRegex = regex;
         this.separatorType = null;
+        this.isValueReference = false;
     }
 
     OptionEnum(String value, String completion, String regex) {
@@ -47,13 +50,15 @@ public enum OptionEnum {
         this.completions = new String[]{completion};
         this.validationRegex = regex;
         this.separatorType = null;
+        this.isValueReference = false;
     }
 
-    OptionEnum(String value, String completion, String regex, IElementType separatorType) {
+    OptionEnum(String value, String completion, String regex, IElementType separatorType, boolean isValueReference) {
         this.value = value;
         this.completions = new String[]{completion};
         this.validationRegex = regex;
         this.separatorType = separatorType;
+        this.isValueReference = isValueReference;
     }
 
     public static @Nullable OptionEnum fromValue(String value) {
@@ -72,5 +77,17 @@ public enum OptionEnum {
 
     public String toString() {
         return this.value;
+    }
+
+    public boolean hasValue() {
+        return this.separatorType != null;
+    }
+
+    public boolean isValueReference() {
+        return isValueReference;
+    }
+
+    public boolean hasValueWithoutSeparator() {
+        return this.separatorType == TokenType.WHITE_SPACE;
     }
 }

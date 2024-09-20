@@ -95,8 +95,14 @@ cndFile ::= item_*
 private item_ ::= (COMMENT|CRLF|namespace|nodetype)
 
 
-namespace ::= NS_START namespaceIdentifier? NS_EQUAL? (NS_URI_QUOTE NS_URI? NS_URI_QUOTE)? NS_END
-namespaceIdentifier ::= NS_NAME
+namespace ::= NS_START namespaceIdentifier? NS_EQUAL? (NS_URI_QUOTE NS_URI? NS_URI_QUOTE)? NS_END {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndNamespaceMixin"
+  implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndNamespaceInterface"
+}
+namespaceIdentifier ::= NS_NAME {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndNamespaceIdentifierMixin"
+  implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndNamespaceIdentifierInterface"
+}
 
 
 nodetype ::= NT_START nodetypeIdentifier? NT_END [supertypes_] option* subitem_* {
@@ -117,7 +123,10 @@ option ::= option_name [OPT_EQUAL option_values_] {
   mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndOptionMixin"
   implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndOptionInterface"
 }
-option_name ::= OPT
+option_name ::= OPT {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndOptionNameMixin"
+  implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndOptionNameInterface"
+}
 private option_values_ ::= option_value? (OPT_VALUE_SEP option_value?)*
 option_value ::= OPT_VALUE {
   mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndOptionValueMixin"
@@ -127,8 +136,14 @@ option_value ::= OPT_VALUE {
 private subitem_ ::= CRLF+ (property|subnode)
 
 
-property ::= PROP_START property_name? [prop_type_] [prop_default_] property_attribute* [prop_constraint_]
-property_name ::= PROP_NAME
+property ::= PROP_START property_name? [prop_type_] [prop_default_] property_attribute* [prop_constraint_] {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndPropertyMixin"
+  implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndPropertyInterface"
+}
+property_name ::= PROP_NAME {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndPropertyNameMixin"
+  implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndPropertyNameInterface"
+}
 
 private prop_type_ ::= PROP_TYPE_START property_type? [prop_type_mask_] PROP_TYPE_END
 property_type ::= PROP_TYPE
@@ -148,8 +163,14 @@ private prop_constraint_ ::= PROP_CONST_START property_constraint?
 property_constraint ::= PROP_CONST
 
 
-subnode ::= SUB_START subnode_name? [subnode_types_] [subnode_default_] subnode_attribute*
-subnode_name ::= SUB_NAME
+subnode ::= SUB_START subnode_name? [subnode_types_] [subnode_default_] subnode_attribute* {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndSubnodeMixin"
+  implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndSubnodeInterface"
+}
+subnode_name ::= SUB_NAME {
+  mixin="fr.tolc.jahia.language.cnd.psi.mixins.CndSubnodeNameMixin"
+  implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndSubnodeNameInterface"
+}
 
 private subnode_types_ ::= SUB_TYPES_START subnode_type? (SUB_TYPE_SEP subnode_type?)* SUB_TYPES_END
 subnode_type ::= SUB_TYPE {

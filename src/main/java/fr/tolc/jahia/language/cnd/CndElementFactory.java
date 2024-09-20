@@ -9,6 +9,7 @@ import fr.tolc.jahia.language.cnd.psi.CndFile;
 import fr.tolc.jahia.language.cnd.psi.CndNamespace;
 import fr.tolc.jahia.language.cnd.psi.CndNodetype;
 import fr.tolc.jahia.language.cnd.psi.CndProperty;
+import fr.tolc.jahia.language.cnd.psi.CndSubnode;
 import fr.tolc.jahia.language.cnd.psi.CndSubnodeDefault;
 import fr.tolc.jahia.language.cnd.psi.CndTypes;
 
@@ -48,6 +49,13 @@ public class CndElementFactory {
 
     public static CndProperty createProperty(Project project, String propertyName) {
         return createProperty(project, propertyName, PropertyTypeEnum.UNDEFINED);
+    }
+
+    public static CndSubnode createSubnode(Project project, String subnodeName) {
+        final CndFile file = createFile(project,
+                "[dummyNs:dummyNt]\r\n" +
+                        " + " + subnodeName + " (dummyNs:dummyNt)");
+        return (CndSubnode) file.getFirstChild().getLastChild();
     }
 
     public static ASTNode createSubnodeDefaultEqual(Project project) {

@@ -2,6 +2,7 @@ package fr.tolc.jahia.plugin.references.types;
 
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -9,7 +10,7 @@ import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiPolyVariantReference;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.ResolveResult;
-import fr.tolc.jahia.language.cnd.CndIcons;
+import com.intellij.psi.impl.PsiElementBase;
 import fr.tolc.jahia.language.cnd.CndUtil;
 import fr.tolc.jahia.language.cnd.psi.CndNodetype;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +35,7 @@ public class NodetypeReference extends PsiReferenceBase<PsiElement> implements P
         final List<CndNodetype> nodetypes = CndUtil.findNodetypes(project, identifier);
         List<ResolveResult> results = new ArrayList<>();
         for (CndNodetype nodetype : nodetypes) {
-            results.add(new PsiElementResolveResult(nodetype));
+            results.add(new PsiElementResolveResult(nodetype.getNodetypeIdentifier()));
         }
         return results.toArray(new ResolveResult[0]);
     }
@@ -52,9 +53,11 @@ public class NodetypeReference extends PsiReferenceBase<PsiElement> implements P
         List<LookupElement> variants = new ArrayList<>();
         for (final CndNodetype nodetype : nodetypes) {
             if (StringUtils.isNotBlank(nodetype.getIdentifier())) {
+                ItemPresentation presentation = ((PsiElementBase) nodetype).getPresentation();
                 variants.add(LookupElementBuilder
-                        .create(nodetype).withIcon(nodetype.isMixin() ? CndIcons.CND_MIX : CndIcons.CND_NT)
+                        .create(nodetype.getNodetypeIdentifier())
                         .withTypeText(nodetype.getContainingFile().getName())
+                        .withIcon(presentation.getIcon(false))
                 );
             }
         }

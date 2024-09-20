@@ -6,6 +6,7 @@ import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.editor.HighlighterColors;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import fr.tolc.jahia.constants.CndConstants;
 import fr.tolc.jahia.constants.enums.AttributeEnum;
 import fr.tolc.jahia.constants.enums.OptionEnum;
@@ -13,16 +14,21 @@ import fr.tolc.jahia.language.cnd.CndSyntaxHighlighter;
 import fr.tolc.jahia.language.cnd.CndUtil;
 import fr.tolc.jahia.language.cnd.psi.CndNamespace;
 import fr.tolc.jahia.language.cnd.psi.CndNodetypeIdentifier;
+import fr.tolc.jahia.language.cnd.psi.CndOption;
+import fr.tolc.jahia.language.cnd.psi.CndOptionName;
 import fr.tolc.jahia.language.cnd.psi.CndOptionValue;
+import fr.tolc.jahia.language.cnd.psi.CndPropertyName;
 import fr.tolc.jahia.language.cnd.psi.CndSubnode;
 import fr.tolc.jahia.language.cnd.psi.CndSubnodeAttribute;
 import fr.tolc.jahia.language.cnd.psi.CndSubnodeDefault;
+import fr.tolc.jahia.language.cnd.psi.CndSubnodeName;
 import fr.tolc.jahia.language.cnd.psi.CndSubnodeType;
 import fr.tolc.jahia.language.cnd.psi.CndSupertype;
 import fr.tolc.jahia.plugin.messages.CndBundle;
 import fr.tolc.jahia.plugin.quickfixes.CndAddSubnodeDefaultValueQuickFix;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +42,7 @@ public class CndAnnotator extends AbstractAnnotator {
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
         handleNodetypes(element, holder);
+        handleOptions(element, holder);
         handleSubnodes(element, holder);
     }
 
@@ -83,6 +90,30 @@ public class CndAnnotator extends AbstractAnnotator {
                                 // ** Tutorial step 19. - Add a quick fix for the string containing possible properties
 //                                .withFix(new SimpleCreatePropertyQuickFix(key))
                                 .create();
+                    }
+                }
+            }
+        }
+    }
+
+    private static void handleOptions(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
+        if (element instanceof CndOptionName optionName) {
+            CndOption option = optionName.getOption();
+            if (option.isValueForPreviousOption()) {
+                CndOption previousOption = option.getPreviousOption();
+                if (OptionEnum.PRIMARYITEM == previousOption.getOptionType()) {
+                    PsiReference[] references = optionName.getReferences();
+                    @Nullable PsiElement reference = references.length > 0 ? references[0].resolve() : null;
+
+                    if (reference == null) {
+                        holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(optionName.getTextRange()).textAttributes(HighlighterColors.TEXT).create();
+                        holder.newAnnotation(HighlightSeverity.WARNING, CndBundle.message("annotations.cnd.warning.option.primaryitem"))
+                                .highlightType(ProblemHighlightType.WARNING)
+                                .create();
+                    } else if (reference instanceof CndPropertyName) {
+                        holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(optionName.getTextRange()).textAttributes(CndSyntaxHighlighter.CND_PROPERTY).create();
+                    } else if (reference instanceof CndSubnodeName) {
+                        holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(optionName.getTextRange()).textAttributes(CndSyntaxHighlighter.CND_SUBNODE).create();
                     }
                 }
             }

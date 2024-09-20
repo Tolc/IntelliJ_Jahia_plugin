@@ -8,8 +8,10 @@ import com.intellij.psi.PsiReferenceContributor;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.util.ProcessingContext;
+import fr.tolc.jahia.language.cnd.psi.CndOptionName;
 import fr.tolc.jahia.language.cnd.psi.CndTypes;
 import fr.tolc.jahia.plugin.references.types.NodetypeReference;
+import fr.tolc.jahia.plugin.references.types.PropertyOrSubnodeReference;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,18 @@ public class CndReferenceContributor extends PsiReferenceContributor {
                     public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                         PsiReference[] refs = new PsiReference[1];
                         refs[0] = new NodetypeReference(element, new TextRange(0, element.getTextLength()));
+                        return refs;
+                    }
+                }
+        );
+
+        registrar.registerReferenceProvider(
+                PlatformPatterns.psiElement(CndTypes.OPTION_NAME),
+                new PsiReferenceProvider() {
+                    @Override
+                    public PsiReference @NotNull [] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
+                        PsiReference[] refs = new PsiReference[1];
+                        refs[0] = new PropertyOrSubnodeReference(element, new TextRange(0, element.getTextLength()), ((CndOptionName) element).getOption().getNodetype());
                         return refs;
                     }
                 }
