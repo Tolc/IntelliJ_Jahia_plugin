@@ -29,7 +29,7 @@ intellij {
 //    type.set("IU") // Target IDE Platform
 
     /* Plugin Dependencies */
-    plugins.set(listOf("com.intellij.java", "PsiViewer:232.2-SNAPSHOT"))
+    plugins.set(listOf("com.intellij.java", "org.jetbrains.idea.maven", "PsiViewer:232.2-SNAPSHOT"))
 }
 
 tasks {

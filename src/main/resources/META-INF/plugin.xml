@@ -31,6 +31,7 @@
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.java-capable</depends>
     <depends>com.intellij.java</depends>
+    <depends>org.jetbrains.idea.maven</depends>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
@@ -41,6 +42,11 @@
         <additionalTextAttributes scheme="Default" file="colorSchemes/CndColorsDefault.xml"/>
         <additionalTextAttributes scheme="Darcula" file="colorSchemes/CndColorsDefault.xml"/>
         <colorSettingsPage implementation="fr.tolc.jahia.language.cnd.CndColorSettingsPage"/>
+
+        <projectConfigurable nonDefaultProject="true" parentId="language" dynamic="true"
+                             bundle="messages.CndBundle" key="jahia.settings.project.configurable.name"
+                             provider="fr.tolc.jahia.plugin.config.JahiaProjectSettingsConfigurableProvider"
+                             id="fr.tolc.jahia.intellij.plugin.JahiaSettings"/>
 
         <annotator language="CND" implementationClass="fr.tolc.jahia.plugin.annotators.CndAnnotator"/>
         <annotator language="JAVA" implementationClass="fr.tolc.jahia.plugin.annotators.JavaAnnotator"/>
