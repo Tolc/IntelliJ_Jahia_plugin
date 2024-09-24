@@ -1,4 +1,4 @@
-package fr.tolc.jahia.plugin.settings;
+package fr.tolc.jahia.plugin.config;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.Service;
@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service(Service.Level.PROJECT)
-@State(name = "fr.tolc.jahia.plugin.settings.JahiaProjectSettings", storages = @Storage(StoragePathMacros.PRODUCT_WORKSPACE_FILE))
+@State(name = "fr.tolc.jahia.plugin.config.JahiaProjectSettings", storages = @Storage(StoragePathMacros.PRODUCT_WORKSPACE_FILE))
 public final class JahiaProjectSettings implements PersistentStateComponent<JahiaProjectSettings.JahiaProjectState> {
     private static final Logger logger = LoggerFactory.getLogger(JahiaProjectSettings.class);
 

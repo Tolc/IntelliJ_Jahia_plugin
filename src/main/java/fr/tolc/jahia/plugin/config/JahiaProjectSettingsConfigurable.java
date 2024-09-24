@@ -8,7 +8,6 @@ import com.intellij.openapi.ui.DialogPanel;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import fr.tolc.jahia.plugin.messages.CndBundle;
-import fr.tolc.jahia.plugin.settings.JahiaProjectSettings;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
