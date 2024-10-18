@@ -8,7 +8,7 @@
     <name>CND Language / Jahia Framework</name>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-    <idea-version since-build="232"/>
+    <idea-version since-build="232.8660.185"/>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
     <vendor email="contact@thomas-coquel.fr" url="https://github.com/Tolc/IntelliJ_Jahia_plugin">Thomas 'Tolc' Coquel</vendor>
@@ -53,6 +53,9 @@
 
         <codeInsight.lineMarkerProvider language="CND" implementationClass="fr.tolc.jahia.plugin.linemarkers.CndLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="fr.tolc.jahia.plugin.linemarkers.JavaLineMarkerProvider"/>
+
+        <codeInsight.daemonBoundCodeVisionProvider implementation="fr.tolc.jahia.plugin.inlay.CndReferencesCodeVisionProvider"/>
+        <codeInsight.codeVisionSettingsPreviewLanguage modelId="references" language="CND"/>
 
         <completion.contributor language="CND" implementationClass="fr.tolc.jahia.plugin.completions.CndCompletionContributor"/>
 

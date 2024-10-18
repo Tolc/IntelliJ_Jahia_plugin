@@ -35,7 +35,7 @@ public class CndBlock extends AbstractBlock {
         while (child != null) {
             IElementType type = child.getElementType();
 
-            if (!TokenType.WHITE_SPACE.equals(type) && !CndTypes.CRLF.equals(type)) {
+            if (!TokenType.WHITE_SPACE.equals(type)) {
                 Block block = new CndBlock(child, Wrap.createWrap(WrapType.NONE, false), Alignment.createAlignment(), spacingBuilder);
                 blocks.add(block);
             }

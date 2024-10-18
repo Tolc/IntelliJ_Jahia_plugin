@@ -92,7 +92,7 @@
 }
 
 cndFile ::= item_*
-private item_ ::= (COMMENT|CRLF|namespace|nodetype)
+private item_ ::= (COMMENT|namespace|nodetype)
 
 
 namespace ::= NS_START namespaceIdentifier? NS_EQUAL? (NS_URI_QUOTE NS_URI? NS_URI_QUOTE)? NS_END {
@@ -133,7 +133,7 @@ option_value ::= OPT_VALUE {
   implements="fr.tolc.jahia.language.cnd.psi.interfaces.CndOptionValueInterface"
 }
 
-private subitem_ ::= CRLF+ (property|subnode)
+private subitem_ ::= (property|subnode)
 
 
 property ::= PROP_START property_name? [prop_type_] [prop_default_] property_attribute* [prop_constraint_] {

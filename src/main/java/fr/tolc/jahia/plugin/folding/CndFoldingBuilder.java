@@ -50,9 +50,9 @@ public class CndFoldingBuilder extends FoldingBuilderEx implements DumbAware {
                 FoldingGroup group = FoldingGroup.newGroup("Cnd" + cndNodeType.getName());
 
                 PsiElement lastRealChild = cndNodeType.getLastChild();
-                while (CndTypes.CRLF.equals(lastRealChild.getNode().getElementType())) {
-                    lastRealChild = lastRealChild.getPrevSibling();
-                }
+//                while (CndTypes.CRLF.equals(lastRealChild.getNode().getElementType())) {
+//                    lastRealChild = lastRealChild.getPrevSibling();
+//                }
 
                 int startRange = ntEndNode.getStartOffset() + 1;
                 int endRange = lastRealChild.getTextRange().getEndOffset();
