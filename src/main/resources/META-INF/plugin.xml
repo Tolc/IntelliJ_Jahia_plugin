@@ -71,6 +71,7 @@
         <spellchecker.support language="CND" implementationClass="fr.tolc.jahia.plugin.spellcheck.CndSpellcheckingStrategy"/>
 
         <iconProvider implementation="fr.tolc.jahia.plugin.icons.CndIconProvider"/>
+        <treeStructureProvider implementation="fr.tolc.jahia.plugin.projectView.ViewsMergerTreeStructureProvider"/>
         <lang.psiStructureViewFactory language="CND" implementationClass="fr.tolc.jahia.plugin.structure.CndStructureViewFactory"/>
         <navbar implementation="fr.tolc.jahia.plugin.structure.CndStructureAwareNavbar"/>
     </extensions>

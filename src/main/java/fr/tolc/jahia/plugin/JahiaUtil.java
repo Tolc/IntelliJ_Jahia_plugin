@@ -76,6 +76,10 @@ public final class JahiaUtil {
         return isJahiaProject(module.getProject()) && jahiaModules.containsKey(module);
     }
 
+    public static @Nullable String getJahiaWorkFolderPath(Project project, VirtualFile virtualFile) {
+        return getJahiaWorkFolderPath(getModuleForFile(project, virtualFile));
+    }
+
     public static @Nullable String getJahiaWorkFolderPath(final Module module) {
         if (isJahiaModule(module)) {
             return ProjectUtil.guessModuleDir(module).getPath() + "/src/main/" + jahiaModules.get(module).getWorkFolder();

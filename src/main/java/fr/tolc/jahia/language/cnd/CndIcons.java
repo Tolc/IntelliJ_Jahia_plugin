@@ -15,4 +15,6 @@ public class CndIcons {
     public static final Icon CND_NT = IconLoader.getIcon("icons/nodetype.png", CndIcons.class);
     public static final Icon CND_PROP = IconLoader.getIcon("icons/property.png", CndIcons.class);
 
+    public static final Icon JAHIA_DXM = IconLoader.getIcon("icons/jahia_dxm.png", CndIcons.class);
+
 }
