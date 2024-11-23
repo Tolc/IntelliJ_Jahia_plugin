@@ -5,19 +5,17 @@ import com.intellij.psi.PsiDirectory;
 import fr.tolc.jahia.plugin.messages.CndBundle;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class ViewsFolder {
     public static final DataKey<ViewsFolder[]> DATA_KEY = DataKey.create("cnd.viewsFolder.array");
 
     private final PsiDirectory jahiaWorkFolder;
-    private final List<PsiDirectory> nodetypeFolders;
+    private final List<NamespaceFolderNode> namespaceFolders;
 
-    public ViewsFolder(@NotNull PsiDirectory jahiaWorkFolder, @NotNull Collection<PsiDirectory> nodetypeFolders) {
+    public ViewsFolder(@NotNull PsiDirectory jahiaWorkFolder, @NotNull List<NamespaceFolderNode> namespaceFolders) {
         this.jahiaWorkFolder = jahiaWorkFolder;
-        this.nodetypeFolders = new ArrayList<>(nodetypeFolders);
+        this.namespaceFolders = namespaceFolders;
     }
 
     @NotNull
@@ -30,8 +28,8 @@ public class ViewsFolder {
     }
 
     @NotNull
-    public List<PsiDirectory> getNodetypeFolders() {
-        return nodetypeFolders;
+    public List<NamespaceFolderNode> getNamespaceFolders() {
+        return namespaceFolders;
     }
 
     @Override

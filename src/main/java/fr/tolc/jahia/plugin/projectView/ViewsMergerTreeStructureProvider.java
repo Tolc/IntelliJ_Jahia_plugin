@@ -14,7 +14,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ViewsMergerTreeStructureProvider implements TreeStructureProvider {
     private final Project project;
@@ -33,28 +35,43 @@ public class ViewsMergerTreeStructureProvider implements TreeStructureProvider {
                 String jahiaWorkFolderPath = JahiaUtil.getJahiaWorkFolderPath(module);
 
                 if (parentDirectoryVF.getPath().equals(jahiaWorkFolderPath)) {
-                    List<PsiDirectory> ntFolders = new ArrayList<>();
+                    Map<String, List<PsiDirectory>> nsMap = new LinkedHashMap<>();
 
                     ArrayList<AbstractTreeNode<?>> childrenCopy = new ArrayList<>(children);
                     for (AbstractTreeNode<?> child : childrenCopy) {
                         if (child.getValue() instanceof PsiDirectory childDirectory) {
-                            boolean isViewFolder = couldBeViewFolder(childDirectory);
+                            PsiDirectory ntDirectory = childDirectory;
+                            boolean isViewFolder = couldBeViewFolder(ntDirectory);
                             if (!isViewFolder) {
                                 //Try with parent directory (because of IntelliJ's weird way of merging directories into one if only one subdirectory)
-                                PsiDirectory realChildDirectory = childDirectory.getParent();
-                                if (realChildDirectory != null && realChildDirectory.getChildren().length == 1 && !realChildDirectory.equals(parent.getValue())) {
-                                    isViewFolder = couldBeViewFolder(realChildDirectory);
+                                ntDirectory = childDirectory.getParent();
+                                if (ntDirectory != null && ntDirectory.getChildren().length == 1 && !ntDirectory.equals(parent.getValue())) {
+                                    isViewFolder = couldBeViewFolder(ntDirectory);
                                 }
                             }
 
                             if (isViewFolder) {
                                 children.remove(child);
+
+                                String[] split = ntDirectory.getName().split("_");
+                                String ns = split[0];
+                                String nt = split[1];
+
+                                if (!nsMap.containsKey(ns)) {
+                                    nsMap.put(ns, new ArrayList<>());
+                                }
+                                List<PsiDirectory> ntFolders = nsMap.get(ns);
                                 ntFolders.add(childDirectory);
                             }
                         }
                     }
 
-                    children.add(new ViewsFolderNode(project, new ViewsFolder(parentDirectory, ntFolders), settings));
+                    List<NamespaceFolderNode> nsFolderNodes = new ArrayList<>();
+                    for (Map.Entry<String, List<PsiDirectory>> nsEntry : nsMap.entrySet()) {
+                        nsFolderNodes.add(new NamespaceFolderNode(project, new NamespaceFolder(parentDirectory, nsEntry.getKey(), nsEntry.getValue()), settings));
+                    }
+
+                    children.add(new ViewsFolderNode(project, new ViewsFolder(parentDirectory, nsFolderNodes), settings));
                 }
             }
         }

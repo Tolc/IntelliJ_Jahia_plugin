@@ -3,17 +3,13 @@ package fr.tolc.jahia.plugin.projectView;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.ViewSettings;
-import com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
 import fr.tolc.jahia.language.cnd.CndIcons;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class ViewsFolderNode extends ProjectViewNode<ViewsFolder> {
 
@@ -28,8 +24,8 @@ public class ViewsFolderNode extends ProjectViewNode<ViewsFolder> {
     @Override
     public boolean contains(@NotNull VirtualFile file) {
         if (file.isValid()) {
-            for (PsiDirectory psiDirectory : viewsFolder.getNodetypeFolders()) {
-                if (file.getPath().contains(psiDirectory.getVirtualFile().getPath())) {
+            for (NamespaceFolderNode nsFolder : viewsFolder.getNamespaceFolders()) {
+                if (nsFolder.contains(file)) {
                     return true;
                 }
             }
@@ -39,15 +35,7 @@ public class ViewsFolderNode extends ProjectViewNode<ViewsFolder> {
 
     @Override
     public @NotNull Collection<? extends AbstractTreeNode<?>> getChildren() {
-        ArrayList<AbstractTreeNode<?>> children = new ArrayList<>();
-
-        List<PsiDirectory> nodeTypeFolders = viewsFolder.getNodetypeFolders();
-        for (PsiDirectory directory : nodeTypeFolders) {
-            PsiDirectoryNode node = new PsiDirectoryNode(myProject, directory, this.getSettings());
-            children.add(node);
-        }
-
-        return children;
+        return viewsFolder.getNamespaceFolders();
     }
 
     @Override
